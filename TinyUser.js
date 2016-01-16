@@ -3,11 +3,13 @@ import React, {Component, Image, Text, View} from 'react-native';
 export default class TinyUser extends Component {
 
     static propTypes = {
-        profilePhotoUrl: React.PropTypes.string.isRequired
+        profilePhotoUrl: React.PropTypes.string.isRequired,
+        center: React.PropTypes.bool
     };
 
     static defaultProps = {
-        size: 28
+        size: 28,
+        center: false
     };
 
     render() {
@@ -18,7 +20,12 @@ export default class TinyUser extends Component {
                     width: this.props.size,
                     height: this.props.size,
                     borderRadius: this.props.size/2
-                }, this.props.style]}>
+                },
+                this.props.center && {
+                    marginLeft: -this.props.size/2,
+                    marginTop: -this.props.size/2
+                },
+                this.props.style]}>
                 <Image style={style.image} source={{uri: this.props.profilePhotoUrl}} />
             </View>
         );

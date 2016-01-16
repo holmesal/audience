@@ -22,12 +22,23 @@ export default class Scrubber extends Component {
     }
 
     renderUsers() {
-        return (
+        return [
+            <TinyUser
+                profilePhotoUrl="https://scontent-lax3-1.xx.fbcdn.net/hphotos-xaf1/v/t1.0-0/p206x206/24567_1315611770255_1155488_n.jpg?oh=bbd8882c52d4abd567db280f76d0b87a&oe=56FBD84D"
+                style={[style.tinyUser, {left: 200}]}
+                key="lah"
+            />,
             <TinyUser
                 profilePhotoUrl="https://pbs.twimg.com/profile_images/617806122544566272/Pm6KPI9P_400x400.jpg"
-                style={style.tinyUser}
+                style={[style.tinyUser, {left: 357}]}
+                key="dee"
+            />,
+            <TinyUser
+                profilePhotoUrl="https://scontent-lax3-1.xx.fbcdn.net/hprofile-xft1/v/t1.0-1/c0.0.320.320/p320x320/12510375_10153732937455867_8269122392597910250_n.jpg?oh=267f72be655437a1be7ea666b0b2accf&oe=5705AA7A"
+                style={[style.tinyUser, {left: 462}]}
+                key="dah"
             />
-        )
+        ]
     }
 
     render() {
@@ -40,12 +51,13 @@ export default class Scrubber extends Component {
                 </View>
 
                 {/** Bottom component of the right half background */}
-                <View style={[style.coverWrapper, {opacity: 0.97}]} pointerEvents='none'>
-                    <Image style={[style.bgImage, {right: 0}]} source={require('image!bg')} />
+                <View style={[style.coverWrapper, {opacity: 0.99}]} pointerEvents='none'>
+                    <Image style={[style.bgCover, {right: 0}]} source={require('image!bg')} />
                 </View>
 
                 {/** Scroller */}
                 <ScrollView horizontal
+                            showsHorizontalScrollIndicator={false}
                             style={style.scroller}
                             contentContainerStyle={style.scrollContent}
                             onScroll={this.handleScroll.bind(this)}
@@ -60,7 +72,7 @@ export default class Scrubber extends Component {
 
                 {/** Top component of the right half background */}
                 <View style={[style.coverWrapper, {opacity: 0.8}]} pointerEvents='none'>
-                    <Image style={[style.bgImage, {right: 0}]} source={require('image!bg')} />
+                    <Image style={[style.bgCover, {right: 0}]} source={require('image!bg')} />
                 </View>
             </View>
         );
@@ -84,7 +96,7 @@ let style = {
         top: 0,
         left: 0,
         bottom: 0,
-        right: windowWidth/2,
+        right: 0,//windowWidth/2,
         overflow: 'hidden'
     },
     bgImage: {
@@ -98,15 +110,13 @@ let style = {
         position: 'absolute',
         left: windowWidth/2,
         right: 0,
-        top: 0,//windowHeight/2 - waveformHeight/2,
-        bottom: 0,//windowHeight/2 - waveformHeight/2,
+        top: windowHeight/2 - waveformHeight/2,
+        bottom: windowHeight/2 - waveformHeight/2,
         overflow: 'hidden'
     },
     bgCover: {
         position: 'absolute',
-        top: 0,
-        right: 0,
-        left: 200,
+        top: -windowHeight/2 + waveformHeight/2,
         bottom: 0
     },
     scroller: {
@@ -120,7 +130,7 @@ let style = {
     waveform: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: windowHeight/2 - 18,
+        marginTop: windowHeight/2 - waveformHeight/2,
         position: 'relative'
     },
     spacer: {
@@ -135,9 +145,6 @@ let style = {
 
     tinyUser: {
         position: 'absolute',
-        top: -waveformHeight/2,
-        left: 250,
-        marginLeft: -16,
-        marginTop: -16
+        top: -waveformHeight/2 - 16
     }
 };

@@ -7,6 +7,7 @@ import React, {
   AppRegistry,
   Component,
   StyleSheet,
+  StatusBarIOS,
   Text,
   View
 } from 'react-native';
@@ -14,6 +15,11 @@ import React, {
 import Scrubber from './Scrubber';
 
 class HorizontalScrollTest extends Component {
+
+  componentDidMount() {
+    StatusBarIOS.setStyle('light-content');
+  }
+
   render() {
     return (
       <Scrubber />
