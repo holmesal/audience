@@ -12,7 +12,8 @@ import React, {
   View
 } from 'react-native';
 
-import Scrubber from './Scrubber';
+import Scrubber from './src/components/Scrubber';
+import Search from './src/components/Search/Search';
 
 class HorizontalScrollTest extends Component {
 
@@ -22,7 +23,7 @@ class HorizontalScrollTest extends Component {
 
   render() {
     return (
-      <Scrubber />
+      <Search />
     );
   }
 }

@@ -6,8 +6,8 @@ import React, {
     View
 } from 'react-native';
 
-import colors from './colors';
-import {prettyFormatTime} from './utils';
+import colors from './../colors';
+import {prettyFormatTime} from './../utils';
 
 let initialTextX = 10;
 
@@ -76,9 +76,9 @@ export default class Times extends Component {
     render() {
         return (
             <View style={[style.wrapper, this.props.style]}>
-                <Animated.Text style={[style.text, style.left, {transform: [{translateX: this.state.leftTextX}], opacity: this.state.textOpacity}]}>{prettyFormatTime(this.props.fraction * this.props.length)}</Animated.Text>
+                <Animated.Text style={[style.text, style.left, {transform: [{translateX: this.state.leftTextX}], opacity: this.state.textOpacity}]} monospace>{prettyFormatTime(this.props.fraction * this.props.length)}</Animated.Text>
                 <Animated.View style={[style.sep, {transform: [{scaleY: this.state.sepScale}], opacity: this.state.textOpacity}]} />
-                <Animated.Text style={[style.text, style.right, {transform: [{translateX: this.state.rightTextX}], opacity: this.state.textOpacity}]}>{prettyFormatTime(this.props.length)}</Animated.Text>
+                <Animated.Text style={[style.text, style.right, {transform: [{translateX: this.state.rightTextX}], opacity: this.state.textOpacity}]} monospace>{prettyFormatTime(this.props.length)}</Animated.Text>
             </View>
         );
     }
@@ -109,7 +109,7 @@ let style = {
         color: colors.white,
         bottom: -6,
         letterSpacing: 3.24,
-        fontFamily: '.SFUIText-Regular'
+        fontFamily: 'System'
     },
     left: {
         right: windowWidth/2 + textPadding,

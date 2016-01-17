@@ -9,7 +9,7 @@ import React, {
     View
 } from 'react-native';
 
-import colors from './colors';
+import colors from './../colors';
 import TinyUser from './TinyUser';
 import Times from './Times';
 
@@ -21,7 +21,8 @@ export default class Scrubber extends Component {
 
     state = {
         frac: 0,
-        scrubbing: false
+        scrubbing: false,
+        dashOpacity: new Animated.Value(0)
     };
 
     _touching = false;
@@ -51,7 +52,13 @@ export default class Scrubber extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.scrubbing) {
-
+            Animated.spring(this.state.dashOpacity, {
+                toValue: 1
+            }).start();
+        } else {
+            Animated.spring(this.state.dashOpacity, {
+                toValue: 0
+            }).start();
         }
     }
 
@@ -110,7 +117,7 @@ export default class Scrubber extends Component {
     renderTime() {
         return (
             <View>
-                <Image style={style.dashedTimeIndicator} source={require('image!dashedTimeIndicator')}/>
+                <Animated.Image style={[style.dashedTimeIndicator, {opacity: this.state.dashOpacity}]} source={require('image!dashedTimeIndicator')}/>
                 <Times fraction={this.state.frac}
                        length={1138}
                        style={style.times}
