@@ -6,6 +6,7 @@ import React, {
     PanResponder,
     ScrollView,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 
@@ -167,6 +168,8 @@ export default class Scrubber extends Component {
                 {/** Play head */}
                 <View style={[style.playHead]} pointerEvents='none' />
 
+                <TouchableOpacity style={{width: 60, height: 60, backgroundColor: 'transparent', position: 'absolute', top: 20, left: 0}} onPress={this.props.hidePlayer} />
+
                 {this.renderTime()}
             </View>
         );
@@ -182,8 +185,7 @@ let windowHeight = Dimensions.get('window').height;
 let style = {
     wrapper: {
         flex: 1,
-        alignSelf: 'stretch',
-        backgroundColor: 'white'
+        alignSelf: 'stretch'
     },
     bgWrapper: {
         position: 'absolute',
