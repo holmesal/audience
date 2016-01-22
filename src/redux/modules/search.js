@@ -60,16 +60,20 @@ export function search(query) {
             .end((err, res) => {
                 if (err) console.error(err);
                 let body = JSON.parse(res.text);
+                //console.info('podcast search results', body.results);
+
                 let results = body.results.map((res) => ({
                     type: 'podcast',
-                    podcastId: res.collectionId,
+                    podcastId: res.collectionId.toString(),
                     primary: res.collectionName,
                     secondary: 'Podcast',
                     photoUrl: res.artworkUrl100
                 }));
+
                 // Request is no longer in-flight
                 inFlight = null;
                 dispatch(updateInFlight(false));
+                // Update results
                 dispatch(updateResults(results));
             });
     }

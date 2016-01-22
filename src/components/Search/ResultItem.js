@@ -19,7 +19,7 @@ export default class ResultItem extends Component {
 
     render() {
         return (
-            <TouchableFade underlayColor={colors.almostDarkGrey}>
+            <TouchableFade underlayColor={colors.almostDarkGrey} onPress={this.props.onPress}>
                 <View style={style.wrapper}>
                     <Image style={style.photo} source={{uri: this.props.photoUrl}} />
                     <View style={style.info}>

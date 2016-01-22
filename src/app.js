@@ -20,6 +20,7 @@ import Parse from 'parse/react-native';
 import colors from './colors';
 import Scrubber from './components/Scrubber';
 import Search from './components/Search/Search';
+import PodcastInfo from './components/PodcastInfo/PodcastInfo';
 import Login from './components/Login';
 
 Parse.initialize(
@@ -104,7 +105,8 @@ export default class App extends Component {
         if (!this.state.loggedIn) return <Login onLogin={this.fetchAccessToken.bind(this)} />;
         return (
             <View style={style.wrapper}>
-                {!this.state.player && <Search showPlayer={() => this.setState({player: true})}/>}
+                <Search />
+                <PodcastInfo />
                 {this.state.player && <Scrubber hidePlayer={() => this.setState({player: false})}/>}
             </View>
         );

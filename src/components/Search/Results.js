@@ -12,6 +12,7 @@ import ResultItem from './ResultItem';
 import {connect} from 'react-redux/native';
 import {createSelector} from 'reselect';
 import {results$} from '../../redux/modules/search';
+import {showPodcastInfo} from '../../redux/modules/podcastInfo';
 
 class Results extends Component {
 
@@ -23,7 +24,9 @@ class Results extends Component {
         ]
     };
 
-    parseResult(res) {
+    gotoPodcast(podcastId) {
+        //console.info('navigating to podcast: ', podcastId);
+        this.props.dispatch(showPodcastInfo(podcastId));
     }
 
     renderResults() {
@@ -40,6 +43,7 @@ class Results extends Component {
                     secondary={res.secondary}
                     photoUrl={res.photoUrl}
                     photoShape={photoShape}
+                    onPress={handlePress}
                 />
             )
         });
