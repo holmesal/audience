@@ -1,6 +1,8 @@
 import React, {
     Component,
     Image,
+    PropTypes,
+    StyleSheet,
     Text,
     TouchableWithoutFeedback,
     View
@@ -16,12 +18,12 @@ export default class Search extends Component {
 
     render() {
         return (
-            <View style={style.wrapper}>
+            <View style={styles.wrapper}>
                 <Results showPlayer={this.props.showPlayer}/>
                 <TouchableWithoutFeedback onPress={() => this.refs.searchBar.focus()}>
-                    <View style={style.topBar}>
-                        <VibrancyView blurType="dark" style={style.cover} />
-                        <View style={[style.cover, style.darkOverlay]} />
+                    <View style={styles.topBar}>
+                        <VibrancyView blurType="dark" style={styles.cover} />
+                        <View style={[styles.cover, styles.darkOverlay]} />
                         <SearchBar ref="searchBar" />
                     </View>
                 </TouchableWithoutFeedback>
@@ -31,7 +33,7 @@ export default class Search extends Component {
     }
 }
 
-let style = {
+let styles = StyleSheet.create({
     wrapper: {
         flex: 1
     },
@@ -59,4 +61,4 @@ let style = {
     darkOverlay: {
         backgroundColor: 'rgba(0,0,0,0.63)'
     }
-};
+});

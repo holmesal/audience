@@ -1,7 +1,9 @@
 import React, {
     Component,
     Image,
+    PropTypes,
     ScrollView,
+    StyleSheet,
     Text,
     View,
     TouchableOpacity
@@ -52,7 +54,7 @@ class Results extends Component {
     render() {
 
         return (
-            <ScrollView style={style.wrapper} contentContainerStyle={{paddingTop: 64}} keyboardShouldPersistTaps>
+            <ScrollView style={styles.wrapper} contentContainerStyle={{paddingTop: 64}} keyboardShouldPersistTaps>
                 {this.renderResults()}
                 <TouchableOpacity onPress={this.props.showPlayer}><View  style={{flex: 1, alignSelf: 'stretch', height: 300}}></View></TouchableOpacity>
             </ScrollView>
@@ -60,11 +62,11 @@ class Results extends Component {
     }
 }
 
-let style = {
+let styles = StyleSheet.create({
     wrapper: {
         flex: 1
     }
-};
+});
 
 let select = createSelector(results$, (results) => ({results}));
 export default connect(select)(Results);

@@ -1,6 +1,8 @@
 import React, {
     Component,
     Image,
+    PropTypes,
+    StyleSheet,
     Text,
     View
 } from 'react-native';
@@ -20,20 +22,20 @@ export default class ResultItem extends Component {
     render() {
         return (
             <TouchableFade underlayColor={colors.almostDarkGrey} onPress={this.props.onPress}>
-                <View style={style.wrapper}>
-                    <Image style={style.photo} source={{uri: this.props.photoUrl}} />
-                    <View style={style.info}>
-                        <PrimaryText style={style.primary} numberOfLines={1}>{this.props.primary}</PrimaryText>
-                        <SecondaryText style={style.secondary}>{this.props.secondary}</SecondaryText>
+                <View style={styles.wrapper}>
+                    <Image style={styles.photo} source={{uri: this.props.photoUrl}} />
+                    <View style={styles.info}>
+                        <PrimaryText style={styles.primary} numberOfLines={1}>{this.props.primary}</PrimaryText>
+                        <SecondaryText style={styles.secondary}>{this.props.secondary}</SecondaryText>
                     </View>
-                    <View style={style.sep} />
+                    <View style={styles.sep} />
                 </View>
             </TouchableFade>
           );
     }
 }
 
-let style = {
+let styles = StyleSheet.create({
     wrapper: {
         alignSelf: 'stretch',
         paddingTop: 20,
@@ -74,4 +76,4 @@ let style = {
         left: 20 + 48 + 20,
         right: 0
     }
-};
+});

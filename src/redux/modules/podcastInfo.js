@@ -8,7 +8,7 @@ const HIDE = 'audience/podcastInfo/HIDE';
 
 
 const initialState = Immutable.fromJS({
-    visible: false,
+    visible: true,
     podcastId: null
 });
 

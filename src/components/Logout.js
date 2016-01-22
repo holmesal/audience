@@ -1,6 +1,8 @@
 import React, {
     Component,
     Image,
+    PropTypes,
+    StyleSheet,
     Text,
     TouchableOpacity,
     View
@@ -20,18 +22,18 @@ export default class Logout extends Component {
 
     render() {
         return (
-            <TouchableOpacity style={style.wrapper} onPress={this.logout}>
+            <TouchableOpacity style={styles.wrapper} onPress={this.logout}>
                 <Text style={{color:"#fefefe"}}>Logout</Text>
             </TouchableOpacity>
         );
     }
 }
 
-let style = {
+let styles = StyleSheet.create({
     wrapper: {
         alignSelf: 'stretch',
         height: 60,
         alignItems: 'center',
         justifyContent: 'center'
     }
-};
+});

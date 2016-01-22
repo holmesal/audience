@@ -1,6 +1,8 @@
 import React, {
     Component,
     Image,
+    PropTypes,
+    StyleSheet,
     Text,
     View
 } from 'react-native';
@@ -34,7 +36,7 @@ export default class Login extends Component {
 
     render() {
         return (
-            <View style={style.wrapper}>
+            <View style={styles.wrapper}>
                 <FBSDKLoginButton
                     onLoginFinished={(error, result) => {
                         if (error) {
@@ -59,10 +61,10 @@ export default class Login extends Component {
     }
 }
 
-let style = {
+let styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
     }
-};
+});

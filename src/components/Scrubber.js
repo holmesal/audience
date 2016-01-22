@@ -4,7 +4,9 @@ import React, {
     Dimensions,
     Image,
     PanResponder,
+    PropTypes,
     ScrollView,
+    StyleSheet,
     Text,
     TouchableOpacity,
     View
@@ -99,17 +101,17 @@ export default class Scrubber extends Component {
         return [
             <TinyUser
                 profilePhotoUrl="https://scontent-lax3-1.xx.fbcdn.net/hphotos-xaf1/v/t1.0-0/p206x206/24567_1315611770255_1155488_n.jpg?oh=bbd8882c52d4abd567db280f76d0b87a&oe=56FBD84D"
-                style={[style.tinyUser, {left: 200}]}
+                style={[styles.tinyUser, {left: 200}]}
                 key="lah"
             />,
             <TinyUser
                 profilePhotoUrl="https://pbs.twimg.com/profile_images/617806122544566272/Pm6KPI9P_400x400.jpg"
-                style={[style.tinyUser, {left: 357}]}
+                style={[styles.tinyUser, {left: 357}]}
                 key="dee"
             />,
             <TinyUser
                 profilePhotoUrl="https://scontent-lax3-1.xx.fbcdn.net/hprofile-xft1/v/t1.0-1/c0.0.320.320/p320x320/12510375_10153732937455867_8269122392597910250_n.jpg?oh=267f72be655437a1be7ea666b0b2accf&oe=5705AA7A"
-                style={[style.tinyUser, {left: 462}]}
+                style={[styles.tinyUser, {left: 462}]}
                 key="dah"
             />
         ]
@@ -118,10 +120,10 @@ export default class Scrubber extends Component {
     renderTime() {
         return (
             <View>
-                <Animated.Image style={[style.dashedTimeIndicator, {opacity: this.state.dashOpacity}]} source={require('image!dashedTimeIndicator')}/>
+                <Animated.Image style={[styles.dashedTimeIndicator, {opacity: this.state.dashOpacity}]} source={require('image!dashedTimeIndicator')}/>
                 <Times fraction={this.state.frac}
                        length={1138}
-                       style={style.times}
+                       style={styles.times}
                        visible={this.state.scrubbing}
                 />
             </View>
@@ -130,43 +132,43 @@ export default class Scrubber extends Component {
 
     render() {
         return (
-            <View style={style.wrapper}>
+            <View style={styles.wrapper}>
 
                 {/** Left half background */}
-                <View style={style.bgWrapper}>
-                    <Image style={[style.bgImage, {left: 0}]} source={require('image!bg')} />
+                <View style={styles.bgWrapper}>
+                    <Image style={[styles.bgImage, {left: 0}]} source={require('image!bg')} />
                 </View>
 
                 {/** Bottom component of the right half background */}
-                <View style={[style.coverWrapper, {opacity: 0.99}]} pointerEvents='none'>
-                    <Image style={[style.bgCover, {right: 0}]} source={require('image!bg')} />
+                <View style={[styles.coverWrapper, {opacity: 0.99}]} pointerEvents='none'>
+                    <Image style={[styles.bgCover, {right: 0}]} source={require('image!bg')} />
                 </View>
 
                 {/** Scroller */}
                 <ScrollView horizontal
                             showsHorizontalScrollIndicator={false}
-                            style={style.scroller}
-                            contentContainerStyle={style.scrollContent}
+                            style={styles.scroller}
+                            contentContainerStyle={styles.scrollContent}
                             onScroll={this.handleScroll.bind(this)}
                             onMomentumScrollEnd={this.handleScrollEnd.bind(this)}
                             scrollEventThrottle={32}
                             {...this._panResponder.panHandlers}
                 >
-                    <View style={style.waveform}>
-                        <View style={[style.spacer, {marginRight: 3}]} />
-                        <Image style={style.fakeWaveform} source={require('image!waveform')} />
-                        <View style={[style.spacer, {marginLeft: 3}]} />
+                    <View style={styles.waveform}>
+                        <View style={[styles.spacer, {marginRight: 3}]} />
+                        <Image style={styles.fakeWaveform} source={require('image!waveform')} />
+                        <View style={[styles.spacer, {marginLeft: 3}]} />
                         {this.renderUsers()}
                     </View>
                 </ScrollView>
 
                 {/** Top component of the right half background */}
-                <View style={[style.coverWrapper, {opacity: 0.8}]} pointerEvents='none'>
-                    <Image style={[style.bgCover, {right: 0}]} source={require('image!bg')} />
+                <View style={[styles.coverWrapper, {opacity: 0.8}]} pointerEvents='none'>
+                    <Image style={[styles.bgCover, {right: 0}]} source={require('image!bg')} />
                 </View>
 
                 {/** Play head */}
-                <View style={[style.playHead]} pointerEvents='none' />
+                <View style={[styles.playHead]} pointerEvents='none' />
 
                 <TouchableOpacity style={{width: 60, height: 60, backgroundColor: 'transparent', position: 'absolute', top: 20, left: 0}} onPress={this.props.hidePlayer} />
 
@@ -182,7 +184,7 @@ let waveformHeight = 32;
 let windowWidth = Dimensions.get('window').width;
 let windowHeight = Dimensions.get('window').height;
 
-let style = {
+let styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         alignSelf: 'stretch'
@@ -267,4 +269,4 @@ let style = {
         left: 0,
         right: 0
     }
-};
+});

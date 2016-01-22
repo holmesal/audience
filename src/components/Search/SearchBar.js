@@ -1,6 +1,8 @@
 import React, {
     Component,
     Image,
+    PropTypes,
+    StyleSheet,
     Text,
     TextInput,
     View
@@ -23,11 +25,11 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <View style={style.wrapper}>
-                <Image style={style.magnifying} source={require('image!magnifyingGlass')} />
+            <View style={styles.wrapper}>
+                <Image style={styles.magnifying} source={require('image!magnifyingGlass')} />
                 <TextInput
                     ref="input"
-                    style={style.input}
+                    style={styles.input}
                     keyboardAppearance="dark"
                     placeholder="Searching podcasts, episodes, users"
                     placeholderTextColor={colors.grey}
@@ -42,7 +44,7 @@ class SearchBar extends Component {
     }
 }
 
-let style = {
+let styles = StyleSheet.create({
     wrapper: {
         backgroundColor: 'rgba(60,60,60,0.5)',
         borderRadius: 4,
@@ -62,6 +64,6 @@ let style = {
         fontFamily: 'System',
         color: colors.lightGrey
     }
-};
+});
 
 export default connect()(SearchBar);

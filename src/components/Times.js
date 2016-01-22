@@ -2,6 +2,8 @@ import React, {
     Animated,
     Component,
     Dimensions,
+    PropTypes,
+    StyleSheet,
     Text,
     View
 } from 'react-native';
@@ -75,10 +77,10 @@ export default class Times extends Component {
 
     render() {
         return (
-            <View style={[style.wrapper, this.props.style]}>
-                <Animated.Text style={[style.text, style.left, {transform: [{translateX: this.state.leftTextX}], opacity: this.state.textOpacity}]} monospace>{prettyFormatTime(this.props.fraction * this.props.length)}</Animated.Text>
-                <Animated.View style={[style.sep, {transform: [{scaleY: this.state.sepScale}], opacity: this.state.textOpacity}]} />
-                <Animated.Text style={[style.text, style.right, {transform: [{translateX: this.state.rightTextX}], opacity: this.state.textOpacity}]} monospace>{prettyFormatTime(this.props.length)}</Animated.Text>
+            <View style={[styles.wrapper, this.props.style]}>
+                <Animated.Text style={[styles.text, styles.left, {transform: [{translateX: this.state.leftTextX}], opacity: this.state.textOpacity}]} monospace>{prettyFormatTime(this.props.fraction * this.props.length)}</Animated.Text>
+                <Animated.View style={[styles.sep, {transform: [{scaleY: this.state.sepScale}], opacity: this.state.textOpacity}]} />
+                <Animated.Text style={[styles.text, styles.right, {transform: [{translateX: this.state.rightTextX}], opacity: this.state.textOpacity}]} monospace>{prettyFormatTime(this.props.length)}</Animated.Text>
             </View>
         );
     }
@@ -88,7 +90,7 @@ let windowWidth = Dimensions.get('window').width;
 let windowHeight = Dimensions.get('window').height;
 let textPadding = 28;
 
-let style = {
+let styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         flexDirection: 'row',
@@ -119,4 +121,4 @@ let style = {
         left: windowWidth/2 + textPadding,
         textAlign: 'right'
     }
-};
+});

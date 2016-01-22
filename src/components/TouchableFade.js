@@ -2,6 +2,8 @@ import React, {
     Animated,
     Component,
     Image,
+    PropTypes,
+    StyleSheet,
     Text,
     TouchableWithoutFeedback,
     View
@@ -62,8 +64,8 @@ export default class TouchableFade extends Component {
                 onPressIn={this.handlePressIn.bind(this)}
                 onPressOut={this.handlePressOut.bind(this)}
             >
-                <View style={[style.wrapper, this.props.style]}>
-                    <Animated.View style={[style.underlay,
+                <View style={[styles.wrapper, this.props.style]}>
+                    <Animated.View style={[styles.underlay,
                         {opacity: this.state.underlayOpacity,
                         backgroundColor: this.props.underlayColor
                     }]} />
@@ -74,7 +76,7 @@ export default class TouchableFade extends Component {
     }
 }
 
-let style = {
+let styles = StyleSheet.create({
     wrapper: {
         position: 'relative',
         backgroundColor: 'transparent'
@@ -86,4 +88,4 @@ let style = {
         left: 0,
         bottom: 0
     }
-};
+});
