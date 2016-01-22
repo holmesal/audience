@@ -6,9 +6,12 @@ import React, {
     View
 } from 'react-native';
 
+import {connect} from 'react-redux/native';
+import {updateQuery} from '../../redux/modules/search';
+
 import colors from '../../colors';
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
 
     static propTypes = {};
 
@@ -31,6 +34,7 @@ export default class SearchBar extends Component {
                     clearButtonMode="while-editing"
                     returnKeyType="done"
                     autoCorrect={false}
+                    onChangeText={(query) => this.props.dispatch(updateQuery(query))}
                     selectTextOnFocus
                 />
             </View>
@@ -59,3 +63,5 @@ let style = {
         color: colors.lightGrey
     }
 };
+
+export default connect()(SearchBar);

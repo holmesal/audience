@@ -9,7 +9,11 @@ import React, {
 
 import ResultItem from './ResultItem';
 
-export default class Results extends Component {
+import {connect} from 'react-redux/native';
+import {createSelector} from 'reselect';
+import {results$} from '../../redux/modules/search';
+
+class Results extends Component {
 
     static defaultProps = {
         results: [
@@ -18,6 +22,9 @@ export default class Results extends Component {
             {type: 'podcast', podcastId: '12345', primary: 'Stuff You Should Know', secondary: 'Podcast', photoUrl: 'http://lorempixel.com/200/200?333'}
         ]
     };
+
+    parseResult(res) {
+    }
 
     renderResults() {
         return this.props.results.map(res => {
@@ -41,7 +48,7 @@ export default class Results extends Component {
     render() {
 
         return (
-            <ScrollView style={style.wrapper} contentContainerStyle={{paddingTop: 64}}>
+            <ScrollView style={style.wrapper} contentContainerStyle={{paddingTop: 64}} keyboardShouldPersistTaps>
                 {this.renderResults()}
                 <TouchableOpacity onPress={this.props.showPlayer}><View  style={{flex: 1, alignSelf: 'stretch', height: 300}}></View></TouchableOpacity>
             </ScrollView>
@@ -51,6 +58,9 @@ export default class Results extends Component {
 
 let style = {
     wrapper: {
-        flex: 1,
+        flex: 1
     }
 };
+
+let select = createSelector(results$, (results) => ({results}));
+export default connect(select)(Results);
