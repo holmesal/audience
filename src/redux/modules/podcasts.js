@@ -9,7 +9,7 @@ const initialState = Immutable.fromJS({
 
 export default createReducer(initialState, {
 
-    [UPDATE_PODCAST]: (state, action) => state.set(action.podcastId, action.podcast)
+    [UPDATE_PODCAST]: (state, action) => state.setIn([action.podcastId], Immutable.fromJS(action.podcast))
 
 })
 
@@ -17,6 +17,7 @@ export default createReducer(initialState, {
 export const podcasts$ = state => state.getIn(['podcasts']);
 
 // Actions
+import {fetchEpisodes} from './episodes';
 export const updatePodcast = (podcastId, podcast) => ({
     type: UPDATE_PODCAST,
     podcastId,
@@ -43,7 +44,8 @@ export const fetchPodcast = (podcastId) => {
                     //console.info('podcast results for id ', podcastId, body);
                     let podcast = body.results[0];
                     if (podcast) {
-                        dispatch(updatePodcast(podcastId, podcast))
+                        dispatch(updatePodcast(podcastId, podcast));
+                        dispatch(fetchEpisodes(podcastId));
                     } else {
                         console.error(`No iTunes podcast exists for id ${podcastId}`);
                     }

@@ -16,11 +16,22 @@ import Logout from '../Logout';
 
 export default class Search extends Component {
 
+    blurInput() {
+        this.refs.searchBar.refs.wrappedInstance.blur()
+    }
+
+    focusInput() {
+        this.refs.searchBar.refs.wrappedInstance.focus();
+    }
+
     render() {
         return (
             <View style={styles.wrapper}>
-                <Results showPlayer={this.props.showPlayer}/>
-                <TouchableWithoutFeedback onPress={() => this.refs.searchBar.focus()}>
+                <Results
+                    showPlayer={this.props.showPlayer}
+                    onSelect={this.blurInput.bind(this)}
+                />
+                <TouchableWithoutFeedback onPress={this.focusInput.bind(this)}>
                     <View style={styles.topBar}>
                         <VibrancyView blurType="dark" style={styles.cover} />
                         <View style={[styles.cover, styles.darkOverlay]} />

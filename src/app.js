@@ -105,7 +105,7 @@ export default class App extends Component {
         if (!this.state.loggedIn) return <Login onLogin={this.fetchAccessToken.bind(this)} />;
         return (
             <View style={style.wrapper}>
-                <Search />
+                <Search showPlayer={() => this.setState({player: true})}/>
                 <PodcastInfo />
                 {this.state.player && <Scrubber hidePlayer={() => this.setState({player: false})}/>}
             </View>

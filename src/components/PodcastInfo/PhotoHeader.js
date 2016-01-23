@@ -1,4 +1,5 @@
 import React, {
+    Animated,
     Component,
     Image,
     PropTypes,
@@ -15,25 +16,34 @@ export default class PhotoHeader extends Component {
         title: PropTypes.string
     };
 
-    renderControls() {
-        return (
-            <View>
+    state = {
+        imageOpacity: new Animated.Value(0),
+        //titleOpacity: 0,
+        titleOffset: 100
+    };
 
-            </View>
-        )
+    handleImageLoad() {
+        console.info('image loaded!');
+        Animated.timing(this.state.imageOpacity, {
+            toValue: 1
+        }).start()
     }
 
     render() {
         return (
             <View style={styles.wrapper}>
-                <Image source={{uri: this.props.photoUrl}} style={styles.stretch} />
-                <View style={[styles.stretch, styles.tint]} />
+                <Animated.View style={{flex: 1, alignSelf: 'stretch', opacity: this.state.imageOpacity}}>
+                    <Image
+                        source={{uri: this.props.photoUrl}}
+                        style={[styles.stretch]}
+                        onLoad={this.handleImageLoad.bind(this)}
+                    />
+                    <View style={[styles.stretch, styles.tint]} />
+                </Animated.View>
 
                 <View style={[styles.stretch, styles.titleWrapper]}>
                     <Text style={styles.title}>{this.props.title.toUpperCase()}</Text>
                 </View>
-
-                {this.renderControls()}
             </View>
         );
     }
@@ -41,7 +51,8 @@ export default class PhotoHeader extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        height: 265
+        height: 265,
+        backgroundColor: '#212121'
     },
     stretch: {
         position: 'absolute',
@@ -52,7 +63,7 @@ let styles = StyleSheet.create({
     },
     tint: {
         backgroundColor: '#3e3e3e',
-        opacity: 0.6
+        opacity: 0.8
     },
     titleWrapper: {
         backgroundColor: 'transparent',
@@ -63,8 +74,9 @@ let styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'Oswald-Light',
         fontSize: 30,
-        letterSpacing: 3
-    },
+        letterSpacing: 3,
+        textAlign: 'center'
+    }
 
 
 });

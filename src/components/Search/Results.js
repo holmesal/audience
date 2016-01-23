@@ -29,6 +29,7 @@ class Results extends Component {
     gotoPodcast(podcastId) {
         //console.info('navigating to podcast: ', podcastId);
         this.props.dispatch(showPodcastInfo(podcastId));
+        this.props.onSelect();
     }
 
     renderResults() {

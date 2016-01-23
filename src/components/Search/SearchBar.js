@@ -23,6 +23,10 @@ class SearchBar extends Component {
         this.refs.input.focus();
     }
 
+    blur() {
+        this.refs.input.blur();
+    }
+
     render() {
         return (
             <View style={styles.wrapper}>

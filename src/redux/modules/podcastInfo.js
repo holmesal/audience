@@ -20,7 +20,7 @@ export default createReducer(initialState, {
     }),
     [HIDE]: (state, action) => state.merge({
         visible: false,
-        podcastId: null
+        //podcastId: null
     })
 })
 
@@ -30,7 +30,10 @@ import {podcasts$} from './podcasts';
 export const podcastId$ = state => state.getIn(['podcastInfo', 'podcastId']);
 export const visible$ = state => state.getIn(['podcastInfo', 'visible']);
 export const podcast$ = createSelector(podcastId$, podcasts$, (podcastId, podcasts) => podcasts.get(podcastId));
-export const podcastInfo$ = createSelector(visible$, podcast$, (visible, podcast) => ({visible, podcast}));
+export const podcastInfo$ = createSelector(visible$, podcast$, (visible, podcast) => ({
+    visible,
+    podcast: podcast && podcast.toJS()
+}));
 
 
 // Actions

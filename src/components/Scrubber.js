@@ -186,8 +186,11 @@ let windowHeight = Dimensions.get('window').height;
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1,
-        alignSelf: 'stretch'
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
     },
     bgWrapper: {
         position: 'absolute',
