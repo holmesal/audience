@@ -23,7 +23,7 @@ export default class PhotoHeader extends Component {
     };
 
     handleImageLoad() {
-        console.info('image loaded!');
+        //console.info('image loaded!');
         Animated.timing(this.state.imageOpacity, {
             toValue: 1
         }).start()

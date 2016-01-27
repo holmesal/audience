@@ -7,13 +7,18 @@ import React, {
     View
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
+import EpisodeListItem from './EpisodeListItem';
+
+import {connect} from 'react-redux/native';
+import {episodeList$} from '../../redux/modules/episodes';
 
 import colors from '../../colors';
 
-export default class EpisodeList extends Component {
+class EpisodeList extends Component {
 
     static propTypes = {
-        episodes: PropTypes.array
+        episodes: PropTypes.array,
+        doneAnimation: PropTypes.bool
     };
 
     static defaultProps = {
@@ -22,18 +27,26 @@ export default class EpisodeList extends Component {
 
     renderLoading() {
         return (
-            <Spinner
-                color={colors.lightGrey}
-                type="Wave"
-                style={{opacity: 0.2}}
-            />
+            <View style={{flex: 1, height: 400, alignItems: 'center', justifyContent: 'center'}}>
+                <Spinner
+                    color={colors.lightGrey}
+                    type="Wave"
+                    style={{opacity: 0.2}}
+                />
+            </View>
         )
     }
 
+    renderEpisodeList() {
+        return this.props.episodes.map(ep => <EpisodeListItem title={ep.title} key={ep.uid} hasAudio={ep.audio.url}/>)
+    }
+
     render() {
+        console.info('episode list props', this.props);
+        let view = this.props.episodes.length > 0 && this.props.doneAnimating ? this.renderEpisodeList() : this.renderLoading();
         return (
             <View style={styles.wrapper}>
-                {this.renderLoading()}
+                {view}
             </View>
         );
     }
@@ -41,9 +54,11 @@ export default class EpisodeList extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1,
-        height: 400,
-        alignItems: 'center',
-        justifyContent: 'center'
+        //flex: 1,
+        //height: 400,
+        //alignItems: 'center',
+        //justifyContent: 'center'
     }
 });
+
+export default connect(episodeList$)(EpisodeList)

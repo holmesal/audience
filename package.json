@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native start"
+    "start": "react-native start",
+    "build": "react-native bundle --entry-file index.ios.js --bundle-output ios/main.jsbundle --platform ios --dev false"
   },
   "dependencies": {
     "feedparser": "^1.1.4",

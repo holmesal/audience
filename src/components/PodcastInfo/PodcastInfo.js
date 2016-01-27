@@ -25,6 +25,7 @@ class PodcastInfo extends Component {
     static propTypes = {};
 
     static defaultProps = {
+        doneAnimating: false
         //podcast: {
         //    artworkUrl600: 'http://is2.mzstatic.com/image/thumb/Music4/v4/c0/bb/52/c0bb5293-0e74-3bf7-6a2d-e8e18e8d80e4/source/600x600bb.jpg',
         //    collectionName: 'Welcome to Night Vale'
@@ -39,7 +40,7 @@ class PodcastInfo extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            this.props.dispatch(showPodcastInfo('542228532'));
+            this.props.dispatch(showPodcastInfo('278981407'));
         }, 300);
     }
 
@@ -57,7 +58,9 @@ class PodcastInfo extends Component {
                 toValue: 0,
                 tension: 32,
                 friction: 8
-            }).start();
+            }).start(() => {
+                if (!this.state.doneAnimating) this.setState({doneAnimating: true})
+            });
         } else {
             Animated.timing(this.state.opacity, {
                 toValue: 0,
@@ -67,12 +70,14 @@ class PodcastInfo extends Component {
                 toValue: OFFSCREEN,
                 tension: 31,
                 friction: 9
-            }).start();
+            }).start(() => {
+                if (this.state.doneAnimating) this.setState({doneAnimating: false})
+            });
         }
     }
 
     renderPodcastInfo() {
-        console.info('podcast info props', this.props);
+        //console.info('podcast info props', this.props);
         return (
             <View style={{flex: 1}}>
                 <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -80,7 +85,7 @@ class PodcastInfo extends Component {
                         title={this.props.podcast.collectionName}
                         photoUrl={this.props.podcast.artworkUrl600}
                     />
-                    <EpisodeList />
+                    <EpisodeList doneAnimating={this.state.doneAnimating}/>
                 </ScrollView>
                 <TopBar
                     onBackPress={() => this.props.dispatch(hidePodcastInfo())}

@@ -30,7 +30,7 @@ export const fetchPodcast = (podcastId) => {
         //console.info('existing podcast: ', existing);
 
         if (!existing) {
-            console.info('fetching ', podcastId);
+            //console.info('fetching ', podcastId);
             request
                 .get('https://itunes.apple.com/lookup')
                 .accept('application/json')
