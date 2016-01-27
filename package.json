@@ -6,6 +6,8 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "feedparser": "^1.1.4",
+    "htmlparser2": "^3.9.0",
     "immutable": "^3.7.6",
     "moment": "^2.11.1",
     "parse": "^1.6.14",
@@ -22,6 +24,11 @@
     "redux-thunk": "^1.0.3",
     "remote-redux-devtools": "0.0.8",
     "reselect": "^2.0.2",
+    "rss-parser": "^2.1.1",
     "superagent": "^1.7.0"
+  },
+  "devDependencies": {
+    "events-browserify": "0.0.1",
+    "stream-browserify": "^2.0.1"
   }
 }
