@@ -35,10 +35,7 @@ export const updateEpisodes = (podcastId, episodes) => ({
 
 export const fetchEpisodes = (podcastId) => {
     return (dispatch, getState) => {
-        //let existing = getState().getIn(['episodes', podcastId, episodeId]);
-        //console.info('existing podcast: ', existing);
         let feedUrl = getState().getIn(['podcasts', podcastId, 'feedUrl']);
-        //console.info('fetching latest episodes for ', podcastId, feedUrl);
 
         if (!feedUrl) {
             console.error(`no feed url found for podcast ${podcastId}`);

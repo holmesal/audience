@@ -38,7 +38,14 @@ class EpisodeList extends Component {
     }
 
     renderEpisodeList() {
-        return this.props.episodes.map(ep => <EpisodeListItem title={ep.title} key={ep.uid} hasAudio={ep.audio.url}/>)
+        return this.props.episodes.map(ep => (
+            <EpisodeListItem
+                title={ep.title}
+                description={ep.description}
+                key={ep.uid}
+                duration={ep.duration}
+            />
+        ))
     }
 
     render() {

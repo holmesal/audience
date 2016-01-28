@@ -26,10 +26,12 @@
     "remote-redux-devtools": "0.0.8",
     "reselect": "^2.0.2",
     "rss-parser": "^2.1.1",
+    "striptags": "^2.1.1",
     "superagent": "^1.7.0"
   },
   "devDependencies": {
     "events-browserify": "0.0.1",
+    "react-native-cli": "^0.1.10",
     "stream-browserify": "^2.0.1"
   }
 }

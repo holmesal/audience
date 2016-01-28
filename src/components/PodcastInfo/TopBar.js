@@ -50,12 +50,12 @@ let styles = StyleSheet.create({
         backgroundColor: 'transparent'
     },
     backIcon: {
-        left: 16,
+        left: 20,
         top: 10
     },
     dotsIcon: {
         position: 'absolute',
-        right: 16,
+        right: 20,
         top: 40
     }
 });
