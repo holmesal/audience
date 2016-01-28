@@ -70,8 +70,8 @@ class PodcastInfo extends Component {
                 toValue: OFFSCREEN,
                 tension: 31,
                 friction: 9
-            }).start(() => {
-                if (this.state.doneAnimating) this.setState({doneAnimating: false})
+            }).start((end) => {
+                if (end.finished && this.state.doneAnimating) this.setState({doneAnimating: false})
             });
         }
     }

@@ -18,7 +18,7 @@ class EpisodeList extends Component {
 
     static propTypes = {
         episodes: PropTypes.array,
-        doneAnimation: PropTypes.bool
+        doneAnimating: PropTypes.bool
     };
 
     static defaultProps = {
