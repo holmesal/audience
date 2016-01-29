@@ -22,7 +22,8 @@ export const episodes$ = state => state.getIn(['episodes']);
 const podcastId$ = state => state.getIn(['podcastInfo', 'podcastId']);
 export const episodeList$ = createSelector(episodes$, podcastId$, (episodes, podcastId) => {
     return {
-        episodes: episodes.get(podcastId, Immutable.List()).toJS()
+        episodes: episodes.get(podcastId, Immutable.List()).toJS(),
+        podcastId
     }
 });
 

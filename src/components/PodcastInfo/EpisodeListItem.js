@@ -11,16 +11,20 @@ import React, {
 import striptags from 'striptags';
 
 import {PrimaryText, SupportingText, MetaText} from '../../type';
+import colors from '../../colors';
+import TouchableFade from '../TouchableFade';
 
 export default class EpisodeListItem extends Component {
 
     static propTypes = {
         title: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired
+        description: PropTypes.string.isRequired,
+        unheard: PropTypes.bool,
+        onPress: PropTypes.func
     };
 
     static defaultProps = {
-
+        unheard: false
     };
 
     getDuration() {
@@ -42,14 +46,15 @@ export default class EpisodeListItem extends Component {
     }
 
     getUploadedAgo() {
+        let extraStyle = this.props.unheard ? {color: colors.attention} : {};
         return (
-            <MetaText>1 day ago</MetaText>
+            <MetaText style={extraStyle}>1 day ago</MetaText>
         )
     }
 
     render() {
         return (
-            <View style={styles.wrapper}>
+            <TouchableFade style={styles.wrapper} underlayColor={colors.almostDarkGrey} onPress={this.props.onPress}>
                 <View style={styles.content}>
                     <PrimaryText style={styles.title} numberOfLines={1}>{this.props.title}</PrimaryText>
                 </View>
@@ -59,14 +64,15 @@ export default class EpisodeListItem extends Component {
                         <Image style={styles.tinyIcon} source={require('image!tinyClock')} />
                         {this.getDuration()}
                         <View style={{flex: 1}} />
-                        <Image style={styles.tinyIcon} source={require('image!tinyUploaded')} />
+                        <Image style={[styles.tinyIcon, {tintColor: this.props.unheard ? colors.attention : null}]} source={require('image!tinyUploaded')} />
                         {this.getUploadedAgo()}
                     </View>
                 </View>
                 <TouchableOpacity style={styles.touchable}>
                     <Image style={styles.dots} source={require('image!dots')} />
                 </TouchableOpacity>
-            </View>
+                {this.props.unheard && <View style={styles.indicator}/>}
+            </TouchableFade>
         );
     }
 }
@@ -134,5 +140,13 @@ let styles = StyleSheet.create({
         width: 10,
         height: 10,
         marginRight: 4
+    },
+    indicator: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        width: 6,
+        backgroundColor: colors.attention
     }
 });

@@ -11,6 +11,7 @@ import EpisodeListItem from './EpisodeListItem';
 
 import {connect} from 'react-redux/native';
 import {episodeList$} from '../../redux/modules/episodes';
+import {playEpisode} from '../../redux/modules/player';
 
 import colors from '../../colors';
 
@@ -38,12 +39,14 @@ class EpisodeList extends Component {
     }
 
     renderEpisodeList() {
-        return this.props.episodes.map(ep => (
+        return this.props.episodes.map((ep, idx) => (
             <EpisodeListItem
                 title={ep.title}
                 description={ep.description}
                 key={ep.uid}
                 duration={ep.duration}
+                unheard={false}
+                onPress={() => this.props.dispatch(playEpisode(this.props.podcastId, ep.uid))}
             />
         ))
     }

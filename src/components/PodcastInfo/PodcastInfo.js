@@ -40,7 +40,7 @@ class PodcastInfo extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            this.props.dispatch(showPodcastInfo('536258179'));
+            this.props.dispatch(showPodcastInfo('432550963'));
         }, 300);
     }
 
