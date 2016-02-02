@@ -12,16 +12,20 @@ let store;
 // Initializing with middleware
 const createStoreWithMiddleware = applyMiddleware(
     // we're using redux-thunk for async actions
-    thunk
+    thunk,
     // Create a logger to make it easy to debug state changes
-    //createLogger({
-    //    collapsed: true
-    //})
+    createLogger({
+        collapsed: true
+    })
 );
 
 const finalCreateStore = compose(
     createStoreWithMiddleware,
-    devTools()
+    devTools({
+        //hostname: 'localhost',
+        //port: 8000,
+        //name: 'Audience iOS'
+    })
 )(createStore);
 
 // Create the store with an initial (empty) state

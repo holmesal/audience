@@ -52,7 +52,6 @@ class EpisodeList extends Component {
     }
 
     render() {
-        console.info('episode list props', this.props);
         let view = this.props.episodes.length > 0 && this.props.doneAnimating ? this.renderEpisodeList() : this.renderLoading();
         return (
             <View style={styles.wrapper}>

@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "HorizontalScrollTest.app"
+               BuildableName = "Audience.app"
                BlueprintName = "Audience"
                ReferencedContainer = "container:Audience.xcodeproj">
             </BuildableReference>
@@ -59,7 +59,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "HorizontalScrollTest.app"
+            BuildableName = "Audience.app"
             BlueprintName = "Audience"
             ReferencedContainer = "container:Audience.xcodeproj">
          </BuildableReference>
@@ -82,7 +82,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "HorizontalScrollTest.app"
+            BuildableName = "Audience.app"
             BlueprintName = "Audience"
             ReferencedContainer = "container:Audience.xcodeproj">
          </BuildableReference>
@@ -101,7 +101,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "HorizontalScrollTest.app"
+            BuildableName = "Audience.app"
             BlueprintName = "Audience"
             ReferencedContainer = "container:Audience.xcodeproj">
          </BuildableReference>

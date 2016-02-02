@@ -40,7 +40,7 @@ export default class App extends Component {
         FBSDKAccessToken.getCurrentAccessToken((credentials) => {
             let loggedIn = false;
             if (credentials) {
-                console.info('user is logged in!', credentials);
+                //console.info('user is logged in!', credentials);
                 // A non-null token indicates that the user is currently logged in.
                 loggedIn = true;
                 // Log in with parse
@@ -68,11 +68,11 @@ export default class App extends Component {
         Parse.FacebookUtils.logIn(authData, {
             success: (user) => {
                 if (!user.existed()) {
-                    console.info("User signed up and logged in through Facebook!");
+                    //console.info("User signed up and logged in through Facebook!");
                 } else {
-                    console.info("User logged in through Facebook!");
+                    //console.info("User logged in through Facebook!");
                 }
-                console.info(user);
+                //console.info(user);
                 this.setState({loggedIn: true, checkedLogin: true});
             },
             error: (user, error) => {

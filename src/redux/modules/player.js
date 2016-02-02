@@ -5,32 +5,84 @@ import request from 'superagent';
 import log from '../../utils/log';
 import moment from 'moment';
 import _ from 'lodash';
+import MTAudio from '../../lib/MTAudio';
 
-const UPDATE_PLAYING_EPISODE = 'audience/player/UPDATE_PLAYING_EPISODE';
+const SHOW_PLAYER = 'audience/player/SHOW_PLAYER';
+const HIDE_PLAYER = 'audience/player/HIDE_PLAYER';
+const UPDATE_EPISODE = 'audience/player/UPDATE_EPISODE';
+const UPDATE_PLAYING = 'audience/player/UPDATE_PLAYING';
+const UPDATE_BUFFERING = 'audience/player/UPDATE_BUFFERING';
+const UPDATE_DURATION = 'audience/player/UPDATE_DURATION';
+const UPDATE_CURRENT_TIME = 'audience/player/UPDATE_CURRENT_TIME';
 
 const initialState = Immutable.fromJS({
-    episodeId: null
+    visible: false,
+    episodeId: null,
+    playing: false,
+    buffering: false,
+    duration: null,
+    currentTime: null
 });
 
 export default createReducer(initialState, {
 
-    [UPDATE_PLAYING_EPISODE]: (state, action) => state.set('episodeId', action.episodeId)
+    [SHOW_PLAYER]: (state, action) => state.set('visible', true),
+    [HIDE_PLAYER]: (state, action) => state.set('visible', false),
+
+    [UPDATE_EPISODE]: (state, action) => state.set('episodeId', action.episodeId),
+
+    [UPDATE_PLAYING]: (state, action) => state.set('playing', action.playing),
+
+    [UPDATE_BUFFERING]: (state, action) => state.set('buffering', action.buffering),
+
+    [UPDATE_DURATION]: (state, action) => state.set('duration', action.duration),
+
+
+    [UPDATE_CURRENT_TIME]: (state, action) => state.set('currentTime', action.currentTime)
 
 })
 
 // Selectors
+export const duration$ = state => state.getIn(['player', 'duration']);
+export const currentTime$ = state => state.getIn(['player', 'currentTime']);
 
 // Actions
-export const updatePlayingEpisode = (episodeId) => ({
-    type: UPDATE_PLAYING_EPISODE,
+export const updateEpisode = (episodeId) => ({
+    type: UPDATE_EPISODE,
     episodeId
 });
 export const playEpisode = (podcastId, episodeId) => {
     return (dispatch, getState) => {
         console.info(podcastId, episodeId);
-        let audio = getState().getIn(['episodes', podcastId]).find((ep) => ep.get('uid') === episodeId, null, Immutable.Map()).get('audio').toJS();
-        console.info(audio);
+        let podcastTitle = getState().getIn(['podcasts', podcastId, 'collectionName']);
+        let audio = getState().getIn(['episodes', podcastId]).find((ep) => ep.get('uid') === episodeId, null, Immutable.Map());
+        let url = audio.getIn(['audio', 'url']);
+        let episodeTitle = audio.get('title');
+        if (!url || !podcastTitle || !episodeTitle) console.error(`Could not play this episode due to missing information:   podcastTitle:${podcastTitle}   episodeTitle:${episodeTitle}   url:${url}`);
+        MTAudio.play(url, podcastTitle, episodeTitle);
+        //MTAudio.play(url, title, description)
         //let mp3Url =
-        dispatch(updatePlayingEpisode(episodeId));
+        dispatch(updateEpisode(episodeId));
+        dispatch(showPlayer());
     }
 };
+
+export const showPlayer = () => ({type: SHOW_PLAYER});
+export const hidePlayer = () => ({type: HIDE_PLAYER});
+
+export const updatePlaying = (playing) => ({
+    type: UPDATE_PLAYING,
+    playing
+});
+export const updateBuffering = (buffering) => ({
+    type: UPDATE_PLAYING,
+    buffering
+});
+export const updateDuration = (duration) => ({
+    type: UPDATE_DURATION,
+    duration
+});
+export const updateCurrentTime = (currentTime) => ({
+    type: UPDATE_CURRENT_TIME,
+    currentTime
+});

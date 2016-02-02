@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import StreamingKit
+//import StreamingKit
 import MediaPlayer
 
 @objc(MTAudio)
@@ -125,9 +125,9 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
     // Get the current playback rate
     let playbackRate:Float;
     switch self.player.state.rawValue {
-    case STKAudioPlayerStatePlaying.rawValue:
+    case STKAudioPlayerState.Playing.rawValue:
       playbackRate = 1;
-    case STKAudioPlayerStateBuffering.rawValue:
+    case STKAudioPlayerState.Buffering.rawValue:
       playbackRate = 0.00000001;
     default:
       playbackRate = 0;
@@ -158,8 +158,8 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
     
     // Construct the URL and set the data source
     let url = NSURL.init(string: source);
-    let source = STKAudioPlayer.dataSourceFromURL(url);
-    self.player.setDataSource(source, withQueueItemId: nil);
+    let source = STKAudioPlayer.dataSourceFromURL(url!);
+    self.player.setDataSource(source, withQueueItemId: NSNull());
   }
   
   @objc func pause() -> Void {
@@ -198,7 +198,7 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
   // Starts or stops a timer to report the current time every so often
   func startOrStopReportingCurrentTime(state: STKAudioPlayerState) -> Void {
     switch state.rawValue {
-      case STKAudioPlayerStatePlaying.rawValue:
+      case STKAudioPlayerState.Playing.rawValue:
         
         // Invalidate any
         if let timer = self.currentTimeReportingTimer {
@@ -216,21 +216,21 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
   // Gets the audio player state as a raw string
   func playerStateAsString() -> String {
     switch self.player.state.rawValue {
-    case STKAudioPlayerStateBuffering.rawValue:
+    case STKAudioPlayerState.Buffering.rawValue:
       return "BUFFERING"
-    case STKAudioPlayerStateDisposed.rawValue:
+    case STKAudioPlayerState.Disposed.rawValue:
       return "DISPOSED"
-    case STKAudioPlayerStateError.rawValue:
+    case STKAudioPlayerState.Error.rawValue:
       return "ERROR"
-    case STKAudioPlayerStatePaused.rawValue:
+    case STKAudioPlayerState.Paused.rawValue:
       return "PAUSED"
-    case STKAudioPlayerStatePlaying.rawValue:
+    case STKAudioPlayerState.Playing.rawValue:
       return "PLAYING"
-    case STKAudioPlayerStateReady.rawValue:
+    case STKAudioPlayerState.Ready.rawValue:
       return "READY"
-    case STKAudioPlayerStateRunning.rawValue:
+    case STKAudioPlayerState.Running.rawValue:
       return "RUNNING"
-    case STKAudioPlayerStateStopped.rawValue:
+    case STKAudioPlayerState.Stopped.rawValue:
       return "STOPPED"
     default:
       return "UNKNOWN"

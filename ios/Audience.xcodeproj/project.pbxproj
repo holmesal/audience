@@ -22,6 +22,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		E26F20811C5AFB8300C99444 /* libStreamingKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E26F207A1C5AFB7000C99444 /* libStreamingKit.a */; };
 		E2A485901C51FBC700ADDD30 /* Oswald-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2A4858D1C51FBC700ADDD30 /* Oswald-Bold.ttf */; };
 		E2A485911C51FBC700ADDD30 /* Oswald-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2A4858E1C51FBC700ADDD30 /* Oswald-Light.ttf */; };
 		E2A485921C51FBC700ADDD30 /* Oswald-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2A4858F1C51FBC700ADDD30 /* Oswald-Regular.ttf */; };
@@ -115,6 +116,34 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		E26F20791C5AFB7000C99444 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A1E7C4C8188D57F50010896F;
+			remoteInfo = StreamingKit;
+		};
+		E26F207B1C5AFB7000C99444 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A1E7C4D8188D57F60010896F;
+			remoteInfo = StreamingKitTests;
+		};
+		E26F207D1C5AFB7000C99444 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A1A49969189E744400E2A2E2;
+			remoteInfo = StreamingKitMac;
+		};
+		E26F207F1C5AFB7000C99444 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A1A4997A189E744500E2A2E2;
+			remoteInfo = StreamingKitMacTests;
+		};
 		E2A485971C52174100ADDD30 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E2A485931C52174100ADDD30 /* RNSpinkit.xcodeproj */;
@@ -174,6 +203,7 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = StreamingKit.xcodeproj; path = StreamingKit/StreamingKit.xcodeproj; sourceTree = "<group>"; };
 		E2A4858D1C51FBC700ADDD30 /* Oswald-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oswald-Bold.ttf"; sourceTree = "<group>"; };
 		E2A4858E1C51FBC700ADDD30 /* Oswald-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oswald-Light.ttf"; sourceTree = "<group>"; };
 		E2A4858F1C51FBC700ADDD30 /* Oswald-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oswald-Regular.ttf"; sourceTree = "<group>"; };
@@ -202,6 +232,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E26F20811C5AFB8300C99444 /* libStreamingKit.a in Frameworks */,
 				E2A485991C52174A00ADDD30 /* libRNSpinkit.a in Frameworks */,
 				E2F303F41C4E0091003C21E4 /* FBSDKLoginKit.framework in Frameworks */,
 				E2F303E01C4DFC5A003C21E4 /* libRCTFBSDKCore.a in Frameworks */,
@@ -335,6 +366,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */,
 				E2A485931C52174100ADDD30 /* RNSpinkit.xcodeproj */,
 				E2F303DA1C4DFC51003C21E4 /* RCTFBSDKCore.xcodeproj */,
 				E2F303C81C4DFC42003C21E4 /* RCTFBSDKLogin.xcodeproj */,
@@ -380,6 +412,17 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* Audience.app */,
 				00E356EE1AD99517003FC87E /* Audience.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E26F20721C5AFB7000C99444 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E26F207A1C5AFB7000C99444 /* libStreamingKit.a */,
+				E26F207C1C5AFB7000C99444 /* StreamingKitTests.xctest */,
+				E26F207E1C5AFB7000C99444 /* libStreamingKitMac.a */,
+				E26F20801C5AFB7000C99444 /* StreamingKitMacTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -498,6 +541,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
@@ -583,6 +627,10 @@
 					ProductGroup = E2A485941C52174100ADDD30 /* Products */;
 					ProjectRef = E2A485931C52174100ADDD30 /* RNSpinkit.xcodeproj */;
 				},
+				{
+					ProductGroup = E26F20721C5AFB7000C99444 /* Products */;
+					ProjectRef = E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -661,6 +709,34 @@
 			fileType = archive.ar;
 			path = libRCTText.a;
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E26F207A1C5AFB7000C99444 /* libStreamingKit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libStreamingKit.a;
+			remoteRef = E26F20791C5AFB7000C99444 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E26F207C1C5AFB7000C99444 /* StreamingKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = StreamingKitTests.xctest;
+			remoteRef = E26F207B1C5AFB7000C99444 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E26F207E1C5AFB7000C99444 /* libStreamingKitMac.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libStreamingKitMac.a;
+			remoteRef = E26F207D1C5AFB7000C99444 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E26F20801C5AFB7000C99444 /* StreamingKitMacTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = StreamingKitMacTests.xctest;
+			remoteRef = E26F207F1C5AFB7000C99444 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		E2A485981C52174100ADDD30 /* libRNSpinkit.a */ = {
@@ -832,6 +908,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -843,14 +920,16 @@
 					"/Users/alonso/Documents/FacebookSDK/**",
 					"$(SRCROOT)/**",
 				);
-				INFOPLIST_FILE = HorizontalScrollTest/Info.plist;
+				INFOPLIST_FILE = Audience/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alonsoholmes.Audience;
 				PRODUCT_NAME = Audience;
 				PROVISIONING_PROFILE = "";
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Debug;
 		};
@@ -860,6 +939,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -871,14 +951,16 @@
 					"/Users/alonso/Documents/FacebookSDK/**",
 					"$(SRCROOT)/**",
 				);
-				INFOPLIST_FILE = HorizontalScrollTest/Info.plist;
+				INFOPLIST_FILE = Audience/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alonsoholmes.Audience;
 				PRODUCT_NAME = Audience;
 				PROVISIONING_PROFILE = "";
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};
@@ -901,7 +983,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -926,6 +1010,8 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/**";
+				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -948,8 +1034,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -966,6 +1054,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/**";
+				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
