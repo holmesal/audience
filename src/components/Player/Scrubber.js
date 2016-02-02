@@ -12,9 +12,9 @@ import React, {
     View
 } from 'react-native';
 
-import colors from './../colors';
-import TinyUser from './TinyUser';
-import Times from './Times';
+import colors from './../../colors';
+import TinyUser from './../TinyUser';
+import Times from './../Times';
 
 export default class Scrubber extends Component {
 

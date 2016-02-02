@@ -45,6 +45,11 @@ export default createReducer(initialState, {
 // Selectors
 export const duration$ = state => state.getIn(['player', 'duration']);
 export const currentTime$ = state => state.getIn(['player', 'currentTime']);
+export const visible$ = state => state.getIn(['player', 'visible']);
+
+export const player$ = createSelector(visible$, (visible) => ({
+    visible
+}));
 
 // Actions
 export const updateEpisode = (episodeId) => ({

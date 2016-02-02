@@ -18,7 +18,7 @@ import {FBSDKAccessToken} from 'react-native-fbsdkcore'
 import Parse from 'parse/react-native';
 
 import colors from './colors';
-import Scrubber from './components/Scrubber';
+import Player from './components/Player/Player';
 import Search from './components/Search/Search';
 import PodcastInfo from './components/PodcastInfo/PodcastInfo';
 import Login from './components/Login';
@@ -107,7 +107,7 @@ export default class App extends Component {
             <View style={style.wrapper}>
                 <Search showPlayer={() => this.setState({player: true})}/>
                 <PodcastInfo />
-                {this.state.player && <Scrubber hidePlayer={() => this.setState({player: false})}/>}
+                <Player />
             </View>
         );
     }
