@@ -9,6 +9,7 @@ import React, {
 } from 'react-native';
 
 import {FBSDKAppEvents} from 'react-native-fbsdkcore'
+import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux/native';
 import {share$, currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
@@ -27,7 +28,7 @@ class ShareButtons extends Component {
     shareEpisode() {
         let {podcastId, episodeId} = this.props;
         let time = currentTime$(store.getState());
-        FBSDKAppEvents.logEvent('shared_episode', time, {
+        Mixpanel.trackWithProperties('Share Episode', {
             podcastId,
             episodeId,
             time
@@ -37,7 +38,7 @@ class ShareButtons extends Component {
     shareMoment() {
         let {podcastId, episodeId} = this.props;
         let time = currentTime$(store.getState());
-        FBSDKAppEvents.logEvent('shared_moment_in_episode', time, {
+        Mixpanel.trackWithProperties('Share Moment (in episode)', {
             podcastId,
             episodeId,
             time
@@ -55,11 +56,11 @@ class ShareButtons extends Component {
         if (duration > 150) {
             let {podcastId, episodeId} = this.props;
             let time = currentTime$(store.getState());
-            FBSDKAppEvents.logEvent('shared_clip_from_episode', duration/1000, {
+            Mixpanel.trackWithProperties('Share Clip (from episode)', {
                 podcastId,
                 episodeId,
                 time,
-                duration
+                duration: duration/1000
             });
         } else {
             alert('Hold this button down to record a bit of this episode.');

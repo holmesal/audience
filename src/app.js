@@ -4,6 +4,7 @@
  */
 'use strict';
 import React, {
+    ActivityIndicatorIOS,
     AppRegistry,
     Component,
     StyleSheet,
@@ -16,6 +17,7 @@ import './redux/create';
 
 import {FBSDKAccessToken} from 'react-native-fbsdkcore'
 import Parse from 'parse/react-native';
+import Mixpanel from 'react-native-mixpanel';
 
 import colors from './colors';
 import Player from './components/Player/Player';
@@ -23,10 +25,14 @@ import Search from './components/Search/Search';
 import PodcastInfo from './components/PodcastInfo/PodcastInfo';
 import Login from './components/Login';
 
+// initialize parse
 Parse.initialize(
     'WTgPZNQN94mjVaaI6OUBiD2ujHOoQYqg2b8Lex20',
     'I5FMaW4LfQlVTLwzRVqAWR4LFBOQy5mMILp5MOgH'
 );
+
+// Initialize mixpanel
+Mixpanel.sharedInstanceWithToken('e427bf5ada34e28eced40b58b6c468f9');
 
 export default class App extends Component {
 
@@ -56,6 +62,8 @@ export default class App extends Component {
         // the timestamp needs to be reformatted for Parse http://stackoverflow.com/questions/12945003/format-date-as-yyyy-mm-ddthhmmss-sssz
         var expdate = new Date(credentials._expirationDate);
         expdate = expdate.toISOString();
+
+        Mixpanel.identify(credentials.userID);
 
         // these are the data from the successful FB login we will pass to Parse.FacebookUtils.logIn instead of null
         // based on https://github.com/ParsePlatform/ParseReact/issues/45#issuecomment-111063927
@@ -100,8 +108,16 @@ export default class App extends Component {
         // Attempt to get an access token
     }
 
+    renderLoading() {
+        return (
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <ActivityIndicatorIOS />
+            </View>
+        )
+    }
+
     render() {
-        if (!this.state.checkedLogin) return <View />;
+        if (!this.state.checkedLogin) return this.renderLoading();
         if (!this.state.loggedIn) return <Login onLogin={this.fetchAccessToken.bind(this)} />;
         return (
             <View style={style.wrapper}>
