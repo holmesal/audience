@@ -9,9 +9,10 @@ import React, {
 } from 'react-native';
 
 import {connect} from 'react-redux/native';
-import {player$} from '../../redux/modules/player.js';
+import {player$, hidePlayer} from '../../redux/modules/player.js';
 import colors from '../../colors.js';
 import Scrubber from './Scrubber';
+import Controls from './Controls';
 
 class Player extends Component {
 
@@ -49,7 +50,8 @@ class Player extends Component {
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
-                <Scrubber />
+                <Scrubber hidePlayer={() => this.props.dispatch(hidePlayer())}/>
+                <Controls />
             </Animated.View>
         );
     }

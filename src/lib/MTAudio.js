@@ -41,6 +41,14 @@ class MTAudioBridge {
         MTAudio.play(url, podcastTitle, episodeTitle);
     }
 
+    pause() {
+        MTAudio.pause()
+    }
+
+    resume() {
+        MTAudio.resume()
+    }
+
     seekTo(time) {
         MTAudio.seekToTime(time);
     }

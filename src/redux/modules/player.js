@@ -14,6 +14,7 @@ const UPDATE_PLAYING = 'audience/player/UPDATE_PLAYING';
 const UPDATE_BUFFERING = 'audience/player/UPDATE_BUFFERING';
 const UPDATE_DURATION = 'audience/player/UPDATE_DURATION';
 const UPDATE_CURRENT_TIME = 'audience/player/UPDATE_CURRENT_TIME';
+const SKIP = 'audience/player/SKIP';
 
 const initialState = Immutable.fromJS({
     visible: false,
@@ -58,6 +59,10 @@ export const scrubber$ = createSelector(currentTime$, duration$, (currentTime, d
     duration
 }));
 
+export const controls$ = createSelector(playing$, (playing) => ({
+    playing
+}));
+
 // Actions
 export const updateEpisode = (episodeId) => ({
     type: UPDATE_EPISODE,
@@ -84,6 +89,16 @@ export const seekTo = (time) => {
         MTAudio.seekTo(time);
     }
 };
+export const resume = () => {
+    return (dispatch, getState) => {
+        MTAudio.resume();
+    }
+};
+export const pause = () => {
+    return (dispatch, getState) => {
+        MTAudio.pause();
+    }
+};
 
 export const showPlayer = () => ({type: SHOW_PLAYER});
 export const hidePlayer = () => ({type: HIDE_PLAYER});
@@ -104,3 +119,15 @@ export const updateCurrentTime = (currentTime) => ({
     type: UPDATE_CURRENT_TIME,
     currentTime
 });
+
+export const skip = (offset) => {
+    return (dispatch, getState) => {
+        let currentTime = currentTime$(getState());
+        let duration = duration$(getState());
+        let target = currentTime + offset;
+        if (target < 0) target = 0;
+        else if (target > duration) target = duration;
+
+        dispatch(seekTo(target));
+    }
+};
