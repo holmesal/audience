@@ -46,9 +46,16 @@ export default createReducer(initialState, {
 export const duration$ = state => state.getIn(['player', 'duration']);
 export const currentTime$ = state => state.getIn(['player', 'currentTime']);
 export const visible$ = state => state.getIn(['player', 'visible']);
+export const playing$ = state => state.getIn(['player', 'playing']);
+export const bufering$ = state => state.getIn(['player', 'buffering']);
 
 export const player$ = createSelector(visible$, (visible) => ({
     visible
+}));
+
+export const scrubber$ = createSelector(currentTime$, duration$, (currentTime, duration) => ({
+    currentTime,
+    duration
 }));
 
 // Actions
@@ -69,6 +76,12 @@ export const playEpisode = (podcastId, episodeId) => {
         //let mp3Url =
         dispatch(updateEpisode(episodeId));
         dispatch(showPlayer());
+    }
+};
+
+export const seekTo = (time) => {
+    return (dispatch, getState) => {
+        MTAudio.seekTo(time);
     }
 };
 

@@ -4,7 +4,7 @@ import {
 
 import {MTAudio} from 'NativeModules';
 
-import {updatePlaying, updateBuffering, updateDuration, updateCurrentTime, duration$, currentTime$} from '../redux/modules/player';
+import {updatePlaying, updateBuffering, updateDuration, updateCurrentTime, duration$, currentTime$, playing$} from '../redux/modules/player';
 import store from '../redux/create';
 
 class MTAudioBridge {
@@ -14,10 +14,12 @@ class MTAudioBridge {
     }
 
     updateState(state) {
-        console.info('got updated state', state);
+        //console.info('got updated state', state);
         //console.info(updatePlaying, store.dispatch);
         let handlers = {
-            'PLAYING': () => store.dispatch(updatePlaying(true)),
+            'PLAYING': () => {
+                if (!playing$(store.getState())) store.dispatch(updatePlaying(true));
+            },
 
             'BUFFERING': () => {
                 store.dispatch(updateBuffering(true))
@@ -37,6 +39,10 @@ class MTAudioBridge {
 
     play(url, podcastTitle, episodeTitle) {
         MTAudio.play(url, podcastTitle, episodeTitle);
+    }
+
+    seekTo(time) {
+        MTAudio.seekToTime(time);
     }
 }
 

@@ -23,6 +23,10 @@ class Player extends Component {
         opacity: new Animated.Value(0)
     };
 
+    componentDidMount() {
+        this.updateVisibility();
+    }
+
     componentDidUpdate(prevProps, prevState) {
         this.updateVisibility();
     }

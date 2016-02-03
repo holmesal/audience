@@ -8,8 +8,8 @@ import React, {
     View
 } from 'react-native';
 
-import colors from './../colors';
-import {prettyFormatTime} from './../utils';
+import colors from './../../colors';
+import {prettyFormatTime} from './../../utils';
 
 let initialTextX = 10;
 
