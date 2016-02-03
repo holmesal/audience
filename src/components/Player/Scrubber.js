@@ -243,7 +243,9 @@ class Scrubber extends Component {
                 {/** Play head */}
                 <View style={[styles.playHead]} pointerEvents='none' />
 
-                <TouchableOpacity style={{width: 60, height: 60, backgroundColor: 'transparent', position: 'absolute', top: 20, left: 0}} onPress={this.props.hidePlayer} />
+                <TouchableOpacity style={{width: 80, height: 80, backgroundColor: 'transparent', position: 'absolute', top: 0, left: 0, paddingTop: 20}} onPress={this.props.hidePlayer}>
+                    <Image style={{position: 'absolute', left: 20, top: 30}} source={require('image!backChevron')}/>
+                </TouchableOpacity>
 
                 {this.renderTime()}
             </View>
