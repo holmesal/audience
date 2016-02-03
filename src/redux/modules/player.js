@@ -17,8 +17,9 @@ const UPDATE_CURRENT_TIME = 'audience/player/UPDATE_CURRENT_TIME';
 const SKIP = 'audience/player/SKIP';
 
 const initialState = Immutable.fromJS({
-    visible: false,
+    visible: true,
     episodeId: null,
+    podcastId: null,
     playing: false,
     buffering: false,
     duration: null,
@@ -30,7 +31,7 @@ export default createReducer(initialState, {
     [SHOW_PLAYER]: (state, action) => state.set('visible', true),
     [HIDE_PLAYER]: (state, action) => state.set('visible', false),
 
-    [UPDATE_EPISODE]: (state, action) => state.set('episodeId', action.episodeId),
+    [UPDATE_EPISODE]: (state, action) => state.merge({podcastId: action.podcastId, episodeId: action.episodeId}),
 
     [UPDATE_PLAYING]: (state, action) => state.set('playing', action.playing),
 
@@ -45,6 +46,8 @@ export default createReducer(initialState, {
 
 // Selectors
 export const duration$ = state => state.getIn(['player', 'duration']);
+export const episodeId$ = state => state.getIn(['player', 'episodeId']);
+export const podcastId$ = state => state.getIn(['player', 'podcastId']);
 export const currentTime$ = state => state.getIn(['player', 'currentTime']);
 export const visible$ = state => state.getIn(['player', 'visible']);
 export const playing$ = state => state.getIn(['player', 'playing']);
@@ -64,9 +67,15 @@ export const controls$ = createSelector(playing$, buffering$, (playing, bufferin
     buffering
 }));
 
+export const share$ = createSelector(podcastId$, episodeId$, (podcastId, episodeId) => ({
+    podcastId,
+    episodeId
+}));
+
 // Actions
-export const updateEpisode = (episodeId) => ({
+export const updateEpisode = (podcastId, episodeId) => ({
     type: UPDATE_EPISODE,
+    podcastId,
     episodeId
 });
 export const playEpisode = (podcastId, episodeId) => {
@@ -80,7 +89,7 @@ export const playEpisode = (podcastId, episodeId) => {
         MTAudio.play(url, podcastTitle, episodeTitle);
         //MTAudio.play(url, title, description)
         //let mp3Url =
-        dispatch(updateEpisode(episodeId));
+        dispatch(updateEpisode(podcastId, episodeId));
         dispatch(showPlayer());
     }
 };

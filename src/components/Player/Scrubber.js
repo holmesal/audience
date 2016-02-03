@@ -253,8 +253,6 @@ class Scrubber extends Component {
     }
 }
 
-//const blend = (alphaBelow, alphaAbove)
-
 let waveformHeight = 32;
 let windowWidth = Dimensions.get('window').width;
 let windowHeight = Dimensions.get('window').height;

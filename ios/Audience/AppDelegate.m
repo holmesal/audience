@@ -69,4 +69,10 @@
           ];
 }
 
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+  // Call the 'activateApp' method to log an app event for use
+  // in analytics and advertising reporting.
+  [FBSDKAppEvents activateApp];
+}
+
 @end
