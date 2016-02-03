@@ -48,7 +48,7 @@ export const duration$ = state => state.getIn(['player', 'duration']);
 export const currentTime$ = state => state.getIn(['player', 'currentTime']);
 export const visible$ = state => state.getIn(['player', 'visible']);
 export const playing$ = state => state.getIn(['player', 'playing']);
-export const bufering$ = state => state.getIn(['player', 'buffering']);
+export const buffering$ = state => state.getIn(['player', 'buffering']);
 
 export const player$ = createSelector(visible$, (visible) => ({
     visible
@@ -59,8 +59,9 @@ export const scrubber$ = createSelector(currentTime$, duration$, (currentTime, d
     duration
 }));
 
-export const controls$ = createSelector(playing$, (playing) => ({
-    playing
+export const controls$ = createSelector(playing$, buffering$, (playing, buffering) => ({
+    playing,
+    buffering
 }));
 
 // Actions
@@ -108,7 +109,7 @@ export const updatePlaying = (playing) => ({
     playing
 });
 export const updateBuffering = (buffering) => ({
-    type: UPDATE_PLAYING,
+    type: UPDATE_BUFFERING,
     buffering
 });
 export const updateDuration = (duration) => ({

@@ -1,4 +1,5 @@
 import React, {
+    ActivityIndicatorIOS,
     Component,
     Dimensions,
     Image,
@@ -25,12 +26,24 @@ class Controls extends Component {
         else this.props.dispatch(resume())
     }
 
-    render() {
+    renderCenterButtonContent() {
         let centerImage = this.props.playing ? require('image!pause') : require('image!play');
+        return (
+            <Image source={centerImage}/>
+        );
+        //if (this.props.playing) {
+        //} else if (this.props.buffering) {
+        //    return (
+        //        <ActivityIndicatorIOS />
+        //    )
+        //}
+    }
+
+    render() {
         return (
             <View style={styles.wrapper}>
                 <TouchableOpacity style={[styles.button, styles.side]} onPress={() => this.props.dispatch(skip(-15))}><Image source={require('image!skipBack15')}/></TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.center]} onPress={this.handleCenterPress.bind(this)}><Image source={centerImage}/></TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.center]} onPress={this.handleCenterPress.bind(this)}>{this.renderCenterButtonContent()}</TouchableOpacity>
                 <TouchableOpacity style={[styles.button, styles.side]} onPress={() => this.props.dispatch(skip(15))}><Image source={require('image!skipForward15')}/></TouchableOpacity>
             </View>
         );

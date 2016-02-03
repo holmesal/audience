@@ -4,7 +4,7 @@ import {
 
 import {MTAudio} from 'NativeModules';
 
-import {updatePlaying, updateBuffering, updateDuration, updateCurrentTime, duration$, currentTime$, playing$} from '../redux/modules/player';
+import {updatePlaying, updateBuffering, updateDuration, updateCurrentTime, duration$, currentTime$, playing$, buffering$} from '../redux/modules/player';
 import store from '../redux/create';
 
 class MTAudioBridge {
@@ -22,7 +22,7 @@ class MTAudioBridge {
             },
 
             'BUFFERING': () => {
-                store.dispatch(updateBuffering(true))
+                if (!buffering$(store.getState())) store.dispatch(updateBuffering(true))
             },
 
             'STOPPED': () => store.dispatch(updatePlaying(false)),

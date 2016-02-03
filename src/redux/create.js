@@ -19,23 +19,22 @@ const createStoreWithMiddleware = applyMiddleware(
     //})
 );
 
-const finalCreateStore = compose(
-    createStoreWithMiddleware,
-    devTools({
-        //hostname: 'localhost',
-        //port: 8000,
-        name: 'Audience iOS'
-    })
-)(createStore);
+let finalCreateStore;
+if (__DEV__) {
+    finalCreateStore = compose(
+        createStoreWithMiddleware,
+        devTools({
+            hostname: 'localhost',
+            port: 8000,
+            name: 'Audience iOS'
+        })
+    )(createStore);
+} else {
+    finalCreateStore = compose(
+        createStoreWithMiddleware
+    )(createStore);
+}
 
-// Create the store with an initial (empty) state
-// In a complex application, we might rehydrate this state from AsyncStorage or etc
-
-//store = createStoreWithMiddleware(rootReducer, rehydratedState);
 store = finalCreateStore(rootReducer);
-
-//store.subscribe(() => {
-//    console.log(JSON.stringify(store.getState()));
-//});
 
 export default store;
