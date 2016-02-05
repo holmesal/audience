@@ -10,7 +10,6 @@ import React, {
 
 import {FBSDKAppEvents} from 'react-native-fbsdkcore'
 import Mixpanel from 'react-native-mixpanel';
-Mixpanel.sharedInstanceWithToken('e427bf5ada34e28eced40b58b6c468f9');
 import {connect} from 'react-redux/native';
 import {share$, currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
@@ -40,6 +39,26 @@ class ShareButtons extends Component {
         let {podcastId, episodeId} = this.props;
         let episodeTime = Math.round(currentTime$(store.getState()));
         Mixpanel.trackWithProperties('Share Moment (in episode)', {
+            podcastId,
+            episodeId,
+            episodeTime
+        });
+    }
+
+    reaction() {
+        let {podcastId, episodeId} = this.props;
+        let episodeTime = Math.round(currentTime$(store.getState()));
+        Mixpanel.trackWithProperties('Leave Reaction', {
+            podcastId,
+            episodeId,
+            episodeTime
+        });
+    }
+
+    comment() {
+        let {podcastId, episodeId} = this.props;
+        let episodeTime = Math.round(currentTime$(store.getState()));
+        Mixpanel.trackWithProperties('Leave Comment', {
             podcastId,
             episodeId,
             episodeTime
@@ -93,6 +112,20 @@ class ShareButtons extends Component {
                     </View>
                     <Text style={styles.caption}>SHARE</Text>
                     <Text style={styles.caption}>CLIP</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonWrapper} onPress={this.reaction.bind(this)}>
+                    <View style={styles.button}>
+                        <Text style={{fontSize: 30}}>😁</Text>
+                    </View>
+                    <Text style={styles.caption}>LEAVE</Text>
+                    <Text style={styles.caption}>REACTION</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonWrapper} onPress={this.comment.bind(this)}>
+                    <View style={styles.button}>
+                        <Text style={{fontSize: 30}}>💬</Text>
+                    </View>
+                    <Text style={styles.caption}>LEAVE</Text>
+                    <Text style={styles.caption}>COMMENT</Text>
                 </TouchableOpacity>
             </View>
         );

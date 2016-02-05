@@ -33,7 +33,6 @@ Parse.initialize(
 
 // Initialize mixpanel
 Mixpanel.sharedInstanceWithToken('e427bf5ada34e28eced40b58b6c468f9');
-Mixpanel.track('test event');
 
 export default class App extends Component {
 
