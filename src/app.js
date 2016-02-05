@@ -32,7 +32,11 @@ Parse.initialize(
 );
 
 // Initialize mixpanel
-Mixpanel.sharedInstanceWithToken('e427bf5ada34e28eced40b58b6c468f9');
+if (__DEV__) {
+    Mixpanel.sharedInstanceWithToken('255425e8c5444a985a94d0a14500e7ef');
+} else {
+    Mixpanel.sharedInstanceWithToken('e427bf5ada34e28eced40b58b6c468f9');
+}
 
 export default class App extends Component {
 

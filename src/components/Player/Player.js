@@ -13,7 +13,8 @@ import {player$, hidePlayer} from '../../redux/modules/player.js';
 import colors from '../../colors.js';
 import Scrubber from './Scrubber';
 import Controls from './Controls';
-import ShareButtons from './ShareButtons';
+import SocialButtons from './SocialButtons';
+import ShareButton from './ShareButton';
 
 class Player extends Component {
 
@@ -53,7 +54,8 @@ class Player extends Component {
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
                 <Scrubber hidePlayer={() => this.props.dispatch(hidePlayer())}/>
                 <Controls />
-                <ShareButtons />
+                <SocialButtons />
+                <ShareButton />
             </Animated.View>
         );
     }

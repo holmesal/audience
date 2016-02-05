@@ -17,7 +17,7 @@ const UPDATE_CURRENT_TIME = 'audience/player/UPDATE_CURRENT_TIME';
 const SKIP = 'audience/player/SKIP';
 
 const initialState = Immutable.fromJS({
-    visible: false,
+    visible: true,
     episodeId: null,
     podcastId: null,
     playing: false,

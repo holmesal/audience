@@ -14,7 +14,7 @@ import {connect} from 'react-redux/native';
 import {share$, currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 
-class ShareButtons extends Component {
+class SocialButtons extends Component {
 
     static propTypes = {};
 
@@ -24,26 +24,6 @@ class ShareButtons extends Component {
         recordStartTime: null,
         recording: false
     };
-
-    shareEpisode() {
-        let {podcastId, episodeId} = this.props;
-        let episodeTime = Math.round(currentTime$(store.getState()));
-        Mixpanel.trackWithProperties('Share Episode', {
-            podcastId,
-            episodeId,
-            episodeTime
-        });
-    }
-
-    shareMoment() {
-        let {podcastId, episodeId} = this.props;
-        let episodeTime = Math.round(currentTime$(store.getState()));
-        Mixpanel.trackWithProperties('Share Moment (in episode)', {
-            podcastId,
-            episodeId,
-            episodeTime
-        });
-    }
 
     reaction() {
         let {podcastId, episodeId} = this.props;
@@ -88,31 +68,18 @@ class ShareButtons extends Component {
         this.setState({recording: false});
     }
 
+//<TouchableOpacity style={styles.buttonWrapper} onPressIn={this.startRecording.bind(this)} onPressOut={this.stopRecording.bind(this)}>
+//<View style={[styles.button, this.state.recording && {backgroundColor: '#DB4B23'}]}>
+//<Image source={require('image!tape')}/>
+//</View>
+//<Text style={styles.caption}>SHARE</Text>
+//<Text style={styles.caption}>CLIP</Text>
+//</TouchableOpacity>
+
     render() {
         console.info(this.props);
         return (
             <View style={styles.wrapper}>
-                <TouchableOpacity style={styles.buttonWrapper} onPress={this.shareEpisode.bind(this)}>
-                    <View style={styles.button}>
-                        <Image source={require('image!share')}/>
-                    </View>
-                    <Text style={styles.caption}>SHARE</Text>
-                    <Text style={styles.caption}>EPISODE</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonWrapper} onPress={this.shareMoment.bind(this)}>
-                    <View style={styles.button}>
-                        <Image source={require('image!bigClock')}/>
-                    </View>
-                    <Text style={styles.caption}>SHARE</Text>
-                    <Text style={styles.caption}>MOMENT</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonWrapper} onPressIn={this.startRecording.bind(this)} onPressOut={this.stopRecording.bind(this)}>
-                    <View style={[styles.button, this.state.recording && {backgroundColor: '#DB4B23'}]}>
-                        <Image source={require('image!tape')}/>
-                    </View>
-                    <Text style={styles.caption}>SHARE</Text>
-                    <Text style={styles.caption}>CLIP</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonWrapper} onPress={this.reaction.bind(this)}>
                     <View style={styles.button}>
                         <Text style={{fontSize: 30}}>😁</Text>
@@ -164,4 +131,4 @@ let styles = StyleSheet.create({
     }
 });
 
-export default connect(share$)(ShareButtons);
+export default connect(share$)(SocialButtons);
