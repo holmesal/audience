@@ -4,7 +4,9 @@ import React, {
     PropTypes,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
+    VibrationIOS,
     View
 } from 'react-native';
 
@@ -21,8 +23,8 @@ class SocialButtons extends Component {
     static defaultProps = {};
 
     state = {
-        recordStartTime: null,
-        recording: false
+        composeVisible: false,
+        comment: null
     };
 
     reaction() {
@@ -33,51 +35,10 @@ class SocialButtons extends Component {
             episodeId,
             episodeTime
         });
+        VibrationIOS.vibrate();
     }
-
-    comment() {
-        let {podcastId, episodeId} = this.props;
-        let episodeTime = Math.round(currentTime$(store.getState()));
-        Mixpanel.trackWithProperties('Leave Comment', {
-            podcastId,
-            episodeId,
-            episodeTime
-        });
-    }
-
-    startRecording() {
-        //console.info('record start!')
-        this.setState({recordStartTime: Date.now(), recording: true})
-    }
-
-    stopRecording() {
-        //console.info('record stop!', Date.now() - this.state.recordStartTime)
-        let duration = Date.now() - this.state.recordStartTime;
-        if (duration > 150) {
-            let {podcastId, episodeId} = this.props;
-            let episodeTime = Math.round(currentTime$(store.getState()));
-            Mixpanel.trackWithProperties('Share Clip (from episode)', {
-                podcastId,
-                episodeId,
-                episodeTime,
-                duration: duration/1000
-            });
-        } else {
-            alert('Hold this button down to record a bit of this episode.');
-        }
-        this.setState({recording: false});
-    }
-
-//<TouchableOpacity style={styles.buttonWrapper} onPressIn={this.startRecording.bind(this)} onPressOut={this.stopRecording.bind(this)}>
-//<View style={[styles.button, this.state.recording && {backgroundColor: '#DB4B23'}]}>
-//<Image source={require('image!tape')}/>
-//</View>
-//<Text style={styles.caption}>SHARE</Text>
-//<Text style={styles.caption}>CLIP</Text>
-//</TouchableOpacity>
 
     render() {
-        console.info(this.props);
         return (
             <View style={styles.wrapper}>
                 <TouchableOpacity style={styles.buttonWrapper} onPress={this.reaction.bind(this)}>
@@ -87,7 +48,7 @@ class SocialButtons extends Component {
                     <Text style={styles.caption}>LEAVE</Text>
                     <Text style={styles.caption}>REACTION</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonWrapper} onPress={this.comment.bind(this)}>
+                <TouchableOpacity style={styles.buttonWrapper} onPress={() => this.props.showCompose()}>
                     <View style={styles.button}>
                         <Text style={{fontSize: 30}}>💬</Text>
                     </View>

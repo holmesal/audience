@@ -15,6 +15,7 @@ import Scrubber from './Scrubber';
 import Controls from './Controls';
 import SocialButtons from './SocialButtons';
 import ShareButton from './ShareButton';
+import CommentCompose from './CommentCompose';
 
 class Player extends Component {
 
@@ -23,7 +24,8 @@ class Player extends Component {
     static defaultProps = {};
 
     state = {
-        opacity: new Animated.Value(0)
+        opacity: new Animated.Value(0),
+        composeVisible: false
     };
 
     componentDidMount() {
@@ -54,8 +56,9 @@ class Player extends Component {
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
                 <Scrubber hidePlayer={() => this.props.dispatch(hidePlayer())}/>
                 <Controls />
-                <SocialButtons />
                 <ShareButton />
+                <SocialButtons showCompose={() => this.setState({composeVisible: true})}/>
+                <CommentCompose visible={this.state.composeVisible} hideCompose={() => this.setState({composeVisible: false})} />
             </Animated.View>
         );
     }

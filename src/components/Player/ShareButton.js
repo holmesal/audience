@@ -58,7 +58,6 @@ class ShareButton extends Component {
             podcastId,
             episodeId,
             episodeTime
-            //duration: duration/1000
         });
     }
 
