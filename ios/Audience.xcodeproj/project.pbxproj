@@ -23,6 +23,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		9AE1B07F75114EDBAFAB7217 /* libRNNotificationActions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EEDD777F121B4AB1B7CDB908 /* libRNNotificationActions.a */; };
 		D47273404AF3B74815784C66 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5848CC463D1D6024A42AC6BB /* libPods.a */; };
+		E20D90E91C76822400C05994 /* Audience.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E20D90E81C767DC400C05994 /* Audience.entitlements */; };
 		E26F20811C5AFB8300C99444 /* libStreamingKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E26F207A1C5AFB7000C99444 /* libStreamingKit.a */; };
 		E272148C1C75371F00E9EC3D /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E272148B1C75371A00E9EC3D /* libRCTPushNotification.a */; };
 		E2A485901C51FBC700ADDD30 /* Oswald-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2A4858D1C51FBC700ADDD30 /* Oswald-Bold.ttf */; };
@@ -230,6 +231,7 @@
 		65155423B11F402D89E77749 /* RNNotificationActions.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNNotificationActions.xcodeproj; path = "../node_modules/react-native-ios-notification-actions/RNNotificationActions/RNNotificationActions.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		E20D90E81C767DC400C05994 /* Audience.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Audience.entitlements; path = Audience/Audience.entitlements; sourceTree = "<group>"; };
 		E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = StreamingKit.xcodeproj; path = StreamingKit/StreamingKit.xcodeproj; sourceTree = "<group>"; };
 		E27214861C75371900E9EC3D /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		E272148D1C75379000E9EC3D /* RNNotificationActions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNNotificationActions.xcodeproj; path = "../node_modules/react-native-ios-notification-actions/RNNotificationActions/RNNotificationActions.xcodeproj"; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 		13B07FAE1A68108700A75B9A /* Audience */ = {
 			isa = PBXGroup;
 			children = (
+				E20D90E81C767DC400C05994 /* Audience.entitlements */,
 				E2A519761C5AE8A9001546D5 /* MTAudio */,
 				E2A519751C5AE8A1001546D5 /* Audience-Bridging-Header.h */,
 				E2A485891C51F5EF00ADDD30 /* Fonts */,
@@ -608,6 +611,9 @@
 						DevelopmentTeam = SQ4LKA86HJ;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.SafariKeychain = {
 								enabled = 1;
 							};
 						};
@@ -888,6 +894,7 @@
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				E2A485901C51FBC700ADDD30 /* Oswald-Bold.ttf in Resources */,
 				E2A485911C51FBC700ADDD30 /* Oswald-Light.ttf in Resources */,
+				E20D90E91C76822400C05994 /* Audience.entitlements in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -987,6 +994,7 @@
 			baseConfigurationReference = 27EE9F402A12816D6BA497DC /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Audience/Audience.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
@@ -1016,7 +1024,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alonsoholmes.audience;
 				PRODUCT_NAME = Audience;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b4068df7-47db-4a65-8fac-2e7fd897d3c1";
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1028,6 +1036,7 @@
 			baseConfigurationReference = 2F096097A6E34116F58554A5 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Audience/Audience.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
@@ -1056,7 +1065,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alonsoholmes.audience;
 				PRODUCT_NAME = Audience;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b4068df7-47db-4a65-8fac-2e7fd897d3c1";
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1110,6 +1119,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "b4068df7-47db-4a65-8fac-2e7fd897d3c1";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
@@ -1156,6 +1166,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "b4068df7-47db-4a65-8fac-2e7fd897d3c1";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
