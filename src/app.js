@@ -13,6 +13,8 @@ import React, {
     View
 } from 'react-native';
 
+import './notifications';
+
 import './redux/create';
 
 import {FBSDKAccessToken} from 'react-native-fbsdkcore'
@@ -24,6 +26,7 @@ import Player from './components/Player/Player';
 import Search from './components/Search/Search';
 import PodcastInfo from './components/PodcastInfo/PodcastInfo';
 import Login from './components/Login';
+import Tabs from './components/Tabs';
 
 // initialize parse
 Parse.initialize(
@@ -125,7 +128,7 @@ export default class App extends Component {
         if (!this.state.loggedIn) return <Login onLogin={this.fetchAccessToken.bind(this)} />;
         return (
             <View style={style.wrapper}>
-                <Search showPlayer={() => this.setState({player: true})}/>
+                <Tabs />
                 <PodcastInfo />
                 <Player />
             </View>

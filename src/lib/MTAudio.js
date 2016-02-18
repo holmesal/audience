@@ -3,8 +3,9 @@ import {
 } from 'react-native';
 
 import {MTAudio} from 'NativeModules';
+import {showRecommendNotification} from '../notifications';
 
-import {updatePlaying, updateBuffering, updateDuration, updateCurrentTime, duration$, currentTime$, playing$, buffering$} from '../redux/modules/player';
+import {updatePlaying, updateBuffering, updateDuration, updateCurrentTime, duration$, currentTime$, playing$, buffering$, episodeId$} from '../redux/modules/player';
 import store from '../redux/create';
 
 class MTAudioBridge {
@@ -33,11 +34,24 @@ class MTAudioBridge {
         if (handlers[state.playerState]) handlers[state.playerState]();
         else console.warn('got unknown state: ', state);
 
+        console.info(state.duration, state.currentTime)
+
         if (state.duration != duration$(store.getState())) store.dispatch(updateDuration(state.duration));
         if (state.currentTime != currentTime$(store.getState())) store.dispatch(updateCurrentTime(state.currentTime));
+
+        if (state.playerState === 'PLAYING' &&
+            state.duration - state.currentTime < 100 &&
+            !this.hasShownRecommendNotification
+        ) {
+            showRecommendNotification(episodeId$(store.getState()));
+            this.hasShownRecommendNotification = true;
+        }
     }
 
     play(url, podcastTitle, episodeTitle) {
+        // Reset
+        this.hasShownRecommendNotification = false;
+        // Play this audio file
         MTAudio.play(url, podcastTitle, episodeTitle);
     }
 
