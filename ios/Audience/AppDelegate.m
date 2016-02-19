@@ -11,6 +11,7 @@
 
 #import "RCTRootView.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <Instabug/Instabug.h>
 #import "RCTPushNotificationManager.h"
 #import "RNNotificationActions.h"
 
@@ -65,6 +66,13 @@
   // Facebook
   [[FBSDKApplicationDelegate sharedInstance] application:application
                            didFinishLaunchingWithOptions:launchOptions];
+  
+  // Instabug
+  #ifndef DEBUG
+    NSLog(@"running in production!");
+    [Instabug startWithToken:@"fab0a5e2120058f12fd75d358e592995" invocationEvent:IBGInvocationEventShake];
+  #endif
+  
   return YES;
 }
 

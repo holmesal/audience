@@ -1,12 +1,15 @@
 PODS:
+  - Instabug (5.1.0)
   - Mixpanel (2.9.3):
     - Mixpanel/Mixpanel (= 2.9.3)
   - Mixpanel/Mixpanel (2.9.3)
 
 DEPENDENCIES:
+  - Instabug
   - Mixpanel
 
 SPEC CHECKSUMS:
+  Instabug: 19604e58b970de072933800c3cd92ad2f3a019f8
   Mixpanel: b9ff1c5d41fc07037d4b813bf2799c050ee3e49b
 
 COCOAPODS: 0.39.0

@@ -14,40 +14,61 @@ import {connect} from 'react-redux/native';
 import {share$, currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 
+import {episodeShareLink} from '../../utils/urls';
+import {getViewer} from '../../auth';
+
 class ShareButton extends Component {
 
     static propTypes = {};
 
     static defaultProps = {};
 
+    //shareMoment() {
+    //    let {podcastId, episodeId} = this.props;
+    //    let episodeTime = Math.round(currentTime$(store.getState()));
+    //    Mixpanel.trackWithProperties('Share Moment (in episode)', {
+    //        podcastId,
+    //        episodeId,
+    //        episodeTime
+    //    });
+    //}
+    //
+    //shareClip() {
+    //    let {podcastId, episodeId} = this.props;
+    //    let episodeTime = Math.round(currentTime$(store.getState()));
+    //    Mixpanel.trackWithProperties('Share Clip (from episode)', {
+    //        podcastId,
+    //        episodeId,
+    //        episodeTime
+    //        //duration: duration/1000
+    //    });
+    //}
+
+
     shareEpisode() {
         let {podcastId, episodeId} = this.props;
         let episodeTime = Math.round(currentTime$(store.getState()));
-        Mixpanel.trackWithProperties('Share Episode', {
+        let {id: userId} = getViewer();
+        // Build the episode link
+        const url = episodeShareLink(podcastId, episodeId, userId);
+        // Show the share sheet
+        ActionSheetIOS.showShareActionSheetWithOptions({
+            url
+        },
+            err => console.error,
+            (success, method) => {
+                if (success) {
+                    console.info('shared episode via ', method);
+                    Mixpanel.trackWithProperties('Shared episode link via share sheet', {
+                        method
+                    });
+                }
+            }
+        );
+        Mixpanel.trackWithProperties('Pressed share episode button', {
             podcastId,
             episodeId,
             episodeTime
-        });
-    }
-
-    shareMoment() {
-        let {podcastId, episodeId} = this.props;
-        let episodeTime = Math.round(currentTime$(store.getState()));
-        Mixpanel.trackWithProperties('Share Moment (in episode)', {
-            podcastId,
-            episodeId,
-            episodeTime
-        });
-    }
-
-    shareClip() {
-        let {podcastId, episodeId} = this.props;
-        let episodeTime = Math.round(currentTime$(store.getState()));
-        Mixpanel.trackWithProperties('Share Clip (from episode)', {
-            podcastId,
-            episodeId,
-            episodeTime
-            //duration: duration/1000
         });
     }
 
@@ -63,20 +84,16 @@ class ShareButton extends Component {
 
     showShareChoices() {
         let options = [
-            'Share entire episode',
-            'Share current moment',
-            'Record and share a clip',
             'Recommend to friends',
+            'Get share link',
             'Cancel'
         ];
         ActionSheetIOS.showActionSheetWithOptions({
             options,
-            cancelButtonIndex: 4
+            cancelButtonIndex: 2
         }, (idx) => {
-            if (idx === 0) this.shareEpisode();
-            else if (idx === 1) this.shareMoment();
-            else if (idx === 2) this.shareClip();
-            else if (idx === 3) this.recommend();
+            if (idx === 0) this.recommend();
+            else if (idx === 1) this.shareEpisode();
         });
     }
 
