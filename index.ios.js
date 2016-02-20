@@ -14,7 +14,7 @@ import App from './src/app';
 import {Provider} from 'react-redux/native';
 import store from './src/redux/create';
 
-class HorizontalScrollTest extends Component {
+class Audience extends Component {
 
     // Until react-native@0.14, <Provider> children need to be wrapped in a function
     // See https://github.com/rackt/redux/issues/867
@@ -27,4 +27,4 @@ class HorizontalScrollTest extends Component {
     }
 }
 
-AppRegistry.registerComponent('HorizontalScrollTest', () => HorizontalScrollTest);
+AppRegistry.registerComponent('Audience', () => Audience);
