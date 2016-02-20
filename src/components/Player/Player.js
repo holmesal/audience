@@ -56,7 +56,7 @@ class Player extends Component {
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
                 <Scrubber hidePlayer={() => this.props.dispatch(hidePlayer())}/>
                 <Controls />
-                <ShareButton />
+                {false && <ShareButton />}
                 <SocialButtons showCompose={() => this.setState({composeVisible: true})}/>
                 <CommentCompose visible={this.state.composeVisible} hideCompose={() => this.setState({composeVisible: false})} />
             </Animated.View>

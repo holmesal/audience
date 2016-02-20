@@ -33,7 +33,7 @@ class MTAudioBridge {
 
         if (handlers[state.playerState]) handlers[state.playerState]();
         else console.warn('got unknown state: ', state);
-        
+
         if (state.duration != duration$(store.getState())) store.dispatch(updateDuration(state.duration));
         if (state.currentTime != currentTime$(store.getState())) store.dispatch(updateCurrentTime(state.currentTime));
 
