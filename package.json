@@ -13,7 +13,7 @@
     "immutable": "^3.7.6",
     "moment": "^2.11.1",
     "parse": "^1.6.14",
-    "react-native": "^0.18.0-rc",
+    "react-native": "^0.20.0",
     "react-native-blur": "^0.7.9",
     "react-native-fbsdkcore": "0.0.8",
     "react-native-fbsdklogin": "0.0.8",
