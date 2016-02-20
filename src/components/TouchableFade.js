@@ -17,7 +17,7 @@ export default class TouchableFade extends Component {
 
     static defaultProps = {
         duration: 200,
-        underlayColor: 'DB4B23'
+        underlayColor: '#DB4B23'
     };
 
     state = {
