@@ -9,15 +9,23 @@ import React, {
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 
-import Discover from './Discover/Discover';
+import Discover from './Discover/DiscoverRoot';
 import Search from './Search/Search';
+import Viewer from './Viewer/ViewerRoot';
 
 export default class Tabs extends Component {
 
     render() {
         return (
-            <ScrollableTabView tabBarPosition="bottom" tabBarUnderlineColor="#FFA726" tabBarActiveTextColor="#FFA726" tabBarInactiveTextColor="#fefefe">
+            <ScrollableTabView
+                tabBarPosition="bottom"
+                tabBarUnderlineColor="#FFA726"
+                tabBarActiveTextColor="#FFA726"
+                tabBarInactiveTextColor="#fefefe"
+                initialPage={0}
+            >
                 <Discover tabLabel="Discover" />
+                <Viewer tabLabel="Me" />
                 <Search tabLabel="Search" />
             </ScrollableTabView>
         )

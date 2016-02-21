@@ -9,13 +9,22 @@ import React, {
     View
 } from 'react-native';
 import _ from 'lodash';
+import Relay from 'react-relay';
 
 import Recommendation from './Recommendation';
 
-export default class Discover extends Component {
+class Discover extends Component {
+
+    state = {
+        refreshing: false
+    };
 
     refresh() {
-        console.info('doing refresh!');
+        this.setState({refreshing: true});
+        this.props.relay.forceFetch({}, (readyState) => {
+            //console.info(readyState);
+            if (readyState.done) this.setState({refreshing: false});
+        });
     }
 
     renderRefreshControl() {
@@ -23,17 +32,20 @@ export default class Discover extends Component {
             <RefreshControl
                 onRefresh={this.refresh.bind(this)}
                 tintColor="#aaaaaa"
+                refreshing={this.state.refreshing}
             />
         )
     }
 
     renderStream() {
-        return (
-            <View>
-                <Recommendation style={styles.recommendation} />
-                <Recommendation style={styles.recommendation} />
-            </View>
-        )
+        console.info(this.props.viewer.stream.items.edges)
+        return this.props.viewer.stream.items.edges.map(edge =>
+            <Recommendation
+                key={edge.node.id}
+                style={styles.recommendation}
+                recommendation={edge.node}
+            />
+        );
     }
 
     render() {
@@ -55,5 +67,25 @@ let styles = StyleSheet.create({
     },
     recommendation: {
         marginBottom: 40
+    }
+});
+
+export default Relay.createContainer(Discover, {
+    fragments: {
+        viewer: () => Relay.QL`
+        fragment on User {
+            id
+            stream {
+                items(first:50) {
+                    edges {
+                        node {
+                            id
+                            ${Recommendation.getFragment('recommendation')}
+                        }
+                    }
+                }
+            }
+        }
+        `
     }
 });

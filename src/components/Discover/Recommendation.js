@@ -6,46 +6,27 @@ import React, {
     Text,
     View
 } from 'react-native';
+import Relay from 'react-relay';
 
 import EpisodeCard from './EpisodeCard';
 
-export default class Recommendation extends Component {
-
-    static propTypes = {};
-
-    static defaultProps = {
-        user: {
-            id: '10153907632414490',
-            displayName: 'Mystery User'
-        },
-        podcast: {
-            id: 'some-podcast-id',
-            name: 'Mystery Podcast',
-            artwork: 'http://lorempixel.com/400/400'
-        },
-        episode: {
-            id: 'some-episode-id',
-            title: 'Mystery Episode'
-        }
-    };
+class Recommendation extends Component {
 
     render() {
-        const photoUrl = `http://graph.facebook.com/v2.5/${this.props.user.id}/picture?type=square&height=72`;
+        const photoUrl = `http://graph.facebook.com/v2.5/${this.props.recommendation.user.facebookId}/picture?type=square&height=72`;
         return (
             <View style={[styles.wrapper, this.props.style]}>
 
                 <View style={styles.topRow}>
                     <Image style={styles.recommenderPhoto} source={{uri: photoUrl}} />
                     <Text style={styles.recommender}>
-                        <Text style={{fontWeight: '600'}}>{this.props.user.displayName} </Text>
+                        <Text style={{fontWeight: '600'}}>{this.props.recommendation.user.displayName} </Text>
                         recommends:
                     </Text>
                 </View>
 
                 <EpisodeCard
-                    episode={this.props.episode}
-                    podcast={this.props.podcast}
-                    user={this.props.user}
+                    episode={this.props.recommendation.episode}
                     style={styles.episodeCard}
                 />
             </View>
@@ -81,3 +62,21 @@ let styles = StyleSheet.create({
         marginRight: 12
     }
 });
+
+export default Relay.createContainer(Recommendation, {
+    fragments: {
+        recommendation: () => Relay.QL`
+            fragment on Recommendation {
+                user {
+                    id
+                    facebookId
+                    displayName
+                }
+                episode {
+                    id
+                    ${EpisodeCard.getFragment('episode')}
+                }
+            }
+        `
+    }
+})

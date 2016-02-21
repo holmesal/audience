@@ -2,53 +2,58 @@ import React, {
     Component,
     Image,
     PropTypes,
+    ScrollView,
     StyleSheet,
     Text,
     View
 } from 'react-native';
-import Relay from 'react-relay';
 
-import viewerRoute from '../../routes/ViewerRoute';
+import Relay from 'react-relay';
 
 class Viewer extends Component {
 
     render() {
-        console.info(this.props.viewer)
+        const photoUrl = `http://graph.facebook.com/v2.5/${this.props.viewer.facebookId}/picture?type=square&height=160`;
         return (
-            <View style={styles.wrapper}>
-                <Text style={styles.text}>{this.props.viewer.id}</Text>
-            </View>
+            <ScrollView style={styles.wrapper} contentContainerStyle={styles.scrollContent}>
+                <Image source={{uri:photoUrl}} style={styles.photo} />
+                <Text style={styles.name}>{this.props.viewer.displayName}</Text>
+            </ScrollView>
         );
     }
 }
 
-let ViewerContainer = Relay.createContainer(Viewer, {
+let styles = StyleSheet.create({
+    wrapper: {
+        flex: 1,
+        paddingTop: 20,
+    },
+    scrollContent: {
+        alignItems: 'center',
+        paddingTop: 40
+    },
+    name: {
+        color: 'white',
+        fontFamily: 'System',
+        fontSize: 20,
+        fontWeight: '300',
+        marginTop: 24
+    },
+    photo: {
+        height: 80,
+        width: 80,
+        borderRadius: 6
+    }
+});
+
+export default Relay.createContainer(Viewer, {
     fragments: {
         viewer: () => Relay.QL`
           fragment on User {
             id
+            facebookId
+            displayName
           }
         `
     }
 });
-
-let styles = StyleSheet.create({
-    wrapper: {
-        flex: 1
-    },
-    text: {
-        color: 'white'
-    }
-});
-
-export default class ViewerRootComponent extends Component {
-
-    render() {
-        return (
-            <Relay.RootContainer
-                Component={ViewerContainer}
-                route={ new viewerRoute()}
-            />
-        )
-    }
-}

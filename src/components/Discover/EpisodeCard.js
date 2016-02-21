@@ -6,29 +6,32 @@ import React, {
     Text,
     View
 } from 'react-native';
+import Relay from 'react-relay';
 
 import TouchableFade from '../TouchableFade';
 import {playEpisode} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 
-export default class EpisodeCard extends Component {
+class EpisodeCard extends Component {
 
     playEpisode() {
-        store.dispatch(playEpisode(this.props.podcast.id, this.props.episode.id))
+        store.dispatch(playEpisode(this.props.episode.podcast.id, this.props.episode.id))
     }
 
     render() {
+        let episode = this.props.episode;
+        let podcast = episode.podcast;
         return (
             <TouchableFade
                 style={[styles.wrapper, this.props.style]}
                 underlayColor="#303030"
                 onPress={this.playEpisode.bind(this)}
             >
-                <Image style={styles.artwork} source={{uri: this.props.podcast.artwork}} />
+                <Image style={styles.artwork} source={{uri: podcast.artwork}} />
 
                 <View style={styles.info}>
-                    <Text numberOfLines={1} style={styles.episodeTitle}>{this.props.episode.title}</Text>
-                    <Text numberOfLines={1} style={styles.podcastName}>{this.props.podcast.name}</Text>
+                    <Text numberOfLines={1} style={styles.episodeTitle}>{episode.title}</Text>
+                    <Text numberOfLines={1} style={styles.podcastName}>{podcast.name}</Text>
                 </View>
             </TouchableFade>
         );
@@ -76,3 +79,24 @@ let styles = StyleSheet.create({
         fontWeight: '300'
     }
 });
+
+export default Relay.createContainer(EpisodeCard, {
+
+    initialVariables: {
+        size: 'large'
+    },
+
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                id
+                title
+                podcast {
+                    id
+                    name
+                    artwork(size:$size)
+                }
+            }
+        `
+    }
+})
