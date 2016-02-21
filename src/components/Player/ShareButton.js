@@ -15,7 +15,7 @@ import {share$, currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 
 import {episodeShareLink} from '../../utils/urls';
-import {getViewer} from '../../auth';
+import {getViewer} from '../../utils/auth';
 
 class ShareButton extends Component {
 

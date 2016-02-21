@@ -17,7 +17,7 @@ import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux/native';
 import {share$, currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
-import {getViewer} from '../../auth';
+import {getViewer} from '../../utils/auth';
 import {episodeShareLink} from '../../utils/urls';
 
 class SocialButtons extends Component {
