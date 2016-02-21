@@ -7,6 +7,7 @@ import React, {
     Text,
     View
 } from 'react-native';
+import Relay from 'react-relay';
 
 import {connect} from 'react-redux/native';
 import {player$, hidePlayer} from '../../redux/modules/player.js';
@@ -57,7 +58,11 @@ class Player extends Component {
                 <Scrubber hidePlayer={() => this.props.dispatch(hidePlayer())}/>
                 <Controls />
                 {false && <ShareButton />}
-                <SocialButtons showCompose={() => this.setState({composeVisible: true})}/>
+                <SocialButtons
+                    showCompose={() => this.setState({composeVisible: true})}
+                    episode={this.props.episode}
+                    podcast={this.props.episode.podcast}
+                />
                 <CommentCompose visible={this.state.composeVisible} hideCompose={() => this.setState({composeVisible: false})} />
             </Animated.View>
         );
@@ -76,4 +81,18 @@ let styles = StyleSheet.create({
     }
 });
 
-export default connect(player$)(Player)
+let ConnectedPlayer =  connect(player$)(Player);
+
+export default Relay.createContainer(ConnectedPlayer, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                id
+                ${SocialButtons.getFragment('episode')}
+                podcast {
+                    ${SocialButtons.getFragment('podcast')}
+                }
+            }
+        `
+    }
+})

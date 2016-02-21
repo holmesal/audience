@@ -67,10 +67,10 @@ export const controls$ = createSelector(playing$, buffering$, (playing, bufferin
     buffering
 }));
 
-export const share$ = createSelector(podcastId$, episodeId$, (podcastId, episodeId) => ({
-    podcastId,
-    episodeId
-}));
+//export const share$ = createSelector(podcastId$, episodeId$, (podcastId, episodeId) => ({
+//    podcastId,
+//    episodeId
+//}));
 
 // Actions
 export const updateEpisode = (podcastId, episodeId) => ({
@@ -80,15 +80,14 @@ export const updateEpisode = (podcastId, episodeId) => ({
 });
 export const playEpisode = (podcastId, episodeId) => {
     return (dispatch, getState) => {
-        console.info(podcastId, episodeId);
-        let podcastTitle = getState().getIn(['podcasts', podcastId, 'collectionName']);
-        let audio = getState().getIn(['episodes', podcastId]).find((ep) => ep.get('uid') === episodeId, null, Immutable.Map());
-        let url = audio.getIn(['audio', 'url']);
-        let episodeTitle = audio.get('title');
-        if (!url || !podcastTitle || !episodeTitle) console.error(`Could not play this episode due to missing information:   podcastTitle:${podcastTitle}   episodeTitle:${episodeTitle}   url:${url}`);
-        MTAudio.play(url, podcastTitle, episodeTitle);
-        //MTAudio.play(url, title, description)
-        //let mp3Url =
+        //console.info(podcastId, episodeId);
+        //let podcastTitle = getState().getIn(['podcasts', podcastId, 'collectionName']);
+        //let audio = getState().getIn(['episodes', podcastId]).find((ep) => ep.get('uid') === episodeId, null, Immutable.Map());
+        //let url = audio.getIn(['audio', 'url']);
+        //let episodeTitle = audio.get('title');
+        //if (!url || !podcastTitle || !episodeTitle) console.error(`Could not play this episode due to missing information:   podcastTitle:${podcastTitle}   episodeTitle:${episodeTitle}   url:${url}`);
+        //MTAudio.play(url, podcastTitle, episodeTitle);
+
         dispatch(updateEpisode(podcastId, episodeId));
         dispatch(showPlayer());
     }

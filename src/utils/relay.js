@@ -1,4 +1,6 @@
 import Relay from 'react-relay';
+import store from '../redux/create';
+import {viewerId$} from '../redux/modules/auth';
 
 const graphqlURL = __DEV__ ? 'http://localhost:5000/graphql' : 'http://podcastfoo.herokuapp.com/graphql';
 
@@ -13,7 +15,6 @@ export const updateRelayAuthHeader = (token) => {
         console.info('!!! USING DEBUG TOKEN !!!');
         token = DEBUG_TOKEN;
     }
-    console.info(token)
     Relay.injectNetworkLayer(
         new Relay.DefaultNetworkLayer(graphqlURL, {
           headers: {
@@ -22,3 +23,5 @@ export const updateRelayAuthHeader = (token) => {
         })
     );
 };
+
+export const getViewerId = () => viewerId$(store.getState());

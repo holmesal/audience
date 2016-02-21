@@ -11,14 +11,19 @@ import React, {
     VibrationIOS,
     View
 } from 'react-native';
+import Relay from 'react-relay';
+
+import CircleCaptionButton from './CircleCaptionButton';
+import RecommendButton from './RecommendButton';
 
 import {FBSDKAppEvents} from 'react-native-fbsdkcore'
 import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux/native';
-import {share$, currentTime$} from '../../redux/modules/player.js';
+import {currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 import {getViewer} from '../../utils/auth';
 import {episodeShareLink} from '../../utils/urls';
+import RecommendEpisodeMutation from '../../mutations/RecommendEpisode';
 
 class SocialButtons extends Component {
 
@@ -31,21 +36,7 @@ class SocialButtons extends Component {
         comment: null
     };
 
-    recommend() {
-        let {podcastId, episodeId} = this.props;
-        console.info('todo - add recommendation');
-        AlertIOS.prompt(
-            'Add a comment?',
-            'This is optional.',
-            [
-                {text: 'Recommend', onPress: this.recommendMutation, style: 'default'},
-            ]
-        )
-    }
 
-    recommendMutation(text) {
-        console.info('recommending', text)
-    }
 
     share() {
         let {podcastId, episodeId} = this.props;
@@ -86,14 +77,13 @@ class SocialButtons extends Component {
     }
 
     render() {
+        console.info(this.props.episode)
         return (
             <View style={styles.wrapper}>
-                <TouchableOpacity style={styles.buttonWrapper} onPress={this.recommend.bind(this)}>
-                    <View style={styles.button}>
-                        <Text style={{fontSize: 30}}>👍</Text>
-                    </View>
-                    <Text style={styles.caption}>RECOMMEND</Text>
-                </TouchableOpacity>
+                <RecommendButton
+                    episode={this.props.episode}
+                    podcast={this.props.podcast}
+                />
                 <TouchableOpacity style={styles.buttonWrapper} onPress={this.share.bind(this)}>
                     <View style={styles.button}>
                         <Image style={styles.icon} source={require('image!share')}/>
@@ -137,4 +127,21 @@ let styles = StyleSheet.create({
     }
 });
 
-export default connect(share$)(SocialButtons);
+//let ConnectedSocialButtons = connect(share$)(SocialButtons);
+
+export default Relay.createContainer(SocialButtons, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                id
+                ${RecommendButton.getFragment('episode')}
+            }
+        `,
+        podcast: () => Relay.QL`
+            fragment on Podcast {
+                id
+                ${RecommendButton.getFragment('podcast')}
+            }
+        `
+    }
+});

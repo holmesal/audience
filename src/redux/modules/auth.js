@@ -11,10 +11,12 @@ import {updateRelayAuthHeader} from '../../utils/relay';
 */
 const UPDATE_LOGGED_IN = 'audience/auth/UPDATE_LOGGED_IN';
 const UPDATE_CHECKED_LOGIN = 'audience/auth/UPDATE_CHECKED_LOGIN';
+const UPDATE_VIEWER_ID = 'audience/auth/UPDATE_VIEWER_ID';
 
 const initialState = Immutable.fromJS({
     checkedLogin: false,
-    token: null
+    token: null,
+    viewerId: null
 });
 
 /**
@@ -24,7 +26,9 @@ export default createReducer(initialState, {
 
     [UPDATE_LOGGED_IN]: (state, action) => state.set('loggedIn', action.loggedIn),
 
-    [UPDATE_CHECKED_LOGIN]: (state, action) => state.set('checkedLogin', action.checkedLogin)
+    [UPDATE_CHECKED_LOGIN]: (state, action) => state.set('checkedLogin', action.checkedLogin),
+
+    [UPDATE_VIEWER_ID]: (state, action) => state.set('viewerId', action.viewerId)
 
 });
 
@@ -33,6 +37,7 @@ export default createReducer(initialState, {
  */
 export const loggedIn$ = state => state.getIn(['auth', 'loggedIn']);
 export const checkedLogin$ = state => state.getIn(['auth', 'checkedLogin']);
+export const viewerId$ = state => state.getIn(['auth', 'viewerId']);
 export const auth$ = createSelector(loggedIn$, checkedLogin$, (loggedIn, checkedLogin) => ({
     loggedIn,
     checkedLogin
@@ -46,6 +51,11 @@ const updateLoggedIn = (loggedIn) => ({
 const updateCheckedLogin = (checkedLogin) => ({
     type: UPDATE_CHECKED_LOGIN,
     checkedLogin
+});
+
+export const updateViewerId = (viewerId) => ({
+    type: UPDATE_VIEWER_ID,
+    viewerId
 });
 
 export const checkLogin = () => {

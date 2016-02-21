@@ -38,7 +38,6 @@ class Discover extends Component {
     }
 
     renderStream() {
-        console.info(this.props.viewer.stream.items.edges)
         return this.props.viewer.stream.items.edges.map(edge =>
             <Recommendation
                 key={edge.node.id}

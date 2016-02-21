@@ -9,7 +9,7 @@ import React, {
 
 import Tabs from './Tabs';
 import PodcastInfo from './PodcastInfo/PodcastInfo';
-import Player from './Player/Player';
+import Player from './Player/PlayerRoot';
 
 export default class Authenticated extends Component {
 

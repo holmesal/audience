@@ -8,9 +8,21 @@ import React, {
     View
 } from 'react-native';
 
+import store from '../../redux/create';
+import {updateViewerId} from '../../redux/modules/auth';
+
 import Relay from 'react-relay';
 
+/**
+ * Note - this component currently is reponsible for setting the viewerId in redux, which is needed when
+ * making api requests that have fat queries involving the viewer
+ */
 class Viewer extends Component {
+
+    componentDidMount() {
+        store.dispatch(updateViewerId(this.props.viewer.id));
+    }
+
 
     render() {
         const photoUrl = `http://graph.facebook.com/v2.5/${this.props.viewer.facebookId}/picture?type=square&height=160`;
