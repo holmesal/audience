@@ -3,6 +3,8 @@ import {createSelector} from 'reselect';
 import Immutable from 'immutable';
 import _ from 'lodash';
 import {FBSDKAccessToken} from 'react-native-fbsdkcore'
+import Relay from 'react-relay';
+import {updateRelayAuthHeader} from '../../utils/relay';
 
 /**
  Action constants
@@ -36,11 +38,6 @@ export const auth$ = createSelector(loggedIn$, checkedLogin$, (loggedIn, checked
     checkedLogin
 }));
 
-// Injects the auth token in the relay network layer
-let injectAccessToken = (token) => {
-    console.info('todo - inject access token into relay network layer');
-};
-
 const updateLoggedIn = (loggedIn) => ({
     type: UPDATE_LOGGED_IN,
     loggedIn
@@ -59,8 +56,8 @@ export const checkLogin = () => {
                 console.info('user is logged in!', credentials);
                 // A non-null token indicates that the user is currently logged in.
                 dispatch(updateLoggedIn(true));
-                // Inject
-                injectAccessToken(credentials.tokenString);
+                // Update the auth token relay sends with requests
+                updateRelayAuthHeader(credentials.tokenString);
             } else {
                 console.info('no credentials found');
                 dispatch(updateLoggedIn(false));

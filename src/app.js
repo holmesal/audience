@@ -17,6 +17,8 @@ import './notifications';
 
 import './redux/create';
 
+import './utils/relay';
+
 import {FBSDKAccessToken} from 'react-native-fbsdkcore'
 import Parse from 'parse/react-native';
 import Mixpanel from 'react-native-mixpanel';

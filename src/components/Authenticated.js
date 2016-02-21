@@ -10,6 +10,7 @@ import React, {
 import Tabs from './Tabs';
 import PodcastInfo from './PodcastInfo/PodcastInfo';
 import Player from './Player/Player';
+import Viewer from './Viewer/Viewer';
 
 export default class Authenticated extends Component {
 
@@ -19,6 +20,7 @@ export default class Authenticated extends Component {
                 <Tabs />
                 <PodcastInfo />
                 <Player />
+                <Viewer />
             </View>
         );
     }
