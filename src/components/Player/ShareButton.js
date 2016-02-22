@@ -15,7 +15,7 @@ import {share$, currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 
 import {episodeShareLink} from '../../utils/urls';
-import {getViewer} from '../../utils/auth';
+import {getViewerId} from '../../utils/relay';
 
 class ShareButton extends Component {
 
@@ -48,9 +48,9 @@ class ShareButton extends Component {
     shareEpisode() {
         let {podcastId, episodeId} = this.props;
         let episodeTime = Math.round(currentTime$(store.getState()));
-        let {id: userId} = getViewer();
+        let viewerId = getViewerId();
         // Build the episode link
-        const url = episodeShareLink(podcastId, episodeId, userId);
+        const url = episodeShareLink(podcastId, episodeId, viewerId);
         // Show the share sheet
         ActionSheetIOS.showShareActionSheetWithOptions({
             url

@@ -7,7 +7,6 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-import {getViewer} from '../../utils/auth';
 import RecommendEpisodeMutation from '../../mutations/RecommendEpisode';
 
 import CircleCaptionButton from './CircleCaptionButton';

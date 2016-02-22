@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run remotedev | $NVM_BIN/react-native start",
-    "build": "react-native bundle --entry-file index.ios.js --bundle-output ios/main.jsbundle --platform ios --dev false",
+    "build": "$NVM_BIN/react-native bundle --entry-file index.ios.js --bundle-output ios/main.jsbundle --platform ios --dev false",
     "remotedev": "remotedev --hostname=localhost --port=8000"
   },
   "dependencies": {
@@ -35,7 +35,8 @@
     "reselect": "^2.0.3",
     "rss-parser": "^2.2.4",
     "striptags": "^2.1.1",
-    "superagent": "^1.7.2"
+    "superagent": "^1.7.2",
+    "url-pattern": "^1.0.1"
   },
   "devDependencies": {
     "events-browserify": "0.0.1",

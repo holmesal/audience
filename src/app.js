@@ -15,6 +15,8 @@ import React, {
 
 import './notifications';
 
+import './lib/linking';
+
 import './redux/create';
 
 import './utils/relay';

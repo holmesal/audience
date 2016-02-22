@@ -1010,6 +1010,7 @@
 					"/Users/alonso/Documents/FacebookSDK/**",
 					"$(SRCROOT)/**",
 					"$(SRCROOT)/../node_modules/react-native-ios-notification-actions/RNNotificationActions",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = Audience/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1051,6 +1052,7 @@
 					"/Users/alonso/Documents/FacebookSDK/**",
 					"$(SRCROOT)/**",
 					"$(SRCROOT)/../node_modules/react-native-ios-notification-actions/RNNotificationActions",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = Audience/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

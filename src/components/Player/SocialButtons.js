@@ -21,7 +21,7 @@ import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux/native';
 import {currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
-import {getViewer} from '../../utils/auth';
+import {getViewerId} from '../../utils/relay';
 import {episodeShareLink} from '../../utils/urls';
 import RecommendEpisodeMutation from '../../mutations/RecommendEpisode';
 
@@ -39,11 +39,12 @@ class SocialButtons extends Component {
 
 
     share() {
-        let {podcastId, episodeId} = this.props;
-        let {id: userId} = getViewer();
+        let podcastId = this.props.podcast.id;
+        let episodeId = this.props.episode.id;
+        let viewerId = getViewerId();
         let episodeTime = Math.round(currentTime$(store.getState()));
         // Build the episode link
-        const url = episodeShareLink(podcastId, episodeId, userId);
+        const url = episodeShareLink(podcastId, episodeId, viewerId);
         // Show the share sheet
         ActionSheetIOS.showShareActionSheetWithOptions({
                 url
@@ -64,17 +65,17 @@ class SocialButtons extends Component {
             episodeTime
         });
     }
-
-    reaction() {
-        let {podcastId, episodeId} = this.props;
-        let episodeTime = Math.round(currentTime$(store.getState()));
-        Mixpanel.trackWithProperties('Leave Reaction', {
-            podcastId,
-            episodeId,
-            episodeTime
-        });
-        VibrationIOS.vibrate();
-    }
+    //
+    //reaction() {
+    //    let {podcastId, episodeId} = this.props;
+    //    let episodeTime = Math.round(currentTime$(store.getState()));
+    //    Mixpanel.trackWithProperties('Leave Reaction', {
+    //        podcastId,
+    //        episodeId,
+    //        episodeTime
+    //    });
+    //    VibrationIOS.vibrate();
+    //}
 
     render() {
         console.info(this.props.episode)

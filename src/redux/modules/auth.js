@@ -61,7 +61,6 @@ export const updateViewerId = (viewerId) => ({
 export const checkLogin = () => {
     return (dispatch, getState) => {
         FBSDKAccessToken.getCurrentAccessToken((credentials) => {
-            dispatch(updateCheckedLogin(true));
             if (credentials) {
                 console.info('user is logged in!', credentials);
                 // A non-null token indicates that the user is currently logged in.
@@ -72,6 +71,7 @@ export const checkLogin = () => {
                 console.info('no credentials found');
                 dispatch(updateLoggedIn(false));
             }
+            dispatch(updateCheckedLogin(true));
         });
     }
 };

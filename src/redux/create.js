@@ -24,8 +24,8 @@ if (__DEV__) {
     finalCreateStore = compose(
         createStoreWithMiddleware,
         devTools({
-            hostname: 'localhost',
-            port: 8000,
+            //hostname: 'localhost',
+            //port: 8000,
             name: 'Audience iOS'
         })
     )(createStore);
