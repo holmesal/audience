@@ -20,7 +20,7 @@
     "react-native-blur": "^0.7.10",
     "react-native-fbsdkcore": "0.0.8",
     "react-native-fbsdklogin": "0.0.8",
-    "react-native-ios-notification-actions": "1.0.0",
+    "react-native-ios-notification-actions": "^1.0.1",
     "react-native-mixpanel": "0.0.7",
     "react-native-scrollable-tab-view": "^0.3.7",
     "react-native-search-bar": "^2.8.0",

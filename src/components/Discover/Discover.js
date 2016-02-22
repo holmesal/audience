@@ -19,7 +19,19 @@ class Discover extends Component {
         refreshing: false
     };
 
+    componentDidMount() {
+        // Refresh every 30 minutes
+        this.refetchTimer = setInterval(() => {
+            this.refresh();
+        }, 1000 * 60 * 30)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.refetchTimer);
+    }
+
     refresh() {
+        console.info('refreshing!');
         this.setState({refreshing: true});
         this.props.relay.forceFetch({}, (readyState) => {
             //console.info(readyState);
