@@ -9,6 +9,7 @@ import {createSelector} from 'reselect';
 
 import PodcastRoute from '../../routes/PodcastRoute';
 import PodcastInfo from './PodcastInfo';
+import RelayError from '../RelayError';
 
 import {podcastId$} from '../../redux/modules/podcastInfo';
 
@@ -29,9 +30,7 @@ class PodcastInfoRoot extends Component {
                 renderFailure={function(error, retry) {
                     console.info(error);
                     return (
-                    <View>
-                        <Text>{error.message}</Text>
-                    </View>
+                        <RelayError error={error} retry={retry} />
                     );
                 }}
                 renderLoading={() => <PodcastInfo loading={true} podcast={null} />}

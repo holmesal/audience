@@ -7,6 +7,7 @@ import Relay from 'react-relay';
 
 import viewerRoute from '../../routes/ViewerRoute';
 import Discover from './Discover';
+import RelayError from '../RelayError';
 
 export default class DiscoverRoot extends Component {
 
@@ -19,9 +20,7 @@ export default class DiscoverRoot extends Component {
                 renderFailure={function(error, retry) {
                     console.info(error)
                     return (
-                    <View>
-                        <Text>{error.message}</Text>
-                    </View>
+                        <RelayError error={error} retry={retry} />
                     );
                 }}
             />

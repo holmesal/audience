@@ -10,6 +10,7 @@ import {createSelector} from 'reselect';
 import SearchRoute from '../../routes/SearchRoute';
 import Results from './Results';
 import LoadingSpinner from '../LoadingSpinner';
+import RelayError from '../RelayError';
 
 import {query$} from '../../redux/modules/search';
 
@@ -27,9 +28,7 @@ class ResultsRoot extends Component {
                 renderFailure={function(error, retry) {
                     console.info(error);
                     return (
-                    <View>
-                        <Text style={{color: 'white'}}>{error.message}</Text>
-                    </View>
+                        <RelayError error={error} retry={retry} />
                     );
                 }}
                 renderLoading={() => <LoadingSpinner />}

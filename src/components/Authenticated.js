@@ -7,7 +7,7 @@ import React, {
     View
 } from 'react-native';
 
-import Tabs from './Tabs';
+import Tabs from './Tabs/Tabs';
 import PodcastInfo from './PodcastInfo/PodcastInfoRoot';
 import Player from './Player/PlayerRoot';
 

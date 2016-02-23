@@ -22,7 +22,7 @@
     "react-native-fbsdklogin": "0.0.8",
     "react-native-ios-notification-actions": "^1.0.1",
     "react-native-mixpanel": "0.0.7",
-    "react-native-scrollable-tab-view": "^0.3.7",
+    "react-native-scrollable-tab-view": "holmesal/react-native-scrollable-tab-view",
     "react-native-search-bar": "^2.8.0",
     "react-native-spinkit": "0.0.7",
     "react-native-tabbar": "^0.3.5",

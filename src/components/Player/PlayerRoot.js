@@ -9,6 +9,7 @@ import {createSelector} from 'reselect';
 
 import EpisodeRoute from '../../routes/EpisodeRoute';
 import Player from './Player';
+import RelayError from '../RelayError';
 
 import {episodeId$} from '../../redux/modules/player';
 
@@ -29,9 +30,7 @@ class PlayerRoot extends Component {
                 renderFailure={function(error, retry) {
                     console.info(error)
                     return (
-                    <View>
-                        <Text>{error.message}</Text>
-                    </View>
+                        <RelayError error={error} retry={retry} />
                     );
                 }}
             />
