@@ -12,11 +12,6 @@ import Relay from 'react-relay';
 
 import PodcastResult from './PodcastResult';
 
-import {connect} from 'react-redux/native';
-import {createSelector} from 'reselect';
-import {results$} from '../../redux/modules/search';
-import {showPodcastInfo} from '../../redux/modules/podcastInfo';
-
 class Results extends Component {
 
     gotoPodcast(podcastId) {

@@ -31,8 +31,7 @@ export const podcastId$ = state => state.getIn(['podcastInfo', 'podcastId']);
 export const visible$ = state => state.getIn(['podcastInfo', 'visible']);
 export const podcast$ = createSelector(podcastId$, podcasts$, (podcastId, podcasts) => podcasts.get(podcastId));
 export const podcastInfo$ = createSelector(visible$, podcast$, (visible, podcast) => ({
-    visible,
-    podcast: podcast && podcast.toJS()
+    visible
 }));
 
 
@@ -41,7 +40,7 @@ import {fetchPodcast} from './podcasts';
 export const showPodcastInfo = (podcastId) => {
     return (dispatch, getState) => {
         // Fetch this podcast
-        dispatch(fetchPodcast(podcastId));
+        //dispatch(fetchPodcast(podcastId));
         // Immediately show the podcast info view
         dispatch({
             type: SHOW,

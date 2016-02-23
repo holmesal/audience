@@ -6,12 +6,9 @@ import React, {
     Text,
     View
 } from 'react-native';
+import Relay from 'react-relay';
 import Spinner from 'react-native-spinkit';
 import EpisodeListItem from './EpisodeListItem';
-
-import {connect} from 'react-redux/native';
-import {episodeList$} from '../../redux/modules/episodes';
-import {playEpisode} from '../../redux/modules/player';
 
 import colors from '../../colors';
 
@@ -39,20 +36,16 @@ class EpisodeList extends Component {
     }
 
     renderEpisodeList() {
-        return this.props.episodes.map((ep, idx) => (
+        return this.props.podcast.episodes.edges.map(edge => (
             <EpisodeListItem
-                title={ep.title}
-                description={ep.description}
-                key={ep.uid}
-                duration={ep.duration}
-                unheard={false}
-                onPress={() => this.props.dispatch(playEpisode(this.props.podcastId, ep.uid))}
+                episode={edge.node}
+                key={edge.node.id}
             />
         ))
     }
 
     render() {
-        let view = this.props.episodes.length > 0 && this.props.doneAnimating ? this.renderEpisodeList() : this.renderLoading();
+        let view = this.props.podcast.episodes.edges.length > 0 && this.props.doneAnimating ? this.renderEpisodeList() : this.renderLoading();
         return (
             <View style={styles.wrapper}>
                 {view}
@@ -70,4 +63,19 @@ let styles = StyleSheet.create({
     }
 });
 
-export default connect(episodeList$)(EpisodeList)
+export default Relay.createContainer(EpisodeList, {
+    fragments: {
+        podcast: () => Relay.QL`
+            fragment on Podcast {
+                episodes(first:30) {
+                    edges {
+                        node {
+                            id
+                            ${EpisodeListItem.getFragment('episode')}
+                        }
+                    }
+                }
+            }
+        `
+    }
+})

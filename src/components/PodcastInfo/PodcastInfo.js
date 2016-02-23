@@ -9,6 +9,7 @@ import React, {
     Text,
     View
 } from 'react-native';
+import Relay from 'react-relay';
 
 import PhotoHeader from './PhotoHeader';
 import TopBar from './TopBar';
@@ -39,9 +40,7 @@ class PodcastInfo extends Component {
     };
 
     componentDidMount() {
-        //setTimeout(() => {
-        //    this.props.dispatch(showPodcastInfo('432550963'));
-        //}, 300);
+        this.updateVisibility();
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -77,15 +76,16 @@ class PodcastInfo extends Component {
     }
 
     renderPodcastInfo() {
-        //console.info('podcast info props', this.props);
         return (
             <View style={{flex: 1}}>
                 <ScrollView contentContainerStyle={styles.scrollContent}>
                     <PhotoHeader
-                        title={this.props.podcast.collectionName}
-                        photoUrl={this.props.podcast.artworkUrl600}
+                        podcast={this.props.podcast}
                     />
-                    <EpisodeList doneAnimating={this.state.doneAnimating}/>
+                    <EpisodeList
+                        podcast={this.props.podcast}
+                        doneAnimating={this.state.doneAnimating}
+                    />
                 </ScrollView>
                 <TopBar
                     onBackPress={() => this.props.dispatch(hidePodcastInfo())}
@@ -99,6 +99,7 @@ class PodcastInfo extends Component {
     }
 
     render() {
+        //console.info('podcast info props', this.props);
         // If not visible, show nothing
         //if (!this.props.visible) return <View />;
 
@@ -130,4 +131,15 @@ let styles = StyleSheet.create({
     }
 });
 
-export default connect(podcastInfo$)(PodcastInfo);
+let connectedPodcastInfo = connect(podcastInfo$)(PodcastInfo);
+export default Relay.createContainer(connectedPodcastInfo, {
+    fragments: {
+        podcast: () => Relay.QL`
+            fragment on Podcast {
+                id
+                ${PhotoHeader.getFragment('podcast')}
+                ${EpisodeList.getFragment('podcast')}
+            }
+        `
+    }
+})

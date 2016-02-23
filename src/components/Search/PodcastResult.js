@@ -8,6 +8,9 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 
+import store from '../../redux/create';
+import {showPodcastInfo} from '../../redux/modules/podcastInfo';
+
 import ResultItem from './ResultItem';
 
 class PodcastResult extends Component {
@@ -20,7 +23,7 @@ class PodcastResult extends Component {
                 secondary={'Podcast'}
                 photoUrl={this.props.podcast.artwork}
                 photoShape={'square'}
-                onPress={() => console.info('podcast tapped!', this.props.podcast.id)}
+                onPress={() => store.dispatch(showPodcastInfo(this.props.podcast.id))}
             />
         );
     }

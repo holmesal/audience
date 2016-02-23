@@ -8,7 +8,7 @@ const UPDATE_RESULTS = 'audience/search/UPDATE_RESULTS';
 
 const initialState = Immutable.fromJS({
     results: [],
-    query: '',
+    query: '99 invisible',
     inFlight: false
 });
 

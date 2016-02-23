@@ -8,13 +8,9 @@ import React, {
     TouchableOpacity,
     View
 } from 'react-native';
+import Relay from 'react-relay';
 
-export default class PhotoHeader extends Component {
-
-    static propTypes = {
-        photoUrl: PropTypes.string,
-        title: PropTypes.string
-    };
+class PhotoHeader extends Component {
 
     state = {
         imageOpacity: new Animated.Value(0),
@@ -34,7 +30,7 @@ export default class PhotoHeader extends Component {
             <View style={styles.wrapper}>
                 <Animated.View style={{flex: 1, alignSelf: 'stretch', opacity: this.state.imageOpacity}}>
                     <Image
-                        source={{uri: this.props.photoUrl}}
+                        source={{uri: this.props.podcast.artwork}}
                         style={[styles.stretch]}
                         onLoad={this.handleImageLoad.bind(this)}
                     />
@@ -42,7 +38,7 @@ export default class PhotoHeader extends Component {
                 </Animated.View>
 
                 <View style={[styles.stretch, styles.titleWrapper]}>
-                    <Text style={styles.title}>{this.props.title.toUpperCase()}</Text>
+                    <Text style={styles.title}>{this.props.podcast.name.toUpperCase()}</Text>
                 </View>
             </View>
         );
@@ -80,3 +76,14 @@ let styles = StyleSheet.create({
 
 
 });
+
+export default Relay.createContainer(PhotoHeader, {
+    fragments: {
+        podcast: () => Relay.QL`
+            fragment on Podcast {
+                name
+                artwork
+            }
+        `
+    }
+})

@@ -7,31 +7,40 @@ import React, {
     TouchableOpacity,
     View
 } from 'react-native';
-
+import Relay from 'react-relay';
 import striptags from 'striptags';
+import store from '../../redux/create';
+import {playEpisode} from '../../redux/modules/player';
 
 import {PrimaryText, SupportingText, MetaText} from '../../type';
 import colors from '../../colors';
 import TouchableFade from '../TouchableFade';
 
-export default class EpisodeListItem extends Component {
+class EpisodeListItem extends Component {
 
     static propTypes = {
-        title: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
-        unheard: PropTypes.bool,
-        onPress: PropTypes.func
+        unheard: PropTypes.bool
     };
 
     static defaultProps = {
         unheard: false
     };
 
+    play() {
+        store.dispatch(playEpisode(this.props.episode.id));
+    }
+
     getDuration() {
-        if (!this.props.duration) return (<View style={{flex: 1}}/>);
-        let components = this.props.duration.split(':');
-        let hours = parseInt(components[0]);
-        let minutes = parseInt(components[1]);
+        if (!this.props.episode.duration) return (<View style={{flex: 1}}/>);
+        let components = this.props.episode.duration.split(':');
+        let hours, minutes;
+        if (components.length > 2) {
+            hours = parseInt(components[0]);
+            minutes = parseInt(components[1]);
+        } else {
+            hours = 0;
+            minutes = parseInt(components[0]);
+        }
         let timeString = '';
         // This format is a little longer, but not so compact
         //if (hours > 0) timeString += `${hours} HR${hours > 1 ? 'S' : ''}   `;
@@ -54,12 +63,12 @@ export default class EpisodeListItem extends Component {
 
     render() {
         return (
-            <TouchableFade style={styles.wrapper} underlayColor={colors.almostDarkGrey} onPress={this.props.onPress}>
+            <TouchableFade style={styles.wrapper} underlayColor={colors.almostDarkGrey} onPress={this.play.bind(this)}>
                 <View style={styles.content}>
-                    <PrimaryText style={styles.title} numberOfLines={1}>{this.props.title}</PrimaryText>
+                    <PrimaryText style={styles.title} numberOfLines={1}>{this.props.episode.title}</PrimaryText>
                 </View>
                 <View style={styles.supporting}>
-                    <SupportingText style={styles.description} numberOfLines={2}>{striptags(this.props.description)}</SupportingText>
+                    <SupportingText style={styles.description} numberOfLines={2}>{striptags(this.props.episode.description)}</SupportingText>
                     <View style={styles.metaRow}>
                         <Image style={styles.tinyIcon} source={require('image!tinyClock')} />
                         {this.getDuration()}
@@ -148,5 +157,19 @@ let styles = StyleSheet.create({
         bottom: 0,
         width: 6,
         backgroundColor: colors.attention
+    }
+});
+
+export default Relay.createContainer(EpisodeListItem, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                id
+                title
+                description
+                duration
+                published
+            }
+        `
     }
 });

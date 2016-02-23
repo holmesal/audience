@@ -8,7 +8,7 @@ import React, {
 } from 'react-native';
 
 import Tabs from './Tabs';
-import PodcastInfo from './PodcastInfo/PodcastInfo';
+import PodcastInfo from './PodcastInfo/PodcastInfoRoot';
 import Player from './Player/PlayerRoot';
 
 export default class Authenticated extends Component {
