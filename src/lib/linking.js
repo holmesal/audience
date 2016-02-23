@@ -19,7 +19,7 @@ function handleLink(url) {
         let {podcastId, episodeId, viewerId} = playEpisodePatten.match(path);
         console.info(podcastId, episodeId, viewerId);
         // Play this episode
-        store.dispatch(playEpisode(podcastId, episodeId))
+        store.dispatch(playEpisode(episodeId))
     } else {
         console.warn('failed to parse path: ', path, 'from URL: ', url);
     }

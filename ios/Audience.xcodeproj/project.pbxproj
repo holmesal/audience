@@ -24,6 +24,7 @@
 		9AE1B07F75114EDBAFAB7217 /* libRNNotificationActions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EEDD777F121B4AB1B7CDB908 /* libRNNotificationActions.a */; };
 		D47273404AF3B74815784C66 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5848CC463D1D6024A42AC6BB /* libPods.a */; };
 		E20D90E91C76822400C05994 /* Audience.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E20D90E81C767DC400C05994 /* Audience.entitlements */; };
+		E2654D141C7C35D200F9BCE8 /* MTDebugIP.m in Sources */ = {isa = PBXBuildFile; fileRef = E2654D131C7C35D200F9BCE8 /* MTDebugIP.m */; };
 		E26F20811C5AFB8300C99444 /* libStreamingKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E26F207A1C5AFB7000C99444 /* libStreamingKit.a */; };
 		E272148C1C75371F00E9EC3D /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E272148B1C75371A00E9EC3D /* libRCTPushNotification.a */; };
 		E2A485901C51FBC700ADDD30 /* Oswald-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2A4858D1C51FBC700ADDD30 /* Oswald-Bold.ttf */; };
@@ -232,6 +233,8 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		E20D90E81C767DC400C05994 /* Audience.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Audience.entitlements; path = Audience/Audience.entitlements; sourceTree = "<group>"; };
+		E2654D121C7C35D200F9BCE8 /* MTDebugIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDebugIP.h; path = MTDebugIP/MTDebugIP.h; sourceTree = "<group>"; };
+		E2654D131C7C35D200F9BCE8 /* MTDebugIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDebugIP.m; path = MTDebugIP/MTDebugIP.m; sourceTree = "<group>"; };
 		E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = StreamingKit.xcodeproj; path = StreamingKit/StreamingKit.xcodeproj; sourceTree = "<group>"; };
 		E27214861C75371900E9EC3D /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		E272148D1C75379000E9EC3D /* RNNotificationActions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNNotificationActions.xcodeproj; path = "../node_modules/react-native-ios-notification-actions/RNNotificationActions/RNNotificationActions.xcodeproj"; sourceTree = "<group>"; };
@@ -363,6 +366,7 @@
 		13B07FAE1A68108700A75B9A /* Audience */ = {
 			isa = PBXGroup;
 			children = (
+				E2654D111C7C358B00F9BCE8 /* MTDebugIP */,
 				E20D90E81C767DC400C05994 /* Audience.entitlements */,
 				E2A519761C5AE8A9001546D5 /* MTAudio */,
 				E2A519751C5AE8A1001546D5 /* Audience-Bridging-Header.h */,
@@ -458,6 +462,15 @@
 				2F096097A6E34116F58554A5 /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		E2654D111C7C358B00F9BCE8 /* MTDebugIP */ = {
+			isa = PBXGroup;
+			children = (
+				E2654D121C7C35D200F9BCE8 /* MTDebugIP.h */,
+				E2654D131C7C35D200F9BCE8 /* MTDebugIP.m */,
+			);
+			name = MTDebugIP;
 			sourceTree = "<group>";
 		};
 		E26F20721C5AFB7000C99444 /* Products */ = {
@@ -581,6 +594,7 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Audience" */;
 			buildPhases = (
 				1FEAB5250A1777E61BD27A40 /* Check Pods Manifest.lock */,
+				E2654D101C7C32C800F9BCE8 /* Auto-ip */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
@@ -960,6 +974,20 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E2654D101C7C32C800F9BCE8 /* Auto-ip */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Auto-ip";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "INFOPLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\necho \"writing to $INFOPLIST\"\nPLISTCMD=\"Add :SERVER_IP string $(ifconfig | grep inet\\ | tail -1 | cut -d \" \" -f 2)\"\necho -n \"$INFOPLIST\" | xargs -0 /usr/libexec/PlistBuddy -c \"$PLISTCMD\" || true\nPLISTCMD=\"Set :SERVER_IP $(ifconfig | grep inet\\ | tail -1 | cut -d \" \" -f 2)\"\necho -n \"$INFOPLIST\" | xargs -0 /usr/libexec/PlistBuddy -c \"$PLISTCMD\" || true";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -970,6 +998,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				E2A519791C5AE8A9001546D5 /* MTAudio.swift in Sources */,
 				E2A5197A1C5AE8A9001546D5 /* MTAudioBridge.m in Sources */,
+				E2654D141C7C35D200F9BCE8 /* MTDebugIP.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

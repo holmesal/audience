@@ -1,8 +1,12 @@
+import {NativeModules} from 'react-native';
 import Relay from 'react-relay';
 import store from '../redux/create';
 import {viewerId$} from '../redux/modules/auth';
+let {MTDebugIP} = NativeModules;
 
-const graphqlURL = __DEV__ ? 'http://localhost:5000/graphql' : 'http://podcastfoo.herokuapp.com/graphql';
+const graphqlURL = __DEV__ ? `http://${MTDebugIP.debugIP}:5000/graphql` : 'http://podcastfoo.herokuapp.com/graphql';
+
+console.info('graphQL url: ', graphqlURL);
 
 const DEBUG_TOKEN = 'CAANMZBBpQDs4BAJvxvyZCTNbCCx5ao0sjuUSSihZAgOVQcZBWVDnnZBy2F2inPYbB2igTp1ZCcdZCDWfkV8AF7jMJz5CZC3ZAkteocAnRqtVgIO3wcpaHEyrD3hDloJ901un1N4Vw62UNc5vZAiIP8JM6B2nwOg7NQ7yUMyZCb7y0ZCqIuNm5EZCFrGbPhZAzofd4W7rAZD';
 
