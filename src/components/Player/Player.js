@@ -88,6 +88,7 @@ class Player extends Component {
                     showCompose={() => this.setState({composeVisible: true})}
                     episode={this.props.episode}
                     podcast={this.props.episode.podcast}
+                    currentTime={this.state.currentTime}
                 />
                 <CommentCompose visible={this.state.composeVisible} hideCompose={() => this.setState({composeVisible: false})} />
             </Animated.View>

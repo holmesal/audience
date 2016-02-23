@@ -78,11 +78,14 @@ let styles = StyleSheet.create({
 });
 
 export default Relay.createContainer(PhotoHeader, {
+    initialVariables: {
+        size: 'large'
+    },
     fragments: {
         podcast: () => Relay.QL`
             fragment on Podcast {
                 name
-                artwork
+                artwork(size:$size)
             }
         `
     }

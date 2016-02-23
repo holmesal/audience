@@ -13,8 +13,6 @@ import { BlurView, VibrancyView } from 'react-native-blur';
 import SearchBar from './SearchBar';
 import Results from './ResultsRoot';
 
-import Logout from '../Logout';
-
 export default class Search extends Component {
 
     blurInput() {
@@ -37,7 +35,6 @@ export default class Search extends Component {
                         <SearchBar ref="searchBar" />
                     </View>
                 </TouchableWithoutFeedback>
-                <Logout />
             </View>
         );
     }

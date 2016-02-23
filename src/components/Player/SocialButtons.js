@@ -18,8 +18,6 @@ import RecommendButton from './RecommendButton';
 
 import {FBSDKAppEvents} from 'react-native-fbsdkcore'
 import Mixpanel from 'react-native-mixpanel';
-import {connect} from 'react-redux/native';
-import {currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 import {getViewerId} from '../../utils/relay';
 import {episodeShareLink} from '../../utils/urls';
@@ -40,7 +38,7 @@ class SocialButtons extends Component {
         let podcastId = this.props.podcast.id;
         let episodeId = this.props.episode.id;
         let viewerId = getViewerId();
-        let episodeTime = Math.round(currentTime$(store.getState()));
+        let episodeTime = Math.round(this.props.currentTime);
         // Build the episode link
         const url = episodeShareLink(podcastId, episodeId, viewerId);
         // Show the share sheet
