@@ -31,24 +31,24 @@ export default createReducer(initialState, {
     [SHOW_PLAYER]: (state, action) => state.set('visible', true),
     [HIDE_PLAYER]: (state, action) => state.set('visible', false),
 
-    [UPDATE_EPISODE]: (state, action) => state.merge({podcastId: action.podcastId, episodeId: action.episodeId}),
+    [UPDATE_EPISODE]: (state, action) => state.set('episodeId', action.episodeId),
 
     [UPDATE_PLAYING]: (state, action) => state.set('playing', action.playing),
 
-    [UPDATE_BUFFERING]: (state, action) => state.set('buffering', action.buffering),
+    //[UPDATE_BUFFERING]: (state, action) => state.set('buffering', action.buffering),
 
-    [UPDATE_DURATION]: (state, action) => state.set('duration', action.duration),
+    //[UPDATE_DURATION]: (state, action) => state.set('duration', action.duration),
 
 
-    [UPDATE_CURRENT_TIME]: (state, action) => state.set('currentTime', action.currentTime)
+    //[UPDATE_CURRENT_TIME]: (state, action) => state.set('currentTime', action.currentTime)
 
 })
 
 // Selectors
 export const duration$ = state => state.getIn(['player', 'duration']);
 export const episodeId$ = state => state.getIn(['player', 'episodeId']);
-export const podcastId$ = state => state.getIn(['player', 'podcastId']);
-export const currentTime$ = state => state.getIn(['player', 'currentTime']);
+//export const podcastId$ = state => state.getIn(['player', 'podcastId']);
+//export const currentTime$ = state => state.getIn(['player', 'currentTime']);
 export const visible$ = state => state.getIn(['player', 'visible']);
 export const playing$ = state => state.getIn(['player', 'playing']);
 export const buffering$ = state => state.getIn(['player', 'buffering']);
@@ -57,10 +57,14 @@ export const player$ = createSelector(visible$, (visible) => ({
     visible
 }));
 
-export const scrubber$ = createSelector(currentTime$, duration$, (currentTime, duration) => ({
-    currentTime,
-    duration
+export const audio$ = createSelector(playing$, (playing) => ({
+    playing
 }));
+
+//export const scrubber$ = createSelector(currentTime$, duration$, (currentTime, duration) => ({
+//    currentTime,
+//    duration
+//}));
 
 export const controls$ = createSelector(playing$, buffering$, (playing, buffering) => ({
     playing,
@@ -73,12 +77,11 @@ export const controls$ = createSelector(playing$, buffering$, (playing, bufferin
 //}));
 
 // Actions
-export const updateEpisode = (podcastId, episodeId) => ({
+export const updateEpisode = (episodeId) => ({
     type: UPDATE_EPISODE,
-    podcastId,
     episodeId
 });
-export const playEpisode = (podcastId, episodeId) => {
+export const playEpisode = (episodeId) => {
     return (dispatch, getState) => {
         //console.info(podcastId, episodeId);
         //let podcastTitle = getState().getIn(['podcasts', podcastId, 'collectionName']);
@@ -88,24 +91,27 @@ export const playEpisode = (podcastId, episodeId) => {
         //if (!url || !podcastTitle || !episodeTitle) console.error(`Could not play this episode due to missing information:   podcastTitle:${podcastTitle}   episodeTitle:${episodeTitle}   url:${url}`);
         //MTAudio.play(url, podcastTitle, episodeTitle);
 
-        dispatch(updateEpisode(podcastId, episodeId));
+        dispatch(updateEpisode(episodeId));
         dispatch(showPlayer());
+        dispatch(updatePlaying(true));
     }
 };
 
-export const seekTo = (time) => {
-    return (dispatch, getState) => {
-        MTAudio.seekTo(time);
-    }
-};
+//export const seekTo = (time) => {
+//    return (dispatch, getState) => {
+//        MTAudio.seekTo(time);
+//    }
+//};
 export const resume = () => {
     return (dispatch, getState) => {
-        MTAudio.resume();
+        dispatch(updatePlaying(true));
+        //MTAudio.resume();
     }
 };
 export const pause = () => {
     return (dispatch, getState) => {
-        MTAudio.pause();
+        dispatch(updatePlaying(false));
+        //MTAudio.pause();
     }
 };
 
@@ -116,27 +122,27 @@ export const updatePlaying = (playing) => ({
     type: UPDATE_PLAYING,
     playing
 });
-export const updateBuffering = (buffering) => ({
-    type: UPDATE_BUFFERING,
-    buffering
-});
-export const updateDuration = (duration) => ({
-    type: UPDATE_DURATION,
-    duration
-});
-export const updateCurrentTime = (currentTime) => ({
-    type: UPDATE_CURRENT_TIME,
-    currentTime
-});
-
-export const skip = (offset) => {
-    return (dispatch, getState) => {
-        let currentTime = currentTime$(getState());
-        let duration = duration$(getState());
-        let target = currentTime + offset;
-        if (target < 0) target = 0;
-        else if (target > duration) target = duration;
-
-        dispatch(seekTo(target));
-    }
-};
+//export const updateBuffering = (buffering) => ({
+//    type: UPDATE_BUFFERING,
+//    buffering
+//});
+//export const updateDuration = (duration) => ({
+//    type: UPDATE_DURATION,
+//    duration
+//});
+//export const updateCurrentTime = (currentTime) => ({
+//    type: UPDATE_CURRENT_TIME,
+//    currentTime
+//});
+//
+//export const skip = (offset) => {
+//    return (dispatch, getState) => {
+//        let currentTime = currentTime$(getState());
+//        let duration = duration$(getState());
+//        let target = currentTime + offset;
+//        if (target < 0) target = 0;
+//        else if (target > duration) target = duration;
+//
+//        dispatch(seekTo(target));
+//    }
+//};

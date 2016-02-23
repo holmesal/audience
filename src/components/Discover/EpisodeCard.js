@@ -15,7 +15,7 @@ import store from '../../redux/create.js';
 class EpisodeCard extends Component {
 
     playEpisode() {
-        store.dispatch(playEpisode(this.props.episode.podcast.id, this.props.episode.id))
+        store.dispatch(playEpisode(this.props.episode.id))
     }
 
     render() {

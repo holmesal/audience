@@ -17,6 +17,7 @@ import Controls from './Controls';
 import SocialButtons from './SocialButtons';
 import ShareButton from './ShareButton';
 import CommentCompose from './CommentCompose';
+import AudioPlayer from './Audio';
 
 class Player extends Component {
 
@@ -26,7 +27,10 @@ class Player extends Component {
 
     state = {
         opacity: new Animated.Value(0),
-        composeVisible: false
+        composeVisible: false,
+        duration: 0,
+        currentTime: 0,
+        lastTargetTime: 0
     };
 
     componentDidMount() {
@@ -51,12 +55,34 @@ class Player extends Component {
         }
     }
 
+    handleSkip(amount) {
+        let lastTargetTime = this.state.currentTime + amount;
+        if (lastTargetTime < 0) lastTargetTime = Math.random() * 0.0001; //rly small but still causes seek
+        else if (lastTargetTime > this.state.duration) lastTargetTime = this.state.duration;
+        this.setState({lastTargetTime});
+    }
+
     render() {
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
-                <Scrubber hidePlayer={() => this.props.dispatch(hidePlayer())}/>
-                <Controls />
+                <AudioPlayer
+                    ref="audio"
+                    episode={this.props.episode}
+                    podcast={this.props.episode.podcast}
+                    lastTargetTime={this.state.lastTargetTime}
+                    onDurationChange={duration => this.setState({duration})}
+                    onCurrentTimeChange={currentTime => this.setState({currentTime})}
+                />
+                <Scrubber
+                    duration={this.state.duration}
+                    currentTime={this.state.currentTime}
+                    onSeek={lastTargetTime => this.setState({lastTargetTime})}
+                    hidePlayer={() => this.props.dispatch(hidePlayer())}
+                />
+                <Controls
+                    onSkip={this.handleSkip.bind(this)}
+                />
                 {false && <ShareButton />}
                 <SocialButtons
                     showCompose={() => this.setState({composeVisible: true})}
@@ -89,8 +115,10 @@ export default Relay.createContainer(ConnectedPlayer, {
             fragment on Episode {
                 id
                 ${SocialButtons.getFragment('episode')}
+                ${AudioPlayer.getFragment('episode')}
                 podcast {
                     ${SocialButtons.getFragment('podcast')}
+                    ${AudioPlayer.getFragment('podcast')}
                 }
             }
         `

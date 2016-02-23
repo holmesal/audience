@@ -36,8 +36,6 @@ class SocialButtons extends Component {
         comment: null
     };
 
-
-
     share() {
         let podcastId = this.props.podcast.id;
         let episodeId = this.props.episode.id;
@@ -78,7 +76,6 @@ class SocialButtons extends Component {
     //}
 
     render() {
-        console.info(this.props.episode)
         return (
             <View style={styles.wrapper}>
                 <RecommendButton

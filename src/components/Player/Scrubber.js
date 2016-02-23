@@ -21,6 +21,10 @@ import {scrubber$, seekTo} from '../../redux/modules/player.js';
 
 class Scrubber extends Component {
 
+    static propTypes = {
+        onSeek: PropTypes.func.isRequired
+    };
+
     static defaultProps = {
         duration: 1138,
         currentTime: 0
@@ -139,7 +143,7 @@ class Scrubber extends Component {
         }, 500); // this time is how long it takes an event to flow over the bridge
 
         // Seek to this time
-        this.props.dispatch(seekTo(targetTime));
+        this.props.onSeek(targetTime);
 
     }
 
@@ -347,4 +351,5 @@ let styles = StyleSheet.create({
     }
 });
 
-export default connect(scrubber$)(Scrubber);
+//export default connect(scrubber$)(Scrubber);
+export default Scrubber;

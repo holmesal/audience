@@ -12,12 +12,14 @@ import React, {
 
 import TouchableFade from '../TouchableFade';
 
-import {pause, resume, skip, controls$} from '../../redux/modules/player.js';
+import {pause, resume, controls$} from '../../redux/modules/player.js';
 import {connect} from 'react-redux/native';
 
 class Controls extends Component {
 
-    static propTypes = {};
+    static propTypes = {
+        onSkip: React.PropTypes.func.isRequired
+    };
 
     static defaultProps = {};
 
@@ -42,9 +44,9 @@ class Controls extends Component {
     render() {
         return (
             <View style={styles.wrapper}>
-                <TouchableOpacity style={[styles.button, styles.side]} onPress={() => this.props.dispatch(skip(-15))}><Image source={require('image!skipBack15')}/></TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.side]} onPress={() => this.props.onSkip(-15)}><Image source={require('image!skipBack15')}/></TouchableOpacity>
                 <TouchableOpacity style={[styles.button, styles.center]} onPress={this.handleCenterPress.bind(this)}>{this.renderCenterButtonContent()}</TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.side]} onPress={() => this.props.dispatch(skip(15))}><Image source={require('image!skipForward15')}/></TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.side]} onPress={() => this.props.onSkip(15)}><Image source={require('image!skipForward15')}/></TouchableOpacity>
             </View>
         );
     }
