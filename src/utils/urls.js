@@ -1,6 +1,5 @@
-export const ROOT = 'https://podcastfoo.herokuapp.com';
+export const ROOT = __DEV__ ? 'http://localhost:8080' : 'https://podcastfoo.herokuapp.com';
 
 export const episodeShareLink = (podcastId, episodeId, userId) => {
-    let url = `${ROOT}/${podcastId}/${episodeId}/${userId}`;
-    return url;
+    return  `${ROOT}/${podcastId}/${episodeId}/${userId}`;
 };
