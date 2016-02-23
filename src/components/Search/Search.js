@@ -7,6 +7,7 @@ import React, {
     TouchableWithoutFeedback,
     View
 } from 'react-native';
+import Relay from 'react-relay';
 
 import { BlurView, VibrancyView } from 'react-native-blur';
 import SearchBar from './SearchBar';
@@ -14,7 +15,7 @@ import Results from './Results';
 
 import Logout from '../Logout';
 
-export default class Search extends Component {
+class Search extends Component {
 
     blurInput() {
         this.refs.searchBar.refs.wrappedInstance.blur()
@@ -25,10 +26,11 @@ export default class Search extends Component {
     }
 
     render() {
+        console.info(this.props.search)
         return (
             <View style={styles.wrapper}>
                 <Results
-                    showPlayer={this.props.showPlayer}
+                    search={this.props.search}
                     onSelect={this.blurInput.bind(this)}
                 />
                 <TouchableWithoutFeedback onPress={this.focusInput.bind(this)}>
@@ -73,3 +75,14 @@ let styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.63)'
     }
 });
+
+export default Relay.createContainer(Search, {
+    fragments: {
+        search: () => Relay.QL`
+            fragment on Search {
+                count
+                ${Results.getFragment('search')}
+            }
+        `
+    }
+})

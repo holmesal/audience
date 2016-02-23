@@ -10,7 +10,7 @@ import React, {
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 
 import Discover from './Discover/DiscoverRoot';
-import Search from './Search/Search';
+import Search from './Search/SearchRoot';
 import Viewer from './Viewer/ViewerRoot';
 
 export default class Tabs extends Component {
@@ -22,7 +22,7 @@ export default class Tabs extends Component {
                 tabBarUnderlineColor="#FFA726"
                 tabBarActiveTextColor="#FFA726"
                 tabBarInactiveTextColor="#fefefe"
-                initialPage={0}
+                initialPage={2}
             >
                 <Discover tabLabel="Discover" />
                 <Viewer tabLabel="Me" />

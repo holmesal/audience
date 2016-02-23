@@ -14,7 +14,7 @@ const initialState = Immutable.fromJS({
 
 export default createReducer(initialState, {
 
-    [UPDATE_QUERY]: (state, action) => state.set(['query'], action.query),
+    [UPDATE_QUERY]: (state, action) => state.set('query', action.query),
 
     [UPDATE_IN_FLIGHT]: (state, action) => state.set('inFlight', action.inFlight),
 
@@ -24,21 +24,22 @@ export default createReducer(initialState, {
 
 // Selectors
 export const results$ = state => state.getIn(['search', 'results']);
+export const query$ = state => state.getIn(['search', 'query']);
 
 // Actions
 export function updateQuery(query) {
     return (dispatch, getState) => {
-        if (query.length > 0) {
-            // do search
-            dispatch(search(query));
-        } else {
-            // clear results
-            dispatch(updateResults([]));
-        }
-        return {
+        //if (query.length > 0) {
+        //    // do search
+        //    dispatch(search(query));
+        //} else {
+        //    // clear results
+        //    dispatch(updateResults([]));
+        //}
+        dispatch({
             type: UPDATE_QUERY,
             query: query
-        }
+        })
     }
 }
 
