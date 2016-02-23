@@ -8,21 +8,21 @@ import {connect} from 'react-redux/native';
 import {createSelector} from 'reselect';
 
 import SearchRoute from '../../routes/SearchRoute';
-import Search from './Search';
+import Results from './Results';
+import LoadingSpinner from '../LoadingSpinner';
 
 import {query$} from '../../redux/modules/search';
 
-class SearchRoot extends Component {
+class ResultsRoot extends Component {
 
     render() {
-        console.info('search root component sees query: ', this.props.query);
-
+        //console.info('results root component sees query: ', this.props.query);
         let route = new SearchRoute({
             text: this.props.query
         });
         return (
             <Relay.RootContainer
-                Component={Search}
+                Component={Results}
                 route={route}
                 renderFailure={function(error, retry) {
                     console.info(error);
@@ -32,13 +32,14 @@ class SearchRoot extends Component {
                     </View>
                     );
                 }}
+                renderLoading={() => <LoadingSpinner />}
             />
         )
     }
 }
 
-export const searchRoot$ = createSelector(query$, (query) => ({
+export const sel$ = createSelector(query$, (query) => ({
     query
 }));
 
-export default connect(searchRoot$)(SearchRoot);
+export default connect(sel$)(ResultsRoot);

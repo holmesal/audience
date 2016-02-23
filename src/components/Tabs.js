@@ -10,7 +10,7 @@ import React, {
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 
 import Discover from './Discover/DiscoverRoot';
-import Search from './Search/SearchRoot';
+import Search from './Search/Search';
 import Viewer from './Viewer/ViewerRoot';
 
 export default class Tabs extends Component {

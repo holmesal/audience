@@ -11,11 +11,11 @@ import Relay from 'react-relay';
 
 import { BlurView, VibrancyView } from 'react-native-blur';
 import SearchBar from './SearchBar';
-import Results from './Results';
+import Results from './ResultsRoot';
 
 import Logout from '../Logout';
 
-class Search extends Component {
+export default class Search extends Component {
 
     blurInput() {
         this.refs.searchBar.refs.wrappedInstance.blur()
@@ -29,10 +29,7 @@ class Search extends Component {
         console.info(this.props.search)
         return (
             <View style={styles.wrapper}>
-                <Results
-                    search={this.props.search}
-                    onSelect={this.blurInput.bind(this)}
-                />
+                <Results />
                 <TouchableWithoutFeedback onPress={this.focusInput.bind(this)}>
                     <View style={styles.topBar}>
                         <VibrancyView blurType="dark" style={styles.cover} />
@@ -75,14 +72,3 @@ let styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.63)'
     }
 });
-
-export default Relay.createContainer(Search, {
-    fragments: {
-        search: () => Relay.QL`
-            fragment on Search {
-                count
-                ${Results.getFragment('search')}
-            }
-        `
-    }
-})

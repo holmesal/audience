@@ -26,9 +26,12 @@ class Results extends Component {
     }
 
     renderResults() {
-        console.info('got new results!', this.props.search.results);
+        console.info('got podcast search results!', this.props.search.results);
         return this.props.search.results.edges.map(edge => {
-            return <PodcastResult podcast={edge.node} />
+            return <PodcastResult
+                key={edge.node.id}
+                podcast={edge.node}
+            />
         });
     }
 
@@ -49,9 +52,6 @@ let styles = StyleSheet.create({
     }
 });
 
-//let select = createSelector(results$, (results) => ({results}));
-//export default connect(select)(Results);
-
 export default Relay.createContainer(Results, {
     fragments: {
         search: () => Relay.QL`
@@ -59,6 +59,7 @@ export default Relay.createContainer(Results, {
                 results {
                     edges {
                         node {
+                            id
                             ${PodcastResult.getFragment('podcast')}
                         }
                     }
@@ -66,4 +67,4 @@ export default Relay.createContainer(Results, {
             }
         `
     }
-})
+});
