@@ -7,7 +7,6 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-import Spinner from 'react-native-spinkit';
 import EpisodeListItem from './EpisodeListItem';
 
 import colors from '../../colors';
@@ -23,18 +22,6 @@ class EpisodeList extends Component {
 
     };
 
-    renderLoading() {
-        return (
-            <View style={{flex: 1, height: 400, alignItems: 'center', justifyContent: 'center'}}>
-                <Spinner
-                    color={colors.lightGrey}
-                    type="Wave"
-                    style={{opacity: 0.2}}
-                />
-            </View>
-        )
-    }
-
     renderEpisodeList() {
         return this.props.podcast.episodes.edges.map(edge => (
             <EpisodeListItem
@@ -45,10 +32,9 @@ class EpisodeList extends Component {
     }
 
     render() {
-        let view = this.props.podcast.episodes.edges.length > 0 && this.props.doneAnimating ? this.renderEpisodeList() : this.renderLoading();
         return (
             <View style={styles.wrapper}>
-                {view}
+                {this.renderEpisodeList()}
             </View>
         );
     }

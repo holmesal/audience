@@ -34,6 +34,7 @@ class PodcastInfoRoot extends Component {
                     </View>
                     );
                 }}
+                renderLoading={() => <PodcastInfo loading={true} podcast={null} />}
             />
         )
     }

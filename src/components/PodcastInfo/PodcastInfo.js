@@ -15,6 +15,7 @@ import PhotoHeader from './PhotoHeader';
 import TopBar from './TopBar';
 import colors from '../../colors';
 import EpisodeList from './EpisodeList';
+import Spinner from 'react-native-spinkit';
 
 import {connect} from 'react-redux/native';
 import {podcastInfo$, hidePodcastInfo, showPodcastInfo} from '../../redux/modules/podcastInfo';
@@ -76,14 +77,17 @@ class PodcastInfo extends Component {
     }
 
     renderPodcastInfo() {
+        let podcast = this.props.podcast || null;
         return (
             <View style={{flex: 1}}>
                 <ScrollView contentContainerStyle={styles.scrollContent}>
                     <PhotoHeader
-                        podcast={this.props.podcast}
+                        podcast={podcast}
+                        loading={this.props.loading}
                     />
                     <EpisodeList
-                        podcast={this.props.podcast}
+                        podcast={podcast}
+                        loading={this.props.loading}
                         doneAnimating={this.state.doneAnimating}
                     />
                 </ScrollView>
@@ -95,11 +99,19 @@ class PodcastInfo extends Component {
     }
 
     renderLoading() {
-        return <View><Text>Loading...</Text></View>
+        return (
+            <View style={{flex: 1, height: 400, alignItems: 'center', justifyContent: 'center'}}>
+                <Spinner
+                    color={colors.lightGrey}
+                    type="Wave"
+                    style={{opacity: 0.2}}
+                />
+            </View>
+        )
     }
 
     render() {
-        //console.info('podcast info props', this.props);
+        console.info('podcast info props', this.props);
         // If not visible, show nothing
         //if (!this.props.visible) return <View />;
 
