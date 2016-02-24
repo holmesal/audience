@@ -33,38 +33,28 @@ export default class Login extends Component {
         //this.login()
     }
 
-
     render() {
         return (
-            <View style={styles.wrapper}>
-                <FBSDKLoginButton
-                    onLoginFinished={(error, result) => {
-                        if (error) {
-                          console.error(error);
-                        } else {
-                          if (result.isCancelled) {
-                            console.info('Login cancelled.');
-                          } else {
-                            console.info(result);
-                            console.info('Logged in.');
-                            this.fetchInfo();
-                            this.props.onLogin();
-                          }
-                        }
-                      }}
-                    onLogoutFinished={() => alert('Logged out.')}
-                    onWillLogin={() => console.info('will login')}
-                    readPermissions={[]}
-                    publishPermissions={[]}/>
-            </View>
+            <FBSDKLoginButton
+                onLoginFinished={(error, result) => {
+                    if (error) {
+                      console.error(error);
+                    } else {
+                      if (result.isCancelled) {
+                        console.info('Login cancelled.');
+                      } else {
+                        console.info(result);
+                        console.info('Logged in.');
+                        this.fetchInfo();
+                        this.props.onLogin();
+                      }
+                    }
+                  }}
+                onLogoutFinished={() => alert('Logged out.')}
+                onWillLogin={() => console.info('will login')}
+                readPermissions={[]}
+                publishPermissions={[]}
+            />
         );
     }
 }
-
-let styles = StyleSheet.create({
-    wrapper: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-});

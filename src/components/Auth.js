@@ -10,7 +10,7 @@ import React, {
 import {connect} from 'react-redux/native';
 
 import {checkLogin, auth$} from '../redux/modules/auth';
-import Login from './Login';
+import Landing from './Landing';
 import Authenticated from './Authenticated';
 
 // Responds to changes in auth state from redux, and renders the appropriate component
@@ -38,7 +38,7 @@ class Auth extends Component {
         } else {
             return this.props.loggedIn ?
                 <Authenticated /> :
-                <Login onLogin={this.checkLogin.bind(this)} />;
+                <Landing onLogin={this.checkLogin.bind(this)} />;
         }
     }
 }
