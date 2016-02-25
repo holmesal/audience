@@ -10,6 +10,7 @@ import Relay from 'react-relay';
 import {connect} from 'react-redux/native';
 import {audio$, resume, updatePlaying} from '../../redux/modules/player.js';
 import ListenToEpisodeMutation from '../../mutations/ListenToEpisode';
+import {showRecommendNotification} from '../../notifications';
 
 import AudioStreamIOS from './AudioStreamIOS';
 
@@ -28,14 +29,20 @@ class EpisodePlayer extends Component {
         duration: 0
     };
 
+    componentWillReceiveProps(nextProps) {
+        // Reset the push notification flag if this is a new episode
+        if (nextProps.episode.id != this.props.episode.id) {
+            this.setState({hasShownRecommendNotification: false, currentTime: 0, duration: 0});
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
 
         // Mark this episode as listened if over 20% heard
         this.markHeard();
 
         // Check if we should send a push notification
-        //this.sendRecommendationPushNotification();
-
+        this.sendRecommendationPushNotification();
     }
 
     markHeard() {
@@ -64,14 +71,15 @@ class EpisodePlayer extends Component {
     }
 
     sendRecommendationPushNotification() {
-        let {currentTime, duration} = this.state.audio;
+        let {currentTime, duration} = this.state;
         if (currentTime != 0 &&
             duration != 0 &&
-            !this.props.episode.viewerHasHeard &&
-            currentTime / duration > 0.2 &&
-            !this.state.listenInFlight
+            !this.props.episode.viewerHasRecommended &&
+            !this.state.hasShownRecommendNotification &&
+            duration - currentTime < 60 * 5 // 5 minutes from the end
         ) {
-
+            showRecommendNotification(this.props.episode.id);
+            this.setState({hasShownRecommendNotification: true});
         }
     }
 
