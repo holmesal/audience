@@ -50,13 +50,23 @@ class Discover extends Component {
     }
 
     renderStream() {
-        return this.props.viewer.stream.items.edges.map(edge =>
-            <Recommendation
-                key={edge.node.id}
-                style={styles.recommendation}
-                recommendation={edge.node}
-            />
-        );
+        if (this.props.viewer.stream.items.edges.length > 0) {
+            return this.props.viewer.stream.items.edges.map(edge =>
+                <Recommendation
+                    key={edge.node.id}
+                    style={styles.recommendation}
+                    recommendation={edge.node}
+                />
+            );
+        } else {
+            return (
+                <View style={{flex: 1, alignItems: 'center', padding: 20}}>
+                    <Text style={{fontSize: 50, marginBottom: 20}}>😔</Text>
+                    <Text style={{color: '#fefefe', fontSize: 14, fontWeight: '200', marginBottom: 12}}>Your friends haven't recommended anything yet...</Text>
+                    <Text style={{color: '#fefefe', fontSize: 14, fontWeight: '200'}}>Check back later!</Text>
+                </View>
+            )
+        }
     }
 
     render() {

@@ -23,8 +23,8 @@ export default class Tabs extends Component {
     renderTabs() {
         let tabs = [
             <Discover key="discover" tabLabel="Discover" />,
-            <Viewer key="me" tabLabel="Me" />,
-            <Search key="search" tabLabel="Search" />
+            <Search key="search" tabLabel="Search" />,
+            <Viewer key="me" tabLabel="Me" />
         ];
         if (this.props.playingEpisodeId) {
             tabs.push(<View key="playing" tabLabel="Playing" invisible />);
