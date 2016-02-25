@@ -17,7 +17,7 @@ import Controls from './Controls';
 import SocialButtons from './SocialButtons';
 import ShareButton from './ShareButton';
 import CommentCompose from './CommentCompose';
-import AudioPlayer from './Audio';
+import AudioPlayer from './EpisodePlayer';
 
 class Player extends Component {
 
@@ -63,6 +63,7 @@ class Player extends Component {
     }
 
     render() {
+        //console.info('player render!');
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
@@ -73,6 +74,7 @@ class Player extends Component {
                     lastTargetTime={this.state.lastTargetTime}
                     onDurationChange={duration => this.setState({duration})}
                     onCurrentTimeChange={currentTime => this.setState({currentTime})}
+                    onSkip={this.handleSkip.bind(this)}
                 />
                 <Scrubber
                     duration={this.state.duration}

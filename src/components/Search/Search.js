@@ -24,7 +24,6 @@ export default class Search extends Component {
     }
 
     render() {
-        console.info(this.props.search)
         return (
             <View style={styles.wrapper}>
                 <Results />

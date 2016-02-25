@@ -11,7 +11,7 @@
 @interface RCT_EXTERN_MODULE(MTAudio, NSObject)
 
 RCT_EXTERN_METHOD(setSource:(NSString *)sourceUrl);
-RCT_EXTERN_METHOD(play:(NSString *)source podcastTitle:(NSString *)podcastTitle episodeTitle:(NSString *)episodeTitle);
+RCT_EXTERN_METHOD(play:(NSString *)source podcastTitle:(NSString *)podcastTitle episodeTitle:(NSString *)episodeTitle artworkUrl:(NSString *)artworkUrl);
 RCT_EXTERN_METHOD(pause);
 RCT_EXTERN_METHOD(resume);
 RCT_EXTERN_METHOD(seekToTime:(nonnull NSNumber *)timestamp);

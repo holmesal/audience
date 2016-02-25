@@ -22,6 +22,7 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
   var source:String?;
   var podcastTitle: String = "";
   var episodeTitle: String = "";
+  var podcastArtwork: UIImage?
   
   var currentTimeReportingTimer: NSTimer?;
   
@@ -56,14 +57,14 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
     commandCenter.skipBackwardCommand.addTarget(self, action: "didReceiveSkipBackwardCommand:");
     commandCenter.skipForwardCommand.preferredIntervals = preferredSkipIntervals;
     commandCenter.skipBackwardCommand.preferredIntervals = preferredSkipIntervals;
-    // Like
-    commandCenter.likeCommand.addTarget(self, action: "didReceiveLikeCommand:");
-    commandCenter.likeCommand.localizedTitle = "Like this Moment";
-    commandCenter.likeCommand.localizedShortTitle = "Like";
-    // Bookmark
-    commandCenter.bookmarkCommand.addTarget(self, action: "didReceiveBookmarkCommand:");
-    commandCenter.bookmarkCommand.localizedTitle = "Bookmark this Moment";
-    commandCenter.bookmarkCommand.localizedShortTitle = "Bookmark";
+//    // Like
+//    commandCenter.likeCommand.addTarget(self, action: "didReceiveLikeCommand:");
+//    commandCenter.likeCommand.localizedTitle = "Like this Moment";
+//    commandCenter.likeCommand.localizedShortTitle = "Like";
+//    // Bookmark
+//    commandCenter.bookmarkCommand.addTarget(self, action: "didReceiveBookmarkCommand:");
+//    commandCenter.bookmarkCommand.localizedTitle = "Bookmark this Moment";
+//    commandCenter.bookmarkCommand.localizedShortTitle = "Bookmark";
     // Disabled commands
     commandCenter.nextTrackCommand.enabled = false;
     commandCenter.previousTrackCommand.enabled = false;
@@ -84,24 +85,26 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
   }
   
   func didReceivePlayCommand(event:MPRemoteCommand) -> MPRemoteCommandHandlerStatus {
-    print("got remote play command!")
+    print("got remote play command!");
+    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.commandCenterPlayButtonTapped", body: NSNull())
     self.resume()
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceivePauseCommand(event:MPRemoteCommand) -> MPRemoteCommandHandlerStatus {
     print("got remote pause command!")
+    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.commandCenterPauseButtonTapped", body: NSNull())
     self.pause()
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceiveSkipForwardCommand(event:MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
-    print("skip forward command is not implemented")
+    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.commandCenterSkipForwardButtonTapped", body: NSNull())
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceiveSkipBackwardCommand(event:MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
-    print("skip backward command is not implemented")
+    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.commandCenterSkipBackwardButtonTapped", body: NSNull())
     return MPRemoteCommandHandlerStatus.Success
   }
   
@@ -132,21 +135,32 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
     default:
       playbackRate = 0;
     }
-    let center = MPNowPlayingInfoCenter.defaultCenter()
-    center.nowPlayingInfo = [
-      MPMediaItemPropertyTitle: self.episodeTitle,
-      MPMediaItemPropertyMediaType: MPMediaType.Podcast.rawValue,
-      MPMediaItemPropertyPodcastTitle: self.podcastTitle,
-      MPMediaItemPropertyArtist: self.podcastTitle,
-      MPNowPlayingInfoPropertyPlaybackRate: playbackRate,
-      MPNowPlayingInfoPropertyElapsedPlaybackTime: self.player.progress,
-      MPMediaItemPropertyPlaybackDuration: self.player.duration
-    ]
+    
+    let center = MPNowPlayingInfoCenter.defaultCenter();
+    var info = center.nowPlayingInfo ?? [:];
+    info[MPMediaItemPropertyTitle] = self.episodeTitle;
+    info[MPMediaItemPropertyMediaType] = MPMediaType.Podcast.rawValue;
+    info[MPMediaItemPropertyPodcastTitle] = self.podcastTitle;
+    info[MPMediaItemPropertyArtist] = self.podcastTitle;
+    info[MPNowPlayingInfoPropertyPlaybackRate] = playbackRate;
+    info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.player.progress;
+    info[MPMediaItemPropertyPlaybackDuration] = self.player.duration;
+    center.nowPlayingInfo = info;
+//    center.nowPlayingInfo = [
+//      MPMediaItemPropertyTitle: self.episodeTitle,
+//      MPMediaItemPropertyMediaType: MPMediaType.Podcast.rawValue,
+//      MPMediaItemPropertyPodcastTitle: self.podcastTitle,
+//      MPMediaItemPropertyArtist: self.podcastTitle,
+//      MPNowPlayingInfoPropertyPlaybackRate: playbackRate,
+//      MPNowPlayingInfoPropertyElapsedPlaybackTime: self.player.progress,
+//      MPMediaItemPropertyPlaybackDuration: self.player.duration,
+////      MPMediaItemPropertyArtwork: artwork
+//    ]
     
   }
   
   // Sets the source audio URL (and begins buffering)
-  @objc func play(source: String, podcastTitle: String, episodeTitle: String) -> Void {
+  @objc func play(source: String, podcastTitle: String, episodeTitle: String, artworkUrl: String?) -> Void {
     print(String(format: "MTAudio.play() called with url %@", source))
     
     // Not sure if this stops the previously-buffering audio source
@@ -155,11 +169,35 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
     // Store the new title
     self.podcastTitle = podcastTitle;
     self.episodeTitle = episodeTitle;
+    self.source = source;
     
     // Construct the URL and set the data source
     let url = NSURL.init(string: source);
     let source = STKAudioPlayer.dataSourceFromURL(url!);
     self.player.setDataSource(source, withQueueItemId: NSNull());
+    
+    if let artworkUrl = artworkUrl {
+      // Fetch the image
+      dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        
+        let artworkUrl = NSURL(string:artworkUrl);
+        
+        if let artworkUrl = artworkUrl {
+          let artworkData = NSData(contentsOfURL: artworkUrl);
+          
+          if let artworkData = artworkData {
+            let artwork = UIImage(data:artworkData);
+            
+            if let artwork = artwork {
+              let center = MPNowPlayingInfoCenter.defaultCenter();
+              var info = center.nowPlayingInfo ?? [:];
+              info[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: artwork);
+              center.nowPlayingInfo = info;
+            }
+          }
+        }
+      })
+    }
   }
   
   @objc func pause() -> Void {
@@ -244,6 +282,7 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
     // TODO - player state
     state["playerState"] = self.playerStateAsString()
     state["currentTime"] = self.player.progress ?? 0
+    state["source"] = self.source;
     self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.updateState", body: state)
     // Update the now playing info
     self.updateNowPlayingInfo();
