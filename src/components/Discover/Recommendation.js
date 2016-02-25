@@ -12,6 +12,12 @@ import EpisodeCard from './EpisodeCard';
 
 class Recommendation extends Component {
 
+    renderReview() {
+        return (
+            <Text style={styles.review}>"{this.props.recommendation.review}"</Text>
+        )
+    }
+
     render() {
         const photoUrl = `http://graph.facebook.com/v2.5/${this.props.recommendation.user.facebookId}/picture?type=square&height=72`;
         return (
@@ -29,6 +35,8 @@ class Recommendation extends Component {
                     episode={this.props.recommendation.episode}
                     style={styles.episodeCard}
                 />
+
+                {this.props.recommendation.review && this.renderReview()}
             </View>
         );
     }
@@ -60,6 +68,13 @@ let styles = StyleSheet.create({
     episodeCard: {
         marginLeft: 36 + 12 + 12,
         marginRight: 12
+    },
+    review: {
+        color: 'white',
+        marginLeft: 36 + 12 + 12,
+        marginRight: 12,
+        fontSize: 14,
+        marginTop: 12
     }
 });
 
@@ -76,6 +91,7 @@ export default Relay.createContainer(Recommendation, {
                     id
                     ${EpisodeCard.getFragment('episode')}
                 }
+                review
             }
         `
     }
