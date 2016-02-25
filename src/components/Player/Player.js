@@ -63,6 +63,10 @@ class Player extends Component {
     }
 
     render() {
+        if (!this.props.episode) {
+            console.warn('player got null episode :-(');
+            return <View />;
+        }
         //console.info('player render!');
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
