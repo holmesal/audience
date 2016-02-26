@@ -1127,7 +1127,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alonsoholmes.audience;
 				PRODUCT_NAME = Podcastfoo;
-				PROVISIONING_PROFILE = "b4068df7-47db-4a65-8fac-2e7fd897d3c1";
+				PROVISIONING_PROFILE = "";
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1171,7 +1171,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alonsoholmes.audience;
 				PRODUCT_NAME = Podcastfoo;
-				PROVISIONING_PROFILE = "b4068df7-47db-4a65-8fac-2e7fd897d3c1";
+				PROVISIONING_PROFILE = "";
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

@@ -14,12 +14,15 @@ RCT_EXPORT_MODULE();
 
 - (NSDictionary *)constantsToExport
 {
-  return @{ @"debugIP": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SERVER_IP"] };
+  NSString *serverIP = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SERVER_IP"];
+  if (!serverIP) serverIP = @"";
+  return @{ @"debugIP": serverIP };
 }
 
 RCT_EXPORT_METHOD(getDebugIP:(RCTResponseSenderBlock)callback)
 {
   NSString *serverIP = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SERVER_IP"];
+  if (!serverIP) serverIP = @"";
   callback(@[[NSNull null], serverIP]);
 }
 

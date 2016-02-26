@@ -19,7 +19,7 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
   var player: STKAudioPlayer!
 
   // The URL source and metadata of the currently-playing audio
-  var source:String?;
+  var source: String = "";
   var podcastTitle: String = "";
   var episodeTitle: String = "";
   var podcastArtwork: UIImage?
