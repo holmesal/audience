@@ -31,9 +31,10 @@ export default class Landing extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1,
+        //flex: 1,
         paddingLeft: 20,
         paddingRight: 20,
+        paddingBottom: 40,
         alignItems: 'center'
     },
     emoji: {

@@ -83,7 +83,6 @@ class Discover extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1,
         paddingTop: 40
     },
     recommendation: {
