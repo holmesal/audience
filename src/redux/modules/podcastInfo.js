@@ -7,8 +7,8 @@ const HIDE = 'audience/podcastInfo/HIDE';
 
 
 const initialState = Immutable.fromJS({
-    visible: true,
-    podcastId: 'UG9kY2FzdDoyNQ=='
+    visible: false,
+    podcastId: null
 });
 
 export default createReducer(initialState, {
