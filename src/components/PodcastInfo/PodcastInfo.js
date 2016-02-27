@@ -16,6 +16,7 @@ import TopBar from './TopBar';
 import colors from '../../colors';
 import EpisodeList from './EpisodeList';
 import Spinner from 'react-native-spinkit';
+import FollowToggle from './FollowToggle';
 
 import {connect} from 'react-redux/native';
 import {podcastInfo$, hidePodcastInfo, showPodcastInfo} from '../../redux/modules/podcastInfo';
@@ -85,6 +86,9 @@ class PodcastInfo extends Component {
                         podcast={podcast}
                         loading={this.props.loading}
                     />
+                    <FollowToggle
+                        podcast={podcast}
+                    />
                     <EpisodeList
                         podcast={podcast}
                         loading={this.props.loading}
@@ -151,6 +155,7 @@ export default Relay.createContainer(connectedPodcastInfo, {
                 id
                 ${PhotoHeader.getFragment('podcast')}
                 ${EpisodeList.getFragment('podcast')}
+                ${FollowToggle.getFragment('podcast')}
             }
         `
     }
