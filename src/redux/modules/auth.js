@@ -2,9 +2,11 @@ import {createReducer} from 'redux-immutablejs';
 import {createSelector} from 'reselect';
 import Immutable from 'immutable';
 import _ from 'lodash';
-import {FBSDKAccessToken} from 'react-native-fbsdkcore'
+import {FBSDKAccessToken} from 'react-native-fbsdkcore';
+import {FBSDKLoginManager} from 'react-native-fbsdklogin';
 import Relay from 'react-relay';
 import {updateRelayAuthHeader} from '../../utils/relay';
+import {requiredReadPermissions} from '../../utils/facebook';
 
 /**
  Action constants
@@ -62,11 +64,29 @@ export const checkLogin = () => {
     return (dispatch, getState) => {
         FBSDKAccessToken.getCurrentAccessToken((credentials) => {
             if (credentials) {
-                console.info('user is logged in!', credentials);
-                // A non-null token indicates that the user is currently logged in.
-                dispatch(updateLoggedIn(true));
-                // Update the auth token relay sends with requests
-                updateRelayAuthHeader(credentials.tokenString);
+                // Check that this token has all the required permissions
+                let hasAllRequiredPermissions = true;
+                requiredReadPermissions.forEach(permission => {
+                    let hasPermission = credentials.hasGrantedPermission(permission);
+                    if (!hasPermission) {
+                        console.info('missing required permission: ', permission);
+                        hasAllRequiredPermissions = false;
+                    }
+                });
+
+                // If this does not have all required permissions, logout (will remain on the login screen)
+                if (!hasAllRequiredPermissions) {
+                    console.info('logging in!');
+                    FBSDKLoginManager.logOut();
+
+                // Otherwise, we're all logged in!
+                } else {
+                    console.info('user is logged in!', credentials);
+                    // A non-null token indicates that the user is currently logged in.
+                    dispatch(updateLoggedIn(true));
+                    // Update the auth token relay sends with requests
+                    updateRelayAuthHeader(credentials.tokenString);
+                }
             } else {
                 console.info('no credentials found');
                 dispatch(updateLoggedIn(false));

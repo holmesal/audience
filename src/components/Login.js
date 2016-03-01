@@ -10,6 +10,8 @@ import React, {
 import FBSDKLogin, {FBSDKLoginButton, FBSDKLoginManager} from 'react-native-fbsdklogin';
 import {FBSDKGraphRequest} from 'react-native-fbsdkcore';
 
+import {desiredReadPermissions} from '../utils/facebook';
+
 export default class Login extends Component {
 
 
@@ -43,8 +45,9 @@ export default class Login extends Component {
                       if (result.isCancelled) {
                         console.info('Login cancelled.');
                       } else {
-                        console.info(result);
                         console.info('Logged in.');
+                        console.info('granted permissions', result.grantedPermissions);
+                        console.info(result);
                         this.fetchInfo();
                         this.props.onLogin();
                       }
@@ -52,7 +55,7 @@ export default class Login extends Component {
                   }}
                 onLogoutFinished={() => alert('Logged out.')}
                 onWillLogin={() => console.info('will login')}
-                readPermissions={['user_friends', 'public_profile', 'email']}
+                readPermissions={desiredReadPermissions}
                 publishPermissions={[]}
             />
         );

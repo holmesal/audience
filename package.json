@@ -14,6 +14,7 @@
     "feedparser": "^1.1.4",
     "htmlparser2": "^3.9.0",
     "immutable": "^3.7.6",
+    "lodash": "^4.5.1",
     "moment": "^2.11.2",
     "parse": "^1.7.1",
     "react-native": "0.18.0",
