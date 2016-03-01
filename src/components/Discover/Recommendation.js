@@ -20,8 +20,9 @@ class Recommendation extends Component {
 
     render() {
         const photoUrl = `http://graph.facebook.com/v2.5/${this.props.recommendation.user.facebookId}/picture?type=square&height=72`;
+        let opacity = this.props.recommendation.episode.viewerHasHeard ? 0.3 : 1;
         return (
-            <View style={[styles.wrapper, this.props.style]}>
+            <View style={[styles.wrapper, this.props.style, {opacity}]}>
 
                 <View style={styles.topRow}>
                     <Image style={styles.recommenderPhoto} source={{uri: photoUrl}} />
@@ -89,6 +90,7 @@ export default Relay.createContainer(Recommendation, {
                 }
                 episode {
                     id
+                    viewerHasHeard
                     ${EpisodeCard.getFragment('episode')}
                 }
                 review

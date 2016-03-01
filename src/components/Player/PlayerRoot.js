@@ -10,6 +10,7 @@ import {createSelector} from 'reselect';
 import EpisodeRoute from '../../routes/EpisodeRoute';
 import Player from './Player';
 import RelayError from '../RelayError';
+import LoadingSpinner from '../LoadingSpinner';
 
 import {episodeId$} from '../../redux/modules/player';
 
@@ -33,6 +34,7 @@ class PlayerRoot extends Component {
                         <RelayError error={error} retry={retry} />
                     );
                 }}
+                renderLoading={() => <LoadingSpinner />}
             />
         )
     }

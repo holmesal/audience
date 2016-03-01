@@ -17,6 +17,7 @@ export default class RelayError extends Component {
     static defaultProps = {};
 
     render() {
+        console.info('relay error rendering!');
         return (
             <View style={styles.wrapper}>
                 <Text style={styles.emoji}>🤔🛰🔥</Text>

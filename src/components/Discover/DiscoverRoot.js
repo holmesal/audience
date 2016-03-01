@@ -8,6 +8,7 @@ import Relay from 'react-relay';
 import viewerRoute from '../../routes/ViewerRoute';
 import Discover from './Discover';
 import RelayError from '../RelayError';
+import LoadingSpinner from '../LoadingSpinner';
 
 export default class DiscoverRoot extends Component {
 
@@ -23,6 +24,7 @@ export default class DiscoverRoot extends Component {
                         <RelayError error={error} retry={retry} />
                     );
                 }}
+                renderLoading={() => <LoadingSpinner />}
             />
         )
     }

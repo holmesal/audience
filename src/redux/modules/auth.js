@@ -15,7 +15,7 @@ const UPDATE_VIEWER_ID = 'audience/auth/UPDATE_VIEWER_ID';
 
 const initialState = Immutable.fromJS({
     checkedLogin: false,
-    token: null,
+    //token: null,
     viewerId: null
 });
 
@@ -76,3 +76,9 @@ export const checkLogin = () => {
     }
 };
 
+export const logout = () => {
+    return (dispatch, getState) => {
+        dispatch(updateViewerId(null));
+        dispatch(updateLoggedIn(false));
+    }
+}

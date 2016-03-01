@@ -50,7 +50,7 @@ class EpisodePlayer extends Component {
         if (currentTime != 0 &&
             duration != 0 &&
             !this.props.episode.viewerHasHeard &&
-            currentTime / duration > 0.2 &&
+            currentTime / duration > 0.5 &&
             !this.state.listenInFlight
         ) {
             console.info('marking as listened!', this.props);

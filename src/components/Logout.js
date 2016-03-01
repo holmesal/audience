@@ -8,6 +8,9 @@ import React, {
     View
 } from 'react-native';
 
+import store from '../redux/create';
+import {logout} from '../redux/modules/auth';
+
 import FBSDKLogin, {FBSDKLoginButton, FBSDKLoginManager} from 'react-native-fbsdklogin';
 
 export default class Logout extends Component {
@@ -18,6 +21,7 @@ export default class Logout extends Component {
 
     logout() {
         FBSDKLoginManager.logOut();
+        store.dispatch(logout());
     }
 
     render() {

@@ -52,7 +52,7 @@ export default class Login extends Component {
                   }}
                 onLogoutFinished={() => alert('Logged out.')}
                 onWillLogin={() => console.info('will login')}
-                readPermissions={[]}
+                readPermissions={['user_friends', 'public_profile', 'email']}
                 publishPermissions={[]}
             />
         );
