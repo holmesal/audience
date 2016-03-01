@@ -8,7 +8,7 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 
-export default class Shows extends Component {
+class Shows extends Component {
 
     static propTypes = {
 
@@ -35,9 +35,15 @@ let styles = StyleSheet.create({
 
 export default Relay.createContainer(Shows, {
     fragments: {
-        viewer: Relay.QL`
-            fragment on Viewer {
-                subscriptions: {}
+        viewer: () => Relay.QL`
+            fragment on User {
+                subscriptions(first:100) {
+                    edges {
+                        node {
+                            id
+                        }
+                    }
+                }
             }
         `
     }

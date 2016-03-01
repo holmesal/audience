@@ -16,6 +16,7 @@ import {createSelector} from 'reselect';
 import Discover from './../Discover/DiscoverRoot';
 import Search from './../Search/Search';
 import Viewer from './../Viewer/ViewerRoot';
+import Shows from '../Shows/ShowsRoot';
 import TabBar from './TabBar';
 
 export default class Tabs extends Component {
@@ -24,7 +25,8 @@ export default class Tabs extends Component {
         let tabs = [
             <Discover key="discover" tabLabel="Discover" />,
             <Search key="search" tabLabel="Search" />,
-            <Viewer key="me" tabLabel="Me" />
+            <Viewer key="me" tabLabel="Me" />,
+            <Shows key="shows" tabLabel="Shows" />
         ];
         if (this.props.playingEpisodeId) {
             tabs.push(<View key="playing" tabLabel="Playing" invisible />);

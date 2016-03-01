@@ -8,6 +8,7 @@ import Relay from 'react-relay';
 import viewerRoute from '../../routes/ViewerRoute';
 import Shows from './Shows';
 import RelayError from '../RelayError';
+import LoadingSpinner from '../LoadingSpinner';
 
 export default class ShowsRoot extends Component {
 
@@ -22,6 +23,7 @@ export default class ShowsRoot extends Component {
                         <RelayError error={error} retry={retry} />
                     );
                 }}
+                renderLoading={() => <LoadingSpinner />}
             />
         )
     }
