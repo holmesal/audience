@@ -61,6 +61,14 @@ class EpisodeListItem extends Component {
         )
     }
 
+    renderDots() {
+        return (
+            <TouchableOpacity style={styles.touchable}>
+                <Image style={styles.dots} source={require('image!dots')} />
+            </TouchableOpacity>
+        )
+    }
+
     render() {
         return (
             <TouchableFade style={styles.wrapper} underlayColor={colors.almostDarkGrey} onPress={this.play.bind(this)}>
@@ -77,9 +85,7 @@ class EpisodeListItem extends Component {
                         {this.getUploadedAgo()}
                     </View>
                 </View>
-                <TouchableOpacity style={styles.touchable}>
-                    <Image style={styles.dots} source={require('image!dots')} />
-                </TouchableOpacity>
+                {false && this.renderDots()}
                 {this.props.unheard && <View style={styles.indicator}/>}
             </TouchableFade>
         );

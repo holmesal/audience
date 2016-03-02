@@ -17,6 +17,14 @@ export default class TopBar extends Component {
 
     static defaultProps = {};
 
+    renderDots() {
+        return (
+            <TouchableOpacity style={[styles.button, {right: 0}]} onPress={this.props.onMorePress}>
+                <Image source={require('image!dots')} style={styles.dotsIcon}/>
+            </TouchableOpacity>
+        )
+    }
+
     render() {
         return (
             <View style={styles.wrapper}>
@@ -24,9 +32,7 @@ export default class TopBar extends Component {
                     <Image source={require('image!backChevron')} style={styles.backIcon}/>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.button, {right: 0}]} onPress={this.props.onMorePress}>
-                    <Image source={require('image!dots')} style={styles.dotsIcon}/>
-                </TouchableOpacity>
+                {false && this.renderDots()}
             </View>
         );
     }
