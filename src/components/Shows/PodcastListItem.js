@@ -4,11 +4,13 @@ import React, {
     PropTypes,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import Relay from 'react-relay';
 import TouchableFade from '../common/TouchableFade';
 import colors from '../../colors';
+import {PrimaryText, SecondaryText} from '../../type';
 
 import store from '../../redux/create';
 import {showPodcastInfo} from '../../redux/modules/podcastInfo';
@@ -19,9 +21,17 @@ class PodcastListItem extends Component {
         store.dispatch(showPodcastInfo(this.props.podcast.id))
     }
 
+    renderDots() {
+        return (
+            <TouchableOpacity style={styles.touchable}>
+                <Image style={styles.dots} source={require('image!dots')} />
+            </TouchableOpacity>
+        )
+    }
+
     renderSecondary() {
-        let text = 'placeholder!';
-        return <Text style={[styles.text, styles.secondary]}>{text}</Text>;
+        let text = 'You\'re all caught up.';
+        return <SecondaryText>{text}</SecondaryText>;
     }
 
     render() {
@@ -34,9 +44,10 @@ class PodcastListItem extends Component {
                     style={styles.artwork}
                     source={{uri: this.props.podcast.artwork}} />
                 <View style={styles.info}>
-                    <Text style={[styles.text, styles.name]}>{this.props.podcast.name}</Text>
+                    <PrimaryText style={styles.name} numberOfLines={1}>{this.props.podcast.name}</PrimaryText>
                     {this.renderSecondary()}
                 </View>
+                {this.renderDots()}
             </TouchableFade>
         );
     }
@@ -48,7 +59,8 @@ let styles = StyleSheet.create({
         paddingLeft: 24,
         paddingRight: 24,
         paddingTop: 12,
-        paddingBottom: 12
+        paddingBottom: 12,
+        position: 'relative'
     },
     artwork: {
         width: 66,
@@ -57,7 +69,7 @@ let styles = StyleSheet.create({
     },
     info: {
         flex: 1,
-        justifyContent: 'center',
+        //justifyContent: 'center',
         alignSelf: 'stretch',
         height: 66
     },
@@ -65,9 +77,6 @@ let styles = StyleSheet.create({
         fontFamily: 'System'
     },
     name: {
-        fontSize: 18,
-        color: colors.lightGrey,
-        letterSpacing: 0.9,
         marginBottom: 6
     },
     secondary: {
@@ -75,7 +84,20 @@ let styles = StyleSheet.create({
         color: colors.grey,
         letterSpacing: 0.79,
         fontWeight: '200'
-    }
+    },
+    touchable: {
+        //backgroundColor: 'red',
+        width: 48,
+        height: 48,
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    dots: {
+        tintColor: '#A4A4A4'
+    },
 });
 
 export default Relay.createContainer(PodcastListItem, {
