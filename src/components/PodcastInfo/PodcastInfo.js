@@ -115,7 +115,7 @@ class PodcastInfo extends Component {
     }
 
     render() {
-        console.info('podcast info props', this.props);
+        //console.info('podcast info props', this.props);
         // If not visible, show nothing
         //if (!this.props.visible) return <View />;
 
