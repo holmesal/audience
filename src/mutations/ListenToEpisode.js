@@ -34,6 +34,7 @@ export default class ListenToEpisodeMutation extends Relay.Mutation {
     getOptimisticResponse() {
         return {
             episode: {
+                id: this.props.episodeId,
                 viewerHasRecommended: true
             }
         }

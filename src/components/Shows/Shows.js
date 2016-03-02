@@ -2,11 +2,14 @@ import React, {
     Component,
     Image,
     PropTypes,
+    ScrollView,
     StyleSheet,
     Text,
     View
 } from 'react-native';
 import Relay from 'react-relay';
+
+import PodcastListItem from './PodcastListItem';
 
 class Shows extends Component {
 
@@ -18,18 +21,27 @@ class Shows extends Component {
         
     };
 
+    renderShowsList() {
+        return this.props.viewer.subscriptions.edges.map(edge =>
+            <PodcastListItem
+                key={edge.node.id}
+                podcast={edge.node}
+            />
+        )
+    }
+
     render() {
         return (
-            <View style={styles.wrapper}>
-                <Text>I am the Shows component!</Text>
-            </View>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+                {this.renderShowsList()}
+            </ScrollView>
         );
     }
 }
 
 let styles = StyleSheet.create({
-    wrapper: {
-        flex: 1
+    scrollContainer: {
+        paddingTop: 20 + 12
     }
 });
 
@@ -41,6 +53,7 @@ export default Relay.createContainer(Shows, {
                     edges {
                         node {
                             id
+                            ${PodcastListItem.getFragment('podcast')}
                         }
                     }
                 }

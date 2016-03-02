@@ -59,8 +59,9 @@ export default class SubscribeToPodcastMutation extends Relay.Mutation {
     getOptimisticResponse() {
         return {
             podcast: {
+                id: this.props.podcast.id,
                 viewerIsSubscribed: !this.props.podcast.viewerIsSubscribed
             }
-        }
+        };
     }
 }

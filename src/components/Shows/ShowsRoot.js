@@ -7,8 +7,8 @@ import Relay from 'react-relay';
 
 import viewerRoute from '../../routes/ViewerRoute';
 import Shows from './Shows';
-import RelayError from '../RelayError';
-import LoadingSpinner from '../LoadingSpinner';
+import RelayError from '../common/RelayError';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 export default class ShowsRoot extends Component {
 
