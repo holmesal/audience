@@ -24,7 +24,7 @@ const createStoreWithMiddleware = applyMiddleware(
 let finalCreateStore;
 if (__DEV__) {
     finalCreateStore = compose(
-        createStoreWithMiddleware,
+        createStoreWithMiddleware
         //devTools()
         //devTools({
         //    hostname: 'http://172.20.10.4',

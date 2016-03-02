@@ -11,7 +11,7 @@ import {connect} from 'react-redux/native';
 
 import {checkLogin, auth$} from '../../redux/modules/auth';
 import Landing from './../Landing/Landing';
-import Authenticated from './navigation/Authenticated';
+import Authenticated from './Authenticated';
 
 // Responds to changes in auth state from redux, and renders the appropriate component
 class Auth extends Component {

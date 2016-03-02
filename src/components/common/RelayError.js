@@ -8,7 +8,7 @@ import React, {
 } from 'react-native';
 
 import colors from '../../colors';
-import RoundButton from './buttons/RoundButton';
+import RoundButton from './RoundButton';
 
 export default class RelayError extends Component {
 

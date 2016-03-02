@@ -19,7 +19,6 @@ const SKIP = 'audience/player/SKIP';
 const initialState = Immutable.fromJS({
     visible: false,
     episodeId: null,
-    podcastId: null,
     playing: false,
     buffering: false,
     duration: null,
@@ -47,8 +46,7 @@ export default createReducer(initialState, {
 // Selectors
 export const duration$ = state => state.getIn(['player', 'duration']);
 export const episodeId$ = state => state.getIn(['player', 'episodeId']);
-//export const podcastId$ = state => state.getIn(['player', 'podcastId']);
-//export const currentTime$ = state => state.getIn(['player', 'currentTime']);
+export const currentTime$ = state => state.getIn(['player', 'currentTime']);
 export const visible$ = state => state.getIn(['player', 'visible']);
 export const playing$ = state => state.getIn(['player', 'playing']);
 export const buffering$ = state => state.getIn(['player', 'buffering']);

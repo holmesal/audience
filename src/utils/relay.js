@@ -9,13 +9,13 @@ const graphqlURL = __DEV__ ? `http://${MTDebugIP.debugIP}:5000/graphql` : 'http:
 console.info('graphQL url: ', graphqlURL);
 
 // Ricky Bobby
-//const DEBUG_TOKEN = 'CAANMZBBpQDs4BAOfgLdloNJ3h3kTVjseoOrg0oyUgZArqxsgGJfB7FaM3ZADa7OuY7DPCucDAnCHbySP93yRYfJDE4AZAQz3oCed6tUFeZCVPJvyA2DmPUj9nKPZCi3mmchdRsvuBNT6kxdmiZBZAPcGSN2tRwGs79TjZAGWAUzS3RX8LzmK31lvZA';
+const DEBUG_TOKEN = 'CAANMZBBpQDs4BAOfgLdloNJ3h3kTVjseoOrg0oyUgZArqxsgGJfB7FaM3ZADa7OuY7DPCucDAnCHbySP93yRYfJDE4AZAQz3oCed6tUFeZCVPJvyA2DmPUj9nKPZCi3mmchdRsvuBNT6kxdmiZBZAPcGSN2tRwGs79TjZAGWAUzS3RX8LzmK31lvZA';
 
 // Carl Danger
 //const DEBUG_TOKEN = 'CAANMZBBpQDs4BABsjM1JE5vWsBzwZCvvgtx87xwtYqhe9AoRyjY4WZBRZB5sznAwtG8TsIrhOHgcimUbYoPUltqSRrFEVF2BmVkMUtTQ3UTj2kQzHn9SY44wZCVRIwVeWcsNbjkhw9HAwaFM15YKdZBEbdiAGZCo969oZCVOmej3g9hFs5YhDCvz5mDdKeZBdaEqIlmOZACRGkcgZDZD';
 
 // Use token from facebook account on device
-const DEBUG_TOKEN = null;
+//const DEBUG_TOKEN = null;
 
 Relay.injectNetworkLayer(
     new Relay.DefaultNetworkLayer(graphqlURL)
