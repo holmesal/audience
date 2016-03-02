@@ -13,9 +13,11 @@ import EpisodeCard from './EpisodeCard';
 class Recommendation extends Component {
 
     renderReview() {
-        return (
-            <Text style={styles.review}>"{this.props.recommendation.review}"</Text>
-        )
+        if (this.props.recommendation.review) {
+            return (
+                <Text style={styles.review}>"{this.props.recommendation.review}"</Text>
+            )
+        }
     }
 
     render() {
@@ -28,7 +30,7 @@ class Recommendation extends Component {
                     <Image style={styles.recommenderPhoto} source={{uri: photoUrl}} />
                     <Text style={styles.recommender}>
                         <Text style={{fontWeight: '600'}}>{this.props.recommendation.user.displayName} </Text>
-                        recommends:
+                        <Text>recommends:</Text>
                     </Text>
                 </View>
 
@@ -36,8 +38,7 @@ class Recommendation extends Component {
                     episode={this.props.recommendation.episode}
                     style={styles.episodeCard}
                 />
-
-                {this.props.recommendation.review && this.renderReview()}
+                {this.renderReview()}
             </View>
         );
     }
