@@ -9,7 +9,7 @@ import React, {
 
 import {PrimaryText, SecondaryText} from '../../type';
 import colors from '../../colors';
-import TouchableFade from '../TouchableFade';
+import TouchableFade from '../buttons/TouchableFade';
 
 export default class ResultItem extends Component {
 

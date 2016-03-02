@@ -10,7 +10,7 @@ import React, {
     View
 } from 'react-native';
 
-import TouchableFade from '../TouchableFade';
+import TouchableFade from '../buttons/TouchableFade';
 
 import {pause, resume, controls$} from '../../redux/modules/player.js';
 import {connect} from 'react-redux/native';

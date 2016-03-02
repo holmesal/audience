@@ -9,7 +9,7 @@ import {createSelector} from 'reselect';
 
 import PodcastRoute from '../../routes/PodcastRoute';
 import PodcastInfo from './PodcastInfo';
-import RelayError from '../RelayError';
+import RelayError from '../common/RelayError';
 
 import {podcastId$} from '../../redux/modules/podcastInfo';
 

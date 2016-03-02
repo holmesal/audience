@@ -14,7 +14,7 @@ import {playEpisode} from '../../redux/modules/player';
 
 import {PrimaryText, SupportingText, MetaText} from '../../type';
 import colors from '../../colors';
-import TouchableFade from '../TouchableFade';
+import TouchableFade from '../buttons/TouchableFade';
 
 class EpisodeListItem extends Component {
 

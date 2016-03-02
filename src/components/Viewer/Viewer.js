@@ -13,7 +13,7 @@ import {updateViewerId} from '../../redux/modules/auth';
 
 import Relay from 'react-relay';
 
-import Logout from '../Logout';
+import Logout from '../auth/Logout';
 
 /**
  * Note - this component currently is reponsible for setting the viewerId in redux, which is needed when

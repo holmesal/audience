@@ -8,7 +8,7 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 
-import TouchableFade from '../TouchableFade';
+import TouchableFade from '../buttons/TouchableFade';
 import {playEpisode} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 

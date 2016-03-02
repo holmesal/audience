@@ -9,8 +9,8 @@ import {createSelector} from 'reselect';
 
 import EpisodeRoute from '../../routes/EpisodeRoute';
 import Player from './Player';
-import RelayError from '../RelayError';
-import LoadingSpinner from '../LoadingSpinner';
+import RelayError from '../common/RelayError';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 import {episodeId$} from '../../redux/modules/player';
 

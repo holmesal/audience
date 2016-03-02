@@ -9,9 +9,9 @@ import React, {
 } from 'react-native';
 import {connect} from 'react-redux/native';
 
-import {checkLogin, auth$} from '../redux/modules/auth';
-import Landing from './Landing';
-import Authenticated from './Authenticated';
+import {checkLogin, auth$} from '../../redux/modules/auth';
+import Landing from './../Landing/Landing';
+import Authenticated from './navigation/Authenticated';
 
 // Responds to changes in auth state from redux, and renders the appropriate component
 class Auth extends Component {

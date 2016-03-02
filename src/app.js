@@ -26,7 +26,7 @@ import Parse from 'parse/react-native';
 import Mixpanel from 'react-native-mixpanel';
 
 import colors from './colors';
-import Auth from './components/Auth';
+import Auth from './components/auth/Auth';
 
 // Initialize mixpanel
 if (__DEV__) {

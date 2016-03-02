@@ -10,7 +10,7 @@ import React, {
 import FBSDKLogin, {FBSDKLoginButton, FBSDKLoginManager} from 'react-native-fbsdklogin';
 import {FBSDKGraphRequest} from 'react-native-fbsdkcore';
 
-import {desiredReadPermissions} from '../utils/facebook';
+import {desiredReadPermissions} from '../../utils/facebook';
 
 export default class Login extends Component {
 

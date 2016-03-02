@@ -7,7 +7,7 @@ import React, {
     View
 } from 'react-native';
 
-import colors from '../colors';
+import colors from '../../colors';
 import RoundButton from './buttons/RoundButton';
 
 export default class RelayError extends Component {

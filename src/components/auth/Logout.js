@@ -8,8 +8,8 @@ import React, {
     View
 } from 'react-native';
 
-import store from '../redux/create';
-import {logout} from '../redux/modules/auth';
+import store from '../../redux/create';
+import {logout} from '../../redux/modules/auth';
 
 import FBSDKLogin, {FBSDKLoginButton, FBSDKLoginManager} from 'react-native-fbsdklogin';
 

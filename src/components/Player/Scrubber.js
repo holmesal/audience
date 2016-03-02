@@ -13,11 +13,8 @@ import React, {
 } from 'react-native';
 
 import colors from './../../colors';
-import TinyUser from './../TinyUser';
+import TinyUser from './TinyUser';
 import Times from './Times';
-
-import {connect} from 'react-redux/native';
-import {scrubber$, seekTo} from '../../redux/modules/player.js';
 
 class Scrubber extends Component {
 
@@ -205,6 +202,12 @@ class Scrubber extends Component {
         )
     }
 
+    renderRemaining() {
+        return (
+            <Text style={styles.remaining} monospace>{this.props.duration - this.props.currentTime} remaining</Text>
+        )
+    }
+
     render() {
         let blurredBgSrc = require('image!bgDark');//require('image!bg');
         return (
@@ -348,8 +351,15 @@ let styles = StyleSheet.create({
         bottom: windowHeight/2 + waveformHeight/2 + 8 + 88 + 12,
         left: 0,
         right: 0
+    },
+
+    remaining: {
+        color: colors.lightGrey,
+        fontSize: 12,
+        position: 'absolute',
+        right: 20,
+        bottom: windowHeight/2 - waveformHeight/2 - 20
     }
 });
 
-//export default connect(scrubber$)(Scrubber);
 export default Scrubber;

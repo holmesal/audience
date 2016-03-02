@@ -8,9 +8,9 @@ import React, {
     View
 } from 'react-native';
 
-import Login from './Login';
+import Login from './../auth/Login';
 
-import colors from '../colors';
+import colors from '../../colors';
 
 export default class Landing extends Component {
 
