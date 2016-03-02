@@ -11,10 +11,11 @@ import Relay from 'react-relay';
 import striptags from 'striptags';
 import store from '../../redux/create';
 import {playEpisode} from '../../redux/modules/player';
+import moment from 'moment';
 
 import {PrimaryText, SupportingText, MetaText} from '../../type';
 import colors from '../../colors';
-import TouchableFade from '../buttons/TouchableFade';
+import TouchableFade from '../common/TouchableFade';
 
 class EpisodeListItem extends Component {
 
@@ -57,7 +58,7 @@ class EpisodeListItem extends Component {
     getUploadedAgo() {
         let extraStyle = this.props.unheard ? {color: colors.attention} : {};
         return (
-            <MetaText style={extraStyle}>1 day ago</MetaText>
+            <MetaText style={extraStyle}>{moment(new Date(this.props.episode.published)).fromNow()}</MetaText>
         )
     }
 
