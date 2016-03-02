@@ -12,43 +12,19 @@ import Relay from 'react-relay';
 import TouchableFade from '../common/TouchableFade';
 import colors from '../../colors';
 import {PrimaryText, SecondaryText} from '../../type';
-import SubscribeToPodcastMutation from '../../mutations/SubscribeToPodcast';
+import PodcastActionSheet from '../common/PodcastActionSheet';
 
 import store from '../../redux/create';
 import {showPodcastInfo} from '../../redux/modules/podcastInfo';
 
 class PodcastListItem extends Component {
 
+    state = {
+        actionSheetVisible: false
+    };
+
     showPodcastInfo() {
         store.dispatch(showPodcastInfo(this.props.podcast.id))
-    }
-
-    showOptions() {
-        ActionSheetIOS.showActionSheetWithOptions({
-            options: [
-                'Unfollow',
-                'Cancel'
-            ],
-            cancelButtonIndex: 1,
-            destructiveButtonIndex: 0
-        }, idx => {
-            if (idx === 0) {
-                this.unfollow();
-            }
-        })
-    }
-
-    unfollow() {
-        Relay.Store.update(new SubscribeToPodcastMutation({
-            podcast: this.props.podcast
-        }), {
-            onFailure: (transaction) => {
-                console.error(transaction.getError())
-            },
-            onSuccess: (res) => {
-                console.info('success!', res)
-            }
-        })
     }
 
     renderDots() {
@@ -61,7 +37,8 @@ class PodcastListItem extends Component {
 
     renderSecondary() {
         let text = 'You\'re all caught up.';
-        return <SecondaryText>{text}</SecondaryText>;
+        return false
+        return <SecondaryText style={styles.secondary}>{text}</SecondaryText>;
     }
 
     render() {
@@ -69,7 +46,7 @@ class PodcastListItem extends Component {
             <TouchableFade style={styles.wrapper}
                            underlayColor={colors.almostDarkGrey}
                            onPress={this.showPodcastInfo.bind(this)}
-                           onLongPress={this.showOptions.bind(this)}
+                           onLongPress={() => this.setState({actionSheetVisible: true})}
             >
                 <Image
                     style={styles.artwork}
@@ -78,6 +55,11 @@ class PodcastListItem extends Component {
                     <PrimaryText style={styles.name} numberOfLines={1}>{this.props.podcast.name}</PrimaryText>
                     {this.renderSecondary()}
                 </View>
+                <PodcastActionSheet
+                    podcast={this.props.podcast}
+                    visible={this.state.actionSheetVisible}
+                    onComplete={() => this.setState({actionSheetVisible: false})}
+                />
             </TouchableFade>
         );
     }
@@ -99,7 +81,7 @@ let styles = StyleSheet.create({
     },
     info: {
         flex: 1,
-        //justifyContent: 'center',
+        justifyContent: 'center',
         alignSelf: 'stretch',
         height: 66
     },
@@ -107,13 +89,9 @@ let styles = StyleSheet.create({
         fontFamily: 'System'
     },
     name: {
-        marginBottom: 6
     },
     secondary: {
-        fontSize: 14,
-        color: colors.grey,
-        letterSpacing: 0.79,
-        fontWeight: '200'
+        marginTop: 6
     }
 });
 
@@ -128,7 +106,7 @@ export default Relay.createContainer(PodcastListItem, {
                 id
                 name
                 artwork(size:$size)
-                ${SubscribeToPodcastMutation.getFragment('podcast')}
+                ${PodcastActionSheet.getFragment('podcast')}
             }
         `
     }

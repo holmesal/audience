@@ -8,7 +8,7 @@ const UPDATE_QUERY = 'audience/search/UPDATE_QUERY';
 
 const initialState = Immutable.fromJS({
     //results: [],
-    query: '',
+    query: '99',
     //inFlight: false
 });
 

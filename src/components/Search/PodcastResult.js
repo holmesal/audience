@@ -8,6 +8,8 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 
+import PodcastActionSheet from '../common/PodcastActionSheet';
+
 import store from '../../redux/create';
 import {showPodcastInfo} from '../../redux/modules/podcastInfo';
 
@@ -15,17 +17,29 @@ import ResultItem from './ResultItem';
 
 class PodcastResult extends Component {
 
+    state = {
+        actionSheetVisible: false
+    };
+
     render() {
         return (
-            <ResultItem
-                key={this.props.podcast.id}
-                primary={this.props.podcast.name}
-                secondary={'Podcast'}
-                photoUrl={this.props.podcast.artwork}
-                photoShape={'square'}
-                onPress={() => store.dispatch(showPodcastInfo(this.props.podcast.id))}
-            />
-        );
+            <View>
+                <ResultItem
+                    key={this.props.podcast.id}
+                    primary={this.props.podcast.name}
+                    secondary={'Podcast'}
+                    photoUrl={this.props.podcast.artwork}
+                    photoShape={'square'}
+                    onPress={() => store.dispatch(showPodcastInfo(this.props.podcast.id))}
+                    onLongPress={() => this.setState({actionSheetVisible: true})}
+                />
+                <PodcastActionSheet
+                    podcast={this.props.podcast}
+                    visible={this.state.actionSheetVisible}
+                    onComplete={() => this.setState({actionSheetVisible: false})}
+                />
+            </View>
+        )
     }
 }
 
@@ -36,6 +50,7 @@ export default Relay.createContainer(PodcastResult, {
                 id
                 name
                 artwork
+                ${PodcastActionSheet.getFragment('podcast')}
             }
         `
     }

@@ -46,7 +46,7 @@ export default class Tabs extends Component {
                 tabBarUnderlineColor="#FFA726"
                 tabBarActiveTextColor="#FFA726"
                 tabBarInactiveTextColor="#fefefe"
-                initialPage={3}
+                initialPage={1}
             >
                 {this.renderTabs()}
             </ScrollableTabView>
