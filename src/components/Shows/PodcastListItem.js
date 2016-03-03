@@ -35,10 +35,15 @@ class PodcastListItem extends Component {
         )
     }
 
+    hasNewEpisode() {
+        return (this.props.podcast.latestEpisode && !this.props.podcast.latestEpisode.viewerHasHeard)
+    }
+
     renderSecondary() {
-        let text = 'You\'re all caught up.';
-        return false
-        return <SecondaryText style={styles.secondary}>{text}</SecondaryText>;
+        console.info('latest episode: ', this.props.podcast.latestEpisode);
+        return this.hasNewEpisode() ?
+            <SecondaryText style={[styles.secondary, styles.newText]}>New Episode!</SecondaryText> :
+            <SecondaryText style={styles.secondary}>You're all caught up.</SecondaryText>;
     }
 
     render() {
@@ -51,6 +56,9 @@ class PodcastListItem extends Component {
                 <Image
                     style={styles.artwork}
                     source={{uri: this.props.podcast.artwork}} />
+
+                {this.hasNewEpisode() && <View style={styles.newEpisodeBar} />}
+
                 <View style={styles.info}>
                     <PrimaryText style={styles.name} numberOfLines={1}>{this.props.podcast.name}</PrimaryText>
                     {this.renderSecondary()}
@@ -92,6 +100,18 @@ let styles = StyleSheet.create({
     },
     secondary: {
         marginTop: 6
+    },
+    newText: {
+        color: colors.attention,
+        fontWeight: '500'
+    },
+    newEpisodeBar: {
+        backgroundColor: colors.attention,
+        position: 'absolute',
+        width: 4,
+        left: 0,
+        top: 12,
+        height: 66
     }
 });
 
@@ -106,6 +126,10 @@ export default Relay.createContainer(PodcastListItem, {
                 id
                 name
                 artwork(size:$size)
+                latestEpisode {
+                    viewerHasHeard
+                    title
+                }
                 ${PodcastActionSheet.getFragment('podcast')}
             }
         `
