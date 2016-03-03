@@ -15,6 +15,7 @@ import React, {
 import colors from './../../colors';
 import TinyUser from './TinyUser';
 import Times from './Times';
+import TimeRemaining from './TimeRemaining';
 
 class Scrubber extends Component {
 
@@ -24,13 +25,16 @@ class Scrubber extends Component {
 
     static defaultProps = {
         duration: 1138,
-        currentTime: 0
+        currentTime: 0,
+        onScrubStart: () => {},
+        onScrubEnd: () => {}
     };
 
     state = {
         frac: 0,
         scrubbing: false,
         dashOpacity: new Animated.Value(0),
+        remainingOpacity: new Animated.Value(1),
         waveformWidth: 1173
     };
 
@@ -73,9 +77,15 @@ class Scrubber extends Component {
             Animated.spring(this.state.dashOpacity, {
                 toValue: 1
             }).start();
+            Animated.spring(this.state.remainingOpacity, {
+                toValue: 0.3
+            }).start();
         } else {
             Animated.spring(this.state.dashOpacity, {
                 toValue: 0
+            }).start();
+            Animated.spring(this.state.remainingOpacity, {
+                toValue: 1
             }).start();
         }
 
@@ -123,7 +133,12 @@ class Scrubber extends Component {
         if (scrubbing != this.state.scrubbing) {
             //console.info('-------------------- scrubbing=', scrubbing);
             this.setState({scrubbing});
-            if (!scrubbing) this.handleScrubEnd();
+            if (scrubbing) {
+                this.props.onScrubStart();
+            } else {
+                this.handleScrubEnd();
+                this.props.onScrubEnd();
+            }
         }
     }
 
@@ -204,7 +219,14 @@ class Scrubber extends Component {
 
     renderRemaining() {
         return (
-            <Text style={styles.remaining} monospace>{this.props.duration - this.props.currentTime} remaining</Text>
+            <Animated.View style={{opacity: this.state.remainingOpacity}}>
+                <TimeRemaining
+                    style={styles.remaining}
+                    time={this.props.duration * this.state.frac}
+                    duration={this.props.duration}
+                    monospace
+                />
+            </Animated.View>
         )
     }
 
@@ -255,6 +277,8 @@ class Scrubber extends Component {
                 </TouchableOpacity>
 
                 {this.renderTime()}
+
+                {this.renderRemaining()}
             </View>
         );
     }
@@ -354,11 +378,9 @@ let styles = StyleSheet.create({
     },
 
     remaining: {
-        color: colors.lightGrey,
-        fontSize: 12,
         position: 'absolute',
         right: 20,
-        bottom: windowHeight/2 - waveformHeight/2 - 20
+        bottom: windowHeight/2 + waveformHeight/2 + 28
     }
 });
 

@@ -30,7 +30,8 @@ class Player extends Component {
         composeVisible: false,
         duration: 0,
         currentTime: 0,
-        lastTargetTime: 0
+        lastTargetTime: 0,
+        scrubbing: false
     };
 
     componentDidMount() {
@@ -85,6 +86,8 @@ class Player extends Component {
                     currentTime={this.state.currentTime}
                     onSeek={lastTargetTime => this.setState({lastTargetTime})}
                     hidePlayer={() => this.props.dispatch(hidePlayer())}
+                    onScrubStart={() => this.setState({scrubbing: true})}
+                    onScrubEnd={() => this.setState({scrubbing: false})}
                 />
                 <Controls
                     onSkip={this.handleSkip.bind(this)}
