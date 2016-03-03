@@ -18,6 +18,7 @@ import SocialButtons from './SocialButtons';
 import ShareButton from './ShareButton';
 import CommentCompose from './CommentCompose';
 import AudioPlayer from './EpisodePlayer';
+import Info from './Info';
 
 class Player extends Component {
 
@@ -92,6 +93,10 @@ class Player extends Component {
                 <Controls
                     onSkip={this.handleSkip.bind(this)}
                 />
+                <Info
+                    visible={!this.state.scrubbing}
+                    episode={this.props.episode}
+                />
                 {false && <ShareButton />}
                 <SocialButtons
                     showCompose={() => this.setState({composeVisible: true})}
@@ -126,6 +131,7 @@ export default Relay.createContainer(ConnectedPlayer, {
                 id
                 ${SocialButtons.getFragment('episode')}
                 ${AudioPlayer.getFragment('episode')}
+                ${Info.getFragment('episode')}
                 podcast {
                     ${SocialButtons.getFragment('podcast')}
                     ${AudioPlayer.getFragment('podcast')}

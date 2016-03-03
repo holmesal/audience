@@ -34,7 +34,7 @@ class PlayerRoot extends Component {
                         <RelayError error={error} retry={retry} />
                     );
                 }}
-                renderLoading={() => <LoadingSpinner />}
+                renderLoading={() => <View />}
             />
         )
     }
