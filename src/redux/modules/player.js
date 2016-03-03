@@ -18,7 +18,7 @@ const SKIP = 'audience/player/SKIP';
 
 const initialState = Immutable.fromJS({
     visible: false,
-    episodeId: 'RXBpc29kZTo0NjA1',
+    episodeId: null,
     playing: false,
     buffering: false,
     duration: null,
