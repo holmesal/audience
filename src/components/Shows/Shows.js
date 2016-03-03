@@ -8,7 +8,7 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-
+import {SecondaryText} from '../../type';
 import PodcastListItem from './PodcastListItem';
 
 class Shows extends Component {
@@ -34,6 +34,7 @@ class Shows extends Component {
         return (
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {this.renderShowsList()}
+                <SecondaryText style={styles.help}>Long-press on an episode to see options</SecondaryText>
             </ScrollView>
         );
     }
@@ -42,6 +43,11 @@ class Shows extends Component {
 let styles = StyleSheet.create({
     scrollContainer: {
         paddingTop: 20 + 12
+    },
+    help: {
+        textAlign: 'center',
+        marginTop: 120,
+        marginBottom: 120
     }
 });
 
