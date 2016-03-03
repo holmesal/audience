@@ -17,12 +17,13 @@ const UPDATE_CURRENT_TIME = 'audience/player/UPDATE_CURRENT_TIME';
 const SKIP = 'audience/player/SKIP';
 
 const initialState = Immutable.fromJS({
-    visible: true,
+    visible: false,
     episodeId: 'RXBpc29kZTo0NjA1',
     playing: false,
     buffering: false,
     duration: null,
-    currentTime: null
+    currentTime: null,
+    duration: null
 });
 
 export default createReducer(initialState, {
@@ -36,10 +37,10 @@ export default createReducer(initialState, {
 
     //[UPDATE_BUFFERING]: (state, action) => state.set('buffering', action.buffering),
 
-    //[UPDATE_DURATION]: (state, action) => state.set('duration', action.duration),
+    [UPDATE_DURATION]: (state, action) => state.set('duration', action.duration),
 
 
-    //[UPDATE_CURRENT_TIME]: (state, action) => state.set('currentTime', action.currentTime)
+    [UPDATE_CURRENT_TIME]: (state, action) => state.set('currentTime', action.currentTime)
 
 })
 
@@ -125,15 +126,15 @@ export const updatePlaying = (playing) => ({
 //    type: UPDATE_BUFFERING,
 //    buffering
 //});
-//export const updateDuration = (duration) => ({
-//    type: UPDATE_DURATION,
-//    duration
-//});
-//export const updateCurrentTime = (currentTime) => ({
-//    type: UPDATE_CURRENT_TIME,
-//    currentTime
-//});
-//
+export const updateDuration = (duration) => ({
+    type: UPDATE_DURATION,
+    duration
+});
+export const updateCurrentTime = (currentTime) => ({
+    type: UPDATE_CURRENT_TIME,
+    currentTime
+});
+
 //export const skip = (offset) => {
 //    return (dispatch, getState) => {
 //        let currentTime = currentTime$(getState());

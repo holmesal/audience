@@ -28,9 +28,9 @@ export default class Tabs extends Component {
             <Viewer key="me" tabLabel="Me" />,
             <Shows key="shows" tabLabel="Shows" />
         ];
-        if (this.props.playingEpisodeId) {
-            tabs.push(<View key="playing" tabLabel="Playing" invisible />);
-        }
+        //if (this.props.playingEpisodeId) {
+        //    tabs.push(<View key="playing" tabLabel="Playing" invisible />);
+        //}
         return tabs
     }
 

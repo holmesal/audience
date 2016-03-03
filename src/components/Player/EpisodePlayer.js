@@ -8,7 +8,7 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 import {connect} from 'react-redux/native';
-import {audio$, resume, updatePlaying} from '../../redux/modules/player.js';
+import {audio$, resume, updatePlaying, updateCurrentTime, updateDuration} from '../../redux/modules/player.js';
 import ListenToEpisodeMutation from '../../mutations/ListenToEpisode';
 import {showRecommendNotification} from '../../notifications';
 
@@ -86,11 +86,13 @@ class EpisodePlayer extends Component {
     handleCurrentTimeChange(currentTime) {
         this.setState({currentTime});
         this.props.onCurrentTimeChange(currentTime);
+        this.props.dispatch(updateCurrentTime(currentTime));
     }
 
     handleDurationChange(duration) {
         this.setState({duration});
         this.props.onDurationChange(duration);
+        this.props.dispatch(updateDuration(duration));
     }
 
     handleSkip(amount) {

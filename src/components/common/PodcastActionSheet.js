@@ -48,7 +48,7 @@ class PodcastActionSheet extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.info('update!', this.props, prevProps);
+        //console.info('update!', this.props, prevProps);
         if (this.props.visible && this.props.visible != prevProps.visible) this.showOptions()
     }
 
