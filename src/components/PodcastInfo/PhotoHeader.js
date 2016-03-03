@@ -18,27 +18,41 @@ class PhotoHeader extends Component {
         titleOffset: 100
     };
 
+    componentWillReceiveProps(nextProps) {
+        console.info('next photoHeader props', nextProps);
+        if (!nextProps.podcast) {
+            console.info('resetting!')
+            this.state.imageOpacity.setValue(0);
+        }
+    }
+
     handleImageLoad() {
-        //console.info('image loaded!');
+        console.info('image loaded!');
         Animated.timing(this.state.imageOpacity, {
             toValue: 1
         }).start()
+    }
+
+    renderArtwork() {
+        return (
+            <Image
+                source={{uri: this.props.podcast.artwork}}
+                style={[styles.stretch]}
+                onLoad={this.handleImageLoad.bind(this)}
+            />
+        )
     }
 
     render() {
         return (
             <View style={styles.wrapper}>
                 <Animated.View style={{flex: 1, alignSelf: 'stretch', opacity: this.state.imageOpacity}}>
-                    <Image
-                        source={{uri: this.props.podcast.artwork}}
-                        style={[styles.stretch]}
-                        onLoad={this.handleImageLoad.bind(this)}
-                    />
+                    {!this.props.loading && this.renderArtwork()}
                     <View style={[styles.stretch, styles.tint]} />
                 </Animated.View>
 
                 <View style={[styles.stretch, styles.titleWrapper]}>
-                    <Text style={styles.title}>{this.props.podcast.name.toUpperCase()}</Text>
+                    {!this.props.loading && <Text style={styles.title}>{this.props.podcast.name.toUpperCase()}</Text>}
                 </View>
             </View>
         );

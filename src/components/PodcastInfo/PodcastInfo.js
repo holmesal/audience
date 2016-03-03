@@ -77,23 +77,31 @@ class PodcastInfo extends Component {
         }
     }
 
+    renderListContent() {
+        return [
+            <FollowToggle
+                key="followToggle"
+                podcast={this.props.podcast}
+            />,
+            <EpisodeList
+                key="episodeList"
+                podcast={this.props.podcast}
+                loading={this.props.loading}
+                doneAnimating={this.state.doneAnimating}
+            />
+        ]
+    }
+
     renderPodcastInfo() {
-        let podcast = this.props.podcast || null;
+        let content = this.props.loading ? this.renderLoading() : this.renderListContent();
         return (
             <View style={{flex: 1}}>
                 <ScrollView contentContainerStyle={styles.scrollContent}>
                     <PhotoHeader
-                        podcast={podcast}
+                        podcast={this.props.podcast}
                         loading={this.props.loading}
                     />
-                    <FollowToggle
-                        podcast={podcast}
-                    />
-                    <EpisodeList
-                        podcast={podcast}
-                        loading={this.props.loading}
-                        doneAnimating={this.state.doneAnimating}
-                    />
+                    {content}
                 </ScrollView>
                 <TopBar
                     onBackPress={() => this.props.dispatch(hidePodcastInfo())}
@@ -120,8 +128,8 @@ class PodcastInfo extends Component {
         //if (!this.props.visible) return <View />;
 
         // If visible, show loading until podcast is loaded
-        let view = this.props.podcast ? this.renderPodcastInfo() : this.renderLoading();
-        //let view = this.renderPodcastInfo();
+        //let view = this.props.podcast ? this.renderPodcastInfo() : this.renderLoading();
+        let view = this.renderPodcastInfo();
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity, transform: [{translateY: this.state.offset}]}]} pointerEvents={pointerEvents}>
