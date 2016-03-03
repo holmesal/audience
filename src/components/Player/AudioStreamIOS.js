@@ -43,19 +43,24 @@ export default class AudioStreamIOS extends Component {
     };
 
     componentDidMount() {
+        this._subscriptions = [];
         // Listen for changes to the audio state
-        NativeAppEventEmitter.addListener('MTAudio.updateState', this.handleNativeAudioStateChange.bind(this));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.updateState', this.handleNativeAudioStateChange.bind(this)));
         // Emit changes to play/pause state
-        NativeAppEventEmitter.addListener('MTAudio.commandCenterPlayButtonTapped', () => this.props.onPlayingChange(true));
-        NativeAppEventEmitter.addListener('MTAudio.commandCenterPauseButtonTapped', () => this.props.onPlayingChange(false));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterPlayButtonTapped', this.handleCommandCenterPlayButtonTap.bind(this)));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterPauseButtonTapped', this.handleCommandCenterPauseButtonTap.bind(this)));
         // Handle command center skips
-        NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipForwardButtonTapped', () => this.props.onSkip(15));
-        NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipBackwardButtonTapped', () => this.props.onSkip(-15));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipForwardButtonTapped', this.handleCommandCenterSkipForwardButtonTap.bind(this)));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipBackwardButtonTapped', this.handleCommandCenterSkipBackwardButtonTap.bind(this)));
         // Play the episode
         if (this.props.url) {
             MTAudio.play(this.props.url, this.props.title, this.props.artist, this.props.artworkUrl);
             this.props.onPlayingChange(true);
         }
+    }
+
+    componentWillUnmount() {
+        this._subscriptions.forEach(subscription => subscription.remove());
     }
 
     handleNativeAudioStateChange(audio) {
@@ -79,6 +84,22 @@ export default class AudioStreamIOS extends Component {
             this.props.onStateChange(audio.playerState);
         }
         this.setState(audio);
+    }
+
+    handleCommandCenterPlayButtonTap() {
+        this.props.onPlayingChange(true);
+    }
+
+    handleCommandCenterPauseButtonTap() {
+        this.props.onPlayingChange(false);
+    }
+
+    handleCommandCenterSkipForwardButtonTap() {
+        this.props.onSkip(15);
+    }
+
+    handleCommandCenterSkipBackwardButtonTap() {
+        this.props.onSkip(-15);
     }
 
     componentWillReceiveProps(nextProps) {
