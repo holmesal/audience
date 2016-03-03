@@ -15,17 +15,18 @@ var styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingBottom: 10,
+        //paddingBottom: 10,
     },
 
     tabs: {
         height: 50,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        borderWidth: 1,
-        borderTopWidth: 0,
+        borderTopWidth: 1,
         borderLeftWidth: 0,
         borderRightWidth: 0,
+        borderBottomWidth: 0,
+        borderTopColor: 'rgba(124,124,124,0.07)'
         //borderBottomColor: '#ccc',
     },
 });
@@ -41,7 +42,7 @@ var DefaultTabBar = React.createClass({
         inactiveTextColor : React.PropTypes.string,
     },
 
-    renderTabOption(name, page) {
+    oldRenderTabOption(name, page) {
         var isTabActive = this.props.activeTab === page;
         var activeTextColor = this.props.activeTextColor || "navy";
         var inactiveTextColor = this.props.inactiveTextColor || "black";
@@ -58,12 +59,27 @@ var DefaultTabBar = React.createClass({
         );
     },
 
+    renderTabOption(icon, page) {
+        var isTabActive = this.props.activeTab === page;
+        var activeTextColor = this.props.activeTextColor || "navy";
+        var inactiveTextColor = this.props.inactiveTextColor || "black";
+        return (
+            <TouchableOpacity style={[styles.tab]} key={page} onPress={() => {
+                this.props.goToPage(page);
+            }} activeOpacity={0.8}>
+                <View>
+                    {React.cloneElement(icon, {color: isTabActive ? activeTextColor : inactiveTextColor})}
+                </View>
+            </TouchableOpacity>
+        );
+    },
+
     render() {
         var containerWidth = this.props.containerWidth;
         var numberOfTabs = this.props.tabs.length;
         var tabUnderlineStyle = {
             position: 'absolute',
-            width: containerWidth / numberOfTabs,
+            width: 0,//containerWidth / numberOfTabs,
             height: 4,
             backgroundColor: this.props.underlineColor || "navy",
             bottom: 0,
@@ -73,10 +89,12 @@ var DefaultTabBar = React.createClass({
             inputRange: [0, 1], outputRange: [0,  containerWidth / numberOfTabs]
         });
 
+        //<Animated.View style={[tabUnderlineStyle, {left}]} />
+
         return (
             <View style={[styles.tabs, {backgroundColor : this.props.backgroundColor || null}, this.props.style, ]}>
                 {this.props.tabs.map((tab, i) => this.renderTabOption(tab, i))}
-                <Animated.View style={[tabUnderlineStyle, {left}]} />
+
             </View>
         );
     },

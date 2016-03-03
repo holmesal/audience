@@ -13,6 +13,8 @@ import {episodeId$, showPlayer} from '../../redux/modules/player';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import Discover from './../Discover/DiscoverRoot';
 import Search from './../Search/Search';
 import Viewer from './../Viewer/ViewerRoot';
@@ -22,11 +24,12 @@ import TabBar from './TabBar';
 export default class Tabs extends Component {
 
     renderTabs() {
+        let size = 22;
         let tabs = [
-            <Discover key="discover" tabLabel="Discover" />,
-            <Search key="search" tabLabel="Search" />,
-            <Viewer key="me" tabLabel="Me" />,
-            <Shows key="shows" tabLabel="Shows" />
+            <Discover key="discover" tabLabel={<Icon name="ios-pulse-strong" size={size} />} />,
+            <Shows key="shows" tabLabel={<Icon name="social-rss" size={size} />} />,
+            <Search key="search" tabLabel={<Icon name="ios-search-strong" size={size} />} />,
+            <Viewer key="me" tabLabel={<Icon name="android-happy" size={size} />} />
         ];
         //if (this.props.playingEpisodeId) {
         //    tabs.push(<View key="playing" tabLabel="Playing" invisible />);
@@ -46,7 +49,7 @@ export default class Tabs extends Component {
                 tabBarUnderlineColor="#FFA726"
                 tabBarActiveTextColor="#FFA726"
                 tabBarInactiveTextColor="#fefefe"
-                initialPage={3}
+                initialPage={0}
             >
                 {this.renderTabs()}
             </ScrollableTabView>

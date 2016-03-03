@@ -46,13 +46,14 @@ class CompactPlayer extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        height: 40,
+        height: 40
     },
     row: {
         flex: 1,
         alignSelf: 'stretch',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#0F0F0F'
     },
     artwork: {
         backgroundColor: colors.grey,
