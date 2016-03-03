@@ -39,7 +39,7 @@ class PlayerRoot extends Component {
                 Component={CompactPlayer}
                 route={route}
                 renderFailure={this.renderFailure}
-                renderLoading={() => <View />}
+                renderLoading={() => <CompactPlayer episode={null} loading />}
             />
         )
     }
