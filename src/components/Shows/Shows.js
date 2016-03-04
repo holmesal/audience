@@ -42,8 +42,8 @@ class Shows extends Component {
         return (
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {!hasShows && this.renderHelp()}
+                {!hasShows && <AddShowButton />}
                 {this.renderShowsList()}
-                <AddShowButton />
                 {hasShows && <SecondaryText style={styles.help}>Long-press on an episode to see options</SecondaryText>}
             </ScrollView>
         );
