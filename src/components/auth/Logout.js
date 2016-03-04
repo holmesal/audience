@@ -10,6 +10,8 @@ import React, {
 
 import store from '../../redux/create';
 import {logout} from '../../redux/modules/auth';
+import Icon from 'react-native-vector-icons/Ionicons';
+import colors from '../../colors';
 
 import FBSDKLogin, {FBSDKLoginButton, FBSDKLoginManager} from 'react-native-fbsdklogin';
 
@@ -26,18 +28,26 @@ export default class Logout extends Component {
 
     render() {
         return (
-            <TouchableOpacity style={styles.wrapper} onPress={this.logout}>
+            <Icon.Button
+                name="log-out"
+                style={styles.wrapper}
+                onPress={this.logout}
+                backgroundColor={'transparent'}
+            >
                 <Text style={{color:"#fefefe"}}>Logout</Text>
-            </TouchableOpacity>
+            </Icon.Button>
         );
     }
 }
 
 let styles = StyleSheet.create({
     wrapper: {
-        alignSelf: 'stretch',
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center'
+        width: 200,
+        //alignSelf: 'stretch',
+        ////height: 60,
+        //alignItems: 'center',
+        //justifyContent: 'center'
+        borderColor: colors.grey,
+        borderWidth: 1
     }
 });

@@ -7,6 +7,7 @@ import React, {
     Text,
     View
 } from 'react-native';
+import InviteFriend from './InviteFriend';
 
 import store from '../../redux/create';
 import {updateViewerId} from '../../redux/modules/auth';
@@ -25,13 +26,13 @@ class Viewer extends Component {
         store.dispatch(updateViewerId(this.props.viewer.id));
     }
 
-
     render() {
         const photoUrl = `http://graph.facebook.com/v2.5/${this.props.viewer.facebookId}/picture?type=square&height=160`;
         return (
             <ScrollView style={styles.wrapper} contentContainerStyle={styles.scrollContent}>
                 <Image source={{uri:photoUrl}} style={styles.photo} />
                 <Text style={styles.name}>{this.props.viewer.displayName}</Text>
+                <InviteFriend />
                 <Logout />
             </ScrollView>
         );
