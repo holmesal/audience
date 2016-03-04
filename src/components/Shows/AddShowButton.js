@@ -15,12 +15,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import RoundButton from '../common/RoundButton';
 
 import store from '../../redux/create';
-import {showPodcastInfo} from '../../redux/modules/podcastInfo';
+import {updateCurrentTab} from '../../redux/modules/tabs';
 
 export default class AddShowButton extends Component {
 
     showSearch() {
-
+        store.dispatch(updateCurrentTab('search'));
     }
 
     renderRoundButton() {

@@ -11,7 +11,7 @@ import React, {
 
 import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux/native';
-import {share$, currentTime$} from '../../redux/modules/player.js';
+import {currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 
 import {episodeShareLink} from '../../utils/urls';
@@ -123,4 +123,4 @@ let styles = StyleSheet.create({
     }
 });
 
-export default connect(share$)(ShareButton);
+export default connect()(ShareButton);
