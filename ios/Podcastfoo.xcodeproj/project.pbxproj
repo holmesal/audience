@@ -40,6 +40,8 @@
 		E2A485991C52174A00ADDD30 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A485981C52174100ADDD30 /* libRNSpinkit.a */; };
 		E2A519791C5AE8A9001546D5 /* MTAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A519771C5AE8A9001546D5 /* MTAudio.swift */; };
 		E2A5197A1C5AE8A9001546D5 /* MTAudioBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A519781C5AE8A9001546D5 /* MTAudioBridge.m */; };
+		E2B9ED881C8A51D10050C0EE /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B9ED861C8A51D10050C0EE /* Fabric.framework */; };
+		E2B9ED891C8A51D10050C0EE /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B9ED871C8A51D10050C0EE /* Crashlytics.framework */; };
 		E2C34F771C61CA490046A2E6 /* libRNMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C34F701C61CA320046A2E6 /* libRNMixpanel.a */; };
 		E2D175F11C4B5BCC0006949B /* libRNSearchBar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2D175F01C4B5B950006949B /* libRNSearchBar.a */; };
 		E2D175F81C4B5CC80006949B /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2D175F71C4B5C870006949B /* libRNBlur.a */; };
@@ -271,6 +273,8 @@
 		E2A519751C5AE8A1001546D5 /* Audience-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Audience-Bridging-Header.h"; sourceTree = "<group>"; };
 		E2A519771C5AE8A9001546D5 /* MTAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MTAudio.swift; sourceTree = "<group>"; };
 		E2A519781C5AE8A9001546D5 /* MTAudioBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAudioBridge.m; sourceTree = "<group>"; };
+		E2B9ED861C8A51D10050C0EE /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		E2B9ED871C8A51D10050C0EE /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		E2C34F5E1C61CA320046A2E6 /* RNMixpanel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNMixpanel.xcodeproj; path = "../node_modules/react-native-mixpanel/RNMixpanel.xcodeproj"; sourceTree = "<group>"; };
 		E2D175EB1C4B5B950006949B /* RNSearchBar.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSearchBar.xcodeproj; path = "../node_modules/react-native-search-bar/RNSearchBar.xcodeproj"; sourceTree = "<group>"; };
 		E2D175F21C4B5C870006949B /* RNBlur.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNBlur.xcodeproj; path = "../node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; };
@@ -289,6 +293,7 @@
 			files = (
 				E272148C1C75371F00E9EC3D /* libRCTPushNotification.a in Frameworks */,
 				E2C34F771C61CA490046A2E6 /* libRNMixpanel.a in Frameworks */,
+				E2B9ED891C8A51D10050C0EE /* Crashlytics.framework in Frameworks */,
 				E26F20811C5AFB8300C99444 /* libStreamingKit.a in Frameworks */,
 				E2A485991C52174A00ADDD30 /* libRNSpinkit.a in Frameworks */,
 				E2F303F41C4E0091003C21E4 /* FBSDKLoginKit.framework in Frameworks */,
@@ -308,6 +313,7 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				E2F303F01C4E006F003C21E4 /* Bolts.framework in Frameworks */,
+				E2B9ED881C8A51D10050C0EE /* Fabric.framework in Frameworks */,
 				D47273404AF3B74815784C66 /* libPods.a in Frameworks */,
 				9AE1B07F75114EDBAFAB7217 /* libRNNotificationActions.a in Frameworks */,
 				681873946564444E8EC2B268 /* libRNVectorIcons.a in Frameworks */,
@@ -630,6 +636,8 @@
 		E2F303E21C4DFD5F003C21E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E2B9ED861C8A51D10050C0EE /* Fabric.framework */,
+				E2B9ED871C8A51D10050C0EE /* Crashlytics.framework */,
 				E2F303F31C4E0091003C21E4 /* FBSDKLoginKit.framework */,
 				E2F303EF1C4E006F003C21E4 /* Bolts.framework */,
 				E2F303ED1C4E0056003C21E4 /* FBSDKCoreKit.framework */,
@@ -654,6 +662,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				BEDA8B9F7044F45026151237 /* Embed Pods Frameworks */,
 				66DCBBDE9666B795086EF255 /* Copy Pods Resources */,
+				E2B9ED6D1C8A51860050C0EE /* Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -1059,6 +1068,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "INFOPLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\necho \"writing to $INFOPLIST\"\nPLISTCMD=\"Add :SERVER_IP string $(ifconfig | grep inet\\ | tail -1 | cut -d \" \" -f 2)\"\necho -n \"$INFOPLIST\" | xargs -0 /usr/libexec/PlistBuddy -c \"$PLISTCMD\" || true\nPLISTCMD=\"Set :SERVER_IP $(ifconfig | grep inet\\ | tail -1 | cut -d \" \" -f 2)\"\necho -n \"$INFOPLIST\" | xargs -0 /usr/libexec/PlistBuddy -c \"$PLISTCMD\" || true";
+		};
+		E2B9ED6D1C8A51860050C0EE /* Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Crashlytics;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run d306455d8002c4aad817819ffd71efcb82c07c4a d071b2de84e290ee9bb1b103f5b100ac53307f3b35a0bb29f42f6f181e3262bb";
 		};
 		E2FD8C431C88DD4800953CB8 /* Bump build number */ = {
 			isa = PBXShellScriptBuildPhase;
