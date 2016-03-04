@@ -10,6 +10,7 @@ import React, {
 import Relay from 'react-relay';
 import {SecondaryText} from '../../type';
 import PodcastListItem from './PodcastListItem';
+import AddShowButton from './AddShowButton';
 
 class Shows extends Component {
 
@@ -21,6 +22,12 @@ class Shows extends Component {
         
     };
 
+    renderHelp() {
+        return (
+            <SecondaryText style={styles.help}>Once you start following a few shows, they'll appear here.</SecondaryText>
+        );
+    }
+
     renderShowsList() {
         return this.props.viewer.subscriptions.edges.map(edge =>
             <PodcastListItem
@@ -31,10 +38,13 @@ class Shows extends Component {
     }
 
     render() {
+        let hasShows = this.props.viewer.subscriptions.edges.length > 0;
         return (
             <ScrollView contentContainerStyle={styles.scrollContainer}>
+                {!hasShows && this.renderHelp()}
                 {this.renderShowsList()}
-                <SecondaryText style={styles.help}>Long-press on an episode to see options</SecondaryText>
+                <AddShowButton />
+                {hasShows && <SecondaryText style={styles.help}>Long-press on an episode to see options</SecondaryText>}
             </ScrollView>
         );
     }
@@ -46,8 +56,9 @@ let styles = StyleSheet.create({
     },
     help: {
         textAlign: 'center',
-        marginTop: 120,
-        marginBottom: 120
+        padding: 20,
+        marginTop: 100,
+        marginBottom: 100
     }
 });
 
