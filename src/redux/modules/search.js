@@ -3,18 +3,25 @@ import Immutable from 'immutable';
 //import request from 'superagent';
 
 const UPDATE_QUERY = 'audience/search/UPDATE_QUERY';
+const FOCUS = 'audience/search/FOCUS';
+const BLUR = 'audience/search/BLUR';
 //const UPDATE_IN_FLIGHT = 'audience/search/UPDATE_IN_FLIGHT';
 //const UPDATE_RESULTS = 'audience/search/UPDATE_RESULTS';
 
 const initialState = Immutable.fromJS({
     //results: [],
     query: '',
+    focus: false
     //inFlight: false
 });
 
 export default createReducer(initialState, {
 
     [UPDATE_QUERY]: (state, action) => state.set('query', action.query),
+
+    [FOCUS]: (state, action) => state.set('focus', true),
+
+    [BLUR]: (state, action) => state.set('focus', false)
 
     //[UPDATE_IN_FLIGHT]: (state, action) => state.set('inFlight', action.inFlight),
     //
@@ -25,12 +32,21 @@ export default createReducer(initialState, {
 // Selectors
 //export const results$ = state => state.getIn(['search', 'results']);
 export const query$ = state => state.getIn(['search', 'query']);
+export const focus$ = state => state.getIn(['search', 'focus']);
 
 // Actions
 export const updateQuery = query => ({
     type: UPDATE_QUERY,
     query: query
-})
+});
+
+export const focus = () => ({
+    type: FOCUS
+});
+
+export const blur = () => ({
+    type: BLUR
+});
 
 //let inFlight;
 //export function search(query) {

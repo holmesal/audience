@@ -8,12 +8,10 @@ import React, {
     View
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-
-import {episodeId$, showPlayer} from '../../redux/modules/player';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
-
 import Icon from 'react-native-vector-icons/Ionicons';
+
+import {focus, blur} from '../../redux/modules/search';
+import store from '../../redux/create';
 
 import Discover from './../Discover/DiscoverRoot';
 import Search from './../Search/Search';
@@ -28,20 +26,14 @@ export default class Tabs extends Component {
         let tabs = [
             <Discover key="discover" tabLabel={<Icon name="ios-pulse-strong" size={size} />} />,
             <Shows key="shows" tabLabel={<Icon name="social-rss" size={size} />} />,
-            <Search key="search" tabLabel={<Icon name="ios-search-strong" size={size} />} />,
-            <Viewer key="me" tabLabel={<Icon name="android-happy" size={size} />} />
+            <Viewer key="me" tabLabel={<Icon name="android-happy" size={size} />} />,
+            <Search key="search" tabLabel={<Icon name="ios-search-strong" size={size} />} />
         ];
-        //if (this.props.playingEpisodeId) {
-        //    tabs.push(<View key="playing" tabLabel="Playing" invisible />);
-        //}
         return tabs
     }
 
     render() {
-        let tabBar = <TabBar
-            playerTabVisible={this.props.playingEpisodeId ? true : false}
-            onPlayerPress={() => this.props.dispatch(showPlayer())}
-        />;
+        let tabBar = <TabBar />;
         return (
             <ScrollableTabView
                 renderTabBar={() => tabBar}
@@ -50,13 +42,16 @@ export default class Tabs extends Component {
                 tabBarActiveTextColor="#FFA726"
                 tabBarInactiveTextColor="#fefefe"
                 initialPage={0}
+                onChangeTab={({i}) => {
+                    if (i === 3) {
+                        store.dispatch(focus())
+                    } else {
+                        store.dispatch(blur())
+                    }
+                }}
             >
                 {this.renderTabs()}
             </ScrollableTabView>
         )
     }
 }
-
-let sel$ = createSelector(episodeId$, (episodeId) => ({playingEpisodeId: episodeId}));
-
-export default connect(sel$)(Tabs);

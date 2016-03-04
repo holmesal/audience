@@ -19,6 +19,7 @@ import ShareButton from './ShareButton';
 import CommentCompose from './CommentCompose';
 import AudioPlayer from './EpisodePlayer';
 import Info from './Info';
+import ActionButton from './ActionButton';
 
 class Player extends Component {
 
@@ -98,6 +99,11 @@ class Player extends Component {
                     episode={this.props.episode}
                 />
                 {false && <ShareButton />}
+
+                <ActionButton
+                    podcast={this.props.episode.podcast}
+                />
+
                 <SocialButtons
                     showCompose={() => this.setState({composeVisible: true})}
                     episode={this.props.episode}
@@ -135,6 +141,7 @@ export default Relay.createContainer(ConnectedPlayer, {
                 podcast {
                     ${SocialButtons.getFragment('podcast')}
                     ${AudioPlayer.getFragment('podcast')}
+                    ${ActionButton.getFragment('podcast')}
                 }
             }
         `
