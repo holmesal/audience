@@ -5,6 +5,7 @@ import React, {
     ScrollView,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import InviteFriend from './InviteFriend';
@@ -26,11 +27,18 @@ class Viewer extends Component {
         store.dispatch(updateViewerId(this.props.viewer.id));
     }
 
+    handleImagePress() {
+        // Fake a crash
+        //this.crash()
+    }
+
     render() {
         const photoUrl = `http://graph.facebook.com/v2.5/${this.props.viewer.facebookId}/picture?type=square&height=160`;
         return (
             <ScrollView style={styles.wrapper} contentContainerStyle={styles.scrollContent}>
-                <Image source={{uri:photoUrl}} style={styles.photo} />
+                <TouchableOpacity onPress={this.handleImagePress.bind(this)}>
+                    <Image source={{uri:photoUrl}} style={styles.photo} />
+                </TouchableOpacity>
                 <Text style={styles.name}>{this.props.viewer.displayName}</Text>
                 <InviteFriend />
                 <Logout />

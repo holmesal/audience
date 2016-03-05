@@ -103,7 +103,9 @@
   // Instabug
   #ifndef DEBUG
     NSLog(@"running in production!");
+    // Disable instabug crash reporting
     [Instabug startWithToken:@"fab0a5e2120058f12fd75d358e592995" invocationEvent:IBGInvocationEventShake];
+    [Instabug setCrashReportingEnabled:NO];
   #endif
   
   return YES;
