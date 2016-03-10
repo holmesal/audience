@@ -80,32 +80,6 @@ class CompactScrubber extends Component {
                 }, 64)
             }
         });
-        console.info(this._panResponder);
-        this._touchableResponders = PanResponder.create({
-            onStartShouldSetPanResponder: (evt, gestureState) => {
-                console.info('started!')
-                return true;
-            },
-            onStartShouldSetPanResponderCapture: (evt, gestureState) => {
-                return true;
-            },
-            onMoveShouldSetPanResponder: (evt, gestureState) => true,
-            onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-            onPanResponderGrant: () => {
-                this._touching = true;
-                this._autoScrolling = false; // cancel autoscrolls
-                this.checkScrubbing();
-            },
-            onPanResponderMove: () => {},
-            onPanResponderRelease: () => {
-                this._touching = false;
-                // Wait a minute to allow the first momentum scroll event to come through
-                setTimeout(() => {
-                    //console.info('--- doing deferred check');
-                    this.checkScrubbing();
-                }, 64)
-            }
-        });
     }
 
     componentDidUpdate(prevProps, prevState) {

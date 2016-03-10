@@ -8,8 +8,11 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 import RecommendEpisodeMutation from '../../mutations/RecommendEpisode';
+import colors from '../../colors';
+import NavbarButton from './NavbarButton';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import CircleCaptionButton from './CircleCaptionButton';
+const iconSize = 28;
 
 class RecommendButton extends Component {
 
@@ -22,8 +25,6 @@ class RecommendButton extends Component {
     };
 
     recommend() {
-        let {podcastId, episodeId} = this.props;
-        console.info('todo - add recommendation');
         AlertIOS.prompt(
             'Add a comment?',
             'This is optional.',
@@ -37,7 +38,7 @@ class RecommendButton extends Component {
     recommendMutation(review) {
         console.info('recommending', this.props.episode.id, review, Relay.Store.commitUpdate);
         Relay.Store.update(new RecommendEpisodeMutation({
-            episodeId: this.props.episode.id,
+            episode: this.props.episode,
             review
         }), {
             onFailure: (transaction) =>  {
@@ -53,37 +54,29 @@ class RecommendButton extends Component {
 
     renderNotRecommended() {
         return (
-            <CircleCaptionButton
-                content="👍"
-                caption="RECOMMEND"
-                onPress={this.recommend.bind(this)}
-            />
+            <NavbarButton onPress={this.recommend.bind(this)}>
+                <Icon name="ios-heart-outline" color={colors.darkGrey} size={iconSize}/>
+            </NavbarButton>
         )
     }
 
     renderRecommending() {
         return (
-            <CircleCaptionButton
-                content="👍"
-                caption="RECOMMEND"
-                buttonStyle={{opacity: 0.3}}
-            />
+            <NavbarButton>
+                <Icon name="ios-heart" color={colors.grey} size={iconSize}/>
+            </NavbarButton>
         )
     }
 
     renderRecommended() {
-        console.info('has recommended!')
         return (
-            <CircleCaptionButton
-                content="👍"
-                caption="RECOMMENDED"
-                buttonStyle={{opacity: 0.3}}
-            />
+            <NavbarButton>
+                <Icon name="ios-heart" color={colors.blue} size={iconSize}/>
+            </NavbarButton>
         )
     }
 
     render() {
-        console.info(this.props, this.state);
         if (this.state.recommending) return this.renderRecommending();
         else {
             if (this.props.episode.viewerHasRecommended) return this.renderRecommended();
@@ -98,11 +91,7 @@ export default Relay.createContainer(RecommendButton, {
             fragment on Episode {
                 id
                 viewerHasRecommended
-            }
-        `,
-        podcast: () => Relay.QL`
-            fragment on Podcast {
-                id
+                ${RecommendEpisodeMutation.getFragment('episode')}
             }
         `
     }
