@@ -17,8 +17,8 @@ const UPDATE_CURRENT_TIME = 'audience/player/UPDATE_CURRENT_TIME';
 const SKIP = 'audience/player/SKIP';
 
 const initialState = Immutable.fromJS({
-    visible: false,
-    episodeId: null,
+    visible: true,
+    episodeId: 'RXBpc29kZToyOTE0',
     playing: false,
     buffering: false,
     duration: null,
@@ -52,8 +52,9 @@ export const visible$ = state => state.getIn(['player', 'visible']);
 export const playing$ = state => state.getIn(['player', 'playing']);
 export const buffering$ = state => state.getIn(['player', 'buffering']);
 
-export const player$ = createSelector(visible$, (visible) => ({
-    visible
+export const player$ = createSelector(visible$, playing$, (visible, playing) => ({
+    visible,
+    playing
 }));
 
 export const audio$ = createSelector(playing$, (playing) => ({

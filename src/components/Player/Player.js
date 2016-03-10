@@ -11,6 +11,8 @@ import Relay from 'react-relay';
 
 import {connect} from 'react-redux';
 import {player$, hidePlayer} from '../../redux/modules/player.js';
+import {connect} from 'react-redux/native';
+import {player$, hidePlayer, pause, resume} from '../../redux/modules/player.js';
 import colors from '../../colors.js';
 import Scrubber from './Scrubber';
 import Controls from './Controls';
@@ -20,6 +22,10 @@ import CommentCompose from './CommentCompose';
 import AudioPlayer from './EpisodePlayer';
 import Info from './Info';
 import ActionButton from './ActionButton';
+
+import Navbar from './Navbar';
+import Annotations from './Annotations';
+import CompactScrubber from './CompactScrubber';
 
 class Player extends Component {
 
@@ -65,7 +71,47 @@ class Player extends Component {
         this.setState({lastTargetTime});
     }
 
+    handleWaveformPress() {
+        //console.info('waveform was pressed, and playing is: ', this.props.playing);
+        if (this.props.playing) this.props.dispatch(pause());
+        else this.props.dispatch(resume())
+    }
+
     render() {
+        if (!this.props.episode) {
+            console.warn('player got null episode :-(');
+            return <View />;
+        }
+        //console.info('player render!');
+        let pointerEvents = this.props.visible ? 'auto' : 'none';
+        return (
+            <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
+                <Navbar />
+                <Annotations />
+                <CompactScrubber
+                    duration={this.state.duration}
+                    currentTime={this.state.currentTime}
+                    playing={this.props.playing}
+                    onSeek={lastTargetTime => this.setState({lastTargetTime})}
+                    hidePlayer={() => this.props.dispatch(hidePlayer())}
+                    onScrubStart={() => this.setState({scrubbing: true})}
+                    onScrubEnd={() => this.setState({scrubbing: false})}
+                    onWaveformPress={this.handleWaveformPress.bind(this)}
+                />
+                <AudioPlayer
+                    ref="audio"
+                    episode={this.props.episode}
+                    podcast={this.props.episode.podcast}
+                    lastTargetTime={this.state.lastTargetTime}
+                    onDurationChange={duration => this.setState({duration})}
+                    onCurrentTimeChange={currentTime => this.setState({currentTime})}
+                    onSkip={this.handleSkip.bind(this)}
+                />
+            </Animated.View>
+        );
+    }
+
+    oldRender() {
         if (!this.props.episode) {
             console.warn('player got null episode :-(');
             return <View />;
@@ -124,7 +170,7 @@ let styles = StyleSheet.create({
         bottom: 0,
         right: 0,
         opacity: 0.3,
-        backgroundColor: colors.dark
+        backgroundColor: colors.white
     }
 });
 
