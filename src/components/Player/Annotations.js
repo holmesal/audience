@@ -1,6 +1,7 @@
 import React, {
     Component,
     Image,
+    ListView,
     PropTypes,
     ScrollView,
     StyleSheet,
@@ -8,9 +9,18 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
+import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import Annotation from './Annotation';
 
 class Annotations extends Component {
+
+    constructor(props) {
+        super(props);
+        this.ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged.bind(this)})
+        this.state = {
+            dataSource: this.ds.cloneWithRows(props.episode.annotations.edges)
+        };
+    }
 
     static propTypes = {
 
@@ -20,15 +30,34 @@ class Annotations extends Component {
 
     };
 
-    renderAnnotations() {
-        return this.props.episode.annotations.edges.map(edge => <Annotation key={edge.node.id} annotation={edge.node} />);
+    componentWillReceiveProps(nextProps) {
+        console.info('setting new datasource!')
+        this.setState({
+            dataSource: this.ds.cloneWithRows(nextProps.episode.annotations.edges)
+        });
+    }
+
+    componentDidMount() {
+        console.info(this._scrollView)
+        setTimeout(() => {
+            this._scrollView.scrollResponderScrollTo(0,200)
+        }, 1000)
+    }
+
+
+    rowHasChanged(r1, r2) {
+        return r1 !== r2;
     }
 
     render() {
         return (
-            <ScrollView style={styles.wrapper}>
-                {this.renderAnnotations()}
-            </ScrollView>
+            <ListView
+                ref={component => this._scrollView = component}
+                renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
+                style={styles.wrapper}
+                dataSource={this.state.dataSource}
+                renderRow={(edge) => <Annotation key={edge.node.id} annotation={edge.node} />}
+            />
         );
     }
 }
