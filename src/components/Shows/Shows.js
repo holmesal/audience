@@ -44,7 +44,7 @@ class Shows extends Component {
                 {!hasShows && this.renderHelp()}
                 {!hasShows && <AddShowButton />}
                 {this.renderShowsList()}
-                {hasShows && <SecondaryText style={styles.help}>Long-press on an episode to see options</SecondaryText>}
+                {hasShows && <SecondaryText style={styles.help}>Long-press on a show to see options</SecondaryText>}
             </ScrollView>
         );
     }
