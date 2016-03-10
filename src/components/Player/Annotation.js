@@ -21,7 +21,8 @@ class Annotation extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1
+        //flex: 1,
+        height: 100
     }
 });
 
