@@ -2,6 +2,7 @@ import React, {
     Component,
     Image,
     PropTypes,
+    ScrollView,
     StyleSheet,
     Text,
     View
@@ -19,7 +20,7 @@ export default class RelayError extends Component {
     render() {
         console.info('relay error rendering!');
         return (
-            <View style={styles.wrapper}>
+            <ScrollView style={{flex: 1}} contentContainerStyle={styles.wrapper}>
                 <Text style={styles.emoji}>🤔🛰🔥</Text>
                 <Text style={styles.subheading}>Request failed.</Text>
                 <Text style={styles.subheading}>Are you sure you have internets?</Text>
@@ -32,14 +33,13 @@ export default class RelayError extends Component {
 
                 <Text style={[styles.error, {marginTop: 40}]}>Error details:</Text>
                 <Text style={styles.error}>{this.props.error.message}</Text>
-            </View>
+            </ScrollView>
         );
     }
 }
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
     },
