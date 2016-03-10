@@ -19,9 +19,8 @@ import Controls from './Controls';
 //import SocialButtons from './SocialButtons';
 import ShareButton from './ShareButton';
 import CommentCompose from './CommentCompose';
-import AudioPlayer from './EpisodePlayer';
+import EpisodePlayer from './EpisodePlayer';
 import Info from './Info';
-import ActionButton from './ActionButton';
 
 import Navbar from './Navbar';
 import Annotations from './Annotations';
@@ -88,6 +87,7 @@ class Player extends Component {
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
                 <Navbar
                     episode={this.props.episode}
+                    podcast={this.props.episode.podcast}
                 />
                 <Annotations />
                 <CompactScrubber
@@ -100,7 +100,7 @@ class Player extends Component {
                     onScrubEnd={() => this.setState({scrubbing: false})}
                     onWaveformPress={this.handleWaveformPress.bind(this)}
                 />
-                <AudioPlayer
+                <EpisodePlayer
                     ref="audio"
                     episode={this.props.episode}
                     podcast={this.props.episode.podcast}
@@ -122,7 +122,7 @@ class Player extends Component {
     //    let pointerEvents = this.props.visible ? 'auto' : 'none';
     //    return (
     //        <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
-    //            <AudioPlayer
+    //            <EpisodePlayer
     //                ref="audio"
     //                episode={this.props.episode}
     //                podcast={this.props.episode.podcast}
@@ -183,12 +183,12 @@ export default Relay.createContainer(ConnectedPlayer, {
         episode: () => Relay.QL`
             fragment on Episode {
                 id
-                ${AudioPlayer.getFragment('episode')}
+                ${EpisodePlayer.getFragment('episode')}
                 ${Info.getFragment('episode')}
                 ${Navbar.getFragment('episode')}
                 podcast {
-                    ${AudioPlayer.getFragment('podcast')}
-                    ${ActionButton.getFragment('podcast')}
+                    ${EpisodePlayer.getFragment('podcast')}
+                    ${Navbar.getFragment('podcast')}
                 }
             }
         `
