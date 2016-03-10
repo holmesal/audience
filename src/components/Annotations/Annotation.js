@@ -7,13 +7,14 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
+import {prettyFormatTime} from '../../utils'
 
 class Annotation extends Component {
 
     render() {
         return (
             <View style={styles.wrapper}>
-                <Text>[{this.props.annotation.time}] {this.props.annotation.user.displayName} : {this.props.annotation.text}</Text>
+                <Text>[{prettyFormatTime(Math.round(this.props.annotation.time))}] {this.props.annotation.user.displayName} : {this.props.annotation.text}</Text>
             </View>
         );
     }
