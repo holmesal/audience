@@ -66,6 +66,7 @@ class CompactScrubber extends Component {
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
             onPanResponderGrant: () => {
+                console.info('scroll view has been granted responder')
                 this._touching = true;
                 this._autoScrolling = false; // cancel autoscrolls
                 this.checkScrubbing();
@@ -213,7 +214,8 @@ class CompactScrubber extends Component {
                 //console.info('broadcasting press!')
                 this.props.onWaveformPress();
             }
-        }, 200)
+        }, 60)
+        return false;
     }
 
     renderUsers() {
@@ -265,7 +267,7 @@ class CompactScrubber extends Component {
                                 onScroll={this.handleScroll.bind(this)}
                                 onMomentumScrollEnd={this.handleScrollEnd.bind(this)}
                                 scrollEventThrottle={32}
-                        {...this._panResponder.panHandlers}
+                                {...this._panResponder.panHandlers}
                     >
                         <View style={styles.waveform}>
                             <View style={[styles.spacer, {marginRight: 3}]} />
