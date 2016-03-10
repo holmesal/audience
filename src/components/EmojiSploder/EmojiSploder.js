@@ -4,9 +4,11 @@ import React, {
     Component,
     Dimensions,
     Image,
+    PanResponder,
     PropTypes,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import _ from 'lodash';
@@ -24,7 +26,7 @@ const width = windowWidth;
 let height = windowHeight - paddingTop - paddingBottom;
 
 // size of emoji buttons and hitboxes
-const emojiSize = 30;
+const emojiSize = 35;
 const minHitBoxSize = emojiSize * 2;
 const numCols = Math.floor(windowWidth / minHitBoxSize);
 const hitBoxSize = windowWidth / numCols;
@@ -47,11 +49,52 @@ export default class EmojiSploder extends Component {
         visibility: new Animated.Value(0)
     };
 
+    componentWillMount() {
+        this._panResponder = PanResponder.create({
+            // Ask to be the responder:
+            onStartShouldSetPanResponder: (evt, gestureState) => true,
+            onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+            onMoveShouldSetPanResponder: (evt, gestureState) => true,
+            onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+
+            onPanResponderGrant: (evt, gestureState) => {
+                // The guesture has started. Show visual feedback so the user knows
+                // what is happening!
+
+                // gestureState.{x,y}0 will be set to zero now
+                this.show();
+            },
+            onPanResponderMove: (evt, gestureState) => {
+                console.info(evt.nativeEvent)
+                // The most recent move distance is gestureState.move{X,Y}
+
+                // The accumulated gesture distance since becoming responder is
+                // gestureState.d{x,y}
+            },
+            onPanResponderTerminationRequest: (evt, gestureState) => true,
+            onPanResponderRelease: (evt, gestureState) => {
+                // The user has released all touches while this view is the
+                // responder. This typically means a gesture has succeeded
+                this.hide();
+            },
+            onPanResponderTerminate: (evt, gestureState) => {
+                // Another component has become the responder, so this gesture
+                // should be cancelled
+            },
+            onShouldBlockNativeResponder: (evt, gestureState) => {
+                // Returns whether this component should block native components from becoming the JS
+                // responder. Returns true by default. Is currently only supported on android.
+                return true;
+            }
+        })
+    }
+
+
     show() {
         console.info('showing!');
         Animated.timing(this.state.visibility, {
             toValue: 1,
-            duration: 800
+            duration: 250
         }).start()
     }
 
@@ -59,14 +102,14 @@ export default class EmojiSploder extends Component {
         console.info('hiding!');
         Animated.timing(this.state.visibility, {
             toValue: 0,
-            duration: 800
+            duration: 200
         }).start()
     }
 
-    componentDidMount() {
-        setTimeout(this.show.bind(this), 1000);
-        setTimeout(this.hide.bind(this), 4000);
-    }
+    //componentDidMount() {
+    //    setTimeout(this.show.bind(this), 1000);
+    //    setTimeout(this.hide.bind(this), 4000);
+    //}
 
 
     render() {
@@ -89,7 +132,7 @@ export default class EmojiSploder extends Component {
                 let yOffset = focalPoint.y - cell.cy;
                 cell.distanceFromFocalPoint = Math.sqrt(Math.pow(xOffset, 2) + Math.pow(yOffset, 2));
                 // Calculate the percentage of the visibility animation that this cell should activate at
-                const activateAt = cell.distanceFromFocalPoint / windowHeight;
+                const activateAt = cell.distanceFromFocalPoint / Math.sqrt(Math.pow(windowWidth, 2) + Math.pow(windowHeight, 2));
                 // Create animations for opacity and scale
                 cell.opacity = new Animated.Value(0);
                 Animated.spring(cell.opacity, {
@@ -137,10 +180,10 @@ export default class EmojiSploder extends Component {
                     transform: [{scale: cell.scale}]
                     }
                 ]}
-            ><Text style={{color: '#fefefe', fontSize: 32}}>😁</Text></Animated.View>
+            ><Text style={{color: '#fefefe', fontSize: 35}}>😁</Text></Animated.View>
         });
         return (
-            <View style={styles.wrapper}>
+            <View style={styles.wrapper} {...this._panResponder.panHandlers}>
                 {cellViews}
             </View>
         );
