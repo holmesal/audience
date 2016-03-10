@@ -7,8 +7,10 @@ import React, {
     Text,
     View
 } from 'react-native';
+import Relay from 'react-relay';
+import Annotation from './Annotation';
 
-export default class Annotations extends Component {
+class Annotations extends Component {
 
     static propTypes = {
 
@@ -18,10 +20,14 @@ export default class Annotations extends Component {
 
     };
 
+    renderAnnotations() {
+        return this.props.episode.annotations.edges.map(edge => <Annotation key={edge.node.id} annotation={edge.node} />);
+    }
+
     render() {
         return (
             <ScrollView style={styles.wrapper}>
-                <Text>I am the Annotations component!</Text>
+                {this.renderAnnotations()}
             </ScrollView>
         );
     }
@@ -30,5 +36,22 @@ export default class Annotations extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         flex: 1
+    }
+});
+
+export default Relay.createContainer(Annotations, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                annotations(first: 100) {
+                    edges {
+                        node {
+                            id
+                            ${Annotation.getFragment('annotation')}
+                        }
+                    }
+                }
+            }
+        `
     }
 });

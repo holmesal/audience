@@ -1,4 +1,5 @@
 import React, {
+    ActivityIndicatorIOS,
     Component,
     Image,
     PropTypes,
@@ -57,6 +58,16 @@ class Compose extends Component {
         this.setState({inFlight: true})
     }
 
+    renderInFlight() {
+        if (this.state.inFlight) {
+            return (
+                <View style={styles.inFlight}>
+                    <ActivityIndicatorIOS style={{marginTop: 16, marginLeft: 20}}/>
+                </View>
+            )
+        }
+    }
+
     // TODO - make this a multiline auto-resizing text input when on the latest react-native steez
     // https://github.com/facebook/react-native/commit/481f560f64806ba3324cf722d6bf8c3f36ac74a5
     render() {
@@ -70,6 +81,7 @@ class Compose extends Component {
                     editable={!this.state.inFlight}
                     onSubmitEditing={this.submit.bind(this)}
                 />
+                {this.renderInFlight()}
             </View>
         );
     }
@@ -81,7 +93,8 @@ let styles = StyleSheet.create({
         paddingTop: 8,
         paddingBottom: 8,
         paddingLeft: 12,
-        paddingRight: 12
+        paddingRight: 12,
+        position: 'relative'
     },
     input: {
         backgroundColor: '#F7F7F7',
@@ -90,6 +103,18 @@ let styles = StyleSheet.create({
         height: 36,
         paddingLeft: 12,
         paddingRight: 12
+    },
+    inFlight: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        //flexDirection: 'column',
+        //flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255,255,255,0.7)',
     }
 });
 

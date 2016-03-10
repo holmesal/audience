@@ -92,7 +92,9 @@ class Player extends Component {
                     podcast={this.props.episode.podcast}
                 />
 
-                <Annotations />
+                <Annotations
+                    episode={this.props.episode}
+                />
 
                 <Compose
                     episode={this.props.episode}
@@ -197,6 +199,7 @@ export default Relay.createContainer(ConnectedPlayer, {
                 ${Info.getFragment('episode')}
                 ${Navbar.getFragment('episode')}
                 ${Compose.getFragment('episode')}
+                ${Annotations.getFragment('episode')}
                 podcast {
                     ${EpisodePlayer.getFragment('podcast')}
                     ${Navbar.getFragment('podcast')}
