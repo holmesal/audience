@@ -8,11 +8,15 @@ import React, {
     TouchableOpacity,
     View
 } from 'react-native';
+import Relay from 'react-relay';
 
 import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux';
 import {currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
+import colors from '../../colors';
+import NavbarButton from './NavbarButton';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import {episodeShareLink} from '../../utils/urls';
 import {getViewerId} from '../../utils/relay';
@@ -23,34 +27,12 @@ class ShareButton extends Component {
 
     static defaultProps = {};
 
-    //shareMoment() {
-    //    let {podcastId, episodeId} = this.props;
-    //    let episodeTime = Math.round(currentTime$(store.getState()));
-    //    Mixpanel.trackWithProperties('Share Moment (in episode)', {
-    //        podcastId,
-    //        episodeId,
-    //        episodeTime
-    //    });
-    //}
-    //
-    //shareClip() {
-    //    let {podcastId, episodeId} = this.props;
-    //    let episodeTime = Math.round(currentTime$(store.getState()));
-    //    Mixpanel.trackWithProperties('Share Clip (from episode)', {
-    //        podcastId,
-    //        episodeId,
-    //        episodeTime
-    //        //duration: duration/1000
-    //    });
-    //}
-
-
     shareEpisode() {
-        let {podcastId, episodeId} = this.props;
         let episodeTime = Math.round(currentTime$(store.getState()));
         let viewerId = getViewerId();
         // Build the episode link
-        const url = episodeShareLink(podcastId, episodeId, viewerId);
+        const url = episodeShareLink(this.props.podcast.id, this.props.episode.id, viewerId);
+        //console.info(url, episodeTime)
         // Show the share sheet
         ActionSheetIOS.showShareActionSheetWithOptions({
             url
@@ -60,48 +42,23 @@ class ShareButton extends Component {
                 if (success) {
                     console.info('shared episode via ', method);
                     Mixpanel.trackWithProperties('Shared episode link via share sheet', {
+                        episode: this.props.episode.id,
                         method
                     });
                 }
             }
         );
         Mixpanel.trackWithProperties('Pressed share episode button', {
-            podcastId,
-            episodeId,
+            episode: this.props.episode.id,
             episodeTime
-        });
-    }
-
-    recommend() {
-        let {podcastId, episodeId} = this.props;
-        let episodeTime = Math.round(currentTime$(store.getState()));
-        Mixpanel.trackWithProperties('Recommend Episode', {
-            podcastId,
-            episodeId,
-            episodeTime
-        });
-    }
-
-    showShareChoices() {
-        let options = [
-            'Recommend to friends',
-            'Get share link',
-            'Cancel'
-        ];
-        ActionSheetIOS.showActionSheetWithOptions({
-            options,
-            cancelButtonIndex: 2
-        }, (idx) => {
-            if (idx === 0) this.recommend();
-            else if (idx === 1) this.shareEpisode();
         });
     }
 
     render() {
         return (
-            <TouchableOpacity style={styles.wrapper} onPress={this.showShareChoices.bind(this)}>
-                <Image style={styles.icon} source={require('image!share')}/>
-            </TouchableOpacity>
+            <NavbarButton onPress={this.shareEpisode.bind(this)}>
+                <Icon name="ios-upload-outline" color={colors.darkGrey} size={28}/>
+            </NavbarButton>
         );
     }
 }
@@ -123,4 +80,19 @@ let styles = StyleSheet.create({
     }
 });
 
-export default connect()(ShareButton);
+let connectedShareButton = connect()(ShareButton);
+
+export default Relay.createContainer(connectedShareButton, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                id
+            }
+        `,
+        podcast: () => Relay.QL`
+            fragment on Podcast {
+                id
+            }
+        `
+    }
+});

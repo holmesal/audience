@@ -14,16 +14,18 @@ import store from '../../redux/create';
 import {hidePlayer} from '../../redux/modules/player';
 import {showPodcastInfo} from '../../redux/modules/podcastInfo';
 import colors from '../../colors';
+import NavbarButton from './NavbarButton';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-class ActionButton extends Component {
+class MoreButton extends Component {
 
     static propTypes = {};
 
     static defaultProps = {};
 
     showActions() {
+        console.info(this, window)
         ActionSheetIOS.showActionSheetWithOptions({
             options: [
                 'View show',
@@ -42,30 +44,17 @@ class ActionButton extends Component {
 
     render() {
         return (
-            <TouchableOpacity style={styles.wrapper} onPress={this.showActions.bind(this)}>
-                <Icon style={styles.icon} name="ios-more" size={32} color={colors.lightGrey}/>
-            </TouchableOpacity>
+            <NavbarButton onPress={this.showActions.bind(this)}>
+                <Icon name="ios-more" size={28} color={colors.darkGrey}/>
+            </NavbarButton>
         );
     }
 }
 
 let styles = StyleSheet.create({
-    wrapper: {
-        backgroundColor: 'transparent',
-        width: 60,
-        height: 60,
-        position: 'absolute',
-        top: 0,
-        right: 0
-    },
-    icon: {
-        position: 'absolute',
-        top: 24,
-        right: 20
-    }
 });
 
-export default Relay.createContainer(ActionButton, {
+export default Relay.createContainer(MoreButton, {
     fragments: {
         podcast: () => Relay.QL`
             fragment on Podcast {

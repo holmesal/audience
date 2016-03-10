@@ -16,6 +16,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import NavbarButton from './NavbarButton';
 
 import RecommendButton from './RecommendButton';
+import MoreButton from './MoreButton';
+import ShareButton from './ShareButton';
 
 class Navbar extends Component {
 
@@ -31,17 +33,7 @@ class Navbar extends Component {
         store.dispatch(hidePlayer());
     }
 
-    recommend() {
-        if (!this.props.episode.viewerHasRecommended) {
-
-        }
-    }
-
     share() {
-
-    }
-
-    more() {
 
     }
 
@@ -56,17 +48,18 @@ class Navbar extends Component {
 
                 <View style={{flex: 1}} />
 
-                <NavbarButton onPress={this.share.bind(this)}>
-                    <Icon name="ios-upload-outline" color={colors.darkGrey} size={iconSize}/>
-                </NavbarButton>
+                <ShareButton
+                    episode={this.props.episode}
+                    podcast={this.props.podcast}
+                />
 
                 <RecommendButton
                     episode={this.props.episode}
                 />
 
-                <NavbarButton onPress={this.more.bind(this)}>
-                    <Icon name="ios-more" color={colors.darkGrey} size={iconSize}/>
-                </NavbarButton>
+                <MoreButton
+                    podcast={this.props.podcast}
+                />
 
             </View>
         );
@@ -89,6 +82,13 @@ export default Relay.createContainer(Navbar, {
         episode: () => Relay.QL`
             fragment on Episode {
                 ${RecommendButton.getFragment('episode')}
+                ${ShareButton.getFragment('episode')}
+            }
+        `,
+        podcast: () => Relay.QL`
+            fragment on Podcast {
+                ${MoreButton.getFragment('podcast')}
+                ${ShareButton.getFragment('podcast')}
             }
         `
     }
