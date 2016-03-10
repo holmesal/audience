@@ -23,7 +23,7 @@ import EpisodePlayer from './EpisodePlayer';
 import Info from './Info';
 
 import Navbar from './Navbar';
-import Annotations from './Annotations';
+import Annotations from './../Annotations/Annotations';
 import CompactScrubber from './CompactScrubber';
 import Compose from './Compose';
 

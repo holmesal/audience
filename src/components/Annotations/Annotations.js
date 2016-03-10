@@ -11,6 +11,7 @@ import React, {
 import Relay from 'react-relay';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import Annotation from './Annotation';
+import PlaceKeeper from './PlaceKeeper';
 
 class Annotations extends Component {
 
@@ -18,7 +19,7 @@ class Annotations extends Component {
         super(props);
         this.ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged.bind(this)})
         this.state = {
-            dataSource: this.ds.cloneWithRows(props.episode.annotations.edges)
+            dataSource: this.ds.cloneWithRows(props.episode.annotations.edges.slice().reverse())
         };
     }
 
@@ -33,7 +34,7 @@ class Annotations extends Component {
     componentWillReceiveProps(nextProps) {
         console.info('setting new datasource!')
         this.setState({
-            dataSource: this.ds.cloneWithRows(nextProps.episode.annotations.edges)
+            dataSource: this.ds.cloneWithRows(nextProps.episode.annotations.edges.slice().reverse())
         });
     }
 
@@ -50,14 +51,21 @@ class Annotations extends Component {
     }
 
     render() {
+        console.info(this.state.dataSource)
         return (
-            <ListView
-                ref={component => this._scrollView = component}
-                renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
-                style={styles.wrapper}
-                dataSource={this.state.dataSource}
-                renderRow={(edge) => <Annotation key={edge.node.id} annotation={edge.node} />}
-            />
+            <View style={styles.wrapper}>
+                <ListView
+                    ref={component => this._scrollView = component}
+                    renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
+                    style={styles.wrapper}
+                    dataSource={this.state.dataSource}
+                    renderRow={(edge) => <Annotation key={edge.node.id} annotation={edge.node} />}
+                />
+                <PlaceKeeper
+                    edges={this.props.episode.annotations.edges}
+                    onChangeLastSeenIdx={idx => console.info('new last seen idx', idx)}
+                />
+            </View>
         );
     }
 }
@@ -76,6 +84,7 @@ export default Relay.createContainer(Annotations, {
                     edges {
                         node {
                             id
+                            time
                             ${Annotation.getFragment('annotation')}
                         }
                     }
