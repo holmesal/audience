@@ -25,6 +25,7 @@ import Info from './Info';
 import Navbar from './Navbar';
 import Annotations from './Annotations';
 import CompactScrubber from './CompactScrubber';
+import Compose from './Compose';
 
 class Player extends Component {
 
@@ -85,11 +86,18 @@ class Player extends Component {
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
+
                 <Navbar
                     episode={this.props.episode}
                     podcast={this.props.episode.podcast}
                 />
+
                 <Annotations />
+
+                <Compose
+                    episode={this.props.episode}
+                />
+
                 <CompactScrubber
                     duration={this.state.duration}
                     currentTime={this.state.currentTime}
@@ -100,6 +108,7 @@ class Player extends Component {
                     onScrubEnd={() => this.setState({scrubbing: false})}
                     onWaveformPress={this.handleWaveformPress.bind(this)}
                 />
+
                 <EpisodePlayer
                     ref="audio"
                     episode={this.props.episode}
@@ -109,6 +118,7 @@ class Player extends Component {
                     onCurrentTimeChange={currentTime => this.setState({currentTime})}
                     onSkip={this.handleSkip.bind(this)}
                 />
+
             </Animated.View>
         );
     }
@@ -186,6 +196,7 @@ export default Relay.createContainer(ConnectedPlayer, {
                 ${EpisodePlayer.getFragment('episode')}
                 ${Info.getFragment('episode')}
                 ${Navbar.getFragment('episode')}
+                ${Compose.getFragment('episode')}
                 podcast {
                     ${EpisodePlayer.getFragment('podcast')}
                     ${Navbar.getFragment('podcast')}
