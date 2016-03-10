@@ -16,7 +16,7 @@ import {player$, hidePlayer, pause, resume} from '../../redux/modules/player.js'
 import colors from '../../colors.js';
 import Scrubber from './Scrubber';
 import Controls from './Controls';
-import SocialButtons from './SocialButtons';
+//import SocialButtons from './SocialButtons';
 import ShareButton from './ShareButton';
 import CommentCompose from './CommentCompose';
 import AudioPlayer from './EpisodePlayer';
@@ -86,7 +86,9 @@ class Player extends Component {
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
-                <Navbar />
+                <Navbar
+                    episode={this.props.episode}
+                />
                 <Annotations />
                 <CompactScrubber
                     duration={this.state.duration}
@@ -111,55 +113,55 @@ class Player extends Component {
         );
     }
 
-    oldRender() {
-        if (!this.props.episode) {
-            console.warn('player got null episode :-(');
-            return <View />;
-        }
-        //console.info('player render!');
-        let pointerEvents = this.props.visible ? 'auto' : 'none';
-        return (
-            <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
-                <AudioPlayer
-                    ref="audio"
-                    episode={this.props.episode}
-                    podcast={this.props.episode.podcast}
-                    lastTargetTime={this.state.lastTargetTime}
-                    onDurationChange={duration => this.setState({duration})}
-                    onCurrentTimeChange={currentTime => this.setState({currentTime})}
-                    onSkip={this.handleSkip.bind(this)}
-                />
-                <Scrubber
-                    duration={this.state.duration}
-                    currentTime={this.state.currentTime}
-                    onSeek={lastTargetTime => this.setState({lastTargetTime})}
-                    hidePlayer={() => this.props.dispatch(hidePlayer())}
-                    onScrubStart={() => this.setState({scrubbing: true})}
-                    onScrubEnd={() => this.setState({scrubbing: false})}
-                />
-                <Controls
-                    onSkip={this.handleSkip.bind(this)}
-                />
-                <Info
-                    visible={!this.state.scrubbing}
-                    episode={this.props.episode}
-                />
-                {false && <ShareButton />}
-
-                <ActionButton
-                    podcast={this.props.episode.podcast}
-                />
-
-                <SocialButtons
-                    showCompose={() => this.setState({composeVisible: true})}
-                    episode={this.props.episode}
-                    podcast={this.props.episode.podcast}
-                    currentTime={this.state.currentTime}
-                />
-                <CommentCompose visible={this.state.composeVisible} hideCompose={() => this.setState({composeVisible: false})} />
-            </Animated.View>
-        );
-    }
+    //oldRender() {
+    //    if (!this.props.episode) {
+    //        console.warn('player got null episode :-(');
+    //        return <View />;
+    //    }
+    //    //console.info('player render!');
+    //    let pointerEvents = this.props.visible ? 'auto' : 'none';
+    //    return (
+    //        <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
+    //            <AudioPlayer
+    //                ref="audio"
+    //                episode={this.props.episode}
+    //                podcast={this.props.episode.podcast}
+    //                lastTargetTime={this.state.lastTargetTime}
+    //                onDurationChange={duration => this.setState({duration})}
+    //                onCurrentTimeChange={currentTime => this.setState({currentTime})}
+    //                onSkip={this.handleSkip.bind(this)}
+    //            />
+    //            <Scrubber
+    //                duration={this.state.duration}
+    //                currentTime={this.state.currentTime}
+    //                onSeek={lastTargetTime => this.setState({lastTargetTime})}
+    //                hidePlayer={() => this.props.dispatch(hidePlayer())}
+    //                onScrubStart={() => this.setState({scrubbing: true})}
+    //                onScrubEnd={() => this.setState({scrubbing: false})}
+    //            />
+    //            <Controls
+    //                onSkip={this.handleSkip.bind(this)}
+    //            />
+    //            <Info
+    //                visible={!this.state.scrubbing}
+    //                episode={this.props.episode}
+    //            />
+    //            {false && <ShareButton />}
+    //
+    //            <ActionButton
+    //                podcast={this.props.episode.podcast}
+    //            />
+    //
+    //            <SocialButtons
+    //                showCompose={() => this.setState({composeVisible: true})}
+    //                episode={this.props.episode}
+    //                podcast={this.props.episode.podcast}
+    //                currentTime={this.state.currentTime}
+    //            />
+    //            <CommentCompose visible={this.state.composeVisible} hideCompose={() => this.setState({composeVisible: false})} />
+    //        </Animated.View>
+    //    );
+    //}
 }
 
 let styles = StyleSheet.create({
@@ -181,11 +183,10 @@ export default Relay.createContainer(ConnectedPlayer, {
         episode: () => Relay.QL`
             fragment on Episode {
                 id
-                ${SocialButtons.getFragment('episode')}
                 ${AudioPlayer.getFragment('episode')}
                 ${Info.getFragment('episode')}
+                ${Navbar.getFragment('episode')}
                 podcast {
-                    ${SocialButtons.getFragment('podcast')}
                     ${AudioPlayer.getFragment('podcast')}
                     ${ActionButton.getFragment('podcast')}
                 }

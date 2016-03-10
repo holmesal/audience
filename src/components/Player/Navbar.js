@@ -7,12 +7,17 @@ import React, {
     Text,
     View
 } from 'react-native';
+import Relay from 'react-relay';
+import store from '../../redux/create';
+import {hidePlayer} from '../../redux/modules/player';
 
 import colors from '../../colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NavbarButton from './NavbarButton';
 
-export default class Navbar extends Component {
+import RecommendButton from './RecommendButton';
+
+class Navbar extends Component {
 
     static propTypes = {};
 
@@ -23,11 +28,13 @@ export default class Navbar extends Component {
     }
 
     close() {
-
+        store.dispatch(hidePlayer());
     }
 
     recommend() {
+        if (!this.props.episode.viewerHasRecommended) {
 
+        }
     }
 
     share() {
@@ -53,9 +60,9 @@ export default class Navbar extends Component {
                     <Icon name="ios-upload-outline" color={colors.darkGrey} size={iconSize}/>
                 </NavbarButton>
 
-                <NavbarButton onPress={this.recommend.bind(this)}>
-                    <Icon name="ios-heart-outline" color={colors.darkGrey} size={iconSize}/>
-                </NavbarButton>
+                <RecommendButton
+                    episode={this.props.episode}
+                />
 
                 <NavbarButton onPress={this.more.bind(this)}>
                     <Icon name="ios-more" color={colors.darkGrey} size={iconSize}/>
@@ -74,5 +81,15 @@ let styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: colors.lightBorder,
         height: 66
+    }
+});
+
+export default Relay.createContainer(Navbar, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                ${RecommendButton.getFragment('episode')}
+            }
+        `
     }
 });

@@ -3,13 +3,21 @@ import {getViewerId} from '../utils/relay';
 
 export default class RecommendEpisodeMutation extends Relay.Mutation {
 
+    static fragments = {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                id
+            }
+        `
+    };
+
     getMutation() {
         return Relay.QL`mutation { recommendEpisode }`;
     }
 
     getVariables() {
         return {
-            episodeId: this.props.episodeId,
+            episodeId: this.props.episode.id,
             review: this.props.review
         }
     }
@@ -30,7 +38,7 @@ export default class RecommendEpisodeMutation extends Relay.Mutation {
         return [{
             type: 'FIELDS_CHANGE',
             fieldIDs: {
-                episode: this.props.episodeId,
+                episode: this.props.episode.id,
                 viewer: getViewerId()
             }
         }]
@@ -39,7 +47,7 @@ export default class RecommendEpisodeMutation extends Relay.Mutation {
     getOptimisticResponse() {
         return {
             episode: {
-                id: this.props.episodeId,
+                id: this.props.episode.id,
                 viewerHasRecommended: true
             }
         }
