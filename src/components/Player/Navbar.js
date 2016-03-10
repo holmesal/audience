@@ -24,6 +24,7 @@ export default class Navbar extends Component {
     render() {
         return (
             <View style={styles.wrapper}>
+
             </View>
         );
     }

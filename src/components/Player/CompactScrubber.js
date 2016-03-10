@@ -40,7 +40,8 @@ class CompactScrubber extends Component {
         dashOpacity: new Animated.Value(0),
         remainingOpacity: new Animated.Value(1),
         waveformWidth: 1173,
-        waveformScaleY: new Animated.Value(1)
+        waveformScaleY: new Animated.Value(1),
+        hintOpacity: new Animated.Value(1)
     };
 
     _touching = false;
@@ -129,6 +130,12 @@ class CompactScrubber extends Component {
         // Grow/shrink the waveform based on playing state
         if (this.props.playing) Animated.spring(this.state.waveformScaleY, { toValue: 1 }).start();
         else Animated.spring(this.state.waveformScaleY, { toValue: 0.1 }).start();
+
+        // Fade the hint
+        Animated.timing(this.state.hintOpacity, {
+            toValue: 1 - (this.state.frac/0.03),
+            duration: 50
+        }).start()
     }
 
     handleUpdatedCurrentTime() {
@@ -315,6 +322,11 @@ class CompactScrubber extends Component {
                     monospace
                     negative
                 />
+                
+                <Animated.View style={[styles.hintWrapper, {opacity: this.state.hintOpacity}]}>
+                    <Text style={[styles.hint, {marginBottom: 4}]}>Tap to {this.props.playing ? 'pause' : 'play'}</Text>
+                    <Text style={styles.hint}>Drag to seek</Text>
+                </Animated.View>
             </View>
         );
     }
@@ -424,7 +436,22 @@ let styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    current: {}
+    current: {},
+
+    hintWrapper: {
+        position: 'absolute',
+        backgroundColor: 'transparent',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        paddingLeft: 20
+    },
+    hint: {
+        fontSize: 12,
+        fontFamily: 'System',
+        color: '#A3A3A3'
+    }
 });
 
 export default CompactScrubber;
