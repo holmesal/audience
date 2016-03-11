@@ -8,6 +8,7 @@ import React, {
     Text,
     View
 } from 'react-native';
+import _ from 'lodash';
 import Relay from 'react-relay';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import Annotation from './Annotation';
@@ -17,7 +18,8 @@ class Annotations extends Component {
 
     constructor(props) {
         super(props);
-        this.ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged.bind(this)})
+        this.ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged.bind(this)});
+        this.rows = {};
         this.state = {
             dataSource: this.ds.cloneWithRows(props.episode.annotations.edges.slice().reverse())
         };
@@ -50,20 +52,34 @@ class Annotations extends Component {
         return r1 !== r2;
     }
 
+    renderRow(edge) {
+        console.info(this.rows, edge.node.id)
+        return (
+            <Annotation ref={(row) => {this.rows[edge.node.id] = 'hey'}} annotation={edge.node} />
+        )
+    }
+
+    scrollToLastSeen(idx) {
+        console.info('new last seen idx', idx);
+        console.info(this._scrollView);
+    }
+
     render() {
-        console.info(this.state.dataSource)
+        console.info(this.state.dataSource);
+        // Fake edges to test placekeeper
+        //this.props.episode.annotations.edges = _.map(_.range(10000000), i => ({node: {time: i/1000}}));
         return (
             <View style={styles.wrapper}>
                 <ListView
                     ref={component => this._scrollView = component}
-                    renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
+                    renderScrollComponent={props => <InvertibleScrollView {...props} inverted/>}
                     style={styles.wrapper}
                     dataSource={this.state.dataSource}
-                    renderRow={(edge) => <Annotation key={edge.node.id} annotation={edge.node} />}
+                    renderRow={this.renderRow.bind(this)}
                 />
                 <PlaceKeeper
                     edges={this.props.episode.annotations.edges}
-                    onChangeLastSeenIdx={idx => console.info('new last seen idx', idx)}
+                    onChangeLastSeenIdx={this.scrollToLastSeen.bind(this)}
                 />
             </View>
         );
