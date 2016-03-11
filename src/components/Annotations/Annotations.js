@@ -21,7 +21,7 @@ class Annotations extends Component {
         super(props);
         this.ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged.bind(this)});
         this.state = {
-            dataSource: this.ds.cloneWithRows(props.episode.annotations.edges.slice().reverse())
+            dataSource: this.ds.cloneWithRows(props.episode.annotations.edges.slice())
         };
     }
 
@@ -34,12 +34,12 @@ class Annotations extends Component {
     };
 
     rows = {};
-    _cellOffsets = [];
+    _containerHeight = 0;
 
     componentWillReceiveProps(nextProps) {
         console.info('setting new datasource!')
         this.setState({
-            dataSource: this.ds.cloneWithRows(nextProps.episode.annotations.edges.slice().reverse())
+            dataSource: this.ds.cloneWithRows(nextProps.episode.annotations.edges.slice())
         });
     }
 
@@ -55,50 +55,58 @@ class Annotations extends Component {
         return r1 !== r2;
     }
 
-    //renderRow(edge) {
-    //    return (
-    //        <Annotation ref={(row) => {this.rows[edge.node.id] = row}} annotation={edge.node} onLayout={ev => console.info('layout', edge.node.id, ev.nativeEvent.layout)} />
-    //    )
-    //}
-
     renderRow(edge) {
         return (
-            <View style={{height: 100}} ref={(row) => {this.rows[edge.node.id] = row}} annotation={edge.node}><Text>hey</Text></View>
+            <Annotation ref={(row) => {this.rows[edge.node.id] = row}} annotation={edge.node} onLayout={ev => console.info('layout', edge.node.id, ev.nativeEvent.layout)} />
         )
     }
 
+    //renderRow(edge) {
+    //    return (
+    //        <View style={{height: 100}} ref={(row) => {this.rows[edge.node.id] = row}} annotation={edge.node}><Text>hey</Text></View>
+    //    )
+    //}
+
     handleCellLayout(idx, ev) {
         console.info('annotations saw child layout', idx, ev);
-        this._cellOffsets[idx] = ev.y;
-
     }
 
     scrollToLastSeen(idx) {
         console.info('new last seen idx', idx);
-        let offset = this._cellOffsets[idx];
-        if (!offset && offset != 0) console.warn(`no cell offset found for cell at index: ${idx}`, this._cellOffsets);
-        else {
-            console.info('scrolling to ' + offset);
-            this._scrollView.scrollTo({y: offset});
+        let edge = this.props.episode.annotations.edges[idx];
+        if (!edge) {
+            console.warn(`oh snap, edge doesn't exist for idx: ${idx}`);
+        } else {
+            let id = edge.node.id;
+            let com = this.rows[id];
+            console.info('scrolling to ' + id, com);
+            //com.refs.component.measure((fx, fy, w, h, px, py) => {
+            //    console.log('Component width is: ' + width)
+            //    console.log('Component height is: ' + height)
+            //    console.log('X offset to frame: ' + fx)
+            //    console.log('Y offset to frame: ' + fy)
+            //    console.log('X offset to page: ' + px)
+            //    console.log('Y offset to page: ' + py)
+            //});
+            var handle = React.findNodeHandle(com);
+            UIManager.measureLayoutRelativeToParent(handle, (e) => {console.error(e)}, (x, y, w, h) => {
+                console.log('offset', x, y, w, h);
+                let scrollTarget = y - this._containerHeight + h;
+                console.info('scrolLTarget', scrollTarget);
+                this._scrollView.scrollTo({y: scrollTarget});
+            });
         }
-        //let edge = this.props.episode.annotations.edges[idx];
-        //if (!edge) {
-        //    console.warn(`oh snap, edge doesn't exist for idx: ${idx}`);
-        //} else {
-        //    let id = edge.node.id;
-        //    let com = this.rows[id];
-        //}
     }
 
     render() {
         //console.info(this.state.dataSource);
         // Fake edges to test placekeeper
         //this.props.episode.annotations.edges = _.map(_.range(10000000), i => ({node: {time: i/1000}}));
+        //            renderScrollComponent={props => <InvertibleScrollView {...props} inverted onCellLayout={this.handleCellLayout.bind(this)}/>}
         return (
-            <View style={styles.wrapper}>
+            <View style={styles.wrapper} onLayout={ev => {this._containerHeight = ev.nativeEvent.layout.height}}>
                 <ListView
                     ref={component => this._scrollView = component}
-                    renderScrollComponent={props => <InvertibleScrollView {...props} inverted onCellLayout={this.handleCellLayout.bind(this)} onLayout={console.info}/>}
                     style={styles.wrapper}
                     dataSource={this.state.dataSource}
                     renderRow={this.renderRow.bind(this)}
