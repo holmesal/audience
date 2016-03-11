@@ -1,5 +1,6 @@
 import React, {
     Component,
+    Dimensions,
     Image,
     ListView,
     PropTypes,
@@ -14,6 +15,8 @@ import Relay from 'react-relay';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import Annotation from './Annotation';
 import PlaceKeeper from './PlaceKeeper';
+import WelcomeView from './WelcomeView';
+import Comment from './Comment';
 
 class Annotations extends Component {
 
@@ -21,7 +24,8 @@ class Annotations extends Component {
         super(props);
         this.ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged.bind(this)});
         this.state = {
-            dataSource: this.ds.cloneWithRows(props.episode.annotations.edges.slice())
+            dataSource: this.ds.cloneWithRows(this.getDataSourceFromAnnotations(props.episode.annotations.edges)),
+            containerHeight: Dimensions.get('window').height - 66 - 52 - 66
         };
     }
 
@@ -34,20 +38,22 @@ class Annotations extends Component {
     };
 
     rows = {};
-    _containerHeight = 0;
+    //containerHeight = Dimensions.get('window').height - 66 - 52 - 66;
 
     componentWillReceiveProps(nextProps) {
         console.info('setting new datasource!')
         this.setState({
-            dataSource: this.ds.cloneWithRows(nextProps.episode.annotations.edges.slice())
+            dataSource: this.ds.cloneWithRows(this.getDataSourceFromAnnotations(nextProps.episode.annotations.edges))
         });
     }
 
-    componentDidMount() {
-        console.info(this._scrollView)
-        //setTimeout(() => {
-        //    this._scrollView.scrollResponderScrollTo(0,200)
-        //}, 1000)
+    getDataSourceFromAnnotations(annotations) {
+        let rows = [
+            {type: 'welcome-row'},
+            {type: 'fake-description-row'}
+        ].concat(annotations);
+        console.info(rows);
+        return rows;
     }
 
 
@@ -56,19 +62,14 @@ class Annotations extends Component {
     }
 
     renderRow(edge) {
-        return (
-            <Annotation ref={(row) => {this.rows[edge.node.id] = row}} annotation={edge.node} onLayout={ev => console.info('layout', edge.node.id, ev.nativeEvent.layout)} />
-        )
-    }
-
-    //renderRow(edge) {
-    //    return (
-    //        <View style={{height: 100}} ref={(row) => {this.rows[edge.node.id] = row}} annotation={edge.node}><Text>hey</Text></View>
-    //    )
-    //}
-
-    handleCellLayout(idx, ev) {
-        console.info('annotations saw child layout', idx, ev);
+        if (edge.type === 'welcome-row') {
+            return <WelcomeView episode={this.props.episode} style={{height: this.state.containerHeight}}/>
+        } else if (edge.type === 'fake-description-row') {
+            let avatar = <Image source={{uri: this.props.episode.podcast.artwork}} style={{width: 32, height: 32, borderRadius: 32/2}} />
+            return <Comment name={this.props.episode.podcast.name} text={this.props.episode.description} avatar={avatar} onLayout={(ev) => this._scrollView.scrollTo({y: ev.nativeEvent.layout.height})}/>
+        } else {
+            return <Annotation ref={(row) => {this.rows[edge.node.id] = row}} annotation={edge.node} onLayout={ev => console.info('layout', edge.node.id, ev.nativeEvent.layout)} />
+        }
     }
 
     scrollToLastSeen(idx) {
@@ -82,7 +83,7 @@ class Annotations extends Component {
             var handle = React.findNodeHandle(com);
             UIManager.measureLayoutRelativeToParent(handle, (e) => {console.error(e)}, (x, y, w, h) => {
                 console.log('offset', x, y, w, h);
-                let scrollTarget = y - this._containerHeight + h;
+                let scrollTarget = y - this.state.containerHeight + h;
                 console.info('scrolLTarget', scrollTarget);
                 this._scrollView.scrollTo({y: scrollTarget});
             });
@@ -95,7 +96,7 @@ class Annotations extends Component {
         //this.props.episode.annotations.edges = _.map(_.range(10000000), i => ({node: {time: i/1000}}));
         //            renderScrollComponent={props => <InvertibleScrollView {...props} inverted onCellLayout={this.handleCellLayout.bind(this)}/>}
         return (
-            <View style={styles.wrapper} onLayout={ev => {this._containerHeight = ev.nativeEvent.layout.height}}>
+            <View style={styles.wrapper} onLayout={ev => this.setState({containerHeight: ev.nativeEvent.layout.height})}>
                 <ListView
                     ref={component => this._scrollView = component}
                     style={styles.wrapper}
@@ -118,9 +119,13 @@ let styles = StyleSheet.create({
 });
 
 export default Relay.createContainer(Annotations, {
+    initialVariables: {
+        size: 'small'
+    },
     fragments: {
         episode: () => Relay.QL`
             fragment on Episode {
+                description
                 annotations(first: 100) {
                     edges {
                         node {
@@ -129,6 +134,11 @@ export default Relay.createContainer(Annotations, {
                             ${Annotation.getFragment('annotation')}
                         }
                     }
+                }
+                ${WelcomeView.getFragment('episode')}
+                podcast {
+                    artwork(size:$size)
+                    name
                 }
             }
         `
