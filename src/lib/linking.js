@@ -1,5 +1,5 @@
 import {
-    LinkingIOS
+    Linking
 } from 'react-native';
 import UrlPattern from 'url-pattern';
 import {ROOT} from '../utils/urls';
@@ -26,11 +26,13 @@ function handleLink(url) {
 }
 
 // Listen for deeplinks while app is running
-LinkingIOS.addEventListener('url', (ev) => {
+Linking.addEventListener('url', (ev) => {
     console.info('got url event', ev);
     handleLink(ev.url);
 });
 
 // If the app was launched from a deeplink, handle it
-let initialUrl = LinkingIOS.popInitialURL();
-if (initialUrl) handleLink(initialUrl);
+Linking.getInitialURL().then(url => {
+    console.info(url)
+    if (url) handleLink(url);
+});

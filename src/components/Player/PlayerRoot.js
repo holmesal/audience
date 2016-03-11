@@ -4,7 +4,7 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 
 import EpisodeRoute from '../../routes/EpisodeRoute';

@@ -7,7 +7,7 @@ import React, {
     Text,
     View
 } from 'react-native';
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 
 import {checkLogin, auth$} from '../../redux/modules/auth';
 import Landing from './../Landing/Landing';

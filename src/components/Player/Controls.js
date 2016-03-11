@@ -13,7 +13,7 @@ import React, {
 import TouchableFade from '../common/TouchableFade';
 
 import {pause, resume, controls$} from '../../redux/modules/player.js';
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 
 class Controls extends Component {
 

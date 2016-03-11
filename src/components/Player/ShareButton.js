@@ -10,7 +10,7 @@ import React, {
 } from 'react-native';
 
 import Mixpanel from 'react-native-mixpanel';
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 import {currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 

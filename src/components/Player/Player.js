@@ -9,7 +9,7 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 import {player$, hidePlayer} from '../../redux/modules/player.js';
 import colors from '../../colors.js';
 import Scrubber from './Scrubber';

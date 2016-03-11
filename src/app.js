@@ -8,7 +8,7 @@ import React, {
     AppRegistry,
     Component,
     StyleSheet,
-    StatusBarIOS,
+    StatusBar,
     Text,
     View
 } from 'react-native';
@@ -38,7 +38,7 @@ if (__DEV__) {
 export default class App extends Component {
 
     componentDidMount() {
-        StatusBarIOS.setStyle('light-content');
+        StatusBar.setBarStyle('light-content');
     }
 
     render() {

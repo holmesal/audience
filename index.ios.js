@@ -11,7 +11,7 @@ import React, {
 import App from './src/app';
 
 // Provider
-import {Provider} from 'react-redux/native';
+import {Provider} from 'react-redux';
 import store from './src/redux/create';
 
 class Audience extends Component {
@@ -21,7 +21,7 @@ class Audience extends Component {
     render() {
         return (
             <Provider store={store}>
-                {() => <App />}
+                <App />
             </Provider>
         );
     }

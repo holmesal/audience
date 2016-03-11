@@ -3,7 +3,7 @@ import React, {
     AppRegistry,
     Component,
     StyleSheet,
-    StatusBarIOS,
+    StatusBar,
     Text,
     View
 } from 'react-native';
@@ -11,7 +11,7 @@ import ScrollableTabView from 'react-native-scrollable-tab-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import _ from 'lodash';
 
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 import {focus, blur} from '../../redux/modules/search';
 import {updateCurrentTab, tabs$} from '../../redux/modules/tabs';
 import store from '../../redux/create';

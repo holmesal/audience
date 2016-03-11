@@ -7,7 +7,7 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 import {audio$, resume, updatePlaying, updateCurrentTime, updateDuration} from '../../redux/modules/player.js';
 import ListenToEpisodeMutation from '../../mutations/ListenToEpisode';
 import {showRecommendNotification} from '../../notifications';

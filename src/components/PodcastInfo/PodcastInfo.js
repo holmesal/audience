@@ -18,7 +18,7 @@ import EpisodeList from './EpisodeList';
 import Spinner from 'react-native-spinkit';
 import FollowToggle from './FollowToggle';
 
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 import {podcastInfo$, hidePodcastInfo, showPodcastInfo} from '../../redux/modules/podcastInfo';
 
 const OFFSCREEN = Dimensions.get('window').height + 50;

@@ -8,7 +8,7 @@ import React, {
     View
 } from 'react-native';
 
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 import {updateQuery, query$, focus$} from '../../redux/modules/search';
 import {createSelector} from 'reselect';
 
