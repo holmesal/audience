@@ -77,6 +77,7 @@ class Annotations extends Component {
         let edge = this.props.episode.annotations.edges[idx];
         if (!edge) {
             console.warn(`oh snap, edge doesn't exist for idx: ${idx}`);
+            this._scrollView.scrollTo({y: 0});
         } else {
             let id = edge.node.id;
             let com = this.rows[id];
@@ -102,6 +103,7 @@ class Annotations extends Component {
                     style={styles.wrapper}
                     dataSource={this.state.dataSource}
                     renderRow={this.renderRow.bind(this)}
+                    scrollEnabled={false}
                 />
                 <PlaceKeeper
                     edges={this.props.episode.annotations.edges}
