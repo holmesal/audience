@@ -9,7 +9,7 @@ import React, {
 } from 'react-native';
 
 import {connect} from 'react-redux';
-import {updateQuery, query$, focus$} from '../../redux/modules/search';
+import {updateQuery, query$, focus$, focus, blur} from '../../redux/modules/search';
 import {createSelector} from 'reselect';
 
 import colors from '../../colors';
@@ -22,7 +22,7 @@ class SearchBar extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.focus != this.props.focus) {
-            if (nextProps.focus) this.focus()
+            if (nextProps.focus) this.focus();
             else this.blur()
         }
     }
@@ -47,10 +47,12 @@ class SearchBar extends Component {
                     placeholderTextColor={colors.grey}
                     clearButtonMode="while-editing"
                     returnKeyType="done"
-                    autoCorrect={false}
+                    autoCorrect={true}
                     value={this.props.query}
                     onChangeText={(query) => this.props.dispatch(updateQuery(query))}
                     selectTextOnFocus
+                    onFocus={() => this.props.dispatch(focus())}
+                    onBlur={() => this.props.dispatch(blur())}
                 />
             </View>
         );

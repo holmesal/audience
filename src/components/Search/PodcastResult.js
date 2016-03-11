@@ -12,6 +12,7 @@ import PodcastActionSheet from '../common/PodcastActionSheet';
 
 import store from '../../redux/create';
 import {showPodcastInfo} from '../../redux/modules/podcastInfo';
+import {blur} from '../../redux/modules/search';
 
 import ResultItem from './ResultItem';
 
@@ -20,6 +21,11 @@ class PodcastResult extends Component {
     state = {
         actionSheetVisible: false
     };
+
+    handlePress() {
+        store.dispatch(blur());
+        store.dispatch(showPodcastInfo(this.props.podcast.id));
+    }
 
     render() {
         return (
@@ -30,7 +36,7 @@ class PodcastResult extends Component {
                     secondary={'Podcast'}
                     photoUrl={this.props.podcast.artwork}
                     photoShape={'square'}
-                    onPress={() => store.dispatch(showPodcastInfo(this.props.podcast.id))}
+                    onPress={this.handlePress.bind(this)}
                     onLongPress={() => this.setState({actionSheetVisible: true})}
                 />
                 <PodcastActionSheet
