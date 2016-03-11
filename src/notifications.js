@@ -8,7 +8,7 @@ import RecommendEpisodeMutation from './mutations/RecommendEpisode';
 
 function recommend(episodeId, review) {
     console.info('recommending', episodeId, review);
-    Relay.Store.update(new RecommendEpisodeMutation({
+    Relay.Store.commitUpdate(new RecommendEpisodeMutation({
         episodeId,
         review
     }), {

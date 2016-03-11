@@ -79,15 +79,6 @@ class Annotations extends Component {
         } else {
             let id = edge.node.id;
             let com = this.rows[id];
-            console.info('scrolling to ' + id, com);
-            //com.refs.component.measure((fx, fy, w, h, px, py) => {
-            //    console.log('Component width is: ' + width)
-            //    console.log('Component height is: ' + height)
-            //    console.log('X offset to frame: ' + fx)
-            //    console.log('Y offset to frame: ' + fy)
-            //    console.log('X offset to page: ' + px)
-            //    console.log('Y offset to page: ' + py)
-            //});
             var handle = React.findNodeHandle(com);
             UIManager.measureLayoutRelativeToParent(handle, (e) => {console.error(e)}, (x, y, w, h) => {
                 console.log('offset', x, y, w, h);
