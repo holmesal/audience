@@ -136,6 +136,7 @@ export default Relay.createContainer(connectedEpisodePlayer, {
                 title
                 audioSource
                 viewerHasHeard
+                viewerHasRecommended
             }
         `,
         podcast: () => Relay.QL`
