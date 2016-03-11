@@ -35,7 +35,7 @@ class PodcastActionSheet extends Component {
     }
 
     toggleSubscribed() {
-        Relay.Store.update(new SubscribeToPodcastMutation({
+        Relay.Store.commitUpdate(new SubscribeToPodcastMutation({
             podcast: this.props.podcast
         }), {
             onFailure: (transaction) => {

@@ -37,7 +37,7 @@ class Compose extends Component {
         });
 
         // Commit the update
-        Relay.Store.update(mutation, {
+        Relay.Store.commitUpdate(mutation, {
             onSuccess: () => {
                 console.info('successfully annotated episode!');
                 // Clear the text

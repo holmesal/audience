@@ -55,7 +55,7 @@ class EpisodePlayer extends Component {
         ) {
             console.info('marking as listened!', this.props);
             this.setState({listenInFlight: true});
-            Relay.Store.update(new ListenToEpisodeMutation({
+            Relay.Store.commitUpdate(new ListenToEpisodeMutation({
                 episodeId: this.props.episode.id
             }), {
                 onFailure: (transaction) =>  {

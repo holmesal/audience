@@ -37,7 +37,7 @@ class RecommendButton extends Component {
 
     recommendMutation(review) {
         console.info('recommending', this.props.episode.id, review, Relay.Store.commitUpdate);
-        Relay.Store.update(new RecommendEpisodeMutation({
+        Relay.Store.commitUpdate(new RecommendEpisodeMutation({
             episode: this.props.episode,
             review
         }), {
