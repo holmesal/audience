@@ -11,7 +11,11 @@ import React, {
     View
 } from 'react-native';
 import _ from 'lodash';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+import {currentTime$} from '../../redux/modules/player';
 import Relay from 'react-relay';
+
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import Annotation from './Annotation';
 import PlaceKeeper from './PlaceKeeper';
@@ -41,10 +45,12 @@ class Annotations extends Component {
     //containerHeight = Dimensions.get('window').height - 66 - 52 - 66;
 
     componentWillReceiveProps(nextProps) {
-        console.info('setting new datasource!')
-        this.setState({
-            dataSource: this.ds.cloneWithRows(this.getDataSourceFromAnnotations(nextProps.episode.annotations.edges))
-        });
+        if (nextProps.episode.annotations != this.props.episode.annotations) {
+            console.info('setting new datasource!')
+            this.setState({
+                dataSource: this.ds.cloneWithRows(this.getDataSourceFromAnnotations(nextProps.episode.annotations.edges))
+            });
+        }
     }
 
     getDataSourceFromAnnotations(annotations) {
@@ -63,12 +69,17 @@ class Annotations extends Component {
 
     renderRow(edge) {
         if (edge.type === 'welcome-row') {
-            return <WelcomeView episode={this.props.episode} style={{height: this.state.containerHeight}}/>
+            return <WelcomeView episode={this.props.episode}
+                                style={{height: this.state.containerHeight}}/>
         } else if (edge.type === 'fake-description-row') {
-            let avatar = <Image source={{uri: this.props.episode.podcast.artwork}} style={{width: 32, height: 32, borderRadius: 32/2}} />
-            return <Comment name={this.props.episode.podcast.name} text={this.props.episode.description} avatar={avatar} onLayout={(ev) => this._scrollView.scrollTo({y: ev.nativeEvent.layout.height})}/>
+            let avatar = <Image source={{uri: this.props.episode.podcast.artwork}}
+                                style={{width: 32, height: 32, borderRadius: 32/2}}/>
+            return <Comment name={this.props.episode.podcast.name}
+                            text={this.props.episode.description}
+                            avatar={avatar} onLayout={(ev) => this._scrollView.scrollTo({y: ev.nativeEvent.layout.height})}/>
         } else {
-            return <Annotation ref={(row) => {this.rows[edge.node.id] = row}} annotation={edge.node} onLayout={ev => console.info('layout', edge.node.id, ev.nativeEvent.layout)} />
+            return <Annotation ref={(row) => {this.rows[edge.node.id] = row}}
+                               annotation={edge.node} />
         }
     }
 
@@ -81,7 +92,13 @@ class Annotations extends Component {
         } else {
             let id = edge.node.id;
             let com = this.rows[id];
+            console.info(com);
             var handle = React.findNodeHandle(com);
+            if (!handle) {
+                console.warn('no component - using HACKY SOLUTION OF WAITING 100ms', idx, com, id);
+                // Try again in 100ms
+                setTimeout(() => scrollToLastSeen(idx), 100);
+            }
             UIManager.measureLayoutRelativeToParent(handle, (e) => {console.error(e)}, (x, y, w, h) => {
                 console.log('offset', x, y, w, h);
                 let scrollTarget = y - this.state.containerHeight + h;
@@ -120,7 +137,9 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(Annotations, {
+let connectedAnnotations = connect(createSelector(currentTime$, currentTime => ({currentTime})))(Annotations);
+
+export default Relay.createContainer(connectedAnnotations, {
     initialVariables: {
         size: 'small'
     },
