@@ -195,7 +195,7 @@ class CompactScrubber extends Component {
 
         // Actually perform the scroll
         let targetX = this.props.currentTime / this.props.duration * this.state.waveformWidth;
-        this.refs.scroller.scrollTo(0, targetX);
+        this.refs.scroller.scrollTo({x: targetX});
 
         // After a bit, stop ignoring these scroll events
         clearTimeout(this._autoScrollCancelTimeout);

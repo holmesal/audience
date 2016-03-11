@@ -3,7 +3,7 @@ import React, {
     Image,
     PropTypes,
     StyleSheet,
-    StatusBarIOS,
+    StatusBar,
     Text,
     View
 } from 'react-native';
@@ -26,7 +26,7 @@ class Navbar extends Component {
     static defaultProps = {};
 
     componentDidMount() {
-        StatusBarIOS.setStyle('default');
+        StatusBar.setBarStyle('default');
     }
 
     close() {

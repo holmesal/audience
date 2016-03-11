@@ -4,6 +4,7 @@ import React, {
     PropTypes,
     StyleSheet,
     Text,
+    UIManager,
     View
 } from 'react-native';
 import Relay from 'react-relay';
