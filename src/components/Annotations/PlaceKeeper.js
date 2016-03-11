@@ -7,7 +7,7 @@ import React, {
     View
 } from 'react-native';
 import _ from 'lodash';
-import {connect} from 'react-redux/native';
+import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {currentTime$} from '../../redux/modules/player';
 import {prettyFormatTime} from '../../utils'

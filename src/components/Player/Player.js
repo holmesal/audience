@@ -10,8 +10,6 @@ import React, {
 import Relay from 'react-relay';
 
 import {connect} from 'react-redux';
-import {player$, hidePlayer} from '../../redux/modules/player.js';
-import {connect} from 'react-redux/native';
 import {player$, hidePlayer, pause, resume} from '../../redux/modules/player.js';
 import colors from '../../colors.js';
 import Scrubber from './Scrubber';
