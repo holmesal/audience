@@ -28,6 +28,7 @@ class RecommendButton extends Component {
             'Add a comment?',
             'This is optional.',
             [
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
                 {text: 'Recommend', onPress: this.recommendMutation.bind(this), style: 'default'},
             ]
         )
