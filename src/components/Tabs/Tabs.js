@@ -51,6 +51,7 @@ class Tabs extends Component {
                 tabBarUnderlineColor="#FFA726"
                 tabBarActiveTextColor="#FFA726"
                 tabBarInactiveTextColor="#fefefe"
+                contentProps={{keyboardShouldPersistTaps: true}}
                 onChangeTab={({i}) => {
                     let tabId = this.tabs[i].id;
                     if (tabId === 'search') {
