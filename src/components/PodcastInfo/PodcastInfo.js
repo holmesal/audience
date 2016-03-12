@@ -1,112 +1,67 @@
 import React, {
-    Animated,
     Component,
-    Dimensions,
     Image,
+    ListView,
     PropTypes,
-    ScrollView,
     StyleSheet,
     Text,
     View
 } from 'react-native';
 import Relay from 'react-relay';
-
 import PhotoHeader from './PhotoHeader';
 import TopBar from './TopBar';
 import colors from '../../colors';
-import EpisodeList from './EpisodeList';
-import Spinner from 'react-native-spinkit';
 import FollowToggle from './FollowToggle';
+import InfiniteScrollView from 'react-native-infinite-scroll-view';
+import EpisodeListItem from './EpisodeListItem';
 
 import {connect} from 'react-redux';
 import {podcastInfo$, hidePodcastInfo, showPodcastInfo} from '../../redux/modules/podcastInfo';
 
-const OFFSCREEN = Dimensions.get('window').height + 50;
+const EPISODE_RESULTS_PER_PAGE = 30;
 
 class PodcastInfo extends Component {
 
-    static propTypes = {};
+    constructor(props) {
+        super(props);
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.state = {
+            ds,
+            dataSource: ds.cloneWithRows(props.podcast.episodes.edges),
+            canLoadMore: false,
+            isLoadingMore: false
+        };
+    }
+
+    static propTypes = {
+        episodes: PropTypes.array,
+        doneAnimating: PropTypes.bool
+    };
 
     static defaultProps = {
-        doneAnimating: false
-        //podcast: {
-        //    artworkUrl600: 'http://is2.mzstatic.com/image/thumb/Music4/v4/c0/bb/52/c0bb5293-0e74-3bf7-6a2d-e8e18e8d80e4/source/600x600bb.jpg',
-        //    collectionName: 'Welcome to Night Vale'
-        //},
-        //visible: false
+
     };
 
-    state = {
-        opacity: new Animated.Value(0),
-        offset: new Animated.Value(OFFSCREEN)
-    };
-
-    componentDidMount() {
-        this.updateVisibility();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        this.updateVisibility();
-    }
-
-    updateVisibility() {
-        if (this.props.visible) {
-            Animated.timing(this.state.opacity, {
-                toValue: 1,
-                duration: 200
-            }).start();
-            Animated.spring(this.state.offset, {
-                toValue: 0,
-                tension: 32,
-                friction: 8
-            }).start(() => {
-                if (!this.state.doneAnimating) this.setState({doneAnimating: true})
+    componentWillReceiveProps(nextProps) {
+        if (this.props.podcast.episodes != nextProps.podcast.episodes) {
+            console.info('list of episodes changed!');
+            this.setState({
+                dataSource: this.state.ds.cloneWithRows(nextProps.podcast.episodes.edges),
+                isLoadingMore: false
             });
-        } else {
-            Animated.timing(this.state.opacity, {
-                toValue: 0,
-                duration: 500
-            }).start();
-            Animated.spring(this.state.offset, {
-                toValue: OFFSCREEN,
-                tension: 31,
-                friction: 9
-            }).start((end) => {
-                if (end.finished && this.state.doneAnimating) this.setState({doneAnimating: false})
-            });
+        }
+        // If the podcast id changes, scroll to the top
+        if (this.props.podcast.id != nextProps.podcast.id) {
+            this._scrollView.scrollTo({y: 0, animated: false});
         }
     }
 
-    renderListContent() {
-        return [
-            <FollowToggle
-                key="followToggle"
-                podcast={this.props.podcast}
-            />,
-            <EpisodeList
-                key="episodeList"
-                podcast={this.props.podcast}
-                loading={this.props.loading}
-                doneAnimating={this.state.doneAnimating}
-            />
-        ]
-    }
-
-    renderPodcastInfo() {
-        let content = this.props.loading ? this.renderLoading() : this.renderListContent();
+    renderEpisodeListItem(edge) {
         return (
-            <View style={{flex: 1}}>
-                <ScrollView contentContainerStyle={styles.scrollContent}>
-                    <PhotoHeader
-                        podcast={this.props.podcast}
-                        loading={this.props.loading}
-                    />
-                    {content}
-                </ScrollView>
-                <TopBar
-                    onBackPress={() => this.props.dispatch(hidePodcastInfo())}
-                />
-            </View>
+            <EpisodeListItem
+                episode={edge.node}
+                key={edge.node.id}
+            />
         )
     }
 
@@ -122,48 +77,76 @@ class PodcastInfo extends Component {
         )
     }
 
-    render() {
-        //console.info('podcast info props', this.props);
-        // If not visible, show nothing
-        //if (!this.props.visible) return <View />;
-
-        // If visible, show loading until podcast is loaded
-        //let view = this.props.podcast ? this.renderPodcastInfo() : this.renderLoading();
-        let view = this.renderPodcastInfo();
-        let pointerEvents = this.props.visible ? 'auto' : 'none';
+    renderHeader() {
         return (
-            <Animated.View style={[styles.wrapper, {opacity: this.state.opacity, transform: [{translateY: this.state.offset}]}]} pointerEvents={pointerEvents}>
-                {view}
-            </Animated.View>
-        );
+            <View>
+                <PhotoHeader
+                    podcast={this.props.podcast}
+                />
+                <FollowToggle
+                    key="followToggle"
+                    podcast={this.props.podcast}
+                />
+            </View>
+        )
+    }
+
+    loadMore() {
+        if (!this.state.isLoadingMore) {
+            console.info('loading more!');
+            this.props.relay.setVariables({
+                first: this.props.relay.variables.first + EPISODE_RESULTS_PER_PAGE
+            });
+            this.setState({isLoadingMore: true});
+        }
+    }
+
+    render() {
+        console.info('pageinfo', this.props.podcast.episodes.pageInfo)
+        return (
+            <View style={{flex: 1}}>
+                <ListView contentContainerStyle={styles.scrollContent}
+                          ref={com => this._scrollView = com}
+                          renderScrollComponent={props => <InfiniteScrollView {...props} />}
+                          dataSource={this.state.dataSource}
+                          renderRow={this.renderEpisodeListItem.bind(this)}
+                          renderHeader={this.renderHeader.bind(this)}
+                          canLoadMore={this.props.podcast.episodes.pageInfo.hasNextPage}
+                          onLoadMoreAsync={this.loadMore.bind(this)}
+                />
+            </View>
+        )
     }
 }
 
 let styles = StyleSheet.create({
     wrapper: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: colors.darkGrey,
-        opacity: 1,
-        paddingBottom: 0 // TODO - replace with tab bar padding
-    },
-    scrollContent: {
-        //paddingTop: 70
+        flex: 1
     }
 });
 
-let connectedPodcastInfo = connect(podcastInfo$)(PodcastInfo);
+let connectedPodcastInfo = connect()(PodcastInfo);
 export default Relay.createContainer(connectedPodcastInfo, {
+    initialVariables: {
+        first: EPISODE_RESULTS_PER_PAGE
+    },
     fragments: {
         podcast: () => Relay.QL`
             fragment on Podcast {
                 id
                 ${PhotoHeader.getFragment('podcast')}
-                ${EpisodeList.getFragment('podcast')}
                 ${FollowToggle.getFragment('podcast')}
+                episodes(first:$first) {
+                    edges {
+                        node {
+                            id
+                            ${EpisodeListItem.getFragment('episode')}
+                        }
+                    }
+                    pageInfo {
+                        hasNextPage
+                    }
+                }
             }
         `
     }

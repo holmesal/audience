@@ -8,7 +8,7 @@ import React, {
 } from 'react-native';
 
 import Tabs from './../Tabs/Tabs';
-import PodcastInfo from './../PodcastInfo/PodcastInfoRoot';
+import PodcastInfoWrapper from './../PodcastInfo/PodcastInfoWrapper';
 import Player from './../Player/PlayerRoot';
 import CompactPlayer from '../CompactPlayer/CompactPlayerRoot';
 
@@ -22,7 +22,7 @@ export default class Authenticated extends Component {
                 <CompactPlayer />
 
                 {/** Overlay views */}
-                <PodcastInfo />
+                <PodcastInfoWrapper />
                 <Player />
             </View>
         );
