@@ -7,8 +7,11 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-
+import moment from 'moment';
 import EpisodeCard from './EpisodeCard';
+import {MetaText} from '../../type';
+import colors from '../../colors';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 class Recommendation extends Component {
 
@@ -18,6 +21,15 @@ class Recommendation extends Component {
                 <Text style={styles.review}>"{this.props.recommendation.review}"</Text>
             )
         }
+    }
+
+    renderBottomRow() {
+        return (
+            <View style={styles.bottomRow}>
+                <Icon name="android-time" size={12} color={colors.grey} style={{marginRight: 6, marginBottom: -1}}/>
+                <MetaText>{moment(new Date(this.props.recommendation.created)).fromNow()}</MetaText>
+            </View>
+        )
     }
 
     render() {
@@ -39,6 +51,7 @@ class Recommendation extends Component {
                     style={styles.episodeCard}
                 />
                 {this.renderReview()}
+                {this.renderBottomRow()}
             </View>
         );
     }
@@ -77,6 +90,14 @@ let styles = StyleSheet.create({
         marginRight: 12,
         fontSize: 14,
         marginTop: 12
+    },
+    bottomRow: {
+        marginRight: 12,
+        marginTop: 12,
+        alignSelf: 'stretch',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        flexDirection: 'row'
     }
 });
 
@@ -95,6 +116,7 @@ export default Relay.createContainer(Recommendation, {
                     ${EpisodeCard.getFragment('episode')}
                 }
                 review
+                created
             }
         `
     }
