@@ -6,7 +6,7 @@ import React, {
 import Relay from 'react-relay';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-
+import LoadingSpinner from '../common/LoadingSpinner';
 import PodcastRoute from '../../routes/PodcastRoute';
 import PodcastInfo from './PodcastInfo';
 import RelayError from '../common/RelayError';
@@ -33,7 +33,13 @@ class PodcastInfoRoot extends Component {
                         <RelayError error={error} retry={retry} />
                     );
                 }}
-                renderLoading={() => <PodcastInfo loading={true} podcast={null} />}
+                renderLoading={() => {
+                    return (
+                        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                            <LoadingSpinner />
+                        </View>
+                    )
+                }}
             />
         )
     }
