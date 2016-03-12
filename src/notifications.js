@@ -1,5 +1,8 @@
 import NotificationActions from 'react-native-ios-notification-actions'
-import {PushNotificationIOS} from 'react-native';
+import {
+    AppStateIOS,
+    PushNotificationIOS
+} from 'react-native';
 import Relay from 'react-relay';
 import RecommendEpisodeMutation from './mutations/RecommendEpisode';
 
@@ -63,18 +66,30 @@ NotificationActions.updateCategories([myCategory]);
 
 // Show a local notification to recommend an episode
 export const showRecommendNotification = (episodeId) => {
-    console.info('showing recommend notification!');
-    PushNotificationIOS.presentLocalNotification({
-        alertBody: 'Would your friends dig this episode?',
-        alertAction: 'recommend',
-        userInfo: {
-            episodeId
-        },
-        category: 'RECOMMEND_EPISODE'
-    });
+    // TODO - disable this always-true when https://github.com/facebook/react-native/pull/6379/files lands
+    // and the app is no longer perpetually-active
+    if (true || AppStateIOS.currentState === 'background') {
+        console.info('showing recommend notification!');
+        PushNotificationIOS.presentLocalNotification({
+            alertBody: 'Would your friends dig this episode?',
+            alertAction: 'recommend',
+            userInfo: {
+                episodeId
+            },
+            category: 'RECOMMEND_EPISODE'
+        });
+    } else {
+        console.info('not showing as app is not in background: state=', AppStateIOS.currentState);
+    }
 };
 
 
 //setTimeout(() => {
 //    showRecommendNotification('RXBpc29kZTo0Nzk=');
-//}, 5000);
+//}, 10000);
+
+
+// Add a listener to handle launches from push notifications
+PushNotificationIOS.addEventListener('notification', (notification) => {
+    console.info('oh snap got a notiication', notification)
+});
