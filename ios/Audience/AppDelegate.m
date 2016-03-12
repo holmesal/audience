@@ -163,6 +163,12 @@
   [RCTPushNotificationManager didReceiveRemoteNotification:notification];
 }
 
+-(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+  NSLog(@"launched from local note!");
+  [RCTPushNotificationManager didReceiveLocalNotification:notification];
+}
+
 // Add support for push notification actions (optional)
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(nullable NSString *)identifier forLocalNotification:(nonnull UILocalNotification *)notification withResponseInfo:(nonnull NSDictionary *)responseInfo completionHandler:(nonnull void (^)())completionHandler
 {
