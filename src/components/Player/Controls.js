@@ -11,7 +11,7 @@ import React, {
 } from 'react-native';
 
 import TouchableFade from '../common/TouchableFade';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 import {pause, resume, controls$} from '../../redux/modules/player.js';
 import {connect} from 'react-redux';
 
@@ -29,9 +29,10 @@ class Controls extends Component {
     }
 
     renderCenterButtonContent() {
-        let centerImage = this.props.playing ? require('image!pause') : require('image!play');
+        console.info('is playing?', this.props.playing)
+        let icon = this.props.playing ? 'ios-pause' : 'ios-play';
         return (
-            <Image source={centerImage}/>
+            <Icon name={icon} size={44} color={'rgba(238,238,238, 0.7)'} />
         );
         //if (this.props.playing) {
         //} else if (this.props.buffering) {
@@ -42,11 +43,12 @@ class Controls extends Component {
     }
 
     render() {
+        let activeOpacity = 0.8;
         return (
             <View style={styles.wrapper}>
-                <TouchableOpacity style={[styles.button, styles.side]} onPress={() => this.props.onSkip(-15)}><Image source={require('image!skipBack15')}/></TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.center]} onPress={this.handleCenterPress.bind(this)}>{this.renderCenterButtonContent()}</TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.side]} onPress={() => this.props.onSkip(15)}><Image source={require('image!skipForward15')}/></TouchableOpacity>
+                <TouchableOpacity activeOpacity={activeOpacity} style={[styles.button, styles.side]} onPress={() => this.props.onSkip(-15)}><Image source={require('image!skipBack15')}/></TouchableOpacity>
+                <TouchableOpacity activeOpacity={activeOpacity} style={[styles.button, styles.center]} onPress={this.handleCenterPress.bind(this)}>{this.renderCenterButtonContent()}</TouchableOpacity>
+                <TouchableOpacity activeOpacity={activeOpacity} style={[styles.button, styles.side]} onPress={() => this.props.onSkip(15)}><Image source={require('image!skipForward15')}/></TouchableOpacity>
             </View>
         );
     }
