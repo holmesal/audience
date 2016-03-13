@@ -80,6 +80,7 @@ class Compose extends Component {
                     value={this.state.text}
                     editable={!this.state.inFlight}
                     onSubmitEditing={this.submit.bind(this)}
+                    returnKeyType="send"
                 />
                 {this.renderInFlight()}
             </View>
@@ -94,7 +95,7 @@ let styles = StyleSheet.create({
         paddingBottom: 8,
         paddingLeft: 12,
         paddingRight: 12,
-        position: 'relative'
+        position: 'relative',
     },
     input: {
         backgroundColor: '#F7F7F7',

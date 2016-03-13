@@ -176,6 +176,7 @@ class CompactScrubber extends Component {
         }, 500); // this time is how long it takes an event to flow over the bridge
 
         // Seek to this time
+        console.info('scrubbing has ended, seeking to target time!')
         this.props.onSeek(targetTime);
 
     }
@@ -201,7 +202,10 @@ class CompactScrubber extends Component {
         clearTimeout(this._autoScrollCancelTimeout);
         this._autoScrollCancelTimeout = setTimeout(() => {
             this._autoScrolling = false;
-        }, 500)
+        // IMPORTANT - if it actually takes longer than this to scroll properly (like when debugging on deive
+        // with chrome runtime on laptop over usb or slow wifi) then this isn't enough, causing seek events
+        // whcih causes skippy audio
+        }, __DEV__ ? 1000 : 500)
     }
 
     waveformWasTouched() {

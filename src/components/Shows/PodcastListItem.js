@@ -40,7 +40,7 @@ class PodcastListItem extends Component {
     }
 
     renderSecondary() {
-        console.info('latest episode: ', this.props.podcast.latestEpisode);
+        //console.info('latest episode: ', this.props.podcast.latestEpisode);
         return this.hasNewEpisode() ?
             <SecondaryText style={[styles.secondary, styles.newText]}>New Episode!</SecondaryText> :
             <SecondaryText style={styles.secondary}>You're all caught up.</SecondaryText>;
