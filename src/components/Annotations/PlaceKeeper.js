@@ -37,7 +37,15 @@ class PlaceKeeper extends Component {
             this.slowlyUpdateCurrentIndex();
             return false
         }
-        // Bail if we're at the end
+
+        const lastTime = this.props.edges[this.state.lastSeenIdx].node.time;
+        // If we're going backwards, slowly update
+        if (this.props.currentTime < lastTime) {
+            this.slowlyUpdateCurrentIndex();
+            return false;
+        }
+
+        // Bail if we're at the end, unless we're going backwards
         const nextIdx = this.state.lastSeenIdx + 1;
         if (nextIdx >= this.props.edges.length) {
             //console.warn('this was the last idx - bailing');
@@ -45,7 +53,6 @@ class PlaceKeeper extends Component {
         }
         // What's the next time?
         //console.info(this.props.edges[nextIdx].node.time);
-        const lastTime = this.props.edges[this.state.lastSeenIdx].node.time;
         const nextTime = this.props.edges[nextIdx].node.time;
         if (!nextTime) {
             console.warn('expected there to be a next time but there wasn\'t :-( for idx: ', nextIdx);
