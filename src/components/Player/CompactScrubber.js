@@ -12,12 +12,13 @@ import React, {
     TouchableWithoutFeedback,
     View
 } from 'react-native';
-
+import Relay from 'react-relay';
 import colors from './../../colors';
 import TinyUser from './TinyUser';
 import Times from './Times';
 import TimeRemaining from './TimeRemaining';
 import PrettyTime from './PrettyTime';
+import FacebookAvatar from '../common/FacebookAvatar';
 
 class CompactScrubber extends Component {
 
@@ -31,7 +32,8 @@ class CompactScrubber extends Component {
         currentTime: 0,
         onScrubStart: () => {},
         onScrubEnd: () => {},
-        onWaveformPress: () => {}
+        onWaveformPress: () => {},
+        onHotSeek: () => {}
     };
 
     state = {
@@ -235,24 +237,17 @@ class CompactScrubber extends Component {
     }
 
     renderUsers() {
-        return <View />;
-        return [
-            <TinyUser
-                profilePhotoUrl="https://scontent-lax3-1.xx.fbcdn.net/hphotos-xaf1/v/t1.0-0/p206x206/24567_1315611770255_1155488_n.jpg?oh=bbd8882c52d4abd567db280f76d0b87a&oe=56FBD84D"
-                style={[styles.tinyUser, {left: 200}]}
-                key="lah"
-            />,
-            <TinyUser
-                profilePhotoUrl="https://pbs.twimg.com/profile_images/617806122544566272/Pm6KPI9P_400x400.jpg"
-                style={[styles.tinyUser, {left: 357}]}
-                key="dee"
-            />,
-            <TinyUser
-                profilePhotoUrl="https://scontent-lax3-1.xx.fbcdn.net/hprofile-xft1/v/t1.0-1/c0.0.320.320/p320x320/12510375_10153732937455867_8269122392597910250_n.jpg?oh=267f72be655437a1be7ea666b0b2accf&oe=5705AA7A"
-                style={[styles.tinyUser, {left: 462}]}
-                key="dah"
-            />
-        ]
+        if (!this.props.duration) return <View />;
+        return this.props.episode.annotations.edges.map(edge => {
+            let frac = edge.node.time / this.props.duration;
+            if (!frac) frac = 0;
+            let left = (frac * waveformWidth) + windowWidth/2 - avatarSize/2;
+            return (<FacebookAvatar user={edge.node.user}
+                                    style={[styles.avatar, {left: left}]}
+                                    key={edge.node.id}
+                                    size={avatarSize}
+            />);
+        })
     }
 
     renderTime() {
@@ -324,10 +319,13 @@ class CompactScrubber extends Component {
     }
 }
 
-let containerHeight = 66;
-let waveformHeight = 32;
-let windowWidth = Dimensions.get('window').width;
-let windowHeight = Dimensions.get('window').height;
+const containerHeight = 66;
+const waveformHeight = 32;
+const waveformWidth = 1173;
+const avatarSize = 10;
+const avatarBottom = 4;
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 let styles = StyleSheet.create({
     wrapper: {
@@ -354,6 +352,7 @@ let styles = StyleSheet.create({
     waveform: {
         flexDirection: 'row',
         alignItems: 'center',
+        alignSelf: 'stretch',
         //marginTop: windowHeight/2 - waveformHeight/2,
         position: 'relative'
     },
@@ -363,7 +362,7 @@ let styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         left: windowWidth/2,
-        bottom: 0,
+        bottom: avatarSize + avatarBottom,
         right: 0
     },
     spacer: {
@@ -377,9 +376,10 @@ let styles = StyleSheet.create({
         tintColor: colors.darkGrey
     },
 
-    tinyUser: {
+    avatar: {
         position: 'absolute',
-        top: -waveformHeight/2 - 16
+        bottom: 4,
+        left: 0
     },
 
     playHead: {
@@ -446,4 +446,22 @@ let styles = StyleSheet.create({
     }
 });
 
-export default CompactScrubber;
+export default Relay.createContainer(CompactScrubber, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                annotations(first:1000) {
+                    edges {
+                        node {
+                            id
+                            time
+                            user {
+                                ${FacebookAvatar.getFragment('user')}
+                            }
+                        }
+                    }
+                }
+            }
+        `
+    }
+});
