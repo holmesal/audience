@@ -1,6 +1,8 @@
 import React, {
     Animated,
+    AppleEasing,
     Component,
+    DeviceEventEmitter,
     Image,
     PropTypes,
     StyleSheet,
@@ -37,8 +39,19 @@ class Player extends Component {
         duration: 0,
         currentTime: 0,
         lastTargetTime: 0,
-        scrubbing: false
+        scrubbing: false,
+        keyboardHeight: new Animated.Value(0)
     };
+
+    _keyboardSpring = {
+        tension: 50,
+        friction: 12
+    };
+
+    componentWillMount() {
+        DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+        DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+    }
 
     componentDidMount() {
         this.updateVisibility();
@@ -46,6 +59,26 @@ class Player extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         this.updateVisibility();
+    }
+
+    keyboardWillShow(ev) {
+        //console.info('keyboard will show!', ev);
+        Animated.spring(this.state.keyboardHeight, {
+            toValue: -ev.endCoordinates.height + 66,
+            tension: 55,
+            friction: 12
+        }).start();
+        this.props.dispatch(pause());
+    }
+
+    keyboardWillHide(ev) {
+        //console.info('keyboard will hide!');
+        Animated.spring(this.state.keyboardHeight, {
+            toValue: 0,
+            tension: 60,
+            friction: 10
+        }).start();
+        this.props.dispatch(resume());
     }
 
     updateVisibility() {
@@ -63,6 +96,7 @@ class Player extends Component {
     }
 
     handleSkip(amount) {
+        console.info('handling skip!');
         let lastTargetTime = this.state.currentTime + amount;
         if (lastTargetTime < 0) lastTargetTime = Math.random() * 0.0001; //rly small but still causes seek
         else if (lastTargetTime > this.state.duration) lastTargetTime = this.state.duration;
@@ -85,17 +119,23 @@ class Player extends Component {
         return (
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
 
+                <Animated.View style={{flex: 1, transform: [{translateY: this.state.keyboardHeight}]}}>
+
+                    <Annotations
+                        episode={this.props.episode}
+                        style={styles.annotations}
+                    />
+
+                    <Compose
+                        episode={this.props.episode}
+                    />
+
+                </Animated.View>
+
                 <Navbar
+                    style={styles.navbar}
                     episode={this.props.episode}
                     podcast={this.props.episode.podcast}
-                />
-
-                <Annotations
-                    episode={this.props.episode}
-                />
-
-                <Compose
-                    episode={this.props.episode}
                 />
 
                 <CompactScrubber
@@ -181,8 +221,14 @@ let styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
-        opacity: 0.3,
+        opacity: 0.7,
         backgroundColor: colors.white
+    },
+    navbar: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0
     }
 });
 

@@ -40,7 +40,7 @@ class Navbar extends Component {
     render() {
         const iconSize = 28;
         return (
-            <View style={styles.wrapper}>
+            <View style={[styles.wrapper, this.props.style]}>
 
                 <NavbarButton onPress={this.close.bind(this)}>
                     <Icon name="ios-arrow-down" color={colors.darkGrey} size={iconSize}/>
@@ -73,7 +73,8 @@ let styles = StyleSheet.create({
         alignSelf: 'stretch',
         borderBottomWidth: 1,
         borderColor: colors.lightBorder,
-        height: 66
+        height: 66,
+        backgroundColor: 'rgba(255,255,255,0.95)'
     }
 });
 

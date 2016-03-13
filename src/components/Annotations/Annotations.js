@@ -1,4 +1,5 @@
 import React, {
+    Animated,
     Component,
     Dimensions,
     Image,
@@ -29,7 +30,8 @@ class Annotations extends Component {
         this.ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged.bind(this)});
         this.state = {
             dataSource: this.ds.cloneWithRows(this.getDataSourceFromAnnotations(props.episode.annotations.edges)),
-            containerHeight: Dimensions.get('window').height - 66 - 52 - 66
+            containerHeight: Dimensions.get('window').height - 66 - 52 - 66,
+            opacity: new Animated.Value(1)
         };
     }
 
@@ -40,6 +42,8 @@ class Annotations extends Component {
     static defaultProps = {
 
     };
+
+    _approxScrollPosition = 0;
 
     rows = {};
     //containerHeight = Dimensions.get('window').height - 66 - 52 - 66;
@@ -83,8 +87,13 @@ class Annotations extends Component {
         }
     }
 
+    handleScroll(ev) {
+        //console.info('scroll!', ev.nativeEvent.contentOffset.y);
+        this._approxScrollPosition = ev.nativeEvent.contentOffset.y
+    }
+
     scrollToLastSeen(idx) {
-        console.info('new last seen idx', idx);
+        //console.info('new last seen idx', idx);
         let edge = this.props.episode.annotations.edges[idx];
         if (!edge) {
             console.warn(`oh snap, edge doesn't exist for idx: ${idx}`);
@@ -92,19 +101,26 @@ class Annotations extends Component {
         } else {
             let id = edge.node.id;
             let com = this.rows[id];
-            console.info(com);
             var handle = React.findNodeHandle(com);
             if (!handle) {
                 console.warn('no component - using HACKY SOLUTION OF WAITING 100ms', idx, com, id);
+                console.info('this is because the row you\'re trying to scroll to has not yet been rendered, so there is no scroll offset information for it');
+                let targetPosition = this._approxScrollPosition + 100;
+                this._approxScrollPosition = targetPosition;
+                this._scrollView.scrollTo({y: targetPosition, animated: false});
                 // Try again in 100ms
-                setTimeout(() => scrollToLastSeen(idx), 100);
+                setTimeout(() => this.scrollToLastSeen(idx), 200);
+                // uncomment to hide comments while scrolling
+                //Animated.spring(this.state.opacity, {toValue: 0}).start();
+            } else {
+                UIManager.measureLayoutRelativeToParent(handle, (e) => {console.error(e)}, (x, y, w, h) => {
+                    //console.log('offset', x, y, w, h);
+                    let scrollTarget = y - this.state.containerHeight + h;
+                    //console.info('scrolLTarget', scrollTarget);
+                    this._scrollView.scrollTo({y: scrollTarget});
+                    //Animated.spring(this.state.opacity, {toValue: 1}).start();
+                });
             }
-            UIManager.measureLayoutRelativeToParent(handle, (e) => {console.error(e)}, (x, y, w, h) => {
-                console.log('offset', x, y, w, h);
-                let scrollTarget = y - this.state.containerHeight + h;
-                console.info('scrolLTarget', scrollTarget);
-                this._scrollView.scrollTo({y: scrollTarget});
-            });
         }
     }
 
@@ -114,19 +130,22 @@ class Annotations extends Component {
         //this.props.episode.annotations.edges = _.map(_.range(10000000), i => ({node: {time: i/1000}}));
         //            renderScrollComponent={props => <InvertibleScrollView {...props} inverted onCellLayout={this.handleCellLayout.bind(this)}/>}
         return (
-            <View style={styles.wrapper} onLayout={ev => this.setState({containerHeight: ev.nativeEvent.layout.height})}>
+            <Animated.View style={[styles.wrapper, this.props.style, {opacity: this.state.opacity}]} onLayout={ev => this.setState({containerHeight: ev.nativeEvent.layout.height})}>
                 <ListView
                     ref={component => this._scrollView = component}
                     style={styles.wrapper}
                     dataSource={this.state.dataSource}
                     renderRow={this.renderRow.bind(this)}
                     scrollEnabled={false}
+                    keyboardDismissMode="interactive"
+                    onScroll={this.handleScroll.bind(this)}
+                    scrollEventThrottle={60}
                 />
                 <PlaceKeeper
                     edges={this.props.episode.annotations.edges}
                     onChangeLastSeenIdx={this.scrollToLastSeen.bind(this)}
                 />
-            </View>
+            </Animated.View>
         );
     }
 }
