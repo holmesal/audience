@@ -86,4 +86,4 @@ let sel$ = createSelector(query$, focus$, (query, focus) => ({
     focus
 }));
 
-export default connect(sel$)(SearchBar);
+export default connect(sel$, null, null, {withRef: true})(SearchBar);
