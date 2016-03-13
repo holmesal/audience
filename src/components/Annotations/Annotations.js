@@ -31,7 +31,8 @@ class Annotations extends Component {
         this.state = {
             dataSource: this.ds.cloneWithRows(this.getDataSourceFromAnnotations(props.episode.annotations.edges)),
             containerHeight: Dimensions.get('window').height - 66 - 52 - 66,
-            opacity: new Animated.Value(1)
+            opacity: new Animated.Value(1),
+            mounted: false
         };
     }
 
@@ -57,6 +58,11 @@ class Annotations extends Component {
         }
     }
 
+    componentDidMount() {
+        this.setState({mounted: true});
+    }
+
+
     getDataSourceFromAnnotations(annotations) {
         let rows = [
             {type: 'welcome-row'},
@@ -80,7 +86,7 @@ class Annotations extends Component {
                                 style={{width: 32, height: 32, borderRadius: 32/2}}/>
             return <Comment name={this.props.episode.podcast.name}
                             text={this.props.episode.description}
-                            avatar={avatar} onLayout={(ev) => this._scrollView.scrollTo({y: ev.nativeEvent.layout.height})}/>
+                            avatar={avatar} onLayout={(ev) => this.scrollTo({y: ev.nativeEvent.layout.height})}/>
         } else {
             return <Annotation ref={(row) => {this.rows[edge.node.id] = row}}
                                annotation={edge.node} />
@@ -96,32 +102,43 @@ class Annotations extends Component {
         //console.info('new last seen idx', idx);
         let edge = this.props.episode.annotations.edges[idx];
         if (!edge) {
-            console.warn(`oh snap, edge doesn't exist for idx: ${idx}`);
-            this._scrollView.scrollTo({y: 0});
+            console.info(`oh snap, edge doesn't exist for idx: ${idx}`);
+            //this.scrollTo({y: 0});
         } else {
             let id = edge.node.id;
             let com = this.rows[id];
             var handle = React.findNodeHandle(com);
             if (!handle) {
-                console.warn('no component - using HACKY SOLUTION OF WAITING 100ms', idx, com, id);
+                console.info('no component - using HACKY SOLUTION OF WAITING 100ms', idx, com, id);
                 console.info('this is because the row you\'re trying to scroll to has not yet been rendered, so there is no scroll offset information for it');
                 let targetPosition = this._approxScrollPosition + 100;
                 this._approxScrollPosition = targetPosition;
-                this._scrollView.scrollTo({y: targetPosition, animated: false});
+                this.scrollTo({y: targetPosition, animated: false});
                 // Try again in 100ms
                 setTimeout(() => this.scrollToLastSeen(idx), 200);
                 // uncomment to hide comments while scrolling
                 //Animated.spring(this.state.opacity, {toValue: 0}).start();
             } else {
-                UIManager.measureLayoutRelativeToParent(handle, (e) => {console.error(e)}, (x, y, w, h) => {
-                    //console.log('offset', x, y, w, h);
-                    let scrollTarget = y - this.state.containerHeight + h;
-                    //console.info('scrolLTarget', scrollTarget);
-                    this._scrollView.scrollTo({y: scrollTarget});
-                    //Animated.spring(this.state.opacity, {toValue: 1}).start();
-                });
+                // This timeout is necessary because if annotations for this episode have already been loaded,
+                // measureLayoutRelativeToParent will be called before they get laid out
+                setTimeout(() => {
+                    UIManager.measureLayoutRelativeToParent(handle, (e) => {
+                        console.error(e)
+                    }, (x, y, w, h) => {
+                        //console.log('offset', x, y, w, h);
+                        let scrollTarget = y - this.state.containerHeight + h;
+                        //console.info('scrolLTarget', scrollTarget);
+                        this.scrollTo({y: scrollTarget});
+                        //Animated.spring(this.state.opacity, {toValue: 1}).start();
+                    });
+                }, 0)
             }
         }
+    }
+
+    scrollTo(args) {
+        // Don't call this before mount
+        if (this.state.mounted && this._scrollView) this._scrollView.scrollTo(args);
     }
 
     render() {

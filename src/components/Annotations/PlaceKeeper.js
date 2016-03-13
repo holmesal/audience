@@ -30,6 +30,7 @@ class PlaceKeeper extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        //console.info('updateing! last seen: ', this.state.lastSeenIdx);
         // Bail if there is no lastSeenIdx
         if (this.state.lastSeenIdx === null) { // could be null or a number
             //console.info('no lastSeenIdx - requesting slow check', this.state.lastSeenIdx);
@@ -39,7 +40,7 @@ class PlaceKeeper extends Component {
         // Bail if we're at the end
         const nextIdx = this.state.lastSeenIdx + 1;
         if (nextIdx >= this.props.edges.length) {
-            //console.info('this was the last idx - bailing');
+            //console.warn('this was the last idx - bailing');
             return false;
         }
         // What's the next time?
@@ -68,7 +69,8 @@ class PlaceKeeper extends Component {
                     this.slowlyUpdateCurrentIndex();
                 }
             } else {
-                //console.info('doing nothing - we\'re at the end.')
+                //console.info('doing nothing - we\'re at the end.');
+                this.setLastSeenIdx(targetIdx - 1);
             }
         } else if (this.props.currentTime < lastTime) {
             // we probably skipped backwards
@@ -98,10 +100,17 @@ class PlaceKeeper extends Component {
         let firstLargerIdx = _.findIndex(edges, edge => edge.node.time > this.props.currentTime);
         //console.info('firstLarger: ', firstLargerIdx);
         // unless the first item is larger
+
+        // if the first larger is greater than 0, we're in the middle
         if (firstLargerIdx > 0) {
             // we last saw the previous item
             lastSeenIdx = firstLargerIdx - 1;
+
+        // If no larger item was found, we've passed the last item
+        } else if (firstLargerIdx === -1 && edges.length > 0) {
+            lastSeenIdx = edges.length - 1;
         }
+        // otherwise, lastSeenIdx remains null
 
         this.setLastSeenIdx(lastSeenIdx)
     }

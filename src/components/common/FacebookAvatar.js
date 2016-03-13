@@ -21,7 +21,7 @@ class FacebookAvatar extends Component {
     };
 
     render() {
-        const photoUrl = `http://graph.facebook.com/v2.5/${this.props.user.facebookId}/picture?type=square&height=${this.props.size}`;
+        const photoUrl = `http://graph.facebook.com/v2.5/${this.props.user.facebookId}/picture?type=square&height=${this.props.size * 2}`;
         return <Image
             style={[styles.photo, {width: this.props.size, height: this.props.size, borderRadius: this.props.size/2}, this.props.style]}
             source={{uri: photoUrl}}

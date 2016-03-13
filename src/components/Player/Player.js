@@ -62,23 +62,27 @@ class Player extends Component {
     }
 
     keyboardWillShow(ev) {
-        //console.info('keyboard will show!', ev);
-        Animated.spring(this.state.keyboardHeight, {
-            toValue: -ev.endCoordinates.height + 66,
-            tension: 55,
-            friction: 12
-        }).start();
-        this.props.dispatch(pause());
+        if (this.props.visible) {
+            //console.info('keyboard will show!', ev);
+            Animated.spring(this.state.keyboardHeight, {
+                toValue: -ev.endCoordinates.height + 66,
+                tension: 55,
+                friction: 12
+            }).start();
+            this.props.dispatch(pause());
+        }
     }
 
     keyboardWillHide(ev) {
-        //console.info('keyboard will hide!');
-        Animated.spring(this.state.keyboardHeight, {
-            toValue: 0,
-            tension: 60,
-            friction: 10
-        }).start();
-        this.props.dispatch(resume());
+        if (this.props.visible) {
+            //console.info('keyboard will hide!');
+            Animated.spring(this.state.keyboardHeight, {
+                toValue: 0,
+                tension: 60,
+                friction: 10
+            }).start();
+            this.props.dispatch(resume());
+        }
     }
 
     updateVisibility() {
@@ -147,6 +151,7 @@ class Player extends Component {
                     onScrubStart={() => this.setState({scrubbing: true})}
                     onScrubEnd={() => this.setState({scrubbing: false})}
                     onWaveformPress={this.handleWaveformPress.bind(this)}
+                    episode={this.props.episode}
                 />
 
                 <EpisodePlayer
@@ -240,6 +245,7 @@ export default Relay.createContainer(ConnectedPlayer, {
             fragment on Episode {
                 id
                 ${EpisodePlayer.getFragment('episode')}
+                ${CompactScrubber.getFragment('episode')}
                 ${Info.getFragment('episode')}
                 ${Navbar.getFragment('episode')}
                 ${Compose.getFragment('episode')}
