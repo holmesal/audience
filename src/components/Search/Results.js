@@ -36,6 +36,7 @@ class Results extends Component {
             <ScrollView style={styles.wrapper}
                         contentContainerStyle={{paddingTop: 64}}
                         keyboardShouldPersistTaps={true}
+                        keyboardDismissMode="interactive"
             >
                 {this.renderResults()}
                 <TouchableOpacity onPress={this.props.showPlayer}><View  style={{flex: 1, alignSelf: 'stretch', height: 300}}></View></TouchableOpacity>

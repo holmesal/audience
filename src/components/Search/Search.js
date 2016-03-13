@@ -15,12 +15,8 @@ import Results from './ResultsRoot';
 
 export default class Search extends Component {
 
-    blurInput() {
-        this.refs.searchBar.refs.wrappedInstance.blur()
-    }
-
     focusInput() {
-        this.refs.searchBar.refs.wrappedInstance.focus();
+        this.refs.searchBar.getWrappedInstance().focus();
     }
 
     render() {
