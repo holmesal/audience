@@ -14,6 +14,7 @@ import colors from '../../colors';
 import FollowToggle from './FollowToggle';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import EpisodeListItem from './EpisodeListItem';
+import moment from 'moment';
 
 import {connect} from 'react-redux';
 import {podcastInfo$, hidePodcastInfo, showPodcastInfo} from '../../redux/modules/podcastInfo';
@@ -42,6 +43,10 @@ class PodcastInfo extends Component {
 
     };
 
+    componentDidMount() {
+        this.checkLastRefreshed();
+    }
+
     componentWillReceiveProps(nextProps) {
         if (this.props.podcast.episodes != nextProps.podcast.episodes) {
             console.info('list of episodes changed!');
@@ -50,10 +55,14 @@ class PodcastInfo extends Component {
                 isLoadingMore: false
             });
         }
+        // This is no longer necessary, because we render a loading view in between this podcast having episodes and the next
         // If the podcast id changes, scroll to the top
-        if (this.props.podcast.id != nextProps.podcast.id) {
-            this._scrollView.scrollTo({y: 0, animated: false});
-        }
+        //if (this.props.podcast.id != nextProps.podcast.id) {
+        //    // Scroll to the top
+        //    this._scrollView.scrollTo({y: 0, animated: false});
+        //    // Possibly force refresh this episode list
+        //    this.checkLastRefreshed();
+        //}
     }
 
     renderEpisodeListItem(edge) {
@@ -101,8 +110,23 @@ class PodcastInfo extends Component {
         }
     }
 
+    checkLastRefreshed() {
+        let lastRefreshed = moment(new Date(this.props.podcast.lastEpisodeRefresh));
+        let now = moment();
+        let howManyMinutesAgo = now.diff(lastRefreshed, 'minutes');
+        console.info(`podcast ${this.props.podcast.id} was last refreshed: ${this.props.podcast.lastEpisodeRefresh} which is ${howManyMinutesAgo} minutes ago`);
+        if (howManyMinutesAgo > 60) this.forceFetchLatest();
+    }
+
+    forceFetchLatest() {
+        console.info('force fetching latest episodes!');
+        this.props.relay.setVariables({
+            forceFetchLatest: true
+        });
+    }
+
     render() {
-        console.info('pageinfo', this.props.podcast.episodes.pageInfo)
+        //console.info('pageinfo', this.props.podcast.episodes.pageInfo);
         return (
             <View style={{flex: 1}}>
                 <ListView contentContainerStyle={styles.scrollContent}
@@ -128,15 +152,17 @@ let styles = StyleSheet.create({
 let connectedPodcastInfo = connect()(PodcastInfo);
 export default Relay.createContainer(connectedPodcastInfo, {
     initialVariables: {
-        first: EPISODE_RESULTS_PER_PAGE
+        first: EPISODE_RESULTS_PER_PAGE,
+        forceFetchLatest: false
     },
     fragments: {
         podcast: () => Relay.QL`
             fragment on Podcast {
                 id
+                lastEpisodeRefresh
                 ${PhotoHeader.getFragment('podcast')}
                 ${FollowToggle.getFragment('podcast')}
-                episodes(first:$first) {
+                episodes(first:$first, forceFetchLatest:$forceFetchLatest) {
                     edges {
                         node {
                             id
