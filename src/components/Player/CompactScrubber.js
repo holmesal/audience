@@ -51,13 +51,17 @@ class CompactScrubber extends Component {
     _ignoringTimeUpdates = false;
     _ignoringTimeUpdatesCancelTimeout = null;
 
+    _touchStartTime = null;
+
     // when releasing - the first thing you get is an updated current time event
     // then it scrolls to current time
     // then it sets scrubbing = false
 
     componentWillMount() {
         this._panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: (evt, gestureState) => {
+            onStartShouldSetPanResponder: (ev, gestureState) => {
+                console.info('touch down!');
+                this._touchStartTime = ev.nativeEvent.timestamp;
                 return true;
             },
             onStartShouldSetPanResponderCapture: (evt, gestureState) => {
@@ -71,14 +75,22 @@ class CompactScrubber extends Component {
                 this._autoScrolling = false; // cancel autoscrolls
                 this.checkScrubbing();
             },
-            onPanResponderMove: () => {},
-            onPanResponderRelease: () => {
+            onPanResponderMove: () => {
+                //console.info('touch move!');
+            },
+            onPanResponderRelease: (ev, gestureState) => {
+                let {dx, dy} = gestureState;
+                let elapsed = ev.nativeEvent.timestamp - this._touchStartTime;
+                //console.info('touch release!', dx+dy, elapsed);
                 this._touching = false;
-                // Wait a minute to allow the first momentum scroll event to come through
+                // If we didn't move at all, this was a tap
+                if (Math.abs(dx) + Math.abs(dy) < 5 && !this._momentumScrolling) {
+                    this.props.onWaveformPress()
+                }
                 setTimeout(() => {
                     //console.info('--- doing deferred check');
                     this.checkScrubbing();
-                }, 64)
+                }, 64);
             }
         });
     }
@@ -211,14 +223,14 @@ class CompactScrubber extends Component {
     waveformWasTouched() {
         //console.info('waveform was touched!');
         // In a few hundred ms, check if this was a swipe or a drag
-        clearTimeout(this._checkTapTimeout);
-        this._checkTapTimeout = setTimeout(() => {
-            let scrubbing = (this._touching || this._momentumScrolling);
-            if (!scrubbing) {
-                //console.info('broadcasting press!')
-                this.props.onWaveformPress();
-            }
-        }, 60)
+        //clearTimeout(this._checkTapTimeout);
+        //this._checkTapTimeout = setTimeout(() => {
+        //    let scrubbing = (this._touching || this._momentumScrolling);
+        //    if (!scrubbing) {
+        //        //console.info('broadcasting press!')
+        //        this.props.onWaveformPress();
+        //    }
+        //}, 60)
         return false;
     }
 
@@ -262,7 +274,7 @@ class CompactScrubber extends Component {
             <View style={styles.wrapper}>
 
                 {/** Scroller */}
-                <View style={{flex: 1}} onStartShouldSetResponder={this.waveformWasTouched.bind(this)}>
+                <View style={{flex: 1}}>
                     <ScrollView horizontal
                                 ref="scroller"
                                 showsHorizontalScrollIndicator={false}
@@ -273,12 +285,12 @@ class CompactScrubber extends Component {
                                 scrollEventThrottle={32}
                                 {...this._panResponder.panHandlers}
                     >
-                        <View style={styles.waveform}>
+                        <TouchableOpacity style={styles.waveform} onPress={this.props.onWaveformPress} activeOpacity={1}>
                             <View style={[styles.spacer, {marginRight: 3}]} />
                             <Animated.Image style={[styles.fakeWaveform, {transform: [{scaleY: this.state.waveformScaleY}]}]} source={require('image!waveform')} />
                             <View style={[styles.spacer, {marginLeft: 3}]} />
                             {this.renderUsers()}
-                        </View>
+                        </TouchableOpacity>
                     </ScrollView>
                 </View>
 
@@ -303,7 +315,7 @@ class CompactScrubber extends Component {
                     negative
                 />
                 
-                <Animated.View style={[styles.hintWrapper, {opacity: this.state.hintOpacity}]}>
+                <Animated.View style={[styles.hintWrapper, {opacity: this.state.hintOpacity}]} pointerEvents='none' >
                     <Text style={[styles.hint, {marginBottom: 4}]}>Tap to {this.props.playing ? 'pause' : 'play'}</Text>
                     <Text style={styles.hint}>Drag to seek</Text>
                 </Animated.View>
@@ -329,7 +341,7 @@ let styles = StyleSheet.create({
     scroller: {
         flex: 1,
         alignSelf: 'stretch',
-        //backgroundColor: 'green'
+        //backgroundColor: 'green',
         backgroundColor: 'transparent'
     },
     scrollContent: {
