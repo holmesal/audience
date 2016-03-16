@@ -1,2 +1,4 @@
+workspace 'Audience'
+
 pod 'Mixpanel'
 pod 'Instabug'
