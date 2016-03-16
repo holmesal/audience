@@ -18,6 +18,7 @@ import NavbarButton from './NavbarButton';
 import RecommendButton from './RecommendButton';
 import MoreButton from './MoreButton';
 import ShareButton from './ShareButton';
+import PodcastButton from './PodcastButton';
 
 class Navbar extends Component {
 
@@ -43,7 +44,7 @@ class Navbar extends Component {
             <View style={[styles.wrapper, this.props.style]}>
 
                 <NavbarButton onPress={this.close.bind(this)}>
-                    <Icon name="ios-arrow-down" color={colors.darkGrey} size={iconSize}/>
+                    <Icon name="ios-arrow-down" color={colors.lighterGrey} size={iconSize}/>
                 </NavbarButton>
 
                 <View style={{flex: 1}} />
@@ -57,7 +58,7 @@ class Navbar extends Component {
                     episode={this.props.episode}
                 />
 
-                <MoreButton
+                <PodcastButton
                     podcast={this.props.podcast}
                 />
 
@@ -72,9 +73,9 @@ let styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'stretch',
         borderBottomWidth: 1,
-        borderColor: colors.lightBorder,
+        borderColor: colors.darkBorder,
         height: 66,
-        backgroundColor: 'rgba(255,255,255,0.95)'
+        backgroundColor: colors.darkGrey
     }
 });
 
@@ -89,6 +90,7 @@ export default Relay.createContainer(Navbar, {
         podcast: () => Relay.QL`
             fragment on Podcast {
                 ${MoreButton.getFragment('podcast')}
+                ${PodcastButton.getFragment('podcast')}
                 ${ShareButton.getFragment('podcast')}
             }
         `

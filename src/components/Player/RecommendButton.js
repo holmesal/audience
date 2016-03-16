@@ -55,7 +55,7 @@ class RecommendButton extends Component {
     renderNotRecommended() {
         return (
             <NavbarButton onPress={this.recommend.bind(this)}>
-                <Icon name="ios-heart-outline" color={colors.darkGrey} size={iconSize}/>
+                <Icon name="ios-heart-outline" color={colors.lighterGrey} size={iconSize}/>
             </NavbarButton>
         )
     }
@@ -71,7 +71,7 @@ class RecommendButton extends Component {
     renderRecommended() {
         return (
             <NavbarButton>
-                <Icon name="ios-heart" color={colors.blue} size={iconSize}/>
+                <Icon name="ios-heart" color={colors.grey} size={iconSize}/>
             </NavbarButton>
         )
     }

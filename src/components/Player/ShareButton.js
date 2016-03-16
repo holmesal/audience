@@ -57,7 +57,7 @@ class ShareButton extends Component {
     render() {
         return (
             <NavbarButton onPress={this.shareEpisode.bind(this)}>
-                <Icon name="ios-upload-outline" color={colors.darkGrey} size={28}/>
+                <Icon name="ios-upload-outline" color={colors.lighterGrey} size={28}/>
             </NavbarButton>
         );
     }
