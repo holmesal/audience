@@ -3,6 +3,7 @@ import React, {
     AppleEasing,
     Component,
     DeviceEventEmitter,
+    Dimensions,
     Image,
     PropTypes,
     StyleSheet,
@@ -28,6 +29,8 @@ import CompactScrubber from './CompactScrubber';
 import Compose from './Compose';
 import ButtonRow from './ButtonRow';
 
+const OFFSCREEN = Dimensions.get('window').height + 50;
+
 class Player extends Component {
 
     static propTypes = {};
@@ -36,6 +39,7 @@ class Player extends Component {
 
     state = {
         opacity: new Animated.Value(0),
+        offset: new Animated.Value(OFFSCREEN),
         composeVisible: false,
         duration: 0,
         currentTime: 0,
@@ -88,14 +92,16 @@ class Player extends Component {
 
     updateVisibility() {
         if (this.props.visible) {
-            Animated.timing(this.state.opacity, {
-                toValue: 1,
-                duration: 200
+            Animated.spring(this.state.offset, {
+                toValue: 0,
+                tension: 32,
+                friction: 8
             }).start();
         } else {
-            Animated.timing(this.state.opacity, {
-                toValue: 0,
-                duration: 500
+            Animated.spring(this.state.offset, {
+                toValue: OFFSCREEN,
+                tension: 31,
+                friction: 9
             }).start();
         }
     }
@@ -140,7 +146,7 @@ class Player extends Component {
         //console.info('player render!');
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
-            <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
+            <Animated.View style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]} pointerEvents={pointerEvents}>
 
                 {this.renderAnnotationsCompose()}
 
@@ -246,7 +252,6 @@ let styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
-        opacity: 0.7,
         backgroundColor: colors.darkGrey
     },
     navbar: {
