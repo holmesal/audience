@@ -32,7 +32,7 @@ class PlayPauseButton extends Component {
                 style={[styles.wrapper, this.props.style]}
                 onPress={this.handlePress.bind(this)}
             >
-                <Icon name={iconName} size={38} color={colors.lighterGrey} />
+                <Icon name={iconName} size={34} color={colors.lighterGrey} />
             </TouchableOpacity>
         );
     }
