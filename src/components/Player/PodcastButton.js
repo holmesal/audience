@@ -1,5 +1,4 @@
 import React, {
-    ActionSheetIOS,
     Component,
     Image,
     PropTypes,
@@ -24,41 +23,39 @@ class MoreButton extends Component {
 
     static defaultProps = {};
 
-    showActions() {
-        console.info(this, window)
-        ActionSheetIOS.showActionSheetWithOptions({
-            options: [
-                'View show',
-                'Cancel'
-            ],
-            cancelButtonIndex: 1
-        }, idx => {
-            if (idx === 0) {
-                // Hide the player
-                store.dispatch(hidePlayer());
-                // Show this show in the podcast info view
-                store.dispatch(showPodcastInfo(this.props.podcast.id));
-            }
-        })
+    showPodcast() {
+        // Hide the player
+        store.dispatch(hidePlayer());
+        // Show this show in the podcast info view
+        store.dispatch(showPodcastInfo(this.props.podcast.id));
     }
 
     render() {
         return (
-            <NavbarButton onPress={this.showActions.bind(this)}>
-                <Icon name="ios-more" size={28} color={colors.lighterGrey}/>
+            <NavbarButton onPress={this.showPodcast.bind(this)}>
+                <Image style={styles.image} source={{uri: this.props.podcast.artwork}} />
             </NavbarButton>
         );
     }
 }
 
 let styles = StyleSheet.create({
+    image: {
+        width: 24,
+        height: 24,
+        borderRadius: 24/2
+    }
 });
 
 export default Relay.createContainer(MoreButton, {
+    initialVariables: {
+        size: 'small'
+    },
     fragments: {
         podcast: () => Relay.QL`
             fragment on Podcast {
                 id
+                artwork(size:$size)
             }
         `
     }

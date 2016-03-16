@@ -113,6 +113,24 @@ class Player extends Component {
         else this.props.dispatch(resume())
     }
 
+    renderAnnotationsCompose() {
+        return <View style={{flex: 1}} />
+        //return (
+        //    <Animated.View style={{flex: 1, transform: [{translateY: this.state.keyboardHeight}]}}>
+        //
+        //        <Annotations
+        //            episode={this.props.episode}
+        //            style={styles.annotations}
+        //        />
+        //
+        //        <Compose
+        //            episode={this.props.episode}
+        //        />
+        //
+        //    </Animated.View>
+        //)
+    }
+
     render() {
         if (!this.props.episode) {
             console.warn('player got null episode :-(');
@@ -123,18 +141,7 @@ class Player extends Component {
         return (
             <Animated.View style={[styles.wrapper, {opacity: this.state.opacity}]} pointerEvents={pointerEvents}>
 
-                <Animated.View style={{flex: 1, transform: [{translateY: this.state.keyboardHeight}]}}>
-
-                    <Annotations
-                        episode={this.props.episode}
-                        style={styles.annotations}
-                    />
-
-                    <Compose
-                        episode={this.props.episode}
-                    />
-
-                </Animated.View>
+                {this.renderAnnotationsCompose()}
 
                 <Navbar
                     style={styles.navbar}
@@ -227,7 +234,7 @@ let styles = StyleSheet.create({
         bottom: 0,
         right: 0,
         opacity: 0.7,
-        backgroundColor: colors.white
+        backgroundColor: colors.darkGrey
     },
     navbar: {
         position: 'absolute',

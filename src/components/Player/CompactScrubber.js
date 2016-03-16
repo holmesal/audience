@@ -282,7 +282,9 @@ class CompactScrubber extends Component {
                     >
                         <TouchableOpacity style={styles.waveform} onPress={this.props.onWaveformPress} activeOpacity={1}>
                             <View style={[styles.spacer, {marginRight: 3}]} />
-                            <Animated.Image style={[styles.fakeWaveform, {transform: [{scaleY: this.state.waveformScaleY}]}]} source={require('image!waveform')} />
+                            <Animated.Image
+                                style={[styles.fakeWaveform, {transform: [{scaleY: this.state.waveformScaleY}]}]}
+                                source={require('image!waveform')} />
                             <View style={[styles.spacer, {marginLeft: 3}]} />
                             {this.renderUsers()}
                         </TouchableOpacity>
@@ -319,7 +321,7 @@ class CompactScrubber extends Component {
     }
 }
 
-const containerHeight = 66;
+const containerHeight = 84;
 const waveformHeight = 32;
 const waveformWidth = 1173;
 const avatarSize = 10;
@@ -332,9 +334,9 @@ let styles = StyleSheet.create({
         alignSelf: 'stretch',
         height: containerHeight,
         position: 'relative',
-        backgroundColor: colors.lighterGrey,
+        backgroundColor: colors.darkGrey,
         borderTopWidth: 1,
-        borderColor: colors.lightBorder
+        borderColor: colors.darkBorder
     },
     scroller: {
         flex: 1,
@@ -357,7 +359,7 @@ let styles = StyleSheet.create({
         position: 'relative'
     },
     waveformMask: {
-        backgroundColor: colors.lighterGrey,
+        backgroundColor: colors.darkGrey,
         opacity: 0.8,
         position: 'absolute',
         top: 0,
@@ -368,12 +370,12 @@ let styles = StyleSheet.create({
     spacer: {
         width: windowWidth/2,
         height: 1,
-        backgroundColor: colors.lightGrey,
+        backgroundColor: colors.darkGrey,
         opacity: 0.09
     },
     fakeWaveform: {
         height: waveformHeight,
-        tintColor: colors.darkGrey
+        tintColor: colors.lighterGrey
     },
 
     avatar: {
@@ -386,7 +388,7 @@ let styles = StyleSheet.create({
         width: 2,
         height: 32,
         borderRadius: 1,
-        backgroundColor: colors.blue,
+        backgroundColor: colors.attention,
         position: 'absolute',
         top: containerHeight/2 - 16,
         left: windowWidth/2 - 1
