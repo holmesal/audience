@@ -1,5 +1,7 @@
 import React, {
+    Animated,
     Component,
+    DeviceEventEmitter,
     Image,
     PropTypes,
     StyleSheet,
@@ -8,10 +10,13 @@ import React, {
     TouchableOpacity,
     View
 } from 'react-native';
-
+import Icon from 'react-native-vector-icons/Ionicons'
+import colors from '../../colors';
+import Relay from 'react-relay';
+import AnnotateEpisodeMutation from '../../mutations/AnnotateEpisode';
 import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux';
-import {share$, currentTime$} from '../../redux/modules/player.js';
+import {currentTime$} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
 
 class CommentCompose extends Component {
@@ -19,47 +24,111 @@ class CommentCompose extends Component {
     static propTypes = {};
 
     static defaultProps = {
-        visible: true
+        visible: true,
+        hide: () => {}
     };
 
     state = {
-        comment: ''
+        text: '',
+        paddingBottom: new Animated.Value(0),
+        keyboardHeight: 0,
+        inFlight: false
     };
 
-    comment() {
-        let {podcastId, episodeId} = this.props;
-        let episodeTime = Math.round(currentTime$(store.getState()));
-        Mixpanel.trackWithProperties('Leave Comment', {
-            podcastId,
-            episodeId,
-            episodeTime,
-            commentLength: this.state.comment.length
-        });
-        this.hideCompose();
+    componentWillMount() {
+        DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+        DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
     }
 
-    hideCompose() {
+    keyboardWillShow(ev) {
+        this.setState({keyboardHeight: ev.endCoordinates.height});
+    }
+
+    keyboardWillHide() {
+        this.setState({keyboardHeight: 0});
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        //console.info('did update!', this.state.keyboardHeight, this.props.scrubberHeight)
+        Animated.spring(this.state.paddingBottom, {
+            toValue: this.state.keyboardHeight + this.props.scrubberHeight
+        }).start();
+    }
+
+    submit() {
+        let currentTime = currentTime$(store.getState());
+        console.info(this.state.text, currentTime);
+
+        // Create the mutation
+        let mutation = new AnnotateEpisodeMutation({
+            episode: this.props.episode,
+            time: currentTime,
+            text: this.state.text
+        });
+
+        // Commit the update
+        Relay.Store.commitUpdate(mutation, {
+            onSuccess: () => {
+                console.info('successfully annotated episode!');
+                // Clear the text
+                this.setState({
+                    inFlight: false,
+                    text: ''
+                });
+            },
+            onFailure: (transaction) => {
+                let error = transaction.getError();
+                console.error(error);
+                alert('Error adding your comment :-(');
+                this.setState({inFlight: false});
+            }
+        });
+
+        // Update the ui to reflect in-flight request
+        this.setState({inFlight: true});
+
+        // Hide this window immediately
+        this.props.hide();
+    }
+
+    close() {
         this.setState({comment: ''});
-        this.props.hideCompose();
+        this.props.hide();
+    }
+
+    renderTopRow() {
+        let sendText = this.state.inFlight ? 'Sending...' : 'Send';
+        let disabled = this.state.inFlight || this.state.text.length < 1;
+        let sendOpacity = disabled ? 0.5 : 1;
+        let sendTarget = disabled ? null : this.submit.bind(this);
+        return (
+            <View style={styles.topRow}>
+                <TouchableOpacity style={[styles.button, styles.closeButton]} onPress={this.close.bind(this)}>
+                    <Icon name="close-round" size={24} color={colors.lighterGrey}/>
+                </TouchableOpacity>
+                <View style={{flex: 1}} />
+                <TouchableOpacity style={[styles.button, styles.sendButton]} onPress={sendTarget}>
+                    <Text style={[styles.sendText, {opacity: sendOpacity}]}>{sendText}</Text>
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     render() {
         if (!this.props.visible) return <View />;
         return (
-            <View style={styles.inputWrapper}>
+            <Animated.View style={[styles.inputWrapper, {paddingBottom: this.state.paddingBottom}]}>
+                {this.renderTopRow()}
                 <TextInput style={styles.input}
                            placeholder="Say something awesome..."
                            placeholderTextColor="grey"
                            multiline
-                           value={this.state.comment}
+                           value={this.state.text}
                            autoFocus
-                           onChangeText={(comment) => this.setState({comment})}
+                           keyboardDismissMode="interactive"
+                           onChangeText={(text) => this.setState({text})}
                 />
-                <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity style={styles.textButton} onPress={this.hideCompose.bind(this)}><Text style={styles.textButtonText}>Cancel</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.textButton} onPress={this.comment.bind(this)}><Text style={[styles.textButtonText, {color: '#29B6F6', fontWeight: '600'}]}>Send</Text></TouchableOpacity>
-                </View>
-            </View>
+            </Animated.View>
         );
     }
 }
@@ -71,20 +140,44 @@ let styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        height: 700,
-        backgroundColor: 'rgba(29,29,29,0.9)',
+        backgroundColor: 'rgba(62,62,62,0.95)'
+    },
+    topRow: {
+        flexDirection: 'row'
+    },
+    button: {
+        paddingTop: 32
+    },
+    closeButton: {
+        //backgroundColor: 'red',
+        padding: 20,
+        paddingTop: 32
+    },
+    sendButton: {
+        //backgroundColor: 'green',
         padding: 20
     },
+    sendText: {
+        color: colors.attention,
+        fontFamily: 'System',
+        fontWeight: '600',
+        fontSize: 18
+    },
     input: {
-        marginTop: 40,
-        color: 'white',
+        flex: 1,
+        //backgroundColor: 'red',
+        //marginTop: 40,
+        color: colors.lightGrey,
         alignSelf: 'stretch',
-        height: 100,
-        borderWidth: 1,
-        borderRadius: 8,
-        borderColor: 'rgba(255,255,255,0.1)',
-        padding: 8,
-        fontSize: 16
+        //height: 100,
+        //borderWidth: 1,
+        //borderRadius: 8,
+        //borderColor: 'rgba(255,255,255,0.1)',
+        paddingLeft: 20,
+        paddingRight: 20,
+        fontSize: 18,
+        fontFamily: 'System',
+        lineHeight: 25
     },
     textButton: {
         flex: 1,
@@ -99,4 +192,13 @@ let styles = StyleSheet.create({
     }
 });
 
-export default connect(share$)(CommentCompose);
+export default Relay.createContainer(CommentCompose, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                id
+                ${AnnotateEpisodeMutation.getFragment('episode')}
+            }
+        `
+    }
+});

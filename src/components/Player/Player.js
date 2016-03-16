@@ -26,6 +26,7 @@ import Navbar from './Navbar';
 import Annotations from './../Annotations/Annotations';
 import CompactScrubber from './CompactScrubber';
 import Compose from './Compose';
+import ButtonRow from './ButtonRow';
 
 class Player extends Component {
 
@@ -65,8 +66,8 @@ class Player extends Component {
         if (this.props.visible) {
             //console.info('keyboard will show!', ev);
             Animated.spring(this.state.keyboardHeight, {
-                toValue: -ev.endCoordinates.height + 66,
-                tension: 55,
+                toValue: -ev.endCoordinates.height,
+                tension: 70,
                 friction: 12
             }).start();
             this.props.dispatch(pause());
@@ -143,10 +144,21 @@ class Player extends Component {
 
                 {this.renderAnnotationsCompose()}
 
+                <ButtonRow
+                    onCommentPress={() => this.setState({composeVisible: true})}
+                />
+
                 <Navbar
                     style={styles.navbar}
                     episode={this.props.episode}
                     podcast={this.props.episode.podcast}
+                />
+
+                <CommentCompose
+                    episode={this.props.episode}
+                    visible={this.state.composeVisible}
+                    scrubberHeight={84}
+                    hide={() => this.setState({composeVisible: false})}
                 />
 
                 <CompactScrubber
@@ -159,6 +171,7 @@ class Player extends Component {
                     onScrubEnd={() => this.setState({scrubbing: false})}
                     onWaveformPress={this.handleWaveformPress.bind(this)}
                     episode={this.props.episode}
+                    style={{top: this.state.keyboardHeight}}
                 />
 
                 <EpisodePlayer
@@ -255,7 +268,7 @@ export default Relay.createContainer(ConnectedPlayer, {
                 ${CompactScrubber.getFragment('episode')}
                 ${Info.getFragment('episode')}
                 ${Navbar.getFragment('episode')}
-                ${Compose.getFragment('episode')}
+                ${CommentCompose.getFragment('episode')}
                 ${Annotations.getFragment('episode')}
                 podcast {
                     ${EpisodePlayer.getFragment('podcast')}

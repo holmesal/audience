@@ -266,7 +266,7 @@ class CompactScrubber extends Component {
     render() {
         let blurredBgSrc = require('image!bgDark');//require('image!bg');
         return (
-            <View style={styles.wrapper}>
+            <Animated.View style={[styles.wrapper, this.props.style]}>
 
                 {/** Scroller */}
                 <View style={{flex: 1}}>
@@ -316,7 +316,7 @@ class CompactScrubber extends Component {
                     <Text style={[styles.hint, {marginBottom: 4}]}>Tap to {this.props.playing ? 'pause' : 'play'}</Text>
                     <Text style={styles.hint}>Drag to seek</Text>
                 </Animated.View>
-            </View>
+            </Animated.View>
         );
     }
 }
