@@ -19,6 +19,8 @@ import Times from './Times';
 import TimeRemaining from './TimeRemaining';
 import PrettyTime from './PrettyTime';
 import FacebookAvatar from '../common/FacebookAvatar';
+import PlayPauseButton from './PlayPauseButton';
+import LinearGradient from 'react-native-linear-gradient';
 
 class CompactScrubber extends Component {
 
@@ -316,6 +318,20 @@ class CompactScrubber extends Component {
                     <Text style={[styles.hint, {marginBottom: 4}]}>Tap to {this.props.playing ? 'pause' : 'play'}</Text>
                     <Text style={styles.hint}>Drag to seek</Text>
                 </Animated.View>
+
+                {/** Gradient cover for pause button */}
+                <LinearGradient
+                    style={styles.gradient}
+                    colors={['rgba(53,53,53,0.95)', 'rgba(53,53,53,0.95)', 'rgba(53,53,53,0)']}
+                    start={[0.0, 0.5]}
+                    end={[1.0, 0.5]}
+                    locations={[0.0, 0.7, 1.0]}
+                    pointerEvents="none"
+                />
+
+                <PlayPauseButton 
+                    style={styles.playPause}
+                />
             </Animated.View>
         );
     }
@@ -409,7 +425,7 @@ let styles = StyleSheet.create({
     },
 
     timestamp: {
-        color: colors.darkGrey,
+        color: colors.lighterGrey,
         fontSize: 10,
         fontWeight: '400',
         letterSpacing: 0.58
@@ -417,7 +433,7 @@ let styles = StyleSheet.create({
 
     remaining: {
         position: 'absolute',
-        top: 2,
+        top: 4,
         right: 12,
     },
 
@@ -426,7 +442,7 @@ let styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        top: 2,
+        top: 4,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -445,6 +461,17 @@ let styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: 'System',
         color: '#A3A3A3'
+    },
+    gradient: {
+        //backgroundColor: 'orange',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        width: 120
+    },
+    playPause: {
+
     }
 });
 
