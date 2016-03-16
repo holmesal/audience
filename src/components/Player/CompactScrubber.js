@@ -21,6 +21,7 @@ import PrettyTime from './PrettyTime';
 import FacebookAvatar from '../common/FacebookAvatar';
 import PlayPauseButton from './PlayPauseButton';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 class CompactScrubber extends Component {
 
@@ -240,15 +241,36 @@ class CompactScrubber extends Component {
 
     renderUsers() {
         if (!this.props.duration) return <View />;
-        return this.props.episode.annotations.edges.map(edge => {
+        let thinnedAnnotations = [];
+        let lastLaidAnnotationLeft = null;
+        const minSpacing = avatarSize + 4;
+
+        this.props.episode.annotations.edges.map(edge => {
             let frac = edge.node.time / this.props.duration;
             if (!frac) frac = 0;
             let left = (frac * waveformWidth) + windowWidth/2 - avatarSize/2;
-            return (<FacebookAvatar user={edge.node.user}
-                                    style={[styles.avatar, {left: left}]}
-                                    key={edge.node.id}
-                                    size={avatarSize}
-            />);
+            if (!lastLaidAnnotationLeft || (left - lastLaidAnnotationLeft > minSpacing)) {
+                edge.left = left;
+                lastLaidAnnotationLeft = left;
+                thinnedAnnotations.push(edge);
+            }
+        });
+
+        return thinnedAnnotations.map(edge => {
+            return (
+                <Icon
+                    name="ios-chatbubble"
+                    style={[styles.avatar, {left: edge.left}]}
+                    key={edge.node.id}
+                    color={colors.lighterGrey}
+                    size={10}
+                />
+            );
+            //return (<FacebookAvatar user={edge.node.user}
+            //                        style={[styles.avatar, {left: left}]}
+            //                        key={edge.node.id}
+            //                        size={avatarSize}
+            ///>);
         })
     }
 
@@ -341,7 +363,7 @@ const containerHeight = 84;
 const waveformHeight = 32;
 const waveformWidth = 1173;
 const avatarSize = 10;
-const avatarBottom = 4;
+const avatarBottom = 6;
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -396,7 +418,7 @@ let styles = StyleSheet.create({
 
     avatar: {
         position: 'absolute',
-        bottom: 4,
+        bottom: avatarBottom,
         left: 0
     },
 
