@@ -13,6 +13,8 @@ import React, {
 } from 'react-native';
 import _ from 'lodash';
 
+import Emoji from 'react-native-emoji';
+
 // window dimensions
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -46,10 +48,49 @@ console.info(`rows: ${numRows}   cols: ${numCols}   hitBoxSize: ${hitBoxSize}`);
 export default class EmojiSploder extends Component {
 
     state = {
-        visibility: new Animated.Value(0)
+        visibility: new Animated.Value(0),
+        focused: null
     };
 
+    rankedEmoji = [
+        'clap',
+        'joy',
+        'hearts',
+        'heart_eyes',
+        '+1',
+        'raised_hands',
+        'unamused',
+        'relaxed',
+        'ok_hand',
+        'grimacing',
+        'kissing_heart',
+        'blush',
+        'pensive',
+        'hankey',
+        'weary',
+        'sob',
+        'smirk',
+        'headphones',
+        'grin',
+        'flushed',
+        'wink',
+        'see_no_evil',
+        'v',
+        'expressionless',
+        'disappointed',
+        'cry',
+        'sunglasses',
+        'rage',
+        'neutral_face',
+        'scream',
+        'broken_heart',
+        'sweat_smile',
+        'facepunch',
+        'sweat'
+    ];
+
     componentWillMount() {
+        // Create a pan responder for the view
         this._panResponder = PanResponder.create({
             // Ask to be the responder:
             onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -64,8 +105,11 @@ export default class EmojiSploder extends Component {
                 // gestureState.{x,y}0 will be set to zero now
                 this.show();
             },
-            onPanResponderMove: (evt, gestureState) => {
-                console.info(evt.nativeEvent)
+            onPanResponderMove: (ev, gestureState) => {
+                //console.info(ev.nativeEvent);
+                const {locationX, locationY} = ev.nativeEvent;
+                this.focusCellUnderTouch(locationX, locationY);
+
                 // The most recent move distance is gestureState.move{X,Y}
 
                 // The accumulated gesture distance since becoming responder is
@@ -76,6 +120,7 @@ export default class EmojiSploder extends Component {
                 // The user has released all touches while this view is the
                 // responder. This typically means a gesture has succeeded
                 this.hide();
+                console.info('picked emoji!', this.state.focused);
             },
             onPanResponderTerminate: (evt, gestureState) => {
                 // Another component has become the responder, so this gesture
@@ -86,7 +131,9 @@ export default class EmojiSploder extends Component {
                 // responder. Returns true by default. Is currently only supported on android.
                 return true;
             }
-        })
+        });
+        // Set up the list of cells
+        this.initCells();
     }
 
 
@@ -103,7 +150,9 @@ export default class EmojiSploder extends Component {
         Animated.timing(this.state.visibility, {
             toValue: 0,
             duration: 200
-        }).start()
+        }).start(() => {
+            this.setState({focused: null});
+        });
     }
 
     //componentDidMount() {
@@ -111,8 +160,7 @@ export default class EmojiSploder extends Component {
     //    setTimeout(this.hide.bind(this), 4000);
     //}
 
-
-    render() {
+    initCells() {
         let cells = [];
         for (let ix = 0; ix < numCols; ix++) {
             for (let iy = 0; iy < numRows; iy++) {
@@ -145,26 +193,30 @@ export default class EmojiSploder extends Component {
                     //duration: 200
                 }).start();
                 // Scale animation
-                cell.scale = new Animated.Value(0.6);
+                cell.scale = new Animated.Value(0.3);
                 Animated.spring(cell.scale, {
                     toValue: this.state.visibility.interpolate({
                         inputRange: [0, activateAt - 0.001, activateAt, 1],
-                        outputRange: [0.6, 0.6, 1, 1]
+                        outputRange: [0.3, 0.3, 0.5, 0.5]
                     }),
                     friction: 4,
                     tension: 50
                 }).start();
+                // Spring for hovering
+                cell.hoverScale = new Animated.Value(1);
                 //console.info(`[${ix},${iy}]   ${cell.distanceFromFocalPoint}`);
                 // Add the cell to the array
                 cells.push(cell);
             }
         }
+        this._cells = cells;
 
         // Order cells by distance from origin
-        cells = _.sortBy(cells, 'distanceFromFocalPoint');
-
-        let cellViews = cells.map((cell, idx) => {
-            return <Animated.View
+        let distanceOrderedCells = _.sortBy(this._cells, 'distanceFromFocalPoint');
+        // Create the views
+        this._cellViews = distanceOrderedCells.map((cell, idx) => {
+            let emojiName = cell.emojiName = this.rankedEmoji[idx] || 'coffee';
+            return <View
                 key={cell.key}
                 style={[
                     styles.cellView,
@@ -174,19 +226,55 @@ export default class EmojiSploder extends Component {
                         width: cell.width,
                         height: cell.height,
                         //opacity: 1 - (cell.distanceFromFocalPoint/windowHeight)
-                    },
-                    {
+                    }
+                ]}>
+                <Animated.View style={[styles.emojiWrapper, {
                     opacity: cell.opacity,
                     transform: [{scale: cell.scale}]
-                    }
-                ]}
-            ><Text style={{color: '#fefefe', fontSize: 35}}>😁</Text></Animated.View>
+                }]}>
+                    <Animated.View style={[{transform: [{scale: cell.hoverScale}]}]}>
+                        <Text style={{color: '#fefefe', fontSize: 70}}><Emoji name={emojiName} /></Text>
+                    </Animated.View>
+                </Animated.View>
+            </View>
         });
+    }
+
+    focusCellUnderTouch(x, y) {
+        let col = Math.floor(x / hitBoxSize);
+        let row = Math.floor(y / hitBoxSize);
+        if (col >= 0 && col < numCols && row >= 0 && row < numRows) {
+            let focused = this._cells[(col * numRows) + row];
+            this.setState({focused});
+        } else {
+            this.setState({focused: null});
+        }
+    }
+
+    render() {
+        //console.info(this.state.focused);
+
         return (
             <View style={styles.wrapper} {...this._panResponder.panHandlers}>
-                {cellViews}
+                {this._cellViews}
             </View>
         );
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.focused && this.state.focused != prevState.focused) {
+            //console.info('de-focusing', prevState.focused);
+            Animated.spring(prevState.focused.hoverScale, {
+                toValue: 1
+            }).start();
+        }
+        if (this.state.focused) {
+            Animated.spring(this.state.focused.hoverScale, {
+                toValue: 1.5,
+                friction: 8,
+                tension: 80
+            }).start();
+        }
     }
 }
 
@@ -203,5 +291,11 @@ let styles = StyleSheet.create({
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+    //emojiWrapper: {
+    //    overflow: 'visible',
+    //    backgroundColor: 'red',
+    //    flex: 1,
+    //    alignSelf: 'stretch'
+    //}
 });
