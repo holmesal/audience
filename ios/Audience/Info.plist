@@ -28,7 +28,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>20</string>
+	<string>24</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -47,6 +47,8 @@
 	<string>929053407186638</string>
 	<key>FacebookDisplayName</key>
 	<string>Audience</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<string>NO</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
