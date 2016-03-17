@@ -101,9 +101,10 @@ export default class EmojiSploder extends Component {
             onPanResponderGrant: (evt, gestureState) => {
                 // The guesture has started. Show visual feedback so the user knows
                 // what is happening!
+                console.info('pan responder granted!');
 
                 // gestureState.{x,y}0 will be set to zero now
-                this.show();
+                //this.show();
             },
             onPanResponderMove: (ev, gestureState) => {
                 //console.info(ev.nativeEvent);
@@ -125,6 +126,7 @@ export default class EmojiSploder extends Component {
             onPanResponderTerminate: (evt, gestureState) => {
                 // Another component has become the responder, so this gesture
                 // should be cancelled
+                console.info('terminated!');
             },
             onShouldBlockNativeResponder: (evt, gestureState) => {
                 // Returns whether this component should block native components from becoming the JS
@@ -136,6 +138,19 @@ export default class EmojiSploder extends Component {
         this.initCells();
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        //if (nextProps.visible != this.props.visible || nextState != this.state) return true
+        return true;
+
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        //console.info('updating!', nextProps, nextState);
+        if (nextProps.visible != this.props.visible) {
+            if (nextProps.visible) this.show();
+            else this.hide();
+        }
+    }
 
     show() {
         console.info('showing!');
@@ -253,9 +268,13 @@ export default class EmojiSploder extends Component {
 
     render() {
         //console.info(this.state.focused);
-
+        let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
-            <View style={styles.wrapper} {...this._panResponder.panHandlers}>
+            <View
+                style={styles.wrapper}
+                {...this._panResponder.panHandlers}
+                pointerEvents={pointerEvents}
+            >
                 {this._cellViews}
             </View>
         );
@@ -282,7 +301,12 @@ let styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         alignSelf: 'stretch',
-        backgroundColor: 'transparent'
+        //backgroundColor: 'red',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
     },
     cellView: {
         //borderWidth: 1,
