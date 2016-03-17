@@ -122,7 +122,7 @@ class PlaceKeeper extends Component {
         let skipping = false;
         if (edges[lastSeenIdx] && edges[this.state.lastSeenIdx]) {
             let timeDiff = edges[lastSeenIdx].node.time - edges[this.state.lastSeenIdx].node.time;
-            console.info('time diff is ', timeDiff);
+            //console.info('time diff is ', timeDiff);
             if (Math.abs(timeDiff) > 2) skipping = true;
         }
 

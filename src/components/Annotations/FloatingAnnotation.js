@@ -25,9 +25,9 @@ export default class FloatingAnnotation extends Component {
     };
 
     state = {
-        top: new Animated.Value(60),
+        top: new Animated.Value(0),
         opacity: new Animated.Value(0),
-        offset: new Animated.Value(0)
+        offset: new Animated.Value(60)
     };
 
     componentDidMount() {
@@ -44,20 +44,18 @@ export default class FloatingAnnotation extends Component {
             }).start();
         });
 
-        Animated.spring(this.state.top, {
-            toValue: 0,
-            tension: 80,
-            friction: 12
+        Animated.spring(this.state.offset, {
+            toValue: 0
+        }).start();
+
+        Animated.timing(this.state.top, {
+            toValue: dieTarget,
+            duration: lifespan,
+            easing: Easing.inOut(Easing.linear)
         }).start(() => {
-            Animated.timing(this.state.top, {
-                toValue: dieTarget,
-                duration: lifespan,
-                easing: Easing.inOut(Easing.linear)
-            }).start(() => {
-                //console.info('killing!');
-                this.props.onDie();
-            });
-        })
+            //console.info('killing!');
+            this.props.onDie();
+        });
 
     }
 
@@ -106,7 +104,7 @@ export default class FloatingAnnotation extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         position: 'absolute',
-        bottom: 130,
+        bottom: 140,
         left: 20,
         right: 20,
         //backgroundColor: 'red',
