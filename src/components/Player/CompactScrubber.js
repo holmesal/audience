@@ -193,7 +193,8 @@ class CompactScrubber extends Component {
         }, 500); // this time is how long it takes an event to flow over the bridge
 
         // Seek to this time
-        console.info('scrubbing has ended, seeking to target time!')
+        if (targetTime === 0) targetTime = Math.random() * 0.01; // tiny time
+        console.info('scrubbing has ended, seeking to target time: ', targetTime);
         this.props.onSeek(targetTime);
 
     }
