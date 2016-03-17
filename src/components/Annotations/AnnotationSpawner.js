@@ -60,7 +60,7 @@ export default class AnnotationSpawner extends Component {
                 let visible = this.state.visible.slice();
                 let offsets = this.state.offsets;
                 for (let i = this.state.lastSeenIdx + 1; i <= lastSeenIdx; i++) {
-                    console.info('spawning: ', i, this.props.episode.annotations.edges[i].node.id, `onscreencount: ${this.state.visible.length}`);
+                    //console.info('spawning: ', i, this.props.episode.annotations.edges[i].node.id, `onscreencount: ${this.state.visible.length}`);
                     let edge = this.props.episode.annotations.edges[i];
                     visible.push(edge);
                     offsets[edge.node.id] = 0;
@@ -87,7 +87,6 @@ export default class AnnotationSpawner extends Component {
     render() {
         return (
             <View style={styles.wrapper}>
-                <Text>{this.state.lastSeenIdx}</Text>
                 <PlaceKeeper
                     edges={this.props.episode.annotations.edges}
                     onChangeLastSeenIdx={this.handleChangeLastSeenIdx.bind(this)}
@@ -101,7 +100,8 @@ export default class AnnotationSpawner extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         flex: 1,
-        position: 'relative'
+        position: 'relative',
+        overflow: 'hidden'
     }
 });
 
