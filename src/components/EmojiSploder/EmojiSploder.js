@@ -9,6 +9,7 @@ import React, {
     StyleSheet,
     Text,
     TouchableOpacity,
+    VibrationIOS,
     View
 } from 'react-native';
 import _ from 'lodash';
@@ -40,7 +41,7 @@ const slackHeight = height - hitBoxSize * numRows;
 // fake centerpoint
 const focalPoint = {
     x: width / 2,
-    y: height - 25
+    y: height - 35 - 80
 };
 
 console.info(`rows: ${numRows}   cols: ${numCols}   hitBoxSize: ${hitBoxSize}`);
@@ -49,7 +50,9 @@ export default class EmojiSploder extends Component {
 
     state = {
         visibility: new Animated.Value(0),
-        focused: null
+        bgOpacity: new Animated.Value(0),
+        focused: null,
+        exploded: false
     };
 
     rankedEmoji = [
@@ -104,7 +107,8 @@ export default class EmojiSploder extends Component {
                 console.info('pan responder granted!');
 
                 // gestureState.{x,y}0 will be set to zero now
-                //this.show();
+                this.setState({exploded: true});
+                this.show();
             },
             onPanResponderMove: (ev, gestureState) => {
                 //console.info(ev.nativeEvent);
@@ -121,6 +125,7 @@ export default class EmojiSploder extends Component {
                 // The user has released all touches while this view is the
                 // responder. This typically means a gesture has succeeded
                 this.hide();
+                //VibrationIOS.vibrate();
                 console.info('picked emoji!', this.state.focused);
             },
             onPanResponderTerminate: (evt, gestureState) => {
@@ -136,6 +141,16 @@ export default class EmojiSploder extends Component {
         });
         // Set up the list of cells
         this.initCells();
+
+        // Track the visibility to set background opacity
+        //Animated.spring(this.state.bgOpacity, {
+        //    toValue: this.state.visibility.interpolate({
+        //        inputRange: [0, 1],
+        //        outputRange: [0.3, 0.3, 0.5, 0.5]
+        //    }),
+        //    friction: 4,
+        //    tension: 50
+        //}).start();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -154,6 +169,7 @@ export default class EmojiSploder extends Component {
 
     show() {
         console.info('showing!');
+        clearTimeout(this._delayedHideTimeout);
         Animated.timing(this.state.visibility, {
             toValue: 1,
             duration: 250
@@ -166,7 +182,11 @@ export default class EmojiSploder extends Component {
             toValue: 0,
             duration: 200
         }).start(() => {
+            console.info('done!');
             this.setState({focused: null});
+            this._delayedHideTimeout = setTimeout(() => {
+                this.setState({exploded: false});
+            }, 200)
         });
     }
 
@@ -200,7 +220,7 @@ export default class EmojiSploder extends Component {
                 cell.opacity = new Animated.Value(0);
                 Animated.spring(cell.opacity, {
                     toValue: this.state.visibility.interpolate({
-                        inputRange: [0, activateAt - 0.001, activateAt, 1],
+                        inputRange: [0, activateAt - 0.00000001, activateAt, 1],
                         outputRange: [0, 0, 1, 1]
                     }),
                     friction: 7,
@@ -211,7 +231,7 @@ export default class EmojiSploder extends Component {
                 cell.scale = new Animated.Value(0.3);
                 Animated.spring(cell.scale, {
                     toValue: this.state.visibility.interpolate({
-                        inputRange: [0, activateAt - 0.001, activateAt, 1],
+                        inputRange: [0, activateAt - 0.00000001, activateAt, 1],
                         outputRange: [0.3, 0.3, 0.5, 0.5]
                     }),
                     friction: 4,
@@ -267,14 +287,32 @@ export default class EmojiSploder extends Component {
     }
 
     render() {
+        //if (!this.props.triggerPosition) return <View />
+        let trig = this.props.targetLayout;
+        //console.info(trig)
         //console.info(this.state.focused);
-        let pointerEvents = this.props.visible ? 'auto' : 'none';
+        let pointerEvents = this.state.exploded ? 'auto' : 'none';
+        let width = this.state.exploded ? windowWidth : trig.width;
+        let height = this.state.exploded ? windowHeight : trig.height;
+        let left = this.state.exploded ? 0 : trig.left;
+        let bottom = this.state.exploded ? 0 : trig.bottom;
+        //console.info(left, top, width, height);
+        //top = 500
+        //width = 100;
+        //height = 100;
+        //top = 0;
+        //left = 0;
         return (
             <View
-                style={styles.wrapper}
+                style={[styles.wrapper, {
+                    width,
+                    height,
+                    left,
+                    bottom
+                }]}
                 {...this._panResponder.panHandlers}
-                pointerEvents={pointerEvents}
             >
+                <Animated.View style={[styles.bg, {opacity: this.state.visibility}]} />
                 {this._cellViews}
             </View>
         );
@@ -299,14 +337,28 @@ export default class EmojiSploder extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1,
-        alignSelf: 'stretch',
+        position: 'absolute',
         //backgroundColor: 'red',
+    },
+    bg: {
         position: 'absolute',
         top: 0,
         left: 0,
         bottom: 0,
-        right: 0
+        right: 0,
+        backgroundColor: 'rgba(35,35,35,0.8)'
+    },
+    trigger: {
+        //flex: 1,
+        //alignSelf: 'stretch',
+    },
+    cellWrapper: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        backgroundColor: 'green'
     },
     cellView: {
         //borderWidth: 1,
@@ -314,7 +366,8 @@ let styles = StyleSheet.create({
         //borderColor: '#fefefe',
         position: 'absolute',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: 'transparent'
     },
     //emojiWrapper: {
     //    overflow: 'visible',

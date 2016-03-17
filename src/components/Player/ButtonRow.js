@@ -17,7 +17,9 @@ export default class ButtonRow extends Component {
         return (
             <View style={[styles.wrapper, this.props.style]}>
                 <CommentButton onPress={this.props.onCommentPress}/>
-                <EmojiButton onPressIn={this.props.onEmojiPressIn} />
+                <EmojiButton
+                    onPressIn={this.props.onEmojiPressIn}
+                />
                 <ShareMomentButton />
             </View>
         );

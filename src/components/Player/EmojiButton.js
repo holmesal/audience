@@ -5,6 +5,7 @@ import React, {
     PropTypes,
     StyleSheet,
     Text,
+    UIManager,
     View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -70,19 +71,39 @@ export default class EmojiButton extends Component {
         });
     }
 
+    measure() {
+        //console.info(this.refs.button);
+        //this.props.onEmojiButtonLayout(this.refs.button);
+        //let handle = React.findNodeHandle(this.refs.button);
+        //UIManager.measure(handle, (x, y, w, h, px, py) => {
+        //    console.log('offset', x, y, w, h, px, py);
+        //    //let scrollTarget = y - this.state.containerHeight + h;
+        //    ////console.info('scrolLTarget', scrollTarget);
+        //    //this.scrollTo({y: scrollTarget});
+        //    //Animated.spring(this.state.opacity, {toValue: 1}).start();
+        //    this.props.onEmojiGlobalPositionCalculated({
+        //        x: px,
+        //        y: py,
+        //        w: w,
+        //        h: h
+        //    });
+        //});
+    }
 
     render() {
         return (
-            <View
+            <CircleButton
+                ref="button"
                 onPressIn={this.props.onPressIn}
                 {...this._panResponder.panHandlers}
+                onLayout={this.measure.bind(this)}
             >
                 <Icon
                     name="android-happy"
                     size={24}
                     color={colors.lighterGrey}
                 />
-            </View>
+            </CircleButton>
         );
     }
 }

@@ -8,6 +8,7 @@ import React, {
     PropTypes,
     StyleSheet,
     Text,
+    UIManager,
     View
 } from 'react-native';
 import Relay from 'react-relay';
@@ -33,6 +34,7 @@ import ButtonRow from './ButtonRow';
 import EmojiSploder from '../EmojiSploder/EmojiSploder';
 
 const OFFSCREEN = Dimensions.get('window').height + 50;
+const windowWidth = Dimensions.get('window').width;
 
 class Player extends Component {
 
@@ -49,7 +51,8 @@ class Player extends Component {
         lastTargetTime: 0,
         scrubbing: false,
         keyboardHeight: new Animated.Value(0),
-        emojiSploderVisible: false
+        emojiSploderVisible: false,
+        globalEmojiButtonPosition: null
     };
 
     _keyboardSpring = {
@@ -141,6 +144,25 @@ class Player extends Component {
         //    </Animated.View>
         //)
     }
+    //
+    //measureEmojiButtonRelativeToContainer(buttonRef) {
+    //    let handle = React.findNodeHandle(buttonRef);
+    //    let ancestorHandle = React.findNodeHandle(this.refs.wrapper);
+    //    console.info(UIManager)
+    //    UIManager.measureLayoutRelativeToParent(handle, ancestorHandle, (x, y, w, h, px, py) => {
+    //        console.log('offset', x, y, w, h, px, py);
+    //        //let scrollTarget = y - this.state.containerHeight + h;
+    //        ////console.info('scrolLTarget', scrollTarget);
+    //        //this.scrollTo({y: scrollTarget});
+    //        //Animated.spring(this.state.opacity, {toValue: 1}).start();
+    //        this.setState({globalEmojiButtonPosition: {
+    //            x: px,
+    //            y: py,
+    //            w: w,
+    //            h: h
+    //        }});
+    //    });
+    //}
 
     render() {
         if (!this.props.episode) {
@@ -150,14 +172,16 @@ class Player extends Component {
         //console.info('player render!', this.state.emojiSploderVisible);
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
-            <Animated.View style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]} pointerEvents={pointerEvents}>
+            <Animated.View
+                ref="wrapper"
+                style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]}
+                pointerEvents={pointerEvents}
+            >
 
                 <View style={styles.content}>
                     <AnnotationSpawner
                         episode={this.props.episode}
                     />
-
-
                 </View>
 
 
@@ -170,11 +194,6 @@ class Player extends Component {
                 <ButtonRow
                     style={styles.buttonRow}
                     onCommentPress={() => this.setState({composeVisible: true})}
-                    onEmojiPressIn={() => this.setState({emojiSploderVisible: true})}
-                />
-
-                <EmojiSploder
-                    visible={this.state.emojiSploderVisible}
                 />
 
                 <CommentCompose
@@ -205,6 +224,15 @@ class Player extends Component {
                     onDurationChange={duration => this.setState({duration})}
                     onCurrentTimeChange={currentTime => this.setState({currentTime})}
                     onSkip={this.handleSkip.bind(this)}
+                />
+
+                <EmojiSploder
+                    targetLayout={{
+                        left: windowWidth/2 - 30,
+                        bottom: buttonRowBottom,
+                        width: 60,
+                        height: 60
+                    }}
                 />
 
             </Animated.View>
@@ -262,6 +290,8 @@ class Player extends Component {
     //}
 }
 
+const buttonRowBottom = 35 + 80;
+
 let styles = StyleSheet.create({
     wrapper: {
         position: 'absolute',
@@ -286,7 +316,7 @@ let styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: 35
+        bottom: buttonRowBottom
     }
 });
 
