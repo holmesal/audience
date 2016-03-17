@@ -30,6 +30,8 @@ import CompactScrubber from './CompactScrubber';
 import Compose from './Compose';
 import ButtonRow from './ButtonRow';
 
+import EmojiSploder from '../EmojiSploder/EmojiSploder';
+
 const OFFSCREEN = Dimensions.get('window').height + 50;
 
 class Player extends Component {
@@ -46,7 +48,8 @@ class Player extends Component {
         currentTime: 0,
         lastTargetTime: 0,
         scrubbing: false,
-        keyboardHeight: new Animated.Value(0)
+        keyboardHeight: new Animated.Value(0),
+        emojiSploderVisible: false
     };
 
     _keyboardSpring = {
@@ -144,7 +147,7 @@ class Player extends Component {
             console.warn('player got null episode :-(');
             return <View />;
         }
-        //console.info('player render!');
+        //console.info('player render!', this.state.emojiSploderVisible);
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
             <Animated.View style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]} pointerEvents={pointerEvents}>
@@ -154,10 +157,7 @@ class Player extends Component {
                         episode={this.props.episode}
                     />
 
-                    <ButtonRow
-                        style={styles.buttonRow}
-                        onCommentPress={() => this.setState({composeVisible: true})}
-                    />
+
                 </View>
 
 
@@ -165,6 +165,16 @@ class Player extends Component {
                     style={styles.navbar}
                     episode={this.props.episode}
                     podcast={this.props.episode.podcast}
+                />
+
+                <ButtonRow
+                    style={styles.buttonRow}
+                    onCommentPress={() => this.setState({composeVisible: true})}
+                    onEmojiPressIn={() => this.setState({emojiSploderVisible: true})}
+                />
+
+                <EmojiSploder
+                    visible={this.state.emojiSploderVisible}
                 />
 
                 <CommentCompose
