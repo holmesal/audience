@@ -14,7 +14,7 @@ import PlaceKeeper from './PlaceKeeper';
 export default class AnnotationSpawner extends Component {
 
     state = {
-        lastSeenIdx: 0,
+        lastSeenIdx: null,
         visible: [],
         offsets: {}
     };
@@ -47,7 +47,7 @@ export default class AnnotationSpawner extends Component {
     }
 
     handleChangeLastSeenIdx(lastSeenIdx, skipping) {
-        //console.info('did update!')
+        console.info('did change last seen idx: ', lastSeenIdx);
         if (this.state.lastSeenIdx != lastSeenIdx) {
             // LastSeenIdx changed, we need to add or remove things
             if (lastSeenIdx < this.state.lastSeenIdx) {
@@ -59,12 +59,17 @@ export default class AnnotationSpawner extends Component {
                 // Going forwards, add annotations
                 let visible = this.state.visible.slice();
                 let offsets = this.state.offsets;
-                for (let i = this.state.lastSeenIdx + 1; i <= lastSeenIdx; i++) {
-                    //console.info('spawning: ', i, this.props.episode.annotations.edges[i].node.id, `onscreencount: ${this.state.visible.length}`);
+                // If we're at the start, show that one, else omit
+                let start = lastSeenIdx ===  0 ? 0 : this.state.lastSeenIdx + 1;
+                let end = lastSeenIdx;
+                //console.info(`${start} ---< ${end}`);
+                for (let i = start; i <= end; i++) {
+                    console.info('spawning: ', i, this.props.episode.annotations.edges[i].node.id, `onscreencount: ${this.state.visible.length}`);
                     let edge = this.props.episode.annotations.edges[i];
                     visible.push(edge);
                     offsets[edge.node.id] = 0;
                 }
+
                 this.setState({visible, offsets});
             }
             this.setState({lastSeenIdx});
