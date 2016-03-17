@@ -339,6 +339,7 @@ let styles = StyleSheet.create({
     wrapper: {
         position: 'absolute',
         //backgroundColor: 'red',
+        overflow: 'hidden'
     },
     bg: {
         position: 'absolute',

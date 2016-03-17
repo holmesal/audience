@@ -44,6 +44,7 @@ let styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1,
-        borderColor: 'rgba(216,216,216,0.8)'
+        borderColor: 'rgba(216,216,216,0.8)',
+        position: null
     }
 });
