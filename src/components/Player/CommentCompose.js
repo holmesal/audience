@@ -70,6 +70,7 @@ class CommentCompose extends Component {
         Relay.Store.commitUpdate(mutation, {
             onSuccess: () => {
                 console.info('successfully annotated episode!');
+                this.props.hide();
                 // Clear the text
                 this.setState({
                     inFlight: false,
@@ -88,7 +89,7 @@ class CommentCompose extends Component {
         this.setState({inFlight: true});
 
         // Hide this window immediately
-        this.props.hide();
+        //this.props.hide();
     }
 
     close() {

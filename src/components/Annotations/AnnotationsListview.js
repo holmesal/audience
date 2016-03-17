@@ -18,12 +18,12 @@ import {currentTime$} from '../../redux/modules/player';
 import Relay from 'react-relay';
 
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
-import Annotation from './Annotation';
+import Annotation from './AnnotationListviewItem';
 import PlaceKeeper from './PlaceKeeper';
 import WelcomeView from './WelcomeView';
 import Comment from './Comment';
 
-class Annotations extends Component {
+class AnnotationsListView extends Component {
 
     constructor(props) {
         super(props);
@@ -173,7 +173,7 @@ let styles = StyleSheet.create({
     }
 });
 
-let connectedAnnotations = connect(createSelector(currentTime$, currentTime => ({currentTime})))(Annotations);
+let connectedAnnotations = connect(createSelector(currentTime$, currentTime => ({currentTime})))(AnnotationsListView);
 
 export default Relay.createContainer(connectedAnnotations, {
     initialVariables: {

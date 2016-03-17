@@ -13,7 +13,7 @@ import FacebookAvatar from '../common/FacebookAvatar';
 
 import Comment from './Comment';
 
-class Annotation extends Component {
+class AnnotationListviewItem extends Component {
 
     render() {
         return (
@@ -29,7 +29,7 @@ class Annotation extends Component {
 let styles = StyleSheet.create({
 });
 
-export default Relay.createContainer(Annotation, {
+export default Relay.createContainer(AnnotationListviewItem, {
     fragments: {
         annotation: () => Relay.QL`
             fragment on Annotation {

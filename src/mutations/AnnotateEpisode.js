@@ -33,11 +33,32 @@ export default class AnnotateEpisodeMutation extends Relay.Mutation {
     }
 
     getConfigs() {
-        return [{
-            type: 'FIELDS_CHANGE',
-            fieldIDs: {
-                episode: this.props.episode.id
-            }
-        }]
+        return [
+            {
+                type: 'FIELDS_CHANGE',
+                fieldIDs: {
+                    episode: this.props.episode.id
+                }
+            },
+            // WANT TO ADD THIS, but rangeBehaviors seems to suggest that it would be difficult to insert this annotation
+            // in the middle
+            //{
+            //    type: 'RANGE_ADD',
+            //    parentID: this.props.episode.id,
+            //    connectionName: 'annotations',
+            //    edgeName: 'annotation',
+            //    rangeBehaviors: {}
+            //}
+        ]
     }
+
+    //getOptimisticResponse() {
+    //    return {
+    //        annotation: {
+    //            episode: this.props.episode,
+    //            text: this.props.text,
+    //            time: this.props.time,
+    //        }
+    //    }
+    //}
 }

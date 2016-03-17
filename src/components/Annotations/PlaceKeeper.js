@@ -86,11 +86,11 @@ class PlaceKeeper extends Component {
         }
     }
 
-    setLastSeenIdx(lastSeenIdx) {
+    setLastSeenIdx(lastSeenIdx, skipping) {
         // if this is different than what we have stored, notify the outer component of the change
         if (lastSeenIdx != this.state.lastSeenIdx) {
             // Notify parent
-            this.props.onChangeLastSeenIdx(lastSeenIdx);
+            this.props.onChangeLastSeenIdx(lastSeenIdx, skipping);
             // Store
             this.setState({lastSeenIdx});
         }
@@ -103,7 +103,7 @@ class PlaceKeeper extends Component {
         // Assuming these edges are ordered by ascending time, walk until you find an edge that the currentTime is less then
         let lastSeenIdx = null;
         // This is inefficient, avoid where possible
-        console.info('inefficiently searching through available episodes');
+        console.info('inefficiently searching through annotations');
         let firstLargerIdx = _.findIndex(edges, edge => edge.node.time > this.props.currentTime);
         //console.info('firstLarger: ', firstLargerIdx);
         // unless the first item is larger
@@ -118,8 +118,15 @@ class PlaceKeeper extends Component {
             lastSeenIdx = edges.length - 1;
         }
         // otherwise, lastSeenIdx remains null
+        // Figure out if we skipped ahead
+        let skipping = false;
+        if (edges[lastSeenIdx] && edges[this.state.lastSeenIdx]) {
+            let timeDiff = edges[lastSeenIdx].node.time - edges[this.state.lastSeenIdx].node.time;
+            console.info('time diff is ', timeDiff);
+            if (Math.abs(timeDiff) > 2) skipping = true;
+        }
 
-        this.setLastSeenIdx(lastSeenIdx)
+        this.setLastSeenIdx(lastSeenIdx, skipping)
     }
 
     render() {

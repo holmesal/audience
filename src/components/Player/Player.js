@@ -24,7 +24,8 @@ import EpisodePlayer from './EpisodePlayer';
 import Info from './Info';
 
 import Navbar from './Navbar';
-import Annotations from './../Annotations/Annotations';
+import Annotations from './../Annotations/AnnotationsListview';
+import AnnotationSpawner from '../Annotations/AnnotationSpawner';
 import CompactScrubber from './CompactScrubber';
 import Compose from './Compose';
 import ButtonRow from './ButtonRow';
@@ -148,11 +149,17 @@ class Player extends Component {
         return (
             <Animated.View style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]} pointerEvents={pointerEvents}>
 
-                {this.renderAnnotationsCompose()}
+                <View style={styles.content}>
+                    <AnnotationSpawner
+                        episode={this.props.episode}
+                    />
 
-                <ButtonRow
-                    onCommentPress={() => this.setState({composeVisible: true})}
-                />
+                    <ButtonRow
+                        style={styles.buttonRow}
+                        onCommentPress={() => this.setState({composeVisible: true})}
+                    />
+                </View>
+
 
                 <Navbar
                     style={styles.navbar}
@@ -259,6 +266,17 @@ let styles = StyleSheet.create({
         top: 0,
         left: 0,
         right: 0
+    },
+    content: {
+        flex: 1,
+        position: 'relative',
+        paddingTop: 66
+    },
+    buttonRow: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 35
     }
 });
 
@@ -275,6 +293,7 @@ export default Relay.createContainer(ConnectedPlayer, {
                 ${Navbar.getFragment('episode')}
                 ${CommentCompose.getFragment('episode')}
                 ${Annotations.getFragment('episode')}
+                ${AnnotationSpawner.getFragment('episode')}
                 podcast {
                     ${EpisodePlayer.getFragment('podcast')}
                     ${Navbar.getFragment('podcast')}
