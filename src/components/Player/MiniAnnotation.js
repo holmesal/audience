@@ -19,7 +19,6 @@ class MiniAnnotation extends Component {
     };
 
     render() {
-        console.info('render mini annotation!')
         const photoUrl = `http://graph.facebook.com/v2.5/${this.props.user.facebookId}/picture?type=square&height=${height * 2}`;
         return (
             <View style={[styles.wrapper, this.props.style]}>

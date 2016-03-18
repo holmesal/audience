@@ -8,6 +8,9 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
+import store from '../../redux/create';
+import {hidePlayer} from '../../redux/modules/player';
+
 import colors from '../../colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -20,6 +23,10 @@ class MiniPlayer extends Component {
     static defaultProps = {
 
     };
+
+    togglePlayer() {
+        store.dispatch(hidePlayer());
+    }
 
     render() {
         return (
@@ -34,7 +41,7 @@ class MiniPlayer extends Component {
                     <Text style={styles.podcast}>{this.props.episode.podcast.name}</Text>
                 </View>
 
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={this.togglePlayer.bind(this)}>
                     <Icon name="ios-arrow-down" size={24} color={colors.lighterGrey} />
                 </TouchableOpacity>
 

@@ -9,7 +9,7 @@ import React, {
     TouchableOpacity,
     View
 } from 'react-native';
-
+import Relay from 'react-relay';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from '../../colors';
 
@@ -34,7 +34,9 @@ export default class ScrollableAnnotationItem extends Component {
 
         // Animate in the container height
         Animated.spring(this.state.height, {
-            toValue: cardHeight + marginTop
+            toValue: cardHeight + marginTop,
+            tension: 80,
+            friction: 10
         }).start();
 
         // Fade in the contents
@@ -144,5 +146,18 @@ let styles = StyleSheet.create({
         color: colors.darkGrey,
         flex: 1,
 
+    }
+});
+
+export default Relay.createContainer(ScrollableAnnotationItem, {
+    fragments: {
+        annotation: () => Relay.QL`
+            fragment on Annotation {
+                text
+                user {
+                    facebookId
+                }
+            }
+        `
     }
 });

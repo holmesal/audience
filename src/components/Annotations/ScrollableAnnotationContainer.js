@@ -8,43 +8,40 @@ import React, {
     View
 } from 'react-native';
 import _ from 'lodash';
+import Relay from 'react-relay';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+import {currentTime$} from '../../redux/modules/player';
 
 import ScrollableAnnotationView from './ScrollableAnnotationView';
+import ScrollableAnnotationItem from './ScrollableAnnotationItem';
 
-export default class ScrollableAnnotationContainer extends Component {
+const annotationLifetime = 30;
+
+class ScrollableAnnotationContainer extends Component {
 
     state = {
-        annotations: []
+        inRangeAnnotations: []
     };
 
+    defaultProps = {
+        currentTime: 0
+    };
 
-    componentDidMount() {
-        let num = 0;
-        this._addAnnotationInterval = setInterval(() => {
-            let annotations = this.state.annotations.slice();
-            let fakeText = 'skadfh askdf hsfhj afjskg This is some long fake text to see how many words can fit before we start having problems';
-            num++;
-            if (num >= fakeText.split(' ').length) num = 1;
-            let annotation = {
-                id: Math.random() + '',
-                text: `[${num}] ${fakeText.split(' ').splice(0, num).join(' ')}`,
-                user: {
-                    facebookId: '10153907632414490'
-                }
-            };
-            annotations.push(annotation);
-            // Remove in 15 s
-            setTimeout(() => {
-                this.setState({
-                    annotations: _.without(this.state.annotations, annotation)
-                });
-            }, 15000);
-            this.setState({annotations});
-        }, 2000)
-    }
+    componentWillReceiveProps(nextProps) {
+        // Detect if we are skipping, and if so, don't show annotations from more than 10 seconds ago
+        let pastRange = nextProps.currentTime - this.props.currentTime > 30 ? 10 : annotationLifetime;
+        let inRangeAnnotations = [];
+        let tStart = nextProps.currentTime - pastRange;
+        let tEnd = nextProps.currentTime;
+        nextProps.episode.annotations.edges.forEach(edge => {
+            let ann = edge.node;
+            //console.info(`${tStart} < --- ${ann.time} --- < ${tEnd}`);
+            if (ann.time <= tEnd && ann.time >= tStart) inRangeAnnotations.push(edge);
+        });
 
-    componentWillUnmount() {
-        clearInterval(this._addAnnotationInterval)
+        //console.info(inRangeAnnotations);
+        this.setState({inRangeAnnotations});
     }
 
     render() {
@@ -53,7 +50,9 @@ export default class ScrollableAnnotationContainer extends Component {
          */
         return (
             <View style={styles.wrapper}>
-                <ScrollableAnnotationView annotations={this.state.annotations.slice().reverse()} />
+                <ScrollableAnnotationView
+                    annotations={this.state.inRangeAnnotations.slice().reverse()}
+                />
             </View>
         );
     }
@@ -62,5 +61,25 @@ export default class ScrollableAnnotationContainer extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         flex: 1
+    }
+});
+
+let con = connect(createSelector(currentTime$, currentTime => ({currentTime})))(ScrollableAnnotationContainer);
+
+export default Relay.createContainer(con, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                annotations(first:1000) {
+                    edges {
+                        node {
+                            id
+                            time
+                            ${ScrollableAnnotationItem.getFragment('annotation')}
+                        }
+                    }
+                }
+            }
+        `
     }
 });
