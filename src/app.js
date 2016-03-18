@@ -28,6 +28,9 @@ import Mixpanel from 'react-native-mixpanel';
 import colors from './colors';
 import Auth from './components/auth/Auth';
 
+// Ignore some warnings
+console.ignoredYellowBox = ['Possible Unhandled Promise Rejection', 'Sticky header index 0'];
+
 // Initialize mixpanel
 if (__DEV__) {
     Mixpanel.sharedInstanceWithToken('255425e8c5444a985a94d0a14500e7ef');
