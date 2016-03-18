@@ -42,8 +42,13 @@ class CommentCompose extends Component {
     }
 
     componentWillMount() {
-        DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
-        DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+        this._keyboardShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+        this._keyboardHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        this._keyboardShowSub.remove();
+        this._keyboardHideSub.remove();
     }
 
     keyboardWillShow(ev) {
