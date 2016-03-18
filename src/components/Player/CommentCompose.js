@@ -16,7 +16,7 @@ import Relay from 'react-relay';
 import AnnotateEpisodeMutation from '../../mutations/AnnotateEpisode';
 import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux';
-import {currentTime$} from '../../redux/modules/player.js';
+import {currentTime$, updateSendingComment} from '../../redux/modules/player.js';
 import store from '../../redux/create';
 
 class CommentCompose extends Component {
@@ -82,21 +82,21 @@ class CommentCompose extends Component {
                     inFlight: false,
                     text: ''
                 });
-                //store.dispatch()
+                store.dispatch(updateSendingComment(false));
             },
             onFailure: (transaction) => {
                 let error = transaction.getError();
                 console.error(error);
                 alert('Error adding your comment :-(');
                 this.setState({inFlight: false});
+                store.dispatch(updateSendingComment(false));
             }
         });
 
         // Update the ui to reflect in-flight request
         this.setState({inFlight: true});
-
-        // Hide this window immediately
-        //this.props.hide();
+        this.props.hide();
+        store.dispatch(updateSendingComment(true));
     }
 
     close() {

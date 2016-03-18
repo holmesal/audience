@@ -23,26 +23,24 @@ class CommentButton extends Component {
         opacity: new Animated.Value(1)
     };
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps, prevState) {
         console.info('update!', this.props);
-        if (nextProps.sendingComment) {
+        if (this.props.sendingComment && this.props.sendingComment != prevProps.sendingComment) {
             this.fadeOutAndIn()
         }
     }
 
     fadeOutAndIn() {
         Animated.timing(this.state.opacity, {
-            toValue: 0.3,
-            duration: 0.3
+            toValue: 0.3
         }).start(() => {
             if (!this.props.sendingComment) {
                 Animated.spring(this.state.opacity, {
                     toValue: 1
                 }).start()
             } else {
-                Animated.spring(this.state.opacity, {
-                    toValue: 0.5,
-                    duration: 0.3
+                Animated.timing(this.state.opacity, {
+                    toValue: 0.5
                 }).start((s) => {
                     this.fadeOutAndIn();
                 })
@@ -73,6 +71,4 @@ let styles = StyleSheet.create({
     }
 });
 
-//export default connect(commentButton$)(CommentButton);
-
-export default CommentButton;
+export default connect(commentButton$)(CommentButton);
