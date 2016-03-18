@@ -66,8 +66,8 @@ export default class ScrollableAnnotationItem extends Component {
     }
 
     render() {
-        let flex = this.props.annotation.text.length > 20 ? 1 : 0;
-        const photoUrl = `http://graph.facebook.com/v2.5/${this.props.annotation.user.facebookId}/picture?type=square&height=${this.state.cardHeight}`;
+        let flex = this.props.annotation.text.length > 25 ? 1 : 0;
+        const photoUrl = `http://graph.facebook.com/v2.5/${this.props.annotation.user.facebookId}/picture?type=square&height=${this.state.cardHeight * 2}`;
         return (
             <Animated.View style={[styles.wrapper, {
                 height: this.state.height,

@@ -72,7 +72,7 @@ class EpisodeListItem extends Component {
 
     render() {
         return (
-            <TouchableFade style={styles.wrapper} underlayColor={colors.almostDarkGrey} onPress={this.play.bind(this)}>
+            <TouchableFade style={styles.wrapper} underlayColor={colors.darkerGrey} onPress={this.play.bind(this)}>
                 <View style={styles.content}>
                     <PrimaryText style={styles.title} numberOfLines={1}>{this.props.episode.title}</PrimaryText>
                 </View>

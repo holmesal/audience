@@ -4,6 +4,7 @@ import React, {
     PropTypes,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -22,18 +23,18 @@ export default class ShareMomentButton extends Component {
 
     render() {
         return (
-            <CircleButton
+            <TouchableOpacity
                 onPress={this.handlePress.bind(this)}
             >
-                <Icon
-                    name="android-time"
-                    size={24}
-                    color={colors.lighterGrey}
-                />
-            </CircleButton>
+                <Image style={styles.buttonImage} source={require('image!buttonShare')} />
+            </TouchableOpacity>
         );
     }
 }
 
 let styles = StyleSheet.create({
+    buttonImage: {
+        width: 90,
+        height: 90
+    }
 });

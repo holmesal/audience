@@ -4,6 +4,7 @@ import React, {
     PropTypes,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -18,18 +19,18 @@ export default class CommentButton extends Component {
 
     render() {
         return (
-            <CircleButton
+            <TouchableOpacity
                 onPress={this.props.onPress}
             >
-                <Icon
-                    name="ios-chatbubble-outline"
-                    size={32}
-                    color={colors.lighterGrey}
-                />
-            </CircleButton>
+                <Image style={styles.buttonImage} source={require('image!buttonComment')} />
+            </TouchableOpacity>
         );
     }
 }
 
 let styles = StyleSheet.create({
+    buttonImage: {
+        width: 90,
+        height: 90
+    }
 });

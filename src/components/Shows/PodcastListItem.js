@@ -49,7 +49,7 @@ class PodcastListItem extends Component {
     render() {
         return (
             <TouchableFade style={styles.wrapper}
-                           underlayColor={colors.almostDarkGrey}
+                           underlayColor={colors.darkerGrey}
                            onPress={this.showPodcastInfo.bind(this)}
                            onLongPress={() => this.setState({actionSheetVisible: true})}
             >

@@ -21,7 +21,7 @@ export default class ResultItem extends Component {
 
     render() {
         return (
-            <TouchableFade underlayColor={colors.almostDarkGrey} onPress={this.props.onPress} onLongPress={this.props.onLongPress}>
+            <TouchableFade underlayColor={colors.darkerGrey} onPress={this.props.onPress} onLongPress={this.props.onLongPress}>
                 <View style={styles.wrapper}>
                     <Image style={styles.photo} source={{uri: this.props.photoUrl}} />
                     <View style={styles.info}>
@@ -49,7 +49,7 @@ let styles = StyleSheet.create({
     photo: {
         width: 48,
         height: 48,
-        backgroundColor: colors.almostDarkGrey,
+        backgroundColor: colors.darkerGrey,
         marginRight: 20
     },
 
@@ -67,7 +67,7 @@ let styles = StyleSheet.create({
     },
 
     sep: {
-        backgroundColor: colors.almostDarkGrey,
+        backgroundColor: colors.darkerGrey,
         opacity: 0.5,
         height: 1,
         marginTop: -1,

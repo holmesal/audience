@@ -38,8 +38,6 @@ if (__DEV__) {
     Mixpanel.sharedInstanceWithToken('e427bf5ada34e28eced40b58b6c468f9');
 }
 
-import ScrollableAnnotationContainer from './components/Annotations/ScrollableAnnotationContainer';
-
 export default class App extends Component {
 
     componentDidMount() {
@@ -47,7 +45,6 @@ export default class App extends Component {
     }
 
     render() {
-        return <ScrollableAnnotationContainer />
         return <Auth />;
     }
 }

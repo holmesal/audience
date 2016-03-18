@@ -674,8 +674,8 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Podcastfoo" */;
 			buildPhases = (
 				1FEAB5250A1777E61BD27A40 /* Check Pods Manifest.lock */,
-				E2FD8C431C88DD4800953CB8 /* Bump build number */,
 				E2654D101C7C32C800F9BCE8 /* Auto-ip */,
+				E2FD8C431C88DD4800953CB8 /* Bump build number */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
