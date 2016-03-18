@@ -52,7 +52,7 @@ class CompactPlayer extends Component {
         return (
             <Animated.View style={[styles.wrapper, {height: this.state.height}]}>
                 <ProgressBar progress={progress} />
-                <TouchableFade style={styles.row} underlayColor={colors.almostDarkGrey} onPress={this.showPlayer.bind(this)}>
+                <TouchableFade style={styles.row} underlayColor={colors.darkerGrey} onPress={this.showPlayer.bind(this)}>
                     {image}
                     <SecondaryText style={styles.title} numberOfLines={1}>{title}</SecondaryText>
                     <Image style={styles.caret} source={require('image!backChevron')} />
@@ -74,7 +74,7 @@ let styles = StyleSheet.create({
         backgroundColor: '#0F0F0F'
     },
     artwork: {
-        backgroundColor: colors.almostDarkGrey,
+        backgroundColor: colors.darkerGrey,
         alignSelf: 'stretch',
         width: 40,
         marginRight: 12

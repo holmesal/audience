@@ -42,7 +42,7 @@ let styles = StyleSheet.create({
         fontFamily: 'System',
         fontWeight: '200',
         fontSize: 14,
-        color: colors.almostDarkGrey,
+        color: colors.darkerGrey,
         marginTop: 12
     }
 });

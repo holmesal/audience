@@ -30,7 +30,7 @@ let styles = StyleSheet.create({
     wrapper: {
         alignSelf: 'stretch',
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around'
+        alignItems: 'flex-start',
+        justifyContent: 'center',
     }
 });

@@ -5,6 +5,7 @@ import React, {
     PropTypes,
     StyleSheet,
     Text,
+    TouchableOpacity,
     UIManager,
     View
 } from 'react-native';
@@ -92,21 +93,27 @@ export default class EmojiButton extends Component {
 
     render() {
         return (
-            <CircleButton
+            <TouchableOpacity
                 ref="button"
+                style={styles.wrapper}
                 onPressIn={this.props.onPressIn}
                 {...this._panResponder.panHandlers}
                 onLayout={this.measure.bind(this)}
             >
-                <Icon
-                    name="android-happy"
-                    size={24}
-                    color={colors.lighterGrey}
-                />
-            </CircleButton>
+                <Image style={styles.buttonImage} source={require('image!buttonEmoji')} />
+            </TouchableOpacity>
         );
     }
 }
 
 let styles = StyleSheet.create({
+    wrapper: {
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10
+    },
+    buttonImage: {
+        width: 90,
+        height: 90
+    }
 });

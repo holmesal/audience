@@ -1,5 +1,6 @@
 import React, {
     Component,
+    Dimensions,
     Image,
     PropTypes,
     StyleSheet,

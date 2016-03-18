@@ -18,7 +18,7 @@ import TinyUser from './TinyUser';
 import Times from './Times';
 import TimeRemaining from './TimeRemaining';
 import PrettyTime from './PrettyTime';
-import FacebookAvatar from '../common/FacebookAvatar';
+import MiniAnnotation from './MiniAnnotation';
 import PlayPauseButton from './PlayPauseButton';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -252,26 +252,26 @@ class CompactScrubber extends Component {
             let left = (frac * waveformWidth) + windowWidth/2 - avatarSize/2;
             if (!lastLaidAnnotationLeft || (left - lastLaidAnnotationLeft > minSpacing)) {
                 edge.left = left;
+                edge.opacity = this.state.frac > frac ? 0.3 : 1;
                 lastLaidAnnotationLeft = left;
                 thinnedAnnotations.push(edge);
             }
         });
 
         return thinnedAnnotations.map(edge => {
-            return (
-                <Icon
-                    name="ios-chatbubble"
-                    style={[styles.avatar, {left: edge.left}]}
-                    key={edge.node.id}
-                    color={colors.lighterGrey}
-                    size={10}
-                />
-            );
-            //return (<FacebookAvatar user={edge.node.user}
-            //                        style={[styles.avatar, {left: left}]}
-            //                        key={edge.node.id}
-            //                        size={avatarSize}
-            ///>);
+            //return (
+            //    <Icon
+            //        name="ios-chatbubble"
+            //        style={[styles.avatar, {left: edge.left}]}
+            //        key={edge.node.id}
+            //        color={colors.lighterGrey}
+            //        size={10}
+            //    />
+            //);
+            return (<MiniAnnotation user={edge.node.user}
+                                    style={[styles.miniAnnotation, {left: edge.left, opacity: edge.opacity}]}
+                                    key={edge.node.id}
+            />);
         })
     }
 
@@ -342,28 +342,28 @@ class CompactScrubber extends Component {
                     <Text style={styles.hint}>Drag to seek</Text>
                 </Animated.View>
 
-                {/** Gradient cover for pause button */}
-                <LinearGradient
-                    style={styles.gradient}
-                    colors={['rgba(53,53,53,0.95)', 'rgba(53,53,53,0.95)', 'rgba(53,53,53,0)']}
-                    start={[0.0, 0.5]}
-                    end={[1.0, 0.5]}
-                    locations={[0.0, 0.7, 1.0]}
-                    pointerEvents="none"
-                />
 
-                <PlayPauseButton 
-                    style={styles.playPause}
-                />
             </Animated.View>
         );
     }
+
+//{/** Gradient cover for pause button */}
+//<LinearGradient
+//    style={styles.gradient}
+//    colors={['rgba(53,53,53,0.95)', 'rgba(53,53,53,0.95)', 'rgba(53,53,53,0)']}
+//    start={[0.0, 0.5]}
+//    end={[1.0, 0.5]}
+//    locations={[0.0, 0.7, 1.0]}
+//    pointerEvents="none"
+///>
+//
+//<PlayPauseButton style={styles.playPause} />
 }
 
-const containerHeight = 84;
-const waveformHeight = 32;
+const containerHeight = 132;
+const waveformHeight = 40;
 const waveformWidth = 1173;
-const avatarSize = 10;
+const avatarSize = 44;
 const avatarBottom = 6;
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -373,9 +373,10 @@ let styles = StyleSheet.create({
         alignSelf: 'stretch',
         height: containerHeight,
         position: 'relative',
-        backgroundColor: colors.darkGrey,
-        borderTopWidth: 1,
-        borderColor: colors.darkBorder
+        marginTop: 20,
+        //backgroundColor: colors.darkGrey,
+        //borderTopWidth: 1,
+        //borderColor: colors.darkBorder
     },
     scroller: {
         flex: 1,
@@ -394,16 +395,15 @@ let styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         alignSelf: 'stretch',
-        //marginTop: windowHeight/2 - waveformHeight/2,
         position: 'relative'
     },
     waveformMask: {
         backgroundColor: colors.darkGrey,
         opacity: 0.8,
         position: 'absolute',
-        top: 0,
+        top: 40,
         left: windowWidth/2,
-        bottom: avatarSize + avatarBottom,
+        bottom: 20,
         right: 0
     },
     spacer: {
@@ -417,19 +417,19 @@ let styles = StyleSheet.create({
         tintColor: colors.lighterGrey
     },
 
-    avatar: {
+    miniAnnotation: {
         position: 'absolute',
-        bottom: avatarBottom,
+        top: 10,
         left: 0
     },
 
     playHead: {
         width: 2,
-        height: 32,
+        height: waveformHeight,
         borderRadius: 1,
         backgroundColor: colors.attention,
         position: 'absolute',
-        top: containerHeight/2 - 16,
+        top: containerHeight/2 - waveformHeight/2,
         left: windowWidth/2 - 1
     },
 
@@ -440,23 +440,23 @@ let styles = StyleSheet.create({
         backgroundColor: 'transparent'
     },
 
-    times: {
-        position: 'absolute',
-        bottom: windowHeight/2 + waveformHeight/2 + 8 + 88 + 12,
-        left: 0,
-        right: 0
-    },
+    //times: {
+    //    position: 'absolute',
+    //    bottom: windowHeight/2 + waveformHeight/2 + 8 + 88 + 12,
+    //    left: 0,
+    //    right: 0
+    //},
 
     timestamp: {
-        color: colors.lighterGrey,
-        fontSize: 10,
-        fontWeight: '400',
+        color: '#c0c0c0',
+        fontSize: 12,
+        fontWeight: '500',
         letterSpacing: 0.58
     },
 
     remaining: {
         position: 'absolute',
-        top: 4,
+        bottom: 8,
         right: 12,
     },
 
@@ -465,7 +465,7 @@ let styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        top: 4,
+        bottom: 8,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -508,7 +508,7 @@ export default Relay.createContainer(CompactScrubber, {
                             id
                             time
                             user {
-                                ${FacebookAvatar.getFragment('user')}
+                                ${MiniAnnotation.getFragment('user')}
                             }
                         }
                     }

@@ -34,7 +34,7 @@ export default class AddShowButton extends Component {
     renderFakeRow() {
         return (
             <TouchableFade style={styles.wrapper}
-                           underlayColor={colors.almostDarkGrey}
+                           underlayColor={colors.darkerGrey}
                            onPress={this.showSearch.bind(this)}
             >
                 <View style={styles.fakeArt}>
@@ -68,7 +68,7 @@ let styles = StyleSheet.create({
         marginRight: 24,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.almostDarkGrey
+        backgroundColor: colors.darkerGrey
     },
     info: {
         flex: 1,
