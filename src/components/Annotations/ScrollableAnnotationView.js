@@ -9,6 +9,7 @@ import React, {
     Text,
     View
 } from 'react-native';
+import Relay from 'react-relay';
 
 import ScrollableAnnotationItem from './ScrollableAnnotationItem';
 import InvertibleScrollView from 'react-native-invertible-scroll-view';
@@ -53,7 +54,8 @@ export default class ScrollableAnnotationView extends Component {
     }
 
     renderRows() {
-        return this.props.annotations.map((annotation) => <ScrollableAnnotationItem key={annotation.id} annotation={annotation} />);
+        //console.info(this.props.annotations)
+        return this.props.annotations.map((edge) => <ScrollableAnnotationItem key={edge.node.id} annotation={edge.node} />);
     }
 
     render() {

@@ -255,7 +255,9 @@ class Player extends Component {
 
                 <View style={styles.content}>
 
-                    <ScrollableAnnotationContainer />
+                    <ScrollableAnnotationContainer
+                        episode={this.props.episode}
+                    />
 
                     <CompactScrubber
                         duration={this.state.duration}
@@ -344,6 +346,7 @@ export default Relay.createContainer(ConnectedPlayer, {
                 ${Annotations.getFragment('episode')}
                 ${AnnotationSpawner.getFragment('episode')}
                 ${MiniPlayer.getFragment('episode')}
+                ${ScrollableAnnotationContainer.getFragment('episode')}
                 podcast {
                     ${EpisodePlayer.getFragment('podcast')}
                     ${Navbar.getFragment('podcast')}
