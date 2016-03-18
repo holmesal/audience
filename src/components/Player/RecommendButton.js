@@ -2,6 +2,7 @@ import React, {
     AlertIOS,
     Component,
     PropTypes,
+    StyleSheet,
     Text,
     TouchableOpacity,
     View
@@ -25,6 +26,7 @@ class RecommendButton extends Component {
     };
 
     recommend() {
+        if (this.props.episode.viewerHasRecommended) return false;
         AlertIOS.prompt(
             'Add a comment?',
             'This is optional.',
@@ -54,36 +56,45 @@ class RecommendButton extends Component {
 
     renderNotRecommended() {
         return (
-            <NavbarButton onPress={this.recommend.bind(this)}>
-                <Icon name="ios-heart-outline" color={colors.lighterGrey} size={iconSize}/>
-            </NavbarButton>
+            <Icon name="ios-heart-outline" color={colors.lighterGrey} size={iconSize}/>
         )
     }
 
     renderRecommending() {
         return (
-            <NavbarButton>
-                <Icon name="ios-heart" color={colors.grey} size={iconSize}/>
-            </NavbarButton>
+            <Icon name="ios-heart" color={colors.grey} size={iconSize}/>
         )
     }
 
     renderRecommended() {
         return (
-            <NavbarButton>
-                <Icon name="ios-heart" color={colors.grey} size={iconSize}/>
-            </NavbarButton>
+            <Icon name="ios-heart" color="#DF7474" size={iconSize}/>
         )
     }
 
-    render() {
+    getIcon() {
         if (this.state.recommending) return this.renderRecommending();
         else {
             if (this.props.episode.viewerHasRecommended) return this.renderRecommended();
             else return this.renderNotRecommended()
         }
     }
+
+    render() {
+        return (
+            <TouchableOpacity
+                style={[styles.wrapper, this.props.style]}
+                onPress={this.recommend.bind(this)}
+            >
+                {this.getIcon()}
+            </TouchableOpacity>
+        )
+    }
 }
+
+let styles = StyleSheet.create({
+    wrapper: {}
+});
 
 export default Relay.createContainer(RecommendButton, {
     fragments: {
