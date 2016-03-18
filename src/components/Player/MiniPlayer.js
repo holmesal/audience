@@ -10,7 +10,7 @@ import React, {
 import Relay from 'react-relay';
 import store from '../../redux/create';
 import {hidePlayer} from '../../redux/modules/player';
-
+import RecommendButton from './RecommendButton';
 import colors from '../../colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -32,9 +32,10 @@ class MiniPlayer extends Component {
         return (
             <View style={styles.wrapper}>
 
-                <TouchableOpacity style={styles.button}>
-                    <Icon name="ios-heart-outline" size={24} color={colors.lighterGrey} />
-                </TouchableOpacity>
+                <RecommendButton
+                    style={styles.button}
+                    episode={this.props.episode}
+                />
 
                 <View style={styles.textWrapper}>
                     <Text style={styles.title} numberOfLines={1}>{this.props.episode.title}</Text>
@@ -96,6 +97,7 @@ export default Relay.createContainer(MiniPlayer, {
                 id
                 viewerHasRecommended
                 title
+                ${RecommendButton.getFragment('episode')}
                 podcast {
                     id
                     name

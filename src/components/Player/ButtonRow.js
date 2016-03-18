@@ -7,12 +7,12 @@ import React, {
     Text,
     View
 } from 'react-native';
-
+import Relay from 'react-relay';
 import CommentButton from './CommentButton';
 import EmojiButton from './EmojiButton';
 import ShareMomentButton from './ShareMomentButton';
 
-export default class ButtonRow extends Component {
+class ButtonRow extends Component {
 
     propTypes: {
       visible: React.PropTypes.bool
@@ -51,7 +51,9 @@ export default class ButtonRow extends Component {
                 <EmojiButton
                     onPressIn={this.props.onEmojiPressIn}
                 />
-                <ShareMomentButton />
+                <ShareMomentButton
+                    episode={this.props.episode}
+                />
             </Animated.View>
         );
     }
@@ -63,5 +65,15 @@ let styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'center',
+    }
+});
+
+export default Relay.createContainer(ButtonRow, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                ${ShareMomentButton.getFragment('episode')}
+            }
+        `
     }
 });

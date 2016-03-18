@@ -134,6 +134,7 @@ class CommentCompose extends Component {
                            value={this.state.text}
                            autoFocus
                            keyboardDismissMode="interactive"
+                           keyboardAppearance="dark"
                            onChangeText={(text) => this.setState({text})}
                 />
             </Animated.View>
