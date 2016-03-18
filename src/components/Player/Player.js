@@ -50,12 +50,7 @@ class Player extends Component {
         opacity: new Animated.Value(0),
         offset: new Animated.Value(OFFSCREEN),
         composeVisible: false,
-        currentTime: 0,
-        lastTargetTime: 0,
-        scrubbing: false,
         keyboardHeight: new Animated.Value(0),
-        emojiSploderVisible: false,
-        globalEmojiButtonPosition: null
     };
 
     _keyboardSpring = {
@@ -259,7 +254,7 @@ class Player extends Component {
                     <ButtonRow
                         style={styles.buttonRow}
                         onCommentPress={() => this.setState({composeVisible: true})}
-                        visible={this.props.visible && this.state.currentTime}
+                        visible={this.props.visible}
                     />
 
                     <MiniPlayer

@@ -32,7 +32,7 @@ const initialState = Immutable.fromJS({
 
     choosingEmoji: false,
     sendingEmoji: false,
-    sendingComment: true,
+    sendingComment: false
 });
 
 export default createReducer(initialState, {
