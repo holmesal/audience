@@ -13,6 +13,8 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
+import {connect} from 'react-redux';
+import {scrubber$, updateLastTargetTime} from '../../redux/modules/player';
 import colors from './../../colors';
 import TinyUser from './TinyUser';
 import Times from './Times';
@@ -26,7 +28,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 class CompactScrubber extends Component {
 
     static propTypes = {
-        onSeek: PropTypes.func.isRequired,
         onWaveformPress: PropTypes.func
     };
 
@@ -35,8 +36,7 @@ class CompactScrubber extends Component {
         currentTime: 0,
         onScrubStart: () => {},
         onScrubEnd: () => {},
-        onWaveformPress: () => {},
-        onHotSeek: () => {}
+        onWaveformPress: () => {}
     };
 
     state = {
@@ -195,7 +195,8 @@ class CompactScrubber extends Component {
         // Seek to this time
         if (targetTime === 0) targetTime = Math.random() * 0.01; // tiny time
         console.info('scrubbing has ended, seeking to target time: ', targetTime);
-        this.props.onSeek(targetTime);
+        this.props.dispatch(updateLastTargetTime(targetTime));
+        //this.props.onSeek(targetTime);
 
     }
 
@@ -498,7 +499,9 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(CompactScrubber, {
+let connectedScrubber = connect(scrubber$)(CompactScrubber);
+
+export default Relay.createContainer(connectedScrubber, {
     fragments: {
         episode: () => Relay.QL`
             fragment on Episode {

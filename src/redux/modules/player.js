@@ -14,6 +14,7 @@ const UPDATE_PLAYING = 'audience/player/UPDATE_PLAYING';
 const UPDATE_BUFFERING = 'audience/player/UPDATE_BUFFERING';
 const UPDATE_DURATION = 'audience/player/UPDATE_DURATION';
 const UPDATE_CURRENT_TIME = 'audience/player/UPDATE_CURRENT_TIME';
+const UPDATE_LAST_TARGET_TIME = 'audience/player/UPDATE_LAST_TARGET_TIME';
 const SKIP = 'audience/player/SKIP';
 const UPDATE_CHOOSING_EMOJI = 'audience/player/UPDATE_CHOOSING_EMOJI';
 const UPDATE_SENDING_EMOJI = 'audience/player/UPDATE_SENDING_EMOJI';
@@ -26,6 +27,7 @@ const initialState = Immutable.fromJS({
     buffering: false,
     duration: null,
     currentTime: null,
+    lastTargetTime: 0,
     duration: null,
 
     choosingEmoji: false,
@@ -48,6 +50,7 @@ export default createReducer(initialState, {
 
 
     [UPDATE_CURRENT_TIME]: (state, action) => state.set('currentTime', action.currentTime),
+    [UPDATE_LAST_TARGET_TIME]: (state, action) => state.set('lastTargetTime', action.lastTargetTime),
 
     [UPDATE_CHOOSING_EMOJI]: (state, action) => state.set('choosingEmoji', action.choosingEmoji),
     [UPDATE_SENDING_EMOJI]: (state, action) => state.set('sendingEmoji', action.sendingEmoji),
@@ -59,6 +62,7 @@ export default createReducer(initialState, {
 export const duration$ = state => state.getIn(['player', 'duration']);
 export const episodeId$ = state => state.getIn(['player', 'episodeId']);
 export const currentTime$ = state => state.getIn(['player', 'currentTime']);
+export const lastTargetTime$ = state => state.getIn(['player', 'lastTargetTime']);
 export const visible$ = state => state.getIn(['player', 'visible']);
 export const playing$ = state => state.getIn(['player', 'playing']);
 export const buffering$ = state => state.getIn(['player', 'buffering']);
@@ -75,10 +79,18 @@ export const audio$ = createSelector(playing$, (playing) => ({
     playing
 }));
 
-//export const scrubber$ = createSelector(currentTime$, duration$, (currentTime, duration) => ({
-//    currentTime,
-//    duration
-//}));
+export const episodePlayer$ = createSelector(playing$, lastTargetTime$, duration$, currentTime$, (playing, lastTargetTime, duration, currentTime) => ({
+    playing,
+    lastTargetTime,
+    duration,
+    currentTime
+}));
+
+export const scrubber$ = createSelector(currentTime$, duration$, playing$, (currentTime, duration, playing) => ({
+    currentTime,
+    duration,
+    playing
+}));
 
 export const controls$ = createSelector(playing$, buffering$, (playing, buffering) => ({
     playing,
@@ -154,9 +166,15 @@ export const updateDuration = (duration) => ({
     type: UPDATE_DURATION,
     duration
 });
+
 export const updateCurrentTime = (currentTime) => ({
     type: UPDATE_CURRENT_TIME,
     currentTime
+});
+
+export const updateLastTargetTime = (lastTargetTime) => ({
+    type: UPDATE_LAST_TARGET_TIME,
+    lastTargetTime
 });
 
 export const updateChoosingEmoji = (choosingEmoji) => ({

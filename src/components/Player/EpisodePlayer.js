@@ -8,7 +8,7 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 import {connect} from 'react-redux';
-import {audio$, resume, updatePlaying, updateCurrentTime, updateDuration} from '../../redux/modules/player.js';
+import {episodePlayer$, resume, updatePlaying, updateCurrentTime, updateDuration, updateLastTargetTime} from '../../redux/modules/player.js';
 import ListenToEpisodeMutation from '../../mutations/ListenToEpisode';
 import {showRecommendNotification} from '../../notifications';
 
@@ -85,18 +85,22 @@ class EpisodePlayer extends Component {
 
     handleCurrentTimeChange(currentTime) {
         this.setState({currentTime});
-        this.props.onCurrentTimeChange(currentTime);
+        //this.props.onCurrentTimeChange(currentTime);
         this.props.dispatch(updateCurrentTime(currentTime));
     }
 
     handleDurationChange(duration) {
         this.setState({duration});
-        this.props.onDurationChange(duration);
+        //this.props.onDurationChange(duration);
         this.props.dispatch(updateDuration(duration));
     }
 
     handleSkip(amount) {
-
+        console.info('handling skip!');
+        let lastTargetTime = this.props.currentTime + amount;
+        if (lastTargetTime < 0) lastTargetTime = Math.random() * 0.0001; //rly small but still causes seek
+        else if (lastTargetTime > this.props.duration) lastTargetTime = this.props.duration;
+        this.props.dispatch(updateLastTargetTime(lastTargetTime));
     }
 
     render() {
@@ -111,7 +115,7 @@ class EpisodePlayer extends Component {
                 onCurrentTimeChange={this.handleCurrentTimeChange.bind(this)}
                 onDurationChange={this.handleDurationChange.bind(this)}
                 onPlayingChange={(playing) => this.props.dispatch(updatePlaying(playing))}
-                onSkip={this.props.onSkip}
+                onSkip={this.handleSkip.bind(this)}
             />
         );
     }
@@ -123,7 +127,7 @@ let styles = StyleSheet.create({
     }
 });
 
-let connectedEpisodePlayer = connect(audio$)(EpisodePlayer);
+let connectedEpisodePlayer = connect(episodePlayer$)(EpisodePlayer);
 
 export default Relay.createContainer(connectedEpisodePlayer, {
     initialVariables: {
