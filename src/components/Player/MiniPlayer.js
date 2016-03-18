@@ -37,8 +37,8 @@ class MiniPlayer extends Component {
                 </TouchableOpacity>
 
                 <View style={styles.textWrapper}>
-                    <Text style={styles.title}>{this.props.episode.title}</Text>
-                    <Text style={styles.podcast}>{this.props.episode.podcast.name}</Text>
+                    <Text style={styles.title} numberOfLines={1}>{this.props.episode.title}</Text>
+                    <Text style={styles.podcast} numberOfLines={1}>{this.props.episode.podcast.name}</Text>
                 </View>
 
                 <TouchableOpacity style={styles.button} onPress={this.togglePlayer.bind(this)}>
@@ -74,14 +74,18 @@ let styles = StyleSheet.create({
         fontWeight: '600',
         color: colors.lightGrey,
         letterSpacing: 0.6,
-        marginBottom: 2
+        marginBottom: 2,
+        alignSelf: 'stretch',
+        textAlign: 'center'
     },
     podcast: {
         fontFamily: 'System',
         fontWeight: '400',
         fontSize: 12,
         color: colors.lightGrey,
-        letterSpacing: 0.6
+        letterSpacing: 0.6,
+        alignSelf: 'stretch',
+        textAlign: 'center'
     }
 });
 

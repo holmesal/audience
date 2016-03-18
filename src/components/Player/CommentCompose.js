@@ -17,14 +17,13 @@ import AnnotateEpisodeMutation from '../../mutations/AnnotateEpisode';
 import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux';
 import {currentTime$} from '../../redux/modules/player.js';
-import store from '../../redux/create.js';
+import store from '../../redux/create';
 
 class CommentCompose extends Component {
 
     static propTypes = {};
 
     static defaultProps = {
-        visible: true,
         hide: () => {}
     };
 
@@ -32,8 +31,15 @@ class CommentCompose extends Component {
         text: '',
         paddingBottom: new Animated.Value(0),
         keyboardHeight: 0,
-        inFlight: false
+        inFlight: false,
+        currentTime: null
     };
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.visible && !this.props.visible) {
+            this.setState({currentTime: currentTime$(store.getState())})
+        }
+    }
 
     componentWillMount() {
         DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
@@ -56,7 +62,7 @@ class CommentCompose extends Component {
     }
 
     submit() {
-        let currentTime = currentTime$(store.getState());
+        let currentTime = this.state.currentTime;
         console.info(this.state.text, currentTime);
 
         // Create the mutation
@@ -76,6 +82,7 @@ class CommentCompose extends Component {
                     inFlight: false,
                     text: ''
                 });
+                //store.dispatch()
             },
             onFailure: (transaction) => {
                 let error = transaction.getError();

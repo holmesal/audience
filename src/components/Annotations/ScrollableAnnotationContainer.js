@@ -16,7 +16,7 @@ import {currentTime$} from '../../redux/modules/player';
 import ScrollableAnnotationView from './ScrollableAnnotationView';
 import ScrollableAnnotationItem from './ScrollableAnnotationItem';
 
-const annotationLifetime = 30;
+const annotationLifetime = 16;
 
 class ScrollableAnnotationContainer extends Component {
 

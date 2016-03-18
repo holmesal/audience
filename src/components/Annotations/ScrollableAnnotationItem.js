@@ -12,6 +12,7 @@ import React, {
 import Relay from 'react-relay';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from '../../colors';
+import emoji from 'node-emoji';
 
 export default class ScrollableAnnotationItem extends Component {
 
@@ -84,7 +85,7 @@ export default class ScrollableAnnotationItem extends Component {
                             source={{uri: photoUrl}}
                             style={[styles.image, {height: this.state.cardHeight || 0}]}
                         />
-                        <Text style={styles.text} onLayout={this.handleTextLayout.bind(this)}>{this.props.annotation.text}</Text>
+                        <Text style={styles.text} onLayout={this.handleTextLayout.bind(this)}>{emoji.emojify(this.props.annotation.text)}</Text>
                     </View>
                 </View>
             </Animated.View>

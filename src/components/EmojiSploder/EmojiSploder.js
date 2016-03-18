@@ -13,8 +13,12 @@ import React, {
     View
 } from 'react-native';
 import _ from 'lodash';
+import Relay from 'react-relay';
+import {currentTime$, updateChoosingEmoji, updateSendingEmoji} from '../../redux/modules/player.js';
+import store from '../../redux/create.js';
 
 import Emoji from 'react-native-emoji';
+import AnnotateEpisodeMutation from '../../mutations/AnnotateEpisode';
 
 // window dimensions
 const windowWidth = Dimensions.get('window').width;
@@ -52,7 +56,8 @@ export default class EmojiSploder extends Component {
         visibility: new Animated.Value(0),
         bgOpacity: new Animated.Value(0),
         focused: null,
-        exploded: false
+        exploded: false,
+        currentTime: null
     };
 
     rankedEmoji = [
@@ -112,8 +117,8 @@ export default class EmojiSploder extends Component {
             },
             onPanResponderMove: (ev, gestureState) => {
                 //console.info(ev.nativeEvent);
-                const {locationX, locationY} = ev.nativeEvent;
-                this.focusCellUnderTouch(locationX, locationY);
+                const {pageX, pageY} = ev.nativeEvent;
+                this.focusCellUnderTouch(pageX, pageY);
 
                 // The most recent move distance is gestureState.move{X,Y}
 
@@ -127,6 +132,7 @@ export default class EmojiSploder extends Component {
                 this.hide();
                 //VibrationIOS.vibrate();
                 console.info('picked emoji!', this.state.focused);
+                this.sendEmojiMessage();
             },
             onPanResponderTerminate: (evt, gestureState) => {
                 // Another component has become the responder, so this gesture
@@ -167,8 +173,41 @@ export default class EmojiSploder extends Component {
         }
     }
 
+    sendEmojiMessage() {
+        if (this.state.focused) {
+            let {emojiName} = this.state.focused;
+
+            console.info(emojiName, this.state.currentTime)
+
+            let mutation = new AnnotateEpisodeMutation({
+                episode: this.props.episode,
+                time: this.state.currentTime,
+                text: `:${emojiName}:`
+            });
+
+            // Commit the update
+            Relay.Store.commitUpdate(mutation, {
+                onSuccess: () => {
+                    console.info('successfully added emoji to episode!');
+                    store.dispatch(updateSendingEmoji(false));
+                },
+                onFailure: (transaction) => {
+                    let error = transaction.getError();
+                    console.error(error);
+                    alert('Error adding your emoji :-(');
+                    store.dispatch(updateSendingEmoji(false));
+                }
+            });
+
+            // Notify the store that an update is in-progress
+            store.dispatch(updateSendingEmoji(true));
+        }
+    }
+
     show() {
         console.info('showing!');
+        this.setState({currentTime: currentTime$(store.getState())});
+        store.dispatch(updateChoosingEmoji(true));
         clearTimeout(this._delayedHideTimeout);
         Animated.timing(this.state.visibility, {
             toValue: 1,
@@ -178,6 +217,7 @@ export default class EmojiSploder extends Component {
 
     hide() {
         console.info('hiding!');
+        store.dispatch(updateChoosingEmoji(false));
         Animated.timing(this.state.visibility, {
             toValue: 0,
             duration: 200
@@ -338,7 +378,7 @@ export default class EmojiSploder extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         position: 'absolute',
-        //backgroundColor: 'red',
+        //backgroundColor: 'rgba(255,0,0,0.3)',
         overflow: 'hidden'
     },
     bg: {
@@ -347,7 +387,7 @@ let styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
-        backgroundColor: 'rgba(35,35,35,0.8)'
+        backgroundColor: 'rgba(35,35,35,0.9)'
     },
     trigger: {
         //flex: 1,
@@ -376,4 +416,14 @@ let styles = StyleSheet.create({
     //    flex: 1,
     //    alignSelf: 'stretch'
     //}
+});
+
+export default Relay.createContainer(EmojiSploder, {
+    fragments: {
+        episode: () => Relay.QL`
+            fragment on Episode {
+                ${AnnotateEpisodeMutation.getFragment('episode')}
+            }
+        `
+    }
 });

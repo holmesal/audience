@@ -1,4 +1,5 @@
 import React, {
+    Animated,
     Component,
     Image,
     PanResponder,
@@ -12,14 +13,21 @@ import React, {
 import Icon from 'react-native-vector-icons/Ionicons'
 import CircleButton from './CircleButton';
 import colors from '../../colors';
+import {connect} from 'react-redux';
+import {emojiButton$} from '../../redux/modules/player';
 
 import EmojiSploder from '../EmojiSploder/EmojiSploder';
 
-export default class EmojiButton extends Component {
+class EmojiButton extends Component {
 
     static propTypes = {};
 
     static defaultProps = {};
+
+    state = {
+        buttonScale: new Animated.Value(1),
+        opacity: new Animated.Value(1)
+    };
 
     componentWillMount() {
         this._panResponder = PanResponder.create({
@@ -72,6 +80,19 @@ export default class EmojiButton extends Component {
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.choosingEmoji) {
+            Animated.spring(this.state.buttonScale, {
+                toValue: 0.9,
+                tension: 70
+            }).start()
+        } else {
+            Animated.spring(this.state.buttonScale, {
+                toValue: 1
+            }).start()
+        }
+    }
+
     measure() {
         //console.info(this.refs.button);
         //this.props.onEmojiButtonLayout(this.refs.button);
@@ -91,6 +112,32 @@ export default class EmojiButton extends Component {
         //});
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        console.info('emoji button updated!')
+        if (this.props.sendingEmoji) {
+            this.fadeOutAndIn()
+        }
+    }
+
+    fadeOutAndIn() {
+        Animated.timing(this.state.opacity, {
+            toValue: 0.3
+        }).start(() => {
+            if (!this.props.sendingEmoji) {
+                Animated.spring(this.state.opacity, {
+                    toValue: 1
+                }).start()
+            } else {
+                Animated.timing(this.state.opacity, {
+                    toValue: 0.5
+                }).start((s) => {
+                    console.info(s);
+                    this.fadeOutAndIn();
+                })
+            }
+        })
+    }
+
     render() {
         return (
             <TouchableOpacity
@@ -100,7 +147,15 @@ export default class EmojiButton extends Component {
                 {...this._panResponder.panHandlers}
                 onLayout={this.measure.bind(this)}
             >
-                <Image style={styles.buttonImage} source={require('image!buttonEmoji')} />
+                <Animated.Image
+                    style={[styles.buttonImage, {
+                        opacity: this.state.opacity,
+                        transform: [
+                            {scale: this.state.buttonScale}
+                        ]
+                    }]}
+                    source={require('image!buttonEmoji')}
+                />
             </TouchableOpacity>
         );
     }
@@ -117,3 +172,5 @@ let styles = StyleSheet.create({
         height: 90
     }
 });
+
+export default connect(emojiButton$)(EmojiButton);
