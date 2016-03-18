@@ -1,4 +1,5 @@
 import React, {
+    Animated,
     Component,
     Image,
     PropTypes,
@@ -13,15 +14,45 @@ import ShareMomentButton from './ShareMomentButton';
 
 export default class ButtonRow extends Component {
 
+    propTypes: {
+      visible: React.PropTypes.bool
+    };
+
+    defaultProps = {
+        visible: false
+    };
+
+    state = {
+        opacity: new Animated.Value(0)
+    };
+
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.visible) this.show();
+        else this.hide();
+    }
+
+    show() {
+        Animated.timing(this.state.opacity, {
+            toValue: 1
+        }).start();
+    }
+
+    hide() {
+        Animated.timing(this.state.opacity, {
+            toValue: 0
+        }).start();
+    }
+
     render() {
         return (
-            <View style={[styles.wrapper, this.props.style]}>
+            <Animated.View style={[styles.wrapper, this.props.style, {opacity: this.state.opacity}]}>
                 <CommentButton onPress={this.props.onCommentPress}/>
                 <EmojiButton
                     onPressIn={this.props.onEmojiPressIn}
                 />
                 <ShareMomentButton />
-            </View>
+            </Animated.View>
         );
     }
 }

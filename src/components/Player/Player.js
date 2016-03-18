@@ -244,7 +244,7 @@ class Player extends Component {
             console.warn('player got null episode :-(');
             return <View />;
         }
-        //console.info('player render!', this.state.emojiSploderVisible);
+        console.info('player is visible? ', this.props.visible);
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
             <Animated.View
@@ -274,6 +274,7 @@ class Player extends Component {
                     <ButtonRow
                         style={styles.buttonRow}
                         onCommentPress={() => this.setState({composeVisible: true})}
+                        visible={this.props.visible && this.state.currentTime}
                     />
 
                     <MiniPlayer episode={this.props.episode} />
@@ -297,6 +298,16 @@ class Player extends Component {
                         onSkip={this.handleSkip.bind(this)}
                     />
 
+                    <EmojiSploder
+                        episode={this.props.episode}
+                        targetLayout={{
+                            left: windowWidth/2 - 40,
+                            bottom: buttonRowBottom,
+                            width: 80,
+                            height: 80
+                        }}
+                    />
+
                 </View>
 
             </Animated.View>
@@ -304,7 +315,7 @@ class Player extends Component {
     }
 }
 
-const buttonRowBottom = 35 + 80;
+const buttonRowBottom = 35 + 60;
 
 let styles = StyleSheet.create({
     wrapper: {
@@ -347,6 +358,7 @@ export default Relay.createContainer(ConnectedPlayer, {
                 ${AnnotationSpawner.getFragment('episode')}
                 ${MiniPlayer.getFragment('episode')}
                 ${ScrollableAnnotationContainer.getFragment('episode')}
+                ${EmojiSploder.getFragment('episode')}
                 podcast {
                     ${EpisodePlayer.getFragment('podcast')}
                     ${Navbar.getFragment('podcast')}

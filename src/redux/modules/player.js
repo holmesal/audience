@@ -15,15 +15,22 @@ const UPDATE_BUFFERING = 'audience/player/UPDATE_BUFFERING';
 const UPDATE_DURATION = 'audience/player/UPDATE_DURATION';
 const UPDATE_CURRENT_TIME = 'audience/player/UPDATE_CURRENT_TIME';
 const SKIP = 'audience/player/SKIP';
+const UPDATE_CHOOSING_EMOJI = 'audience/player/UPDATE_CHOOSING_EMOJI';
+const UPDATE_SENDING_EMOJI = 'audience/player/UPDATE_SENDING_EMOJI';
+const UPDATE_SENDING_COMMENT = 'audience/player/UPDATE_SENDING_COMMENT';
 
 const initialState = Immutable.fromJS({
     visible: true,
-    episodeId: 'RXBpc29kZToyOTE0',
+    episodeId: 'RXBpc29kZToyOTAz',
     playing: false,
     buffering: false,
     duration: null,
     currentTime: null,
-    duration: null
+    duration: null,
+
+    choosingEmoji: false,
+    sendingEmoji: false,
+    sendingComment: true,
 });
 
 export default createReducer(initialState, {
@@ -40,7 +47,11 @@ export default createReducer(initialState, {
     [UPDATE_DURATION]: (state, action) => state.set('duration', action.duration),
 
 
-    [UPDATE_CURRENT_TIME]: (state, action) => state.set('currentTime', action.currentTime)
+    [UPDATE_CURRENT_TIME]: (state, action) => state.set('currentTime', action.currentTime),
+
+    [UPDATE_CHOOSING_EMOJI]: (state, action) => state.set('choosingEmoji', action.choosingEmoji),
+    [UPDATE_SENDING_EMOJI]: (state, action) => state.set('sendingEmoji', action.sendingEmoji),
+    [UPDATE_SENDING_COMMENT]: (state, action) => state.set('sendingComment', action.sendingComment)
 
 })
 
@@ -51,6 +62,9 @@ export const currentTime$ = state => state.getIn(['player', 'currentTime']);
 export const visible$ = state => state.getIn(['player', 'visible']);
 export const playing$ = state => state.getIn(['player', 'playing']);
 export const buffering$ = state => state.getIn(['player', 'buffering']);
+export const choosingEmoji$ = state => state.getIn(['player', 'choosingEmoji']);
+export const sendingEmoji$ = state => state.getIn(['player', 'sendingEmoji']);
+export const sendingComment$ = state => state.getIn(['player', 'sendingComment']);
 
 export const player$ = createSelector(visible$, playing$, (visible, playing) => ({
     visible,
@@ -69,6 +83,15 @@ export const audio$ = createSelector(playing$, (playing) => ({
 export const controls$ = createSelector(playing$, buffering$, (playing, buffering) => ({
     playing,
     buffering
+}));
+
+export const emojiButton$ = createSelector(choosingEmoji$, sendingEmoji$, (choosingEmoji, sendingEmoji) => ({
+    choosingEmoji,
+    sendingEmoji
+}));
+
+export const commentButton$ = createSelector(sendingComment$, (sendingComment) => ({
+    sendingComment
 }));
 
 //export const share$ = createSelector(podcastId$, episodeId$, (podcastId, episodeId) => ({
@@ -134,6 +157,19 @@ export const updateDuration = (duration) => ({
 export const updateCurrentTime = (currentTime) => ({
     type: UPDATE_CURRENT_TIME,
     currentTime
+});
+
+export const updateChoosingEmoji = (choosingEmoji) => ({
+    type: UPDATE_CHOOSING_EMOJI,
+    choosingEmoji
+});
+export const updateSendingEmoji = (sendingEmoji) => ({
+    type: UPDATE_SENDING_EMOJI,
+    sendingEmoji
+});
+export const updateSendingComment = (sendingComment) => ({
+    type: UPDATE_SENDING_COMMENT,
+    sendingComment
 });
 
 //export const skip = (offset) => {
