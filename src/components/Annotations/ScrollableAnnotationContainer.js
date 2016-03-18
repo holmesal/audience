@@ -17,21 +17,21 @@ export default class ScrollableAnnotationContainer extends Component {
 
 
     componentDidMount() {
+        let num = 0;
         this._addAnnotationInterval = setInterval(() => {
             let annotations = this.state.annotations.slice();
             annotations.push({
                 id: Math.random() + '',
-                text: 'Test annotation: ' + Date.now()
+                text: 'Test annotation: ' + num++
             });
             if (annotations.length > 5) annotations.shift();
-            this.setState({annotations});
+            this.setState({annotations, now: Date.now()});
         }, 2000)
     }
 
     componentWillUnmount() {
         clearInterval(this._addAnnotationInterval)
     }
-
 
     render() {
         return (

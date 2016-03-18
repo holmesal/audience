@@ -1,19 +1,43 @@
 import React, {
     Component,
     Image,
+    ListView,
     PropTypes,
-    ScrollView,
     StyleSheet,
     Text,
     View
 } from 'react-native';
 
 import ScrollableAnnotationItem from './ScrollableAnnotationItem';
+import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
 export default class ScrollableAnnotationView extends Component {
 
-    renderAnnotations() {
-        return this.props.annotations.map(ann => <ScrollableAnnotationItem key={ann.id} annotation={ann} />)
+    constructor(props) {
+        super(props);
+        this.ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged.bind(this)});
+        this.state = {
+            dataSource: this.ds.cloneWithRows(props.annotations)
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.info('new props!')
+        console.info('setting new datasource!')
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(nextProps.annotations)
+        });
+        if (nextProps.annotations != this.props.annotations) {
+        }
+    }
+
+    rowHasChanged(r1, r2) {
+        console.info('did change?', r1, r2, r1 !== r2)
+        return r1 !== r2;
+    }
+
+    renderRow(annotation) {
+        return <ScrollableAnnotationItem key={annotation.id} annotation={annotation} />
     }
 
     handleContentSizeChange(newSize) {
@@ -23,24 +47,18 @@ export default class ScrollableAnnotationView extends Component {
     render() {
         console.info(this.props.annotations)
         return (
-            <ScrollView
-                ref="scrollView"
-                style={styles.wrapper}
-                onContentSizeChange={this.handleContentSizeChange.bind(this)}
-            >
-                <View style={styles.spacer} />
-                {this.renderAnnotations()}
-            </ScrollView>
+            <ListView
+                renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
+                dataSource={this.state.dataSource}
+                renderRow={this.renderRow.bind(this)}
+                style={styles.container}
+            />
         );
     }
 }
 
 let styles = StyleSheet.create({
-    wrapper: {
-        //flex: 1
-    },
-    spacer: {
-        flex: 1,
-        backgroundColor: 'green'
+    container: {
+        flex: 1
     }
 });
