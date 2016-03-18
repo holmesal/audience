@@ -2,7 +2,9 @@ import React, {
     Component,
     Image,
     ListView,
+    PanResponder,
     PropTypes,
+    ScrollView,
     StyleSheet,
     Text,
     View
@@ -13,52 +15,69 @@ import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
 export default class ScrollableAnnotationView extends Component {
 
-    constructor(props) {
-        super(props);
-        this.ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged.bind(this)});
-        this.state = {
-            dataSource: this.ds.cloneWithRows(props.annotations)
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        console.info('new props!')
-        console.info('setting new datasource!')
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(nextProps.annotations)
+    componentWillMount() {
+        // Create a pan responder for the scroll view
+        this._panResponder = PanResponder.create({
+            // Ask to be the responder:
+            onStartShouldSetPanResponder: (evt, gestureState) => true,
+            onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+            onMoveShouldSetPanResponder: (evt, gestureState) => true,
+            onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+            onPanResponderGrant: (evt, gestureState) => {},
+            onPanResponderMove: (ev, gestureState) => {},
+            onPanResponderTerminationRequest: (evt, gestureState) => true,
+            onPanResponderRelease: (evt, gestureState) => {
+                this.startResetTimer();
+            },
+            onPanResponderTerminate: (evt, gestureState) => {},
+            onShouldBlockNativeResponder: (evt, gestureState) => true
         });
-        if (nextProps.annotations != this.props.annotations) {
-        }
     }
 
-    rowHasChanged(r1, r2) {
-        console.info('did change?', r1, r2, r1 !== r2)
-        return r1 !== r2;
+
+    componentDidUpdate(prevProps, prevState) {
+
     }
 
-    renderRow(annotation) {
-        return <ScrollableAnnotationItem key={annotation.id} annotation={annotation} />
+    startResetTimer() {
+        console.info('starting scroll reset timer')
+        clearTimeout(this._scrollResetTimer);
+        this._scrollResetTimer = setTimeout(() => {
+            this.scrollToBottom();
+        }, 5000)
     }
 
-    handleContentSizeChange(newSize) {
-        //this.refs.scrollView.scrollTo({y: newSize})
+    scrollToBottom() {
+        console.info('scrolling to bottom!');
+        this.refs.scrollView.scrollTo({y: 0});
+    }
+
+    renderRows() {
+        return this.props.annotations.map((annotation) => <ScrollableAnnotationItem key={annotation.id} annotation={annotation} />);
     }
 
     render() {
-        console.info(this.props.annotations)
+        //console.info(this.props.annotations)
         return (
-            <ListView
-                renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
-                dataSource={this.state.dataSource}
-                renderRow={this.renderRow.bind(this)}
+            <ScrollView
+                ref="scrollView"
                 style={styles.container}
-            />
+                stickyHeaderIndices={[0]}
+                scrollEventThrottle={100}
+                {...this._panResponder.panHandlers}
+            >
+                <View />
+                {this.renderRows()}
+            </ScrollView>
         );
     }
 }
 
 let styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        transform: [
+            {rotateZ: '180deg'}
+        ]
     }
 });
