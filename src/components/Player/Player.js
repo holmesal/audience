@@ -50,7 +50,6 @@ class Player extends Component {
         opacity: new Animated.Value(0),
         offset: new Animated.Value(OFFSCREEN),
         composeVisible: false,
-        duration: 0,
         currentTime: 0,
         lastTargetTime: 0,
         scrubbing: false,
@@ -117,14 +116,6 @@ class Player extends Component {
         }
     }
 
-    handleSkip(amount) {
-        console.info('handling skip!');
-        let lastTargetTime = this.state.currentTime + amount;
-        if (lastTargetTime < 0) lastTargetTime = Math.random() * 0.0001; //rly small but still causes seek
-        else if (lastTargetTime > this.state.duration) lastTargetTime = this.state.duration;
-        this.setState({lastTargetTime});
-    }
-
     handleWaveformPress() {
         //console.info('waveform was pressed, and playing is: ', this.props.playing);
         if (this.props.playing) this.props.dispatch(pause());
@@ -168,76 +159,76 @@ class Player extends Component {
     //    });
     //}
 
-    oldRender() {
-        if (!this.props.episode) {
-            console.warn('player got null episode :-(');
-            return <View />;
-        }
-        //console.info('player render!', this.state.emojiSploderVisible);
-        let pointerEvents = this.props.visible ? 'auto' : 'none';
-        return (
-            <Animated.View
-                ref="wrapper"
-                style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]}
-                pointerEvents={pointerEvents}
-            >
-
-                <View style={styles.content}>
-                    <AnnotationSpawner
-                        episode={this.props.episode}
-                    />
-                    <EmojiSpawner
-                        episode={this.props.episode}
-                    />
-                </View>
-
-
-                <Navbar
-                    style={styles.navbar}
-                    episode={this.props.episode}
-                    podcast={this.props.episode.podcast}
-                />
-
-                <ButtonRow
-                    style={styles.buttonRow}
-                    onCommentPress={() => this.setState({composeVisible: true})}
-                />
-
-                <CompactScrubber
-                    duration={this.state.duration}
-                    currentTime={this.state.currentTime}
-                    playing={this.props.playing}
-                    onSeek={lastTargetTime => this.setState({lastTargetTime})}
-                    hidePlayer={() => this.props.dispatch(hidePlayer())}
-                    onScrubStart={() => this.setState({scrubbing: true})}
-                    onScrubEnd={() => this.setState({scrubbing: false})}
-                    onWaveformPress={this.handleWaveformPress.bind(this)}
-                    episode={this.props.episode}
-                    style={{top: this.state.keyboardHeight}}
-                />
-
-                <EpisodePlayer
-                    ref="audio"
-                    episode={this.props.episode}
-                    podcast={this.props.episode.podcast}
-                    lastTargetTime={this.state.lastTargetTime}
-                    onDurationChange={duration => this.setState({duration})}
-                    onCurrentTimeChange={currentTime => this.setState({currentTime})}
-                    onSkip={this.handleSkip.bind(this)}
-                />
-
-                <EmojiSploder
-                    targetLayout={{
-                        left: windowWidth/2 - 30,
-                        bottom: buttonRowBottom,
-                        width: 60,
-                        height: 60
-                    }}
-                />
-
-            </Animated.View>
-        );
-    }
+    //oldRender() {
+    //    if (!this.props.episode) {
+    //        console.warn('player got null episode :-(');
+    //        return <View />;
+    //    }
+    //    //console.info('player render!', this.state.emojiSploderVisible);
+    //    let pointerEvents = this.props.visible ? 'auto' : 'none';
+    //    return (
+    //        <Animated.View
+    //            ref="wrapper"
+    //            style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]}
+    //            pointerEvents={pointerEvents}
+    //        >
+    //
+    //            <View style={styles.content}>
+    //                <AnnotationSpawner
+    //                    episode={this.props.episode}
+    //                />
+    //                <EmojiSpawner
+    //                    episode={this.props.episode}
+    //                />
+    //            </View>
+    //
+    //
+    //            <Navbar
+    //                style={styles.navbar}
+    //                episode={this.props.episode}
+    //                podcast={this.props.episode.podcast}
+    //            />
+    //
+    //            <ButtonRow
+    //                style={styles.buttonRow}
+    //                onCommentPress={() => this.setState({composeVisible: true})}
+    //            />
+    //
+    //            <CompactScrubber
+    //                duration={this.state.duration}
+    //                currentTime={this.state.currentTime}
+    //                playing={this.props.playing}
+    //                onSeek={lastTargetTime => this.setState({lastTargetTime})}
+    //                hidePlayer={() => this.props.dispatch(hidePlayer())}
+    //                onScrubStart={() => this.setState({scrubbing: true})}
+    //                onScrubEnd={() => this.setState({scrubbing: false})}
+    //                onWaveformPress={this.handleWaveformPress.bind(this)}
+    //                episode={this.props.episode}
+    //                style={{top: this.state.keyboardHeight}}
+    //            />
+    //
+    //            <EpisodePlayer
+    //                ref="audio"
+    //                episode={this.props.episode}
+    //                podcast={this.props.episode.podcast}
+    //                lastTargetTime={this.state.lastTargetTime}
+    //                onDurationChange={duration => this.setState({duration})}
+    //                onCurrentTimeChange={currentTime => this.setState({currentTime})}
+    //                onSkip={this.handleSkip.bind(this)}
+    //            />
+    //
+    //            <EmojiSploder
+    //                targetLayout={{
+    //                    left: windowWidth/2 - 30,
+    //                    bottom: buttonRowBottom,
+    //                    width: 60,
+    //                    height: 60
+    //                }}
+    //            />
+    //
+    //        </Animated.View>
+    //    );
+    //}
 
     render() {
         if (!this.props.episode) {
@@ -260,15 +251,9 @@ class Player extends Component {
                     />
 
                     <CompactScrubber
-                        duration={this.state.duration}
-                        currentTime={this.state.currentTime}
-                        playing={this.props.playing}
-                        onSeek={lastTargetTime => this.setState({lastTargetTime})}
-                        hidePlayer={() => this.props.dispatch(hidePlayer())}
-                        onScrubStart={() => this.setState({scrubbing: true})}
-                        onScrubEnd={() => this.setState({scrubbing: false})}
-                        onWaveformPress={this.handleWaveformPress.bind(this)}
                         episode={this.props.episode}
+                        hidePlayer={() => this.props.dispatch(hidePlayer())}
+                        onWaveformPress={this.handleWaveformPress.bind(this)}
                     />
 
                     <ButtonRow
@@ -277,7 +262,9 @@ class Player extends Component {
                         visible={this.props.visible && this.state.currentTime}
                     />
 
-                    <MiniPlayer episode={this.props.episode} />
+                    <MiniPlayer
+                        episode={this.props.episode}
+                    />
 
                     {/** views that come above everyhing*/}
                     <CommentCompose
@@ -292,10 +279,6 @@ class Player extends Component {
                         ref="audio"
                         episode={this.props.episode}
                         podcast={this.props.episode.podcast}
-                        lastTargetTime={this.state.lastTargetTime}
-                        onDurationChange={duration => this.setState({duration})}
-                        onCurrentTimeChange={currentTime => this.setState({currentTime})}
-                        onSkip={this.handleSkip.bind(this)}
                     />
 
                     <EmojiSploder

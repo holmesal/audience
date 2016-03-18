@@ -28,6 +28,7 @@ export default class ButtonRow extends Component {
 
 
     componentWillReceiveProps(nextProps) {
+        console.info('button row is rendering!');
         if (nextProps.visible) this.show();
         else this.hide();
     }
