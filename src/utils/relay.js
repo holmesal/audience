@@ -3,8 +3,15 @@ import Relay from 'react-relay';
 import store from '../redux/create';
 import {viewerId$} from '../redux/modules/auth';
 let {MTDebugIP} = NativeModules;
+import {DEV_SERVER, STAGING_SERVER, PROD_SERVER} from '../utils/urls';
 
-const graphqlURL = __DEV__ ? `http://${MTDebugIP.debugIP}:5000/graphql` : 'http://podcastfoo.herokuapp.com/graphql';
+const USE_STAGING = true;
+
+let graphqlURL = __DEV__ ?
+    `${DEV_SERVER}/graphql` :
+    `${PROD_SERVER}/graphql`;
+
+if (USE_STAGING) graphqlURL = `${STAGING_SERVER}/graphql`;
 
 console.info('graphQL url: ', graphqlURL);
 
@@ -22,7 +29,7 @@ Relay.injectNetworkLayer(
 );
 
 export const updateRelayAuthHeader = (token) => {
-    if (__DEV__ && DEBUG_TOKEN) {
+    if (__DEV__ && DEBUG_TOKEN && !USE_STAGING) {
         console.info('!!! USING DEBUG TOKEN !!!');
         token = DEBUG_TOKEN;
     }
