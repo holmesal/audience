@@ -13,6 +13,7 @@ import Relay from 'react-relay';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from '../../colors';
 import emoji from 'node-emoji';
+import {getTintForUser, tintOpacity} from '../../utils/tints';
 
 export default class ScrollableAnnotationItem extends Component {
 
@@ -84,7 +85,13 @@ export default class ScrollableAnnotationItem extends Component {
                         <Image
                             source={{uri: photoUrl}}
                             style={[styles.image, {height: this.state.cardHeight || 0}]}
-                        />
+                        >
+                            <View
+                                style={[styles.tint, {
+                                    backgroundColor: getTintForUser(this.props.annotation.user.id)
+                                }]}
+                            />
+                        </Image>
                         <Text style={styles.text} onLayout={this.handleTextLayout.bind(this)}>{emoji.emojify(this.props.annotation.text)}</Text>
                     </View>
                 </View>
@@ -137,6 +144,15 @@ let styles = StyleSheet.create({
     image: {
         width: 40,
         backgroundColor: colors.lightGrey,
+        position: 'relative'
+    },
+    tint: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        opacity: tintOpacity
     },
     text: {
         padding: 10,
@@ -156,6 +172,7 @@ export default Relay.createContainer(ScrollableAnnotationItem, {
             fragment on Annotation {
                 text
                 user {
+                    id
                     facebookId
                 }
             }

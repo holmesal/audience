@@ -7,6 +7,7 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
+import {getTintForUser, tintOpacity} from '../../utils/tints';
 
 class MiniAnnotation extends Component {
 
@@ -22,7 +23,13 @@ class MiniAnnotation extends Component {
         const photoUrl = `http://graph.facebook.com/v2.5/${this.props.user.facebookId}/picture?type=square&height=${height * 2}`;
         return (
             <View style={[styles.wrapper, this.props.style]}>
-                <Image style={styles.image} source={{uri: photoUrl}} />
+                <Image style={styles.image} source={{uri: photoUrl}}>
+                    <View
+                        style={[styles.tint, {
+                                    backgroundColor: getTintForUser(this.props.user.id)
+                                }]}
+                    />
+                </Image>
                 <View style={styles.lines}>
                     <View style={styles.line} />
                     <View style={[styles.line, {width: 7, marginTop: 3}]} />
@@ -45,7 +52,16 @@ let styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-        height: height
+        height: height,
+        position: 'relative'
+    },
+    tint: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        opacity: tintOpacity
     },
     lines: {
         flex: 1,
@@ -64,6 +80,7 @@ export default Relay.createContainer(MiniAnnotation, {
     fragments: {
         user: () => Relay.QL`
             fragment on User {
+                id
                 facebookId
             }
         `
