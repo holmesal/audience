@@ -24,6 +24,7 @@ class HangingPhotoRow extends Component {
                     <FacebookAvatar
                         user={this.props.user}
                         size={24}
+                        tint
                     />
                     {!this.props.isLast && <View style={[styles.rope, {flex: 1}]} />}
                 </View>
