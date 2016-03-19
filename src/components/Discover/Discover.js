@@ -11,8 +11,9 @@ import React, {
 import _ from 'lodash';
 import Relay from 'react-relay';
 
-import Recommendation from './OldRecommendation';
-import EpisodeActivity from './EpisodeActivity';
+import EpisodeCard from './EpisodeCard';
+import Recommendation from './Recommendation';
+import Annotation from './Annotation';
 
 class Discover extends Component {
 
@@ -73,24 +74,25 @@ class Discover extends Component {
         )
     }
 
-    renderStream() {
-        if (this.props.viewer.stream.items.edges.length > 0) {
-            return this.props.viewer.stream.items.edges.map(edge =>
-                <Recommendation
-                    key={edge.node.id}
-                    style={styles.recommendation}
-                    recommendation={edge.node}
-                />
-            );
-        } else {
-            return (
-                <View style={{flex: 1, alignItems: 'center', padding: 20}}>
-                    <Text style={{fontSize: 50, marginBottom: 20}}>😔</Text>
-                    <Text style={{color: '#fefefe', fontSize: 14, fontWeight: '200', marginBottom: 12}}>Your friends haven't recommended anything yet...</Text>
-                    <Text style={{color: '#fefefe', fontSize: 14, fontWeight: '200'}}>Check back later!</Text>
-                </View>
-            )
-        }
+    renderEpisode(episode, activity) {
+        let groupedByType = _.groupBy(activity, edge => edge.node.__typename);
+        //console.info(groupedByType)
+        let recommendations = groupedByType.RecommendationActivity || [];
+        let annotations = groupedByType.AnnotationActivity || [];
+        let annotationsByUser = _.groupBy(annotations, edge => edge.node.annotation.user.id) || [];
+        console.info(`(feed item) [${episode.id}] - ${recommendations.length} recs and ${annotations.length} annotations (by ${_.keys(annotationsByUser).length} users)`);
+        let activityItems = recommendations.map(activityEdge => <Recommendation key={activityEdge.node.id} recommendation={activityEdge.node.recommendation}/>);
+        activityItems = activityItems.concat(_.map(annotationsByUser, (annotations, userId) => <Annotation key={userId} annotations={annotations} user={annotations[0].node.annotation.user} />));
+        // Tell the last activity item that it is last
+        if (activityItems.length > 0) activityItems[activityItems.length - 1] = React.cloneElement(activityItems[activityItems.length - 1], {isLast:true});
+        // Fade the episode if the viewer has heard it
+        let opacity = episode.viewerHasHeard ? 0.3 : 1;
+        return (
+            <View key={episode.id} style={[styles.episodeGroup, {opacity}]}>
+                <EpisodeCard key={episode.id} episode={episode}/>
+                {activityItems}
+            </View>
+        )
     }
 
     render() {
@@ -109,8 +111,9 @@ class Discover extends Component {
                 console.warn('Got unrecognized activity type: ', node.__typename)
             }
         });
-        console.info('grouped', groupedByEpisode, episodes);
-        let episodeComs = _.map(groupedByEpisode, (activity, episodeId) => <EpisodeActivity key={episodeId} activity={activity} episode={episodes[episodeId]} />);
+        //console.info('grouped', groupedByEpisode, episodes);
+        //let episodeComs = _.map(groupedByEpisode, (activity, episodeId) => <EpisodeActivity key={episodeId} activity={activity} episode={episodes[episodeId]} />);
+        let episodeComs = _.map(groupedByEpisode, (activity, episodeId) => this.renderEpisode(episodes[episodeId], activity));
         return (
             <ScrollView
                 style={styles.wrapper}
@@ -124,9 +127,11 @@ class Discover extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        paddingTop: 40
+        paddingTop: 40,
+        paddingLeft: 12,
+        paddingRight: 12
     },
-    recommendation: {
+    episodeGroup: {
         marginBottom: 40
     }
 });
@@ -144,8 +149,10 @@ export default Relay.createContainer(Discover, {
                             recommendation {
                                 episode {
                                     id
-                                    ${EpisodeActivity.getFragment('episode')}
+                                    viewerHasHeard
+                                    ${EpisodeCard.getFragment('episode')}
                                 }
+                                ${Recommendation.getFragment('recommendation')}
                             }
                             user {
                                 id
@@ -155,10 +162,12 @@ export default Relay.createContainer(Discover, {
                             annotation {
                                 episode {
                                     id
-                                    ${EpisodeActivity.getFragment('episode')}
+                                    viewerHasHeard
+                                    ${EpisodeCard.getFragment('episode')}
                                 }
                                 user {
                                     id
+                                    ${Annotation.getFragment('user')}
                                 }
                             }
                         }

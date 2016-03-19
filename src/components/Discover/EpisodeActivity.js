@@ -19,7 +19,7 @@ class EpisodeActivity extends Component {
     };
 
     renderRecommendations() {
-        return _.map(recs, rec => <Text>{rec.node.user.}</Text>)
+        //return _.map(recs, rec => <Text>{rec.node.user.}</Text>)
     }
 
     render() {

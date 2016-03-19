@@ -7,7 +7,7 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-
+import colors from '../../colors';
 import TouchableFade from '../common/TouchableFade';
 import {playEpisode} from '../../redux/modules/player.js';
 import store from '../../redux/create.js';
@@ -44,7 +44,8 @@ let styles = StyleSheet.create({
         height: 64,
         flexDirection: 'row',
         borderRadius: 6,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: colors.darkGreyLightContrast
     },
     artwork: {
         alignSelf: 'stretch',
@@ -56,27 +57,24 @@ let styles = StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'center',
         paddingLeft: 12,
-        paddingRight: 12,
-        //backgroundColor: 'red',
-        borderWidth: 1,
-        borderLeftWidth: 0,
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
-        borderRadius: 6,
-        borderColor: '#656565',
+        paddingRight: 12
     },
     episodeTitle: {
-        color: '#fefefe',
+        color: colors.lightGrey,
+        backgroundColor: 'transparent',
         fontSize: 16,
         fontFamily: 'System',
-        fontWeight: '600',
+        fontWeight: '500',
+        letterSpacing: 0.3,
         marginBottom: 4
     },
     podcastName: {
-        color: '#7C7C7C',
+        color: colors.lightGrey,
+        backgroundColor: 'transparent',
         fontSize: 14,
         fontFamily: 'System',
-        fontWeight: '300'
+        fontWeight: '300',
+        letterSpacing: 0.3
     }
 });
 

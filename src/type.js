@@ -17,6 +17,7 @@ export class PrimaryText extends Component {
                     fontWeight: '400',
                     fontSize: 18,
                     color: colors.lightGrey,
+                    backgroundColor: 'transparent',
                     letterSpacing: 0.9
                 },
                 this.props.style
@@ -35,6 +36,7 @@ export class SecondaryText extends Component {
                     fontSize: 14,
                     fontWeight: '200',
                     color: colors.grey,
+                    backgroundColor: 'transparent',
                     letterSpacing: 0.79
                 },
                 this.props.style
@@ -53,6 +55,7 @@ export class SupportingText extends Component {
                     fontSize: 14,
                     fontWeight: '200',
                     color: colors.grey,
+                    backgroundColor: 'transparent',
                     lineHeight: 17
                 },
                 this.props.style
@@ -71,6 +74,7 @@ export class MetaText extends Component {
                     fontSize: 11,
                     fontWeight: '400',
                     color: colors.grey,
+                    backgroundColor: 'transparent',
                     lineHeight: 13,
                     letterSpacing: 0.77
                 },
