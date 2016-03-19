@@ -14,6 +14,7 @@ import Relay from 'react-relay';
 import EpisodeCard from './EpisodeCard';
 import Recommendation from './Recommendation';
 import Annotation from './Annotation';
+import {PrimaryText, SecondaryText} from '../../type';
 
 class Discover extends Component {
 
@@ -40,21 +41,6 @@ class Discover extends Component {
         //this.parseActivity(nextProps.viewer.friendActivity)
     }
 
-    //parseActivity(friendActivity) {
-    //    console.info('parsing friend activity', friendActivity);
-    //    let groupedByEpisode = _.groupBy(friendActivity.edges, ({node}) => {
-    //        console.info(node);
-    //        if (node.__typename === 'AnnotationActivity') {
-    //            return node.annotation.episode.id;
-    //        } else if (node.__typename === 'RecommendationActivity') {
-    //            return node.recommendation.episode.id;
-    //        } else {
-    //            console.warn('Got unrecognized activity type: ', node.__typename)
-    //        }
-    //    });
-    //    console.info(groupedByEpisode)
-    //}
-
     refresh() {
         console.info('refreshing!');
         this.setState({refreshing: true});
@@ -71,6 +57,15 @@ class Discover extends Component {
                 tintColor="#aaaaaa"
                 refreshing={this.state.refreshing}
             />
+        )
+    }
+
+    renderNoActivity() {
+        return (
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <PrimaryText style={{textAlign: 'center', marginBottom: 20}}>Your friends haven't done anything...</PrimaryText>
+                <SecondaryText style={{textAlign: 'center'}}>Check back later!</SecondaryText>
+            </View>
         )
     }
 
@@ -112,7 +107,6 @@ class Discover extends Component {
             }
         });
         //console.info('grouped', groupedByEpisode, episodes);
-        //let episodeComs = _.map(groupedByEpisode, (activity, episodeId) => <EpisodeActivity key={episodeId} activity={activity} episode={episodes[episodeId]} />);
         let episodeComs = _.map(groupedByEpisode, (activity, episodeId) => this.renderEpisode(episodes[episodeId], activity));
         return (
             <ScrollView
@@ -120,6 +114,7 @@ class Discover extends Component {
                 refreshControl={this.renderRefreshControl()}
             >
                 {episodeComs}
+                {this.renderNoActivity()}
             </ScrollView>
         );
     }

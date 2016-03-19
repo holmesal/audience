@@ -124,7 +124,9 @@ let styles = StyleSheet.create({
         //height: 80
     },
     likeTouchable: {
-        width: likeTouchableWidth,
+        width: 0,//likeTouchableWidth,
+        overflow: 'hidden',
+        marginRight: 20,
         alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center',
