@@ -15,6 +15,7 @@ import {currentTime$} from '../../redux/modules/player';
 
 import ScrollableAnnotationView from './ScrollableAnnotationView';
 import ScrollableAnnotationItem from './ScrollableAnnotationItem';
+import RestingView from './RestingView';
 
 const annotationLifetime = 16;
 
@@ -44,12 +45,21 @@ class ScrollableAnnotationContainer extends Component {
         this.setState({inRangeAnnotations});
     }
 
+    renderRestingView() {
+        return (
+            <View style={styles.restingWrapper}>
+                <RestingView visible={this.state.inRangeAnnotations.length === 0} />
+            </View>
+        )
+    }
+
     render() {
         /**
          * ScrollableAnnotationView prefers annotations in newest-to-oldest order
          */
         return (
             <View style={styles.wrapper}>
+                {false && this.renderRestingView()}
                 <ScrollableAnnotationView
                     annotations={this.state.inRangeAnnotations.slice().reverse()}
                 />
@@ -60,7 +70,15 @@ class ScrollableAnnotationContainer extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1
+        flex: 1,
+        position: 'relative'
+    },
+    restingWrapper: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
     }
 });
 

@@ -79,7 +79,7 @@ export default class ScrollableAnnotationItem extends Component {
             }]}>
                 <View style={[styles.row, {height: this.state.cardHeight}]}>
                     <TouchableOpacity style={styles.likeTouchable}>
-                        <Icon name="ios-heart-outline" size={24} color={colors.lighterGrey} />
+                        <Icon style={styles.icon} name="ios-heart-outline" size={24} color={colors.lighterGrey} />
                     </TouchableOpacity>
                     <View style={[styles.card, {flex}]} onLayout={this.handleLayout.bind(this)}>
                         <Image
@@ -129,6 +129,9 @@ let styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         //backgroundColor: 'orange'
+    },
+    icon: {
+        backgroundColor: 'transparent'
     },
     card: {
         // uncomment to fix heart positioning
