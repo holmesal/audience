@@ -116,7 +116,7 @@ export const updateEpisode = (episodeId) => ({
     type: UPDATE_EPISODE,
     episodeId
 });
-export const playEpisode = (episodeId) => {
+export const playEpisode = (episodeId, startTime=0) => {
     return (dispatch, getState) => {
         //console.info(podcastId, episodeId);
         //let podcastTitle = getState().getIn(['podcasts', podcastId, 'collectionName']);
@@ -130,6 +130,8 @@ export const playEpisode = (episodeId) => {
         dispatch(showPlayer());
         // Stop the player - will be started again by the audio component when it re-renders
         dispatch(updatePlaying(false));
+        // Seek to this time
+        dispatch(updateLastTargetTime(startTime));
     }
 };
 

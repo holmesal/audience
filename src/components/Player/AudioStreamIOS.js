@@ -56,6 +56,8 @@ export default class AudioStreamIOS extends Component {
         if (this.props.url) {
             MTAudio.play(this.props.url, this.props.title, this.props.artist, this.props.artworkUrl);
             this.props.onPlayingChange(true);
+            // Seek to this time
+            setTimeout(() => this.seekTo(this.props.time), 0);
         }
     }
 
@@ -102,11 +104,19 @@ export default class AudioStreamIOS extends Component {
         this.props.onSkip(-15);
     }
 
+    seekTo(time) {
+        console.info(`[AudioStreamIOS] seeking to ${time}`);
+        MTAudio.seekToTime(time);
+    }
+
     componentWillReceiveProps(nextProps) {
+        //console.info('audio stream time: ', this.props.time);
         // When the url changes, stop playback and play the new URL
         if (nextProps.url != this.props.url) {
+            //console.info('audio source changed!');
             MTAudio.play(nextProps.url, nextProps.title, nextProps.artist, this.props.artworkUrl);
             this.props.onPlayingChange(true);
+            setTimeout(() => this.seekTo(this.props.time), 0);
         }
 
         // When the playing state changes, start or stop playback
@@ -119,8 +129,7 @@ export default class AudioStreamIOS extends Component {
         if (nextProps.time != this.props.time
             //Math.abs(nextProps.time - this.state.currentTime) > 1000
         ) {
-            console.info(`[AudioStreamIOS] seeking to ${nextProps.time}`);
-            MTAudio.seekToTime(nextProps.time);
+            this.seekTo(nextProps.time);
         }
     }
 
