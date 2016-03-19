@@ -11,7 +11,8 @@ import React, {
 import _ from 'lodash';
 import Relay from 'react-relay';
 
-import Recommendation from './Recommendation';
+import Recommendation from './OldRecommendation';
+import EpisodeActivity from './EpisodeActivity';
 
 class Discover extends Component {
 
@@ -20,15 +21,38 @@ class Discover extends Component {
     };
 
     componentDidMount() {
+        console.info('discover mount!', this.props)
         // Refresh every 30 minutes
         this.refetchTimer = setInterval(() => {
             this.refresh();
         }, 1000 * 60 * 30)
+        //this.parseActivity(this.props.viewer.friendActivity);
     }
 
     componentWillUnmount() {
         clearInterval(this.refetchTimer);
     }
+
+    componentWillReceiveProps(nextProps) {
+        console.info('got props!')
+        console.info(nextProps.viewer.friendActivity)
+        //this.parseActivity(nextProps.viewer.friendActivity)
+    }
+
+    //parseActivity(friendActivity) {
+    //    console.info('parsing friend activity', friendActivity);
+    //    let groupedByEpisode = _.groupBy(friendActivity.edges, ({node}) => {
+    //        console.info(node);
+    //        if (node.__typename === 'AnnotationActivity') {
+    //            return node.annotation.episode.id;
+    //        } else if (node.__typename === 'RecommendationActivity') {
+    //            return node.recommendation.episode.id;
+    //        } else {
+    //            console.warn('Got unrecognized activity type: ', node.__typename)
+    //        }
+    //    });
+    //    console.info(groupedByEpisode)
+    //}
 
     refresh() {
         console.info('refreshing!');
@@ -70,12 +94,29 @@ class Discover extends Component {
     }
 
     render() {
+        let episodes = {};
+        let groupedByEpisode = _.groupBy(this.props.viewer.friendActivity.edges, ({node}) => {
+            //console.info(node);
+            if (node.__typename === 'AnnotationActivity') {
+                let episode = node.annotation.episode;
+                if (!episodes[episode.id]) episodes[episode.id] = episode;
+                return episode.id
+            } else if (node.__typename === 'RecommendationActivity') {
+                let episode = node.recommendation.episode;
+                if (!episodes[episode.id]) episodes[episode.id] = episode;
+                return episode.id
+            } else {
+                console.warn('Got unrecognized activity type: ', node.__typename)
+            }
+        });
+        console.info('grouped', groupedByEpisode, episodes);
+        let episodeComs = _.map(groupedByEpisode, (activity, episodeId) => <EpisodeActivity key={episodeId} activity={activity} episode={episodes[episodeId]} />);
         return (
             <ScrollView
                 style={styles.wrapper}
                 refreshControl={this.renderRefreshControl()}
             >
-                {this.renderStream()}
+                {episodeComs}
             </ScrollView>
         );
     }
@@ -95,12 +136,31 @@ export default Relay.createContainer(Discover, {
         viewer: () => Relay.QL`
         fragment on User {
             id
-            stream {
-                items(first:50) {
-                    edges {
-                        node {
-                            id
-                            ${Recommendation.getFragment('recommendation')}
+            friendActivity {
+                edges {
+                    node {
+                        __typename
+                        ... on RecommendationActivity {
+                            recommendation {
+                                episode {
+                                    id
+                                    ${EpisodeActivity.getFragment('episode')}
+                                }
+                            }
+                            user {
+                                id
+                            }
+                        }
+                        ... on AnnotationActivity {
+                            annotation {
+                                episode {
+                                    id
+                                    ${EpisodeActivity.getFragment('episode')}
+                                }
+                                user {
+                                    id
+                                }
+                            }
                         }
                     }
                 }
