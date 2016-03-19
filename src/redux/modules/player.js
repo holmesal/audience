@@ -21,8 +21,8 @@ const UPDATE_SENDING_EMOJI = 'audience/player/UPDATE_SENDING_EMOJI';
 const UPDATE_SENDING_COMMENT = 'audience/player/UPDATE_SENDING_COMMENT';
 
 const initialState = Immutable.fromJS({
-    visible: true,
-    episodeId: 'RXBpc29kZToyOTAz',
+    visible: false,
+    episodeId: null, //'RXBpc29kZToyOTAz',
     playing: false,
     buffering: false,
     duration: null,
