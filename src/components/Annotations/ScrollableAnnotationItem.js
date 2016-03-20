@@ -16,6 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import colors from '../../colors';
 import emoji from 'node-emoji';
 import {getTintForUser, tintOpacity} from '../../utils/tints';
+import {getViewerId} from '../../utils/relay';
 
 export default class ScrollableAnnotationItem extends Component {
 
@@ -28,8 +29,10 @@ export default class ScrollableAnnotationItem extends Component {
     _fadeOutBeginTimeout = null;
 
     componentWillMount() {
-        console.info('should show notification? ', this.props.annotation);
-        this.showPushNotification();
+        console.info('should show notification? ', this.props.annotation.user.id, getViewerId());
+        if (__DEV__ || this.props.annotation.user.id != getViewerId()) {
+            this.showPushNotification();
+        }
     }
 
     showPushNotification() {
@@ -131,7 +134,7 @@ export default class ScrollableAnnotationItem extends Component {
         clearTimeout(this._fadeOutBeginTimeout);
         // Remove notifications
         console.info('removing notification');
-        this.removePushNotification();
+        //this.removePushNotification();
         //PushNotificationIOS.cancelAllLocalNotifications({
         //    annotationId: this.props.annotation.id
         //});
