@@ -1,9 +1,11 @@
 import React, {
+    AppStateIOS,
     Animated,
     Component,
     Dimensions,
     Image,
     PropTypes,
+    PushNotificationIOS,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -25,8 +27,34 @@ export default class ScrollableAnnotationItem extends Component {
 
     _fadeOutBeginTimeout = null;
 
-    handleFalseTextLayout(ev) {
+    componentWillMount() {
+        console.info('should show notification? ', this.props.annotation);
+        this.showPushNotification();
+    }
 
+    showPushNotification() {
+        // TODO - remove this once https://github.com/facebook/react-native/pull/4003/files lands
+        PushNotificationIOS.cancelAllLocalNotifications();
+
+        console.info('showing notificaton!');
+        let alertBody = `${this.props.annotation.user.displayName.split(' ')[0]}: ${emoji.emojify(this.props.annotation.text)}`;
+        PushNotificationIOS.presentLocalNotification({
+            alertBody,
+            userInfo: {
+                annotationId: this.props.annotation.id
+            }
+        });
+        //setTimeout(() => {
+        //    this.removePushNotification();
+        //}, 5000);
+    }
+
+    removePushNotification() {
+        PushNotificationIOS.cancelAllLocalNotifications();
+        // TODO - waiting for https://github.com/facebook/react-native/pull/4003/files
+        //PushNotificationIOS.cancelLocalNotifications({
+        //    annotationId: this.props.annotation.id
+        //});
     }
 
     handleLayout(ev) {
@@ -100,7 +128,13 @@ export default class ScrollableAnnotationItem extends Component {
     }
 
     componentWillUnmount() {
-        clearTimeout(this._fadeOutBeginTimeout)
+        clearTimeout(this._fadeOutBeginTimeout);
+        // Remove notifications
+        console.info('removing notification');
+        this.removePushNotification();
+        //PushNotificationIOS.cancelAllLocalNotifications({
+        //    annotationId: this.props.annotation.id
+        //});
     }
 }
 
@@ -179,6 +213,7 @@ export default Relay.createContainer(ScrollableAnnotationItem, {
                 user {
                     id
                     facebookId
+                    displayName
                 }
             }
         `
