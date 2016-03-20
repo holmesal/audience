@@ -29,7 +29,7 @@ export default class ScrollableAnnotationItem extends Component {
     _fadeOutBeginTimeout = null;
 
     componentWillMount() {
-        console.info('should show notification? ', this.props.annotation.user.id, getViewerId());
+        //console.info('should show notification? ', this.props.annotation.user.id, getViewerId());
         if (__DEV__ || this.props.annotation.user.id != getViewerId()) {
             this.showPushNotification();
         }
@@ -39,7 +39,7 @@ export default class ScrollableAnnotationItem extends Component {
         // TODO - remove this once https://github.com/facebook/react-native/pull/4003/files lands
         PushNotificationIOS.cancelAllLocalNotifications();
 
-        console.info('showing notificaton!');
+        //console.info('showing notificaton!');
         let alertBody = `${this.props.annotation.user.displayName.split(' ')[0]}: ${emoji.emojify(this.props.annotation.text)}`;
         PushNotificationIOS.presentLocalNotification({
             alertBody,

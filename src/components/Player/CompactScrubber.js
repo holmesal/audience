@@ -25,6 +25,9 @@ import PlayPauseButton from './PlayPauseButton';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const waveformSegmentWidth = 1173;
+const pixelsPerSecond = 4;
+
 class CompactScrubber extends Component {
 
     static propTypes = {
@@ -32,7 +35,7 @@ class CompactScrubber extends Component {
     };
 
     static defaultProps = {
-        duration: 1138,
+        duration: null,
         currentTime: 0,
         onScrubStart: () => {},
         onScrubEnd: () => {},
@@ -46,7 +49,8 @@ class CompactScrubber extends Component {
         remainingOpacity: new Animated.Value(1),
         waveformWidth: 1173,
         waveformScaleY: new Animated.Value(1),
-        hintOpacity: new Animated.Value(1)
+        hintOpacity: new Animated.Value(1),
+        miniAnnotations: []
     };
 
     _touching = false;
@@ -98,6 +102,26 @@ class CompactScrubber extends Component {
                 }, 64);
             }
         });
+    }
+
+    componentDidMount() {
+        if (this.props.episode.annotations && this.props.duration) {
+            this.renderMiniAnnotations(this.props.episode.annotations, this.props.duration);
+        }
+    }
+
+
+    componentWillReceiveProps(nextProps) {
+        //console.info('new duration', nextProps.duration);
+        if (nextProps.duration != this.props.duration) {
+            let waveformWidth = pixelsPerSecond * nextProps.duration;
+            console.info(`[compactScrubber] - updating waveform width: ${waveformWidth}`);
+            this.setState({waveformWidth});
+        }
+
+        if (nextProps.episode.annotations != this.props.episode.annotations || nextProps.duration != this.props.duration) {
+            this.renderMiniAnnotations(nextProps.episode.annotations, nextProps.duration);
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -245,16 +269,17 @@ class CompactScrubber extends Component {
         return false;
     }
 
-    renderUsers() {
-        if (!this.props.duration) return <View />;
+    renderMiniAnnotations(annotations, duration) {
+        if (!duration) return <View />;
+        console.info('rendering mini annotations!', duration, annotations);
         let thinnedAnnotations = [];
         let lastLaidAnnotationLeft = null;
         const minSpacing = avatarSize + 4;
 
-        this.props.episode.annotations.edges.map(edge => {
-            let frac = edge.node.time / this.props.duration;
+        annotations.edges.map(edge => {
+            let frac = edge.node.time / duration;
             if (!frac) frac = 0;
-            let left = (frac * waveformWidth) + windowWidth/2 - avatarSize/2;
+            let left = (frac * this.state.waveformWidth) + windowWidth/2 - avatarSize/2;
             if (!lastLaidAnnotationLeft || (left - lastLaidAnnotationLeft > minSpacing)) {
                 edge.left = left;
                 edge.opacity = this.state.frac > frac ? 0.3 : 1;
@@ -263,7 +288,7 @@ class CompactScrubber extends Component {
             }
         });
 
-        return thinnedAnnotations.map(edge => {
+        let miniAnnotations = thinnedAnnotations.map(edge => {
             //return (
             //    <Icon
             //        name="ios-chatbubble"
@@ -277,7 +302,8 @@ class CompactScrubber extends Component {
                                     style={[styles.miniAnnotation, {left: edge.left, opacity: edge.opacity}]}
                                     key={edge.node.id}
             />);
-        })
+        });
+        this.setState({miniAnnotations})
     }
 
     renderTime() {
@@ -293,7 +319,14 @@ class CompactScrubber extends Component {
         )
     }
 
+    renderFakeWaveforms() {
+        const howManyWaveforms = Math.ceil(this.state.waveformWidth / waveformSegmentWidth);
+        //console.info(`${howManyWaveforms} waveforms needed!`);
+        return _.map(_.range(0, howManyWaveforms), i => <Image key={`fakeWaveform-${i}`} style={[styles.fakeWaveform]} source={require('image!waveform')} />);
+    }
+
     render() {
+        //console.info('[compactScrubber] render!');
         let blurredBgSrc = require('image!bgDark');//require('image!bg');
         return (
             <Animated.View style={[styles.wrapper, this.props.style]}>
@@ -311,12 +344,12 @@ class CompactScrubber extends Component {
                                 {...this._panResponder.panHandlers}
                     >
                         <TouchableOpacity style={styles.waveform} onPress={this.props.onWaveformPress} activeOpacity={1}>
-                            <View style={[styles.spacer, {marginRight: 3}]} />
-                            <Animated.Image
-                                style={[styles.fakeWaveform, {transform: [{scaleY: this.state.waveformScaleY}]}]}
-                                source={require('image!waveform')} />
-                            <View style={[styles.spacer, {marginLeft: 3}]} />
-                            {this.renderUsers()}
+                            <View style={[styles.spacer, {marginRight: 0}]} />
+                            <Animated.View style={[styles.fakeWaveformWrapper, {transform: [{scaleY: this.state.waveformScaleY}], width: this.state.waveformWidth}]}>
+                                {this.renderFakeWaveforms()}
+                            </Animated.View>
+                            <View style={[styles.spacer, {marginLeft: 0}]} />
+                            {this.state.miniAnnotations}
                         </TouchableOpacity>
                     </ScrollView>
                 </View>
@@ -402,13 +435,21 @@ let styles = StyleSheet.create({
         alignSelf: 'stretch',
         position: 'relative'
     },
+    fakeWaveformWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+        position: 'relative',
+        //backgroundColor: 'rgba(255,0,0,0.3)',
+        overflow: 'hidden'
+    },
     waveformMask: {
         backgroundColor: colors.darkGrey,
         opacity: 0.8,
         position: 'absolute',
         top: 40,
         left: windowWidth/2,
-        bottom: 20,
+        bottom: 40,
         right: 0
     },
     spacer: {

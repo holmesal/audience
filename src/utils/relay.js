@@ -5,7 +5,7 @@ import {viewerId$} from '../redux/modules/auth';
 let {MTDebugIP} = NativeModules;
 import {DEV_SERVER, STAGING_SERVER, PROD_SERVER} from '../utils/urls';
 
-const USE_STAGING = true;
+const USE_STAGING = false;
 
 let graphqlURL = __DEV__ ?
     `${DEV_SERVER}/graphql` :

@@ -118,18 +118,20 @@ export const updateEpisode = (episodeId) => ({
 });
 export const playEpisode = (episodeId, startTime=0) => {
     return (dispatch, getState) => {
-        //console.info(podcastId, episodeId);
-        //let podcastTitle = getState().getIn(['podcasts', podcastId, 'collectionName']);
-        //let audio = getState().getIn(['episodes', podcastId]).find((ep) => ep.get('uid') === episodeId, null, Immutable.Map());
-        //let url = audio.getIn(['audio', 'url']);
-        //let episodeTitle = audio.get('title');
-        //if (!url || !podcastTitle || !episodeTitle) console.error(`Could not play this episode due to missing information:   podcastTitle:${podcastTitle}   episodeTitle:${episodeTitle}   url:${url}`);
-        //MTAudio.play(url, podcastTitle, episodeTitle);
 
-        dispatch(updateEpisode(episodeId));
-        dispatch(showPlayer());
-        // Stop the player - will be started again by the audio component when it re-renders
-        dispatch(updatePlaying(false));
+        // Only do this if we haven't been asked to play the episode that's currently playing
+        if (episodeId != episodeId$(getState())) {
+            // Update to the new episode
+            dispatch(updateEpisode(episodeId));
+            // Show th eplayer
+            dispatch(showPlayer());
+            // Stop the player - will be started again by the audio component when it re-renders
+            dispatch(updatePlaying(false));
+            // Update the duration to null
+            dispatch(updateDuration(null));
+        }
+
+        // Either way, if a startTime is passed we should seek to it
         // Seek to this time
         dispatch(updateLastTargetTime(startTime));
     }
