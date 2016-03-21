@@ -48,7 +48,7 @@ const focalPoint = {
     y: height - 35 - 80
 };
 
-console.info(`rows: ${numRows}   cols: ${numCols}   hitBoxSize: ${hitBoxSize}`);
+//console.info(`rows: ${numRows}   cols: ${numCols}   hitBoxSize: ${hitBoxSize}`);
 
 export default class EmojiSploder extends Component {
 

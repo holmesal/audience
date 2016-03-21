@@ -133,7 +133,7 @@ export default class ScrollableAnnotationItem extends Component {
     componentWillUnmount() {
         clearTimeout(this._fadeOutBeginTimeout);
         // Remove notifications
-        console.info('removing notification');
+        //console.info('removing notification');
         //this.removePushNotification();
         //PushNotificationIOS.cancelAllLocalNotifications({
         //    annotationId: this.props.annotation.id

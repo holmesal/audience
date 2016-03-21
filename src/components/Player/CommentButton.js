@@ -24,7 +24,7 @@ class CommentButton extends Component {
     };
 
     componentDidUpdate(prevProps, prevState) {
-        console.info('update!', this.props);
+        //console.info('update!', this.props);
         if (this.props.sendingComment && this.props.sendingComment != prevProps.sendingComment) {
             this.fadeOutAndIn()
         }

@@ -21,7 +21,7 @@ class Results extends Component {
     }
 
     renderResults() {
-        console.info('got podcast search results!', this.props.search.results);
+        //console.info('got podcast search results!', this.props.search.results);
         return this.props.search.results.edges.map(edge => {
             return <PodcastResult
                 key={edge.node.id}

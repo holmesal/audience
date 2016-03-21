@@ -47,7 +47,7 @@ class CompactScrubber extends Component {
         scrubbing: false,
         dashOpacity: new Animated.Value(0),
         remainingOpacity: new Animated.Value(1),
-        waveformWidth: 1173,
+        waveformWidth: null,
         waveformScaleY: new Animated.Value(1),
         hintOpacity: new Animated.Value(1),
         miniAnnotations: []
@@ -79,7 +79,7 @@ class CompactScrubber extends Component {
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
             onPanResponderGrant: () => {
-                console.info('scroll view has been granted responder')
+                //console.info('scroll view has been granted responder')
                 this._touching = true;
                 this._autoScrolling = false; // cancel autoscrolls
                 this.checkScrubbing();
@@ -105,23 +105,24 @@ class CompactScrubber extends Component {
     }
 
     componentDidMount() {
-        if (this.props.episode.annotations && this.props.duration) {
-            this.renderMiniAnnotations(this.props.episode.annotations, this.props.duration);
+        if (this.props.episode.annotations && this.props.duration && this.state.waveformWidth) {
+            this.renderMiniAnnotations(this.props.episode.annotations, this.props.duration, this.state.waveformWidth);
         }
+        if (this.props.duration) this.updateWaveformWidth(this.props.duration);
     }
 
 
     componentWillReceiveProps(nextProps) {
         //console.info('new duration', nextProps.duration);
         if (nextProps.duration != this.props.duration) {
-            let waveformWidth = pixelsPerSecond * nextProps.duration;
-            console.info(`[compactScrubber] - updating waveform width: ${waveformWidth}`);
-            this.setState({waveformWidth});
+            this.updateWaveformWidth(nextProps.duration);
         }
+    }
 
-        if (nextProps.episode.annotations != this.props.episode.annotations || nextProps.duration != this.props.duration) {
-            this.renderMiniAnnotations(nextProps.episode.annotations, nextProps.duration);
-        }
+    updateWaveformWidth(duration) {
+        let waveformWidth = pixelsPerSecond * duration;
+        console.info(`[compactScrubber] - updating waveform width: ${waveformWidth}`);
+        this.setState({waveformWidth});
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -152,6 +153,14 @@ class CompactScrubber extends Component {
             toValue: 1 - (this.state.frac/0.03),
             duration: 50
         }).start()
+
+        // Possibly update mini annotations
+        if (prevProps.episode.annotations != this.props.episode.annotations ||
+            prevProps.duration != this.props.duration ||
+            prevState.waveformWidth != this.state.waveformWidth
+        ) {
+            this.renderMiniAnnotations(this.props.episode.annotations, this.props.duration, this.state.waveformWidth);
+        }
     }
 
     handleUpdatedCurrentTime() {
@@ -218,7 +227,7 @@ class CompactScrubber extends Component {
 
         // Seek to this time
         if (targetTime === 0) targetTime = Math.random() * 0.01; // tiny time
-        console.info('scrubbing has ended, seeking to target time: ', targetTime);
+        //console.info('scrubbing has ended, seeking to target time: ', targetTime);
         this.props.dispatch(updateLastTargetTime(targetTime));
         //this.props.onSeek(targetTime);
 
@@ -269,9 +278,12 @@ class CompactScrubber extends Component {
         return false;
     }
 
-    renderMiniAnnotations(annotations, duration) {
-        if (!duration) return <View />;
-        console.info('rendering mini annotations!', duration, annotations);
+    renderMiniAnnotations(annotations, duration, waveformWidth) {
+        if (!duration || !waveformWidth) {
+            //console.info('not rendering mini annotations!', duration, waveformWidth);
+            return <View />;
+        }
+        //console.info('rendering mini annotations!', duration, annotations);
         let thinnedAnnotations = [];
         let lastLaidAnnotationLeft = null;
         const minSpacing = avatarSize + 4;
@@ -279,7 +291,7 @@ class CompactScrubber extends Component {
         annotations.edges.map(edge => {
             let frac = edge.node.time / duration;
             if (!frac) frac = 0;
-            let left = (frac * this.state.waveformWidth) + windowWidth/2 - avatarSize/2;
+            let left = (frac * waveformWidth) + windowWidth/2 - avatarSize/2;
             if (!lastLaidAnnotationLeft || (left - lastLaidAnnotationLeft > minSpacing)) {
                 edge.left = left;
                 edge.opacity = this.state.frac > frac ? 0.3 : 1;

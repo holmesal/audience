@@ -23,7 +23,7 @@ class Discover extends Component {
     };
 
     componentDidMount() {
-        console.info('discover mount!', this.props)
+        //console.info('discover mount!', this.props)
         // Refresh every 30 minutes
         this.refetchTimer = setInterval(() => {
             this.refresh();
@@ -36,13 +36,13 @@ class Discover extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.info('got props!')
+        //console.info('got props!')
         console.info(nextProps.viewer.friendActivity)
         //this.parseActivity(nextProps.viewer.friendActivity)
     }
 
     refresh() {
-        console.info('refreshing!');
+        //console.info('refreshing!');
         this.setState({refreshing: true});
         this.props.relay.forceFetch({}, (readyState) => {
             //console.info(readyState);
@@ -75,7 +75,7 @@ class Discover extends Component {
         let recommendations = groupedByType.RecommendationActivity || [];
         let annotations = groupedByType.AnnotationActivity || [];
         let annotationsByUser = _.groupBy(annotations, edge => edge.node.annotation.user.id) || [];
-        console.info(`(feed item) [${episode.id}] - ${recommendations.length} recs and ${annotations.length} annotations (by ${_.keys(annotationsByUser).length} users)`);
+        //console.info(`(feed item) [${episode.id}] - ${recommendations.length} recs and ${annotations.length} annotations (by ${_.keys(annotationsByUser).length} users)`);
         let activityItems = recommendations.map(activityEdge => <Recommendation key={activityEdge.node.id} recommendation={activityEdge.node.recommendation}/>);
         activityItems = activityItems.concat(_.map(annotationsByUser, (annotations, userId) => <Annotation key={userId} annotations={annotations} user={annotations[0].node.annotation.user} />));
         // Tell the last activity item that it is last

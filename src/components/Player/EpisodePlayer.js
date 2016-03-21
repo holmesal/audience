@@ -90,6 +90,9 @@ class EpisodePlayer extends Component {
     }
 
     handleDurationChange(duration) {
+        // Round up
+        duration = Math.ceil(duration);
+
         this.setState({duration});
         //this.props.onDurationChange(duration);
         this.props.dispatch(updateDuration(duration));
