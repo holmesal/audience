@@ -1,15 +1,21 @@
 PODS:
+  - FreeStreamer (3.5.4):
+    - Reachability (~> 3.0)
   - Instabug (5.1.0)
   - Mixpanel (2.9.3):
     - Mixpanel/Mixpanel (= 2.9.3)
   - Mixpanel/Mixpanel (2.9.3)
+  - Reachability (3.2)
 
 DEPENDENCIES:
+  - FreeStreamer
   - Instabug
   - Mixpanel
 
 SPEC CHECKSUMS:
+  FreeStreamer: 1df5727569d209481d4549bae54a0d361c8c9bdd
   Instabug: 19604e58b970de072933800c3cd92ad2f3a019f8
   Mixpanel: b9ff1c5d41fc07037d4b813bf2799c050ee3e49b
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
 
 COCOAPODS: 0.39.0

@@ -10,3 +10,4 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <StreamingKit/STKAudioPlayer.h>
+#import <FreeStreamer/FreeStreamer.h>

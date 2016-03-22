@@ -1,4 +1,6 @@
 workspace 'Audience'
+use_frameworks!
 
 pod 'Mixpanel'
 pod 'Instabug'
+pod 'FreeStreamer'

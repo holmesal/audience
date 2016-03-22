@@ -23,6 +23,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		49EFA14F75544B4CAAD7D9F8 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66E61E38692D456CB73EF608 /* Foundation.ttf */; };
+		4C75BAF2FA7AC2BC2E3A0159 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B27A055219F018632F93929 /* Pods.framework */; };
 		5231FA59C8554F52B7A9F354 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D5051780234438690C813E3 /* Entypo.ttf */; };
 		681873946564444E8EC2B268 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 694328CEF5274F0D829010FE /* libRNVectorIcons.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -30,8 +31,10 @@
 		9AE1B07F75114EDBAFAB7217 /* libRNNotificationActions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EEDD777F121B4AB1B7CDB908 /* libRNNotificationActions.a */; };
 		A3DFAEA39D97447A9E8D92BF /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 341A849A06FA4F39A6A73325 /* FontAwesome.ttf */; };
 		BFC4B8530FD54EE29384E6EB /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EEC39D937E7D4CE29DA926B4 /* libBVLinearGradient.a */; };
-		D47273404AF3B74815784C66 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5848CC463D1D6024A42AC6BB /* libPods.a */; };
 		E20D90E91C76822400C05994 /* Audience.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E20D90E81C767DC400C05994 /* Audience.entitlements */; };
+		E21A36991CA096B000E1AF30 /* PFAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = E21A36971CA096B000E1AF30 /* PFAudio.m */; };
+		E21A369A1CA096B000E1AF30 /* PFAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21A36981CA096B000E1AF30 /* PFAudio.swift */; };
+		E21A36CE1CA0A9BD00E1AF30 /* threadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */; };
 		E2654D141C7C35D200F9BCE8 /* MTDebugIP.m in Sources */ = {isa = PBXBuildFile; fileRef = E2654D131C7C35D200F9BCE8 /* MTDebugIP.m */; };
 		E26F20811C5AFB8300C99444 /* libStreamingKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E26F207A1C5AFB7000C99444 /* libStreamingKit.a */; };
 		E272148C1C75371F00E9EC3D /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E272148B1C75371A00E9EC3D /* libRCTPushNotification.a */; };
@@ -132,6 +135,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = BVLinearGradient;
+		};
+		E21A36D61CA0BE3000E1AF30 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E21A36D21CA0BE2F00E1AF30 /* FreeStreamer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 969D3AA11C6DE48F00DF5410;
+			remoteInfo = FreeStreamer;
 		};
 		E2654D401C7E981400F9BCE8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -257,7 +267,7 @@
 		2F096097A6E34116F58554A5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		341A849A06FA4F39A6A73325 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		3C5BC9491DE04E96843B80DF /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
-		5848CC463D1D6024A42AC6BB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B27A055219F018632F93929 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65155423B11F402D89E77749 /* RNNotificationActions.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNNotificationActions.xcodeproj; path = "../node_modules/react-native-ios-notification-actions/RNNotificationActions/RNNotificationActions.xcodeproj"; sourceTree = "<group>"; };
 		66E61E38692D456CB73EF608 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		694328CEF5274F0D829010FE /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
@@ -270,6 +280,13 @@
 		B954EF1B955F4561B0B50E7E /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		C934426D893047D7AA7A4DA6 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		E20D90E81C767DC400C05994 /* Audience.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Audience.entitlements; path = Audience/Audience.entitlements; sourceTree = "<group>"; };
+		E21A36641CA0949200E1AF30 /* libFreeStreamer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreeStreamer.a; path = "DerivedData/Audience/Build/Products/Release-iphoneos/libFreeStreamer.a"; sourceTree = "<group>"; };
+		E21A36971CA096B000E1AF30 /* PFAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFAudio.m; sourceTree = "<group>"; };
+		E21A36981CA096B000E1AF30 /* PFAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFAudio.swift; sourceTree = "<group>"; };
+		E21A36B21CA09A0500E1AF30 /* FreeStreamer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FreeStreamer.framework; path = "Pods/../build/Release-iphoneos/FreeStreamer.framework"; sourceTree = "<group>"; };
+		E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = threadHelper.swift; sourceTree = "<group>"; };
+		E21A36D01CA0BDC300E1AF30 /* FreeStreamer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FreeStreamer.framework; path = "DerivedData/Audience/Build/Products/Debug-iphoneos/FreeStreamer.framework"; sourceTree = "<group>"; };
+		E21A36D21CA0BE2F00E1AF30 /* FreeStreamer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreeStreamer.xcodeproj; path = FreeStreamer/FreeStreamer/FreeStreamer.xcodeproj; sourceTree = "<group>"; };
 		E2654D121C7C35D200F9BCE8 /* MTDebugIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDebugIP.h; path = MTDebugIP/MTDebugIP.h; sourceTree = "<group>"; };
 		E2654D131C7C35D200F9BCE8 /* MTDebugIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDebugIP.m; path = MTDebugIP/MTDebugIP.m; sourceTree = "<group>"; };
 		E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = StreamingKit.xcodeproj; path = StreamingKit/StreamingKit.xcodeproj; sourceTree = "<group>"; };
@@ -324,10 +341,10 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				E2F303F01C4E006F003C21E4 /* Bolts.framework in Frameworks */,
 				E2B9ED881C8A51D10050C0EE /* Fabric.framework in Frameworks */,
-				D47273404AF3B74815784C66 /* libPods.a in Frameworks */,
 				9AE1B07F75114EDBAFAB7217 /* libRNNotificationActions.a in Frameworks */,
 				681873946564444E8EC2B268 /* libRNVectorIcons.a in Frameworks */,
 				BFC4B8530FD54EE29384E6EB /* libBVLinearGradient.a in Frameworks */,
+				4C75BAF2FA7AC2BC2E3A0159 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +429,7 @@
 			children = (
 				E2654D111C7C358B00F9BCE8 /* MTDebugIP */,
 				E20D90E81C767DC400C05994 /* Audience.entitlements */,
+				E21A36961CA096B000E1AF30 /* PFAudio */,
 				E2A519761C5AE8A9001546D5 /* MTAudio */,
 				E2A519751C5AE8A1001546D5 /* Audience-Bridging-Header.h */,
 				E2A485891C51F5EF00ADDD30 /* Fonts */,
@@ -422,6 +440,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */,
 			);
 			name = Audience;
 			sourceTree = "<group>";
@@ -530,6 +549,23 @@
 			isa = PBXGroup;
 			children = (
 				E21A35031C99F77500E1AF30 /* libBVLinearGradient.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E21A36961CA096B000E1AF30 /* PFAudio */ = {
+			isa = PBXGroup;
+			children = (
+				E21A36971CA096B000E1AF30 /* PFAudio.m */,
+				E21A36981CA096B000E1AF30 /* PFAudio.swift */,
+			);
+			path = PFAudio;
+			sourceTree = "<group>";
+		};
+		E21A36D31CA0BE2F00E1AF30 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E21A36D71CA0BE3000E1AF30 /* FreeStreamer.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -656,12 +692,16 @@
 		E2F303E21C4DFD5F003C21E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E21A36D21CA0BE2F00E1AF30 /* FreeStreamer.xcodeproj */,
+				E21A36D01CA0BDC300E1AF30 /* FreeStreamer.framework */,
+				E21A36B21CA09A0500E1AF30 /* FreeStreamer.framework */,
+				E21A36641CA0949200E1AF30 /* libFreeStreamer.a */,
 				E2B9ED861C8A51D10050C0EE /* Fabric.framework */,
 				E2B9ED871C8A51D10050C0EE /* Crashlytics.framework */,
 				E2F303F31C4E0091003C21E4 /* FBSDKLoginKit.framework */,
 				E2F303EF1C4E006F003C21E4 /* Bolts.framework */,
 				E2F303ED1C4E0056003C21E4 /* FBSDKCoreKit.framework */,
-				5848CC463D1D6024A42AC6BB /* libPods.a */,
+				4B27A055219F018632F93929 /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -731,6 +771,10 @@
 				{
 					ProductGroup = E21A34FF1C99F77500E1AF30 /* Products */;
 					ProjectRef = 7E247F0990D74955A0E0EE23 /* BVLinearGradient.xcodeproj */;
+				},
+				{
+					ProductGroup = E21A36D31CA0BE2F00E1AF30 /* Products */;
+					ProjectRef = E21A36D21CA0BE2F00E1AF30 /* FreeStreamer.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
@@ -900,6 +944,13 @@
 			fileType = archive.ar;
 			path = libBVLinearGradient.a;
 			remoteRef = E21A35021C99F77500E1AF30 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E21A36D71CA0BE3000E1AF30 /* FreeStreamer.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FreeStreamer.framework;
+			remoteRef = E21A36D61CA0BE3000E1AF30 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		E2654D411C7E981400F9BCE8 /* libRNVectorIcons.a */ = {
@@ -1135,10 +1186,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E21A369A1CA096B000E1AF30 /* PFAudio.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				E2A519791C5AE8A9001546D5 /* MTAudio.swift in Sources */,
 				E2A5197A1C5AE8A9001546D5 /* MTAudioBridge.m in Sources */,
 				E2654D141C7C35D200F9BCE8 /* MTDebugIP.m in Sources */,
+				E21A36CE1CA0A9BD00E1AF30 /* threadHelper.swift in Sources */,
+				E21A36991CA096B000E1AF30 /* PFAudio.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1162,6 +1216,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 27EE9F402A12816D6BA497DC /* Pods.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Audience/Audience.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1171,6 +1226,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/build/Release-iphoneos",
+					"$(PROJECT_DIR)/DerivedData/Audience/Build/Products/Debug-iphoneos",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1179,9 +1236,13 @@
 					"/Users/alonso/Documents/FacebookSDK/**",
 					"$(SRCROOT)/**",
 					"$(SRCROOT)/../node_modules/react-native-ios-notification-actions/RNNotificationActions",
-					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"Pods/**",
+					"Frameworks/**",
 				);
 				INFOPLIST_FILE = Audience/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1191,6 +1252,7 @@
 					"\"$(SRCROOT)/Audience\"",
 					"\"$(SRCROOT)/Audience\"",
 					"\"$(SRCROOT)/Podcastfoo\"",
+					"$(PROJECT_DIR)/DerivedData/Audience/Build/Products/Release-iphoneos",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1209,6 +1271,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2F096097A6E34116F58554A5 /* Pods.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Audience/Audience.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1217,6 +1280,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/build/Release-iphoneos",
+					"$(PROJECT_DIR)/DerivedData/Audience/Build/Products/Debug-iphoneos",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1225,9 +1290,13 @@
 					"/Users/alonso/Documents/FacebookSDK/**",
 					"$(SRCROOT)/**",
 					"$(SRCROOT)/../node_modules/react-native-ios-notification-actions/RNNotificationActions",
-					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"Pods/**",
+					"Frameworks/**",
 				);
 				INFOPLIST_FILE = Audience/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1237,6 +1306,7 @@
 					"\"$(SRCROOT)/Audience\"",
 					"\"$(SRCROOT)/Audience\"",
 					"\"$(SRCROOT)/Podcastfoo\"",
+					"$(PROJECT_DIR)/DerivedData/Audience/Build/Products/Release-iphoneos",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1293,7 +1363,10 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/**",
 					"$(SRCROOT)/../node_modules/react-native-ios-notification-actions/RNNotificationActions",
-					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
@@ -1303,7 +1376,6 @@
 				PROVISIONING_PROFILE = "b4068df7-47db-4a65-8fac-2e7fd897d3c1";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/**";
-				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -1343,7 +1415,10 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/**",
 					"$(SRCROOT)/../node_modules/react-native-ios-notification-actions/RNNotificationActions",
-					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS\n$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
@@ -1352,7 +1427,6 @@
 				PROVISIONING_PROFILE = "b4068df7-47db-4a65-8fac-2e7fd897d3c1";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/**";
-				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -62,6 +62,14 @@ class CompactScrubber extends Component {
 
     _touchStartTime = null;
 
+    constructor(props) {
+        super(props);
+        this.throttledSeek = _.throttle(this.seek, 1000, {
+            leading: true,
+            trailing: true
+        });
+    }
+
     // when releasing - the first thing you get is an updated current time event
     // then it scrolls to current time
     // then it sets scrubbing = false
@@ -186,6 +194,14 @@ class CompactScrubber extends Component {
         this.setState({
             frac
         });
+
+        if (!this._autoScrolling) {
+            // HOT-UPDATE
+            let targetTime = frac * this.props.duration;
+            if (targetTime === 0) targetTime = Math.random() * 0.01; // tiny time
+            //console.info('scrubbing has ended, seeking to target time: ', targetTime);
+            this.throttledSeek(targetTime);
+        }
     }
 
     handleScrollEnd() {
@@ -196,6 +212,10 @@ class CompactScrubber extends Component {
             this._momentumScrolling = false;
             this.checkScrubbing();
         }, 32);
+    }
+
+    seek(targetTime) {
+        this.props.dispatch(updateLastTargetTime(targetTime));
     }
 
     checkScrubbing() {
@@ -228,7 +248,7 @@ class CompactScrubber extends Component {
         // Seek to this time
         if (targetTime === 0) targetTime = Math.random() * 0.01; // tiny time
         //console.info('scrubbing has ended, seeking to target time: ', targetTime);
-        this.props.dispatch(updateLastTargetTime(targetTime));
+        this.seek(targetTime);
         //this.props.onSeek(targetTime);
 
     }

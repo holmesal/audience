@@ -5,7 +5,9 @@ import React, {
     View
 } from 'react-native';
 
-import {MTAudio} from 'NativeModules';
+import {PFAudio} from 'NativeModules';
+
+let MTAudio = PFAudio;
 
 /**
  * This component should hide the mask the imperative nature of interacting with the ios api
@@ -42,6 +44,8 @@ export default class AudioStreamIOS extends Component {
         duration: 0
     };
 
+    _lastCurrentTime = 0;
+
     componentDidMount() {
         this._subscriptions = [];
         // Listen for changes to the audio state
@@ -70,7 +74,7 @@ export default class AudioStreamIOS extends Component {
             //console.info('disregarding audio: ', audio);
             return false;
         }
-        //console.info('got state change', audio);
+        console.info('got state change', audio);
         // rounding duration to the nearest 10th of a second
         audio.duration = Math.ceil(audio.duration * 10)/10;
         // Emit duration changes
@@ -105,8 +109,12 @@ export default class AudioStreamIOS extends Component {
     }
 
     seekTo(time) {
-        console.info(`[AudioStreamIOS] seeking to ${time}`);
-        MTAudio.seekToTime(time);
+        if (Math.abs(this.state.currentTime - time) > 1) {
+            console.info(`[AudioStreamIOS] seeking to ${time}`);
+            MTAudio.seekToTime(time);
+        } else {
+            //console.info('skipping!');
+        }
     }
 
     componentWillReceiveProps(nextProps) {

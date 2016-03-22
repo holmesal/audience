@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B44719797BD967B34D22F8A898B8E34CD8264B4E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "B44719797BD967B34D22F8A898B8E34CD8264B4E" : 0,
+    "3D49A5B51B935A42739EE2C73A9A13F0FE9C183F" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "68A7627C-2A81-4AAE-A30D-208BA50883D7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "B44719797BD967B34D22F8A898B8E34CD8264B4E" : "mobile\/",
+    "3D49A5B51B935A42739EE2C73A9A13F0FE9C183F" : "mobile\/ios\/FreeStreamer\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Audience",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ios\/Audience.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:muhku\/FreeStreamer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3D49A5B51B935A42739EE2C73A9A13F0FE9C183F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:holmesal\/audience.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B44719797BD967B34D22F8A898B8E34CD8264B4E"
+    }
+  ]
+}

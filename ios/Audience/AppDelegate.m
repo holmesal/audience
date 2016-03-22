@@ -94,8 +94,8 @@
   [self.window makeKeyAndVisible];
   
   // Audio
-  NSError* error;
-  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
+//  NSError* error;
+//  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
   [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
   
   // Facebook
