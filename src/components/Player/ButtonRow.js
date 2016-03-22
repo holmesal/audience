@@ -10,6 +10,7 @@ import React, {
 import Relay from 'react-relay';
 import CommentButton from './CommentButton';
 import EmojiButton from './EmojiButton';
+import RecordButton from './RecordButton';
 import ShareMomentButton from './ShareMomentButton';
 
 class ButtonRow extends Component {
@@ -51,7 +52,7 @@ class ButtonRow extends Component {
                 <EmojiButton
                     onPressIn={this.props.onEmojiPressIn}
                 />
-                <ShareMomentButton
+                <RecordButton
                     episode={this.props.episode}
                 />
             </Animated.View>

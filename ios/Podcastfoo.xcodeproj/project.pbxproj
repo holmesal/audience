@@ -430,7 +430,7 @@
 				E2654D111C7C358B00F9BCE8 /* MTDebugIP */,
 				E20D90E81C767DC400C05994 /* Audience.entitlements */,
 				E21A36961CA096B000E1AF30 /* PFAudio */,
-				E2A519761C5AE8A9001546D5 /* MTAudio */,
+				E2A519761C5AE8A9001546D5 /* deprecated-MTAudio */,
 				E2A519751C5AE8A1001546D5 /* Audience-Bridging-Header.h */,
 				E2A485891C51F5EF00ADDD30 /* Fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -640,12 +640,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E2A519761C5AE8A9001546D5 /* MTAudio */ = {
+		E2A519761C5AE8A9001546D5 /* deprecated-MTAudio */ = {
 			isa = PBXGroup;
 			children = (
 				E2A519771C5AE8A9001546D5 /* MTAudio.swift */,
 				E2A519781C5AE8A9001546D5 /* MTAudioBridge.m */,
 			);
+			name = "deprecated-MTAudio";
 			path = MTAudio;
 			sourceTree = "<group>";
 		};

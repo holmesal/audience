@@ -96,31 +96,31 @@ class PFAudio: NSObject, RCTInvalidating {
   
   func didReceivePlayCommand(event:MPRemoteCommand) -> MPRemoteCommandHandlerStatus {
     print("got remote play command!");
-    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.commandCenterPlayButtonTapped", body: NSNull())
+    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterPlayButtonTapped", body: NSNull())
     self.resume()
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceivePauseCommand(event:MPRemoteCommand) -> MPRemoteCommandHandlerStatus {
     print("got remote pause command!")
-    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.commandCenterPauseButtonTapped", body: NSNull())
+    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterPauseButtonTapped", body: NSNull())
     self.pause()
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceiveSkipForwardCommand(event:MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
-    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.commandCenterSkipForwardButtonTapped", body: NSNull())
+    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterSkipForwardButtonTapped", body: NSNull())
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceiveSkipBackwardCommand(event:MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
-    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.commandCenterSkipBackwardButtonTapped", body: NSNull())
+    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterSkipBackwardButtonTapped", body: NSNull())
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceiveLikeCommand(event:MPFeedbackCommandEvent) -> MPRemoteCommandHandlerStatus {
     // Emit an event over the bridge
-    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.favorite", body: []);
+    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.favorite", body: []);
     // Set the command state to 'active'
     // Doesn't work, not sure why.
     let commandCenter = MPRemoteCommandCenter.sharedCommandCenter()
@@ -160,7 +160,7 @@ class PFAudio: NSObject, RCTInvalidating {
   // Play a stream
   @objc func play(source: String, podcastTitle: String, episodeTitle: String, artworkUrl: String?) -> Void {
     runOnMain({
-      print(String(format: "MTAudio.play() called with url %@", source))
+      print(String(format: "PFAudio.play() called with url %@", source))
       
       // Store relevant info, so that it can be used to update the command center later
       self.podcastTitle = podcastTitle;
@@ -308,7 +308,7 @@ class PFAudio: NSObject, RCTInvalidating {
     state["currentTime"] =  playbackTimeInSeconds;
     // Source
     state["source"] = self.source;
-    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.updateState", body: state)
+    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.updateState", body: state)
     // Update the now playing info
     self.updateNowPlayingInfo();
   }
@@ -318,13 +318,16 @@ class PFAudio: NSObject, RCTInvalidating {
   
   
   
-  // Recording
-  
+  // Start recording
   func startRecording() -> Void {
     print("PFAudio.startRecording() called!");
   }
   
-  func stopRecording() -> Void {
+  // Stops recording, converts the recorded pcm audio to mp4, and calls the callback with the filepath to that mp4
+  func stopRecording(callback: RCTResponseSenderBlock) -> Void {
     print("PFAudio.stopRecording() called!");
+    
+    // https://github.com/michaeltyson/TPAACAudioConverter for conversion to m4a?
+    callback([NSNull(), "path/to/clip.m4a"]);
   }
 }

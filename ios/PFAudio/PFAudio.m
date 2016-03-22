@@ -15,5 +15,7 @@ RCT_EXTERN_METHOD(play:(NSString *)source podcastTitle:(NSString *)podcastTitle 
 RCT_EXTERN_METHOD(pause);
 RCT_EXTERN_METHOD(resume);
 RCT_EXTERN_METHOD(seekToTime:(nonnull NSNumber *)timestamp);
+RCT_EXTERN_METHOD(startRecording);
+RCT_EXTERN_METHOD(stopRecording:(RCTResponseSenderBlock)callback);
 
 @end
