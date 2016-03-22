@@ -134,7 +134,7 @@ class CompactScrubber extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.currentTime != this.props.currentTime) {
-            if (this._touching || !this._momentumScrolling) {
+            if (this._touching || this._momentumScrolling) {
                 return false
             }
         }

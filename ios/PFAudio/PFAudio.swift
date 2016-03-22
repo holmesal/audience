@@ -6,38 +6,41 @@
 //
 
 import Foundation
-//import StreamingKit
 import MediaPlayer
 import FreeStreamer
 
 @objc(PFAudio)
 class PFAudio: NSObject, RCTInvalidating {
-
+  
+  // The bridge to magical js-land
   var bridge: RCTBridge!
+  
+  // Using FSAudioController instead of FSAudioStream because controller handles changing URLs better
   var audioController: FSAudioController!
 
-  // The URL source and metadata of the currently-playing audio
+  // The info for the currently-playing track
   var source: String = "";
   var podcastTitle: String = "";
   var episodeTitle: String = "";
   var podcastArtwork: UIImage?
   
+  // A timer that, when activated, will report the current time a couple times a second
   var currentTimeReportingTimer: NSTimer?;
   
-  // Player state
+  // String representation of audio player state
   var playerState: String = "UNKNOWN";
+  
   
   override init() {
     super.init();
     // Init audio player
     self.audioController = FSAudioController();
     self.audioController.onStateChange = self.handleStateChange;
-    
-//    self.player.delegate = self;
     self.listenForCommandCenterEvents();
     self.updateNowPlayingInfo();
   }
   
+  // Invalidate is called by react-native before this instance is released
   func invalidate() {
     print("disposing!");
     self.unregisterCommandCenterEvents();
@@ -48,15 +51,9 @@ class PFAudio: NSObject, RCTInvalidating {
       self.audioController = nil;
       print("set audio controller to nil");
     })
-//    self.player.dispose();
   }
   
-//  func createNewStream() {
-//    self.stream = nil;
-//    self.stream = FSAudioStream();
-//    self.stream.onStateChange = self.handleStateChange;
-//  }
-  
+  // Decide which command center events will be enabled/disabled, and start listening for them
   func listenForCommandCenterEvents() -> Void {
     let commandCenter = MPRemoteCommandCenter.sharedCommandCenter()
     // play/pause/skip
@@ -83,6 +80,7 @@ class PFAudio: NSObject, RCTInvalidating {
     commandCenter.stopCommand.enabled = false;
   }
   
+  // Stop listening for command center events
   func unregisterCommandCenterEvents() -> Void {
     let commandCenter = MPRemoteCommandCenter.sharedCommandCenter()
     // play/pause/skip
@@ -135,9 +133,10 @@ class PFAudio: NSObject, RCTInvalidating {
     return MPRemoteCommandHandlerStatus.Success
   }
   
-  // TODO - now playing info
+  // Update the command center now-playing info
   func updateNowPlayingInfo() -> Void {
-    // Get the current playback rate
+    // Command center uses a playback rate to increment current time
+    // We might actually want to do this in JS-land too, it would reduce some of the tight coupling probems we have right now
     let isPlaying = self.audioController.isPlaying();
     let playbackRate:Float;
     if (isPlaying){
@@ -145,7 +144,7 @@ class PFAudio: NSObject, RCTInvalidating {
     } else {
       playbackRate = 0;
     }
-    
+    // Update the center info
     let center = MPNowPlayingInfoCenter.defaultCenter();
     var info = center.nowPlayingInfo ?? [:];
     info[MPMediaItemPropertyTitle] = self.episodeTitle;
@@ -158,26 +157,23 @@ class PFAudio: NSObject, RCTInvalidating {
     center.nowPlayingInfo = info;
   }
   
-  // Sets the source audio URL (and begins buffering)
+  // Play a stream
   @objc func play(source: String, podcastTitle: String, episodeTitle: String, artworkUrl: String?) -> Void {
     runOnMain({
       print(String(format: "MTAudio.play() called with url %@", source))
       
-      // Not sure if this stops the previously-buffering audio source
-//      self.stream.stop();
-      
-      // Create a new stream
-//      self.createNewStream();
-      
-      // Store the new title
+      // Store relevant info, so that it can be used to update the command center later
       self.podcastTitle = podcastTitle;
       self.episodeTitle = episodeTitle;
       self.source = source;
       
       // Construct the URL and set the data source
       let url = NSURL.init(string: source);
+      // Play
       self.audioController.playFromURL(url);
       
+      // If an artwork url was provided, fetch it
+      // [Alonso] sometimes this fails - why???
       if let artworkUrl = artworkUrl {
         // Fetch the image
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
@@ -214,23 +210,24 @@ class PFAudio: NSObject, RCTInvalidating {
   @objc func resume() -> Void {
     runOnMain({
       if (!self.audioController.isPlaying()) {
-        self.audioController.pause();
+        self.audioController.pause(); // lol pause-to-resume
       }
     });
   }
   
   // Seeks to a specific timestamp
-  // Attempt to buffer from this new timestamp instead
   @objc func seekToTime(timestamp: NSNumber) -> Void {
     runOnMain({
+      // Need a position struct to update current timestamp
       var position = FSStreamPosition();
       position.minute = 0;
-      position.second = timestamp.unsignedIntValue;
-      print(position);
+      position.second = timestamp.unsignedIntValue; // is this bad?
+      print("seeking to", position);
       
       // THIS IS SLOW - BLOCKS THE MAIN THREAD
+      // TODO - can the audioController run on a background thread?
       self.audioController.activeStream.seekToPosition(position);
-      print("MTAudio.seek() called with timestamp \(timestamp)");
+      // Emit the updated state
       self.emitStateChange();
     });
   }
@@ -294,7 +291,7 @@ class PFAudio: NSObject, RCTInvalidating {
   // Emits the updated state over the bridge to JS
   func emitStateChange() -> Void {
     // Bail if the audioController has been deallocated
-    // This is necessary because it will emit a "STOPPED" event before dying
+    // This is necessary because it will emit a "STOPPED" event before dying, *after* it's been set to nil? It's a thread thing I don't understand
     if ((self.audioController == nil)) {
       return;
     }
@@ -311,35 +308,23 @@ class PFAudio: NSObject, RCTInvalidating {
     state["currentTime"] =  playbackTimeInSeconds;
     // Source
     state["source"] = self.source;
-//    print("updating state", state);
     self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.updateState", body: state)
     // Update the now playing info
     self.updateNowPlayingInfo();
   }
   
-//  /**
-//  Delegate methods for the STKAudioPlayer
-//  */
-//  func audioPlayer(audioPlayer: STKAudioPlayer!, didStartPlayingQueueItemId queueItemId: NSObject!) {
-//    print("audio player did start playing!");
-//    self.emitStateChange();
-//  }
-//  
-//  func audioPlayer(audioPlayer: STKAudioPlayer!, didFinishBufferingSourceWithQueueItemId queueItemId: NSObject!) {
-//    print("did finish buffering!");
-//    self.emitStateChange();
-//  }
-//  
-//  func audioPlayer(audioPlayer: STKAudioPlayer!, stateChanged state: STKAudioPlayerState, previousState: STKAudioPlayerState) {
-//    print("state changed!");
-//    self.emitStateChange();
-//    // Start or stop the current time emission timer
-//    self.startOrStopReportingCurrentTime(state);
-//  }
-//  func audioPlayer(audioPlayer: STKAudioPlayer!, didFinishPlayingQueueItemId queueItemId: NSObject!, withReason stopReason: STKAudioPlayerStopReason, andProgress progress: Double, andDuration duration: Double) {
-//    print("did finish playing!");
-//  }
-//  func audioPlayer(audioPlayer: STKAudioPlayer!, unexpectedError errorCode: STKAudioPlayerErrorCode) {
-//    print("unexpected error!");
-//  }
+  
+  
+  
+  
+  
+  // Recording
+  
+  func startRecording() -> Void {
+    print("PFAudio.startRecording() called!");
+  }
+  
+  func stopRecording() -> Void {
+    print("PFAudio.stopRecording() called!");
+  }
 }
