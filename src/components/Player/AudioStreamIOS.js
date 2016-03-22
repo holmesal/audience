@@ -74,7 +74,7 @@ export default class AudioStreamIOS extends Component {
             //console.info('disregarding audio: ', audio);
             return false;
         }
-        console.info('got state change', audio);
+        //console.info('got state change', audio);
         // rounding duration to the nearest 10th of a second
         audio.duration = Math.ceil(audio.duration * 10)/10;
         // Emit duration changes

@@ -4,6 +4,7 @@
  */
 'use strict';
 import React, {
+    addons,
     ActivityIndicatorIOS,
     AppRegistry,
     Component,
@@ -42,6 +43,10 @@ export default class App extends Component {
 
     componentDidMount() {
         StatusBar.setBarStyle('light-content');
+        addons.Perf.start();
+        setInterval(() => {
+            addons.Perf.printWasted()
+        }, 5000);
     }
 
     render() {

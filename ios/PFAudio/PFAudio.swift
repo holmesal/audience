@@ -14,7 +14,7 @@ import FreeStreamer
 class PFAudio: NSObject, RCTInvalidating {
 
   var bridge: RCTBridge!
-  var stream: FSAudioStream!
+  var audioController: FSAudioController!
 
   // The URL source and metadata of the currently-playing audio
   var source: String = "";
@@ -30,28 +30,32 @@ class PFAudio: NSObject, RCTInvalidating {
   override init() {
     super.init();
     // Init audio player
-    self.createNewStream();
+    self.audioController = FSAudioController();
+    self.audioController.onStateChange = self.handleStateChange;
+    
 //    self.player.delegate = self;
     self.listenForCommandCenterEvents();
     self.updateNowPlayingInfo();
   }
   
   func invalidate() {
+    print("disposing!");
     self.unregisterCommandCenterEvents();
     if let timer = self.currentTimeReportingTimer {
       timer.invalidate();
     }
     runOnMain({
-      self.stream = nil;
+      self.audioController = nil;
+      print("set audio controller to nil");
     })
 //    self.player.dispose();
   }
   
-  func createNewStream() {
-    self.stream = nil;
-    self.stream = FSAudioStream();
-    self.stream.onStateChange = self.handleStateChange;
-  }
+//  func createNewStream() {
+//    self.stream = nil;
+//    self.stream = FSAudioStream();
+//    self.stream.onStateChange = self.handleStateChange;
+//  }
   
   func listenForCommandCenterEvents() -> Void {
     let commandCenter = MPRemoteCommandCenter.sharedCommandCenter()
@@ -134,7 +138,7 @@ class PFAudio: NSObject, RCTInvalidating {
   // TODO - now playing info
   func updateNowPlayingInfo() -> Void {
     // Get the current playback rate
-    let isPlaying = self.stream.isPlaying();
+    let isPlaying = self.audioController.isPlaying();
     let playbackRate:Float;
     if (isPlaying){
       playbackRate = 1;
@@ -149,8 +153,8 @@ class PFAudio: NSObject, RCTInvalidating {
     info[MPMediaItemPropertyPodcastTitle] = self.podcastTitle;
     info[MPMediaItemPropertyArtist] = self.podcastTitle;
     info[MPNowPlayingInfoPropertyPlaybackRate] = playbackRate;
-    info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.stream.currentTimePlayed.playbackTimeInSeconds;
-    info[MPMediaItemPropertyPlaybackDuration] = self.stream.duration.playbackTimeInSeconds;
+    info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.audioController.activeStream.currentTimePlayed.playbackTimeInSeconds;
+    info[MPMediaItemPropertyPlaybackDuration] = self.audioController.activeStream.duration.playbackTimeInSeconds;
     center.nowPlayingInfo = info;
   }
   
@@ -163,8 +167,7 @@ class PFAudio: NSObject, RCTInvalidating {
 //      self.stream.stop();
       
       // Create a new stream
-      self.createNewStream();
-      self.stream.play()
+//      self.createNewStream();
       
       // Store the new title
       self.podcastTitle = podcastTitle;
@@ -173,7 +176,7 @@ class PFAudio: NSObject, RCTInvalidating {
       
       // Construct the URL and set the data source
       let url = NSURL.init(string: source);
-      self.stream.playFromURL(url);
+      self.audioController.playFromURL(url);
       
       if let artworkUrl = artworkUrl {
         // Fetch the image
@@ -202,16 +205,16 @@ class PFAudio: NSObject, RCTInvalidating {
   
   @objc func pause() -> Void {
     runOnMain({
-      if (self.stream.isPlaying()) {
-        self.stream.pause();
+      if (self.audioController.isPlaying()) {
+        self.audioController.pause();
       }
     });
   }
   
   @objc func resume() -> Void {
     runOnMain({
-      if (!self.stream.isPlaying()) {
-        self.stream.pause();
+      if (!self.audioController.isPlaying()) {
+        self.audioController.pause();
       }
     });
   }
@@ -229,7 +232,7 @@ class PFAudio: NSObject, RCTInvalidating {
 //      position.seconds = timestamp as Float;
 //      position.playbackTimeInSeconds = timestamp as Float;
   //    var position = FSStreamPosition(playbackTimeInSeconds: timestamp.floatValue);
-      self.stream.seekToPosition(position);
+      self.audioController.activeStream.seekToPosition(position);
       print("MTAudio.seek() called with timestamp \(timestamp)");
       self.emitStateChange();
     });
@@ -237,7 +240,7 @@ class PFAudio: NSObject, RCTInvalidating {
   
   // Starts or stops a timer to report the current time every so often
   func startOrStopReportingCurrentTime() -> Void {
-    if (self.playerState == "PLAYING") {
+    if (self.playerState == "PLAYING" || self.playerState == "RETRYING_SUCCEEDED" || self.playerState == "SEEKING") {
       // Invalidate any
       if let timer = self.currentTimeReportingTimer {
         timer.invalidate();
@@ -293,12 +296,25 @@ class PFAudio: NSObject, RCTInvalidating {
   
   // Emits the updated state over the bridge to JS
   func emitStateChange() -> Void {
+    // Bail if the audioController has been deallocated
+    // This is necessary because it will emit a "STOPPED" event before dying
+    if ((self.audioController == nil)) {
+      return;
+    }
     var state:Dictionary<String,AnyObject> = [:]
-    state["duration"] = self.stream.duration.playbackTimeInSeconds ?? 0
-    // TODO - player state
+    // State
     state["playerState"] = self.playerState;
-    state["currentTime"] = self.stream.currentTimePlayed.playbackTimeInSeconds ?? 0
+    // Duration
+    var duration = self.audioController.activeStream.duration.playbackTimeInSeconds;
+    if (duration.isNaN) {duration = 0};
+    state["duration"] =  duration;
+    // currentTime
+    var playbackTimeInSeconds = self.audioController.activeStream.currentTimePlayed.playbackTimeInSeconds;
+    if (playbackTimeInSeconds.isNaN) { playbackTimeInSeconds = 0 };
+    state["currentTime"] =  playbackTimeInSeconds;
+    // Source
     state["source"] = self.source;
+//    print("updating state", state);
     self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.updateState", body: state)
     // Update the now playing info
     self.updateNowPlayingInfo();

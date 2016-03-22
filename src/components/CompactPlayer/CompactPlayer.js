@@ -34,13 +34,13 @@ class CompactPlayer extends Component {
     }
 
     render() {
-        //console.info('compact player props', this.props);
+        console.info('compact player render', this.props);
         let progress = 0;
         if (this.props.currentTime &&
             this.props.currentTime >= 0 &&
             this.props.duration &&
             this.props.duration >= 0) {
-            progress = this.props.currentTime / this.props.duration;
+            progress = (this.props.currentTime / this.props.duration) || 0;
         }
 
         let image = this.props.loading ?

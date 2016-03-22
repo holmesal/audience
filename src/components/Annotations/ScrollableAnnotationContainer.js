@@ -83,6 +83,7 @@ let styles = StyleSheet.create({
 });
 
 let con = connect(createSelector(currentTime$, currentTime => ({currentTime})))(ScrollableAnnotationContainer);
+//let con = connect()(ScrollableAnnotationContainer);
 
 export default Relay.createContainer(con, {
     fragments: {

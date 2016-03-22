@@ -10,6 +10,7 @@ import {createSelector} from 'reselect';
 
 import EpisodeRoute from '../../routes/EpisodeRoute';
 import CompactPlayer from './CompactPlayer';
+import MiniPlayer from '../Player/MiniPlayer';
 import RelayError from '../common/RelayError';
 import LoadingSpinner from '../common/LoadingSpinner';
 
@@ -36,10 +37,10 @@ class PlayerRoot extends Component {
         });
         return (
             <Relay.RootContainer
-                Component={CompactPlayer}
+                Component={MiniPlayer}
                 route={route}
                 renderFailure={this.renderFailure}
-                renderLoading={() => <CompactPlayer episode={null} loading />}
+                renderLoading={() => <View />}
             />
         )
     }

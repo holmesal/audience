@@ -24,8 +24,8 @@ import MiniAnnotation from './MiniAnnotation';
 import PlayPauseButton from './PlayPauseButton';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Waveform from './Waveform';
 
-const waveformSegmentWidth = 1173;
 const pixelsPerSecond = 4;
 
 class CompactScrubber extends Component {
@@ -47,8 +47,7 @@ class CompactScrubber extends Component {
         scrubbing: false,
         dashOpacity: new Animated.Value(0),
         remainingOpacity: new Animated.Value(1),
-        waveformWidth: null,
-        waveformScaleY: new Animated.Value(1),
+        waveformWidth: 0,
         hintOpacity: new Animated.Value(1),
         miniAnnotations: []
     };
@@ -64,7 +63,7 @@ class CompactScrubber extends Component {
 
     constructor(props) {
         super(props);
-        this.throttledSeek = _.throttle(this.seek, 1000, {
+        this.throttledSeek = _.throttle(this.seek, 500, {
             leading: true,
             trailing: true
         });
@@ -133,6 +132,16 @@ class CompactScrubber extends Component {
         this.setState({waveformWidth});
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.currentTime != this.props.currentTime) {
+            if (this._touching || !this._momentumScrolling) {
+                return false
+            }
+        }
+        //console.info('[compactScrubber] - updating!');
+        return true
+    }
+
     componentDidUpdate(prevProps, prevState) {
         if (this.state.scrubbing) {
             Animated.spring(this.state.dashOpacity, {
@@ -151,10 +160,6 @@ class CompactScrubber extends Component {
         }
 
         if (this.props.currentTime != prevProps.currentTime) this.handleUpdatedCurrentTime()
-
-        // Grow/shrink the waveform based on playing state
-        if (this.props.playing) Animated.spring(this.state.waveformScaleY, { toValue: 1 }).start();
-        else Animated.spring(this.state.waveformScaleY, { toValue: 0.1 }).start();
 
         // Fade the hint
         Animated.timing(this.state.hintOpacity, {
@@ -184,7 +189,8 @@ class CompactScrubber extends Component {
         // Grab the info from the event
         let {contentOffset, contentSize} = ev.nativeEvent;
         let frac = contentOffset.x / (contentSize.width - windowWidth);
-        //console.info(contentOffset, frac);
+        //console.info(contentOffset, contentSize, windowWidth, frac);
+        if (isNaN(frac)) return false;
         if (frac < 0) frac = 0;
         else if (frac > 1) frac = 1;
         // If we're not touching then we're momentum scrolling
@@ -199,7 +205,7 @@ class CompactScrubber extends Component {
             // HOT-UPDATE
             let targetTime = frac * this.props.duration;
             if (targetTime === 0) targetTime = Math.random() * 0.01; // tiny time
-            //console.info('scrubbing has ended, seeking to target time: ', targetTime);
+            //console.info('hot-seeking to target time: ', frac, this.props.duration, targetTime);
             this.throttledSeek(targetTime);
         }
     }
@@ -262,7 +268,7 @@ class CompactScrubber extends Component {
     //}
 
     scrollToCurrentTime() {
-        //console.info('scrolling to current time!');
+        //console.info('scrolling to current time!', this.props.currentTime, this.props.duration, this.state.waveformWidth);
         // This animated scroll will generate some scroll events, so we need to set a flag to ignore them
         this._autoScrolling = true;
 
@@ -351,14 +357,8 @@ class CompactScrubber extends Component {
         )
     }
 
-    renderFakeWaveforms() {
-        const howManyWaveforms = Math.ceil(this.state.waveformWidth / waveformSegmentWidth);
-        //console.info(`${howManyWaveforms} waveforms needed!`);
-        return _.map(_.range(0, howManyWaveforms), i => <Image key={`fakeWaveform-${i}`} style={[styles.fakeWaveform]} source={require('image!waveform')} />);
-    }
-
     render() {
-        //console.info('[compactScrubber] render!');
+        //console.info('[compactScrubber] render!', this.props, this.state);
         let blurredBgSrc = require('image!bgDark');//require('image!bg');
         return (
             <Animated.View style={[styles.wrapper, this.props.style]}>
@@ -376,11 +376,11 @@ class CompactScrubber extends Component {
                                 {...this._panResponder.panHandlers}
                     >
                         <TouchableOpacity style={styles.waveform} onPress={this.props.onWaveformPress} activeOpacity={1}>
-                            <View style={[styles.spacer, {marginRight: 0}]} />
-                            <Animated.View style={[styles.fakeWaveformWrapper, {transform: [{scaleY: this.state.waveformScaleY}], width: this.state.waveformWidth}]}>
-                                {this.renderFakeWaveforms()}
-                            </Animated.View>
-                            <View style={[styles.spacer, {marginLeft: 0}]} />
+                            <Waveform
+                                duration={this.props.duration}
+                                width={this.state.waveformWidth}
+                                collapsed={!this.props.playing}
+                            />
                             {this.state.miniAnnotations}
                         </TouchableOpacity>
                     </ScrollView>
@@ -406,7 +406,7 @@ class CompactScrubber extends Component {
                     monospace
                     negative
                 />
-                
+
                 <Animated.View style={[styles.hintWrapper, {opacity: this.state.hintOpacity}]} pointerEvents='none' >
                     <Text style={[styles.hint, {marginBottom: 4}]}>Tap to {this.props.playing ? 'pause' : 'play'}</Text>
                     <Text style={styles.hint}>Drag to seek</Text>
@@ -467,14 +467,7 @@ let styles = StyleSheet.create({
         alignSelf: 'stretch',
         position: 'relative'
     },
-    fakeWaveformWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignSelf: 'stretch',
-        position: 'relative',
-        //backgroundColor: 'rgba(255,0,0,0.3)',
-        overflow: 'hidden'
-    },
+
     waveformMask: {
         backgroundColor: colors.darkGrey,
         opacity: 0.8,
@@ -484,16 +477,8 @@ let styles = StyleSheet.create({
         bottom: 40,
         right: 0
     },
-    spacer: {
-        width: windowWidth/2,
-        height: 1,
-        backgroundColor: colors.darkGrey,
-        opacity: 0.09
-    },
-    fakeWaveform: {
-        height: waveformHeight,
-        tintColor: colors.lighterGrey
-    },
+
+
 
     miniAnnotation: {
         position: 'absolute',

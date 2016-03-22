@@ -174,6 +174,7 @@ let styles = StyleSheet.create({
 });
 
 let connectedAnnotations = connect(createSelector(currentTime$, currentTime => ({currentTime})))(AnnotationsListView);
+//let connectedAnnotations = connect()(AnnotationsListView);
 
 export default Relay.createContainer(connectedAnnotations, {
     initialVariables: {
