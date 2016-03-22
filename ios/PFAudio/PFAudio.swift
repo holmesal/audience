@@ -228,10 +228,7 @@ class PFAudio: NSObject, RCTInvalidating {
       position.second = timestamp.unsignedIntValue;
       print(position);
       
-      //      position.minutes = 0;
-//      position.seconds = timestamp as Float;
-//      position.playbackTimeInSeconds = timestamp as Float;
-  //    var position = FSStreamPosition(playbackTimeInSeconds: timestamp.floatValue);
+      // THIS IS SLOW - BLOCKS THE MAIN THREAD
       self.audioController.activeStream.seekToPosition(position);
       print("MTAudio.seek() called with timestamp \(timestamp)");
       self.emitStateChange();
