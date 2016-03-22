@@ -47,13 +47,3 @@ let styles = StyleSheet.create({
         height: 90
     }
 });
-
-export default Relay.createContainer(RecordButton, {
-    fragments: {
-        episode: () => Relay.QL`
-            fragment on Episode {
-                id
-            }
-        `
-    }
-});

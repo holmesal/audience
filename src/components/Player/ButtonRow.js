@@ -52,9 +52,7 @@ class ButtonRow extends Component {
                 <EmojiButton
                     onPressIn={this.props.onEmojiPressIn}
                 />
-                <RecordButton
-                    episode={this.props.episode}
-                />
+                <RecordButton />
             </Animated.View>
         );
     }
