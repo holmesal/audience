@@ -31,6 +31,10 @@
   RCTSetLogThreshold(RCTLogLevelInfo);
   RCTSetLogFunction(CrashlyticsReactLogFunction);
   
+  NSString* filePath = [[NSBundle mainBundle] pathForResource:@"15step"
+                                                       ofType:@"mp3"];
+  NSLog(@"file path: %@", filePath);
+  
   NSURL *jsCodeLocation;
   
 #if DEBUG
