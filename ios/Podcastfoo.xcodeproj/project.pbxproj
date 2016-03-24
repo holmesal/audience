@@ -41,6 +41,8 @@
 		E21A36991CA096B000E1AF30 /* PFAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = E21A36971CA096B000E1AF30 /* PFAudio.m */; };
 		E21A369A1CA096B000E1AF30 /* PFAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21A36981CA096B000E1AF30 /* PFAudio.swift */; };
 		E21A36CE1CA0A9BD00E1AF30 /* threadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */; };
+		E25119ED1CA39D930024B069 /* 15step.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E25119EC1CA39D930024B069 /* 15step.mp3 */; };
+		E25119EE1CA39D9C0024B069 /* 15step.mp3 in Copy test audio file */ = {isa = PBXBuildFile; fileRef = E25119EC1CA39D930024B069 /* 15step.mp3 */; };
 		E2654D141C7C35D200F9BCE8 /* MTDebugIP.m in Sources */ = {isa = PBXBuildFile; fileRef = E2654D131C7C35D200F9BCE8 /* MTDebugIP.m */; };
 		E26F20811C5AFB8300C99444 /* libStreamingKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E26F207A1C5AFB7000C99444 /* libStreamingKit.a */; };
 		E272148C1C75371F00E9EC3D /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E272148B1C75371A00E9EC3D /* libRCTPushNotification.a */; };
@@ -55,6 +57,9 @@
 		E2C34F771C61CA490046A2E6 /* libRNMixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2C34F701C61CA320046A2E6 /* libRNMixpanel.a */; };
 		E2D175F11C4B5BCC0006949B /* libRNSearchBar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2D175F01C4B5B950006949B /* libRNSearchBar.a */; };
 		E2D175F81C4B5CC80006949B /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2D175F71C4B5C870006949B /* libRNBlur.a */; };
+		E2D7334B1CA3A40100625A29 /* libRNUploader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2D733451CA3A3FD00625A29 /* libRNUploader.a */; };
+		E2D733521CA3BBA400625A29 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2D733511CA3BB9E00625A29 /* libART.a */; };
+		E2D733541CA3C49900625A29 /* 15stepcut.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E2D733531CA3C49900625A29 /* 15stepcut.mp3 */; };
 		E2F303E01C4DFC5A003C21E4 /* libRCTFBSDKCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F303DF1C4DFC51003C21E4 /* libRCTFBSDKCore.a */; };
 		E2F303E11C4DFC5A003C21E4 /* libRCTFBSDKLogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F303CE1C4DFC42003C21E4 /* libRCTFBSDKLogin.a */; };
 		E2F303EE1C4E0056003C21E4 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F303ED1C4E0056003C21E4 /* FBSDKCoreKit.framework */; };
@@ -240,6 +245,20 @@
 			remoteGlobalIDString = A68BD7BC1BC31318005F02DF;
 			remoteInfo = RNBlur;
 		};
+		E2D733441CA3A3FD00625A29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2D7332B1CA3A3FD00625A29 /* RNUploader.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNUploader;
+		};
+		E2D733501CA3BB9E00625A29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2D7334C1CA3BB9E00625A29 /* ART.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0CF68AC11AF0540F00FF9E5C;
+			remoteInfo = ART;
+		};
 		E2F303CD1C4DFC42003C21E4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E2F303C81C4DFC42003C21E4 /* RCTFBSDKLogin.xcodeproj */;
@@ -255,6 +274,20 @@
 			remoteInfo = RCTFBSDKCore;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E25119EB1CA39D630024B069 /* Copy test audio file */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				E25119EE1CA39D9C0024B069 /* 15step.mp3 in Copy test audio file */,
+			);
+			name = "Copy test audio file";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -305,6 +338,9 @@
 		E21A36971CA096B000E1AF30 /* PFAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFAudio.m; sourceTree = "<group>"; };
 		E21A36981CA096B000E1AF30 /* PFAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFAudio.swift; sourceTree = "<group>"; };
 		E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = threadHelper.swift; sourceTree = "<group>"; };
+		E21A36D01CA0BDC300E1AF30 /* FreeStreamer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FreeStreamer.framework; path = "DerivedData/Audience/Build/Products/Debug-iphoneos/FreeStreamer.framework"; sourceTree = "<group>"; };
+		E21A36D21CA0BE2F00E1AF30 /* FreeStreamer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreeStreamer.xcodeproj; path = FreeStreamer/FreeStreamer/FreeStreamer.xcodeproj; sourceTree = "<group>"; };
+		E25119EC1CA39D930024B069 /* 15step.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 15step.mp3; sourceTree = "<group>"; };
 		E2654D121C7C35D200F9BCE8 /* MTDebugIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDebugIP.h; path = MTDebugIP/MTDebugIP.h; sourceTree = "<group>"; };
 		E2654D131C7C35D200F9BCE8 /* MTDebugIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDebugIP.m; path = MTDebugIP/MTDebugIP.m; sourceTree = "<group>"; };
 		E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = StreamingKit.xcodeproj; path = StreamingKit/StreamingKit.xcodeproj; sourceTree = "<group>"; };
@@ -322,6 +358,9 @@
 		E2C34F5E1C61CA320046A2E6 /* RNMixpanel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNMixpanel.xcodeproj; path = "../node_modules/react-native-mixpanel/RNMixpanel.xcodeproj"; sourceTree = "<group>"; };
 		E2D175EB1C4B5B950006949B /* RNSearchBar.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSearchBar.xcodeproj; path = "../node_modules/react-native-search-bar/RNSearchBar.xcodeproj"; sourceTree = "<group>"; };
 		E2D175F21C4B5C870006949B /* RNBlur.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNBlur.xcodeproj; path = "../node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; };
+		E2D7332B1CA3A3FD00625A29 /* RNUploader.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNUploader.xcodeproj; path = "../node_modules/react-native-uploader/RNUploader/RNUploader.xcodeproj"; sourceTree = "<group>"; };
+		E2D7334C1CA3BB9E00625A29 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
+		E2D733531CA3C49900625A29 /* 15stepcut.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 15stepcut.mp3; sourceTree = "<group>"; };
 		E2F303C81C4DFC42003C21E4 /* RCTFBSDKLogin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTFBSDKLogin.xcodeproj; path = "../node_modules/react-native-fbsdklogin/RCTFBSDKLogin.xcodeproj"; sourceTree = "<group>"; };
 		E2F303DA1C4DFC51003C21E4 /* RCTFBSDKCore.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTFBSDKCore.xcodeproj; path = "../node_modules/react-native-fbsdkcore/RCTFBSDKCore.xcodeproj"; sourceTree = "<group>"; };
 		E2F303ED1C4E0056003C21E4 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -338,6 +377,8 @@
 			files = (
 				AAF1889E1CA83BD2004E229E /* AudioToolbox.framework in Frameworks */,
 				AAAA5AC91CA219D400BEDE5F /* FreeStreamer.framework in Frameworks */,
+				E2D733521CA3BBA400625A29 /* libART.a in Frameworks */,
+				E2D7334B1CA3A40100625A29 /* libRNUploader.a in Frameworks */,
 				E272148C1C75371F00E9EC3D /* libRCTPushNotification.a in Frameworks */,
 				E2C34F771C61CA490046A2E6 /* libRNMixpanel.a in Frameworks */,
 				E2B9ED891C8A51D10050C0EE /* Crashlytics.framework in Frameworks */,
@@ -468,6 +509,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				E25119EC1CA39D930024B069 /* 15step.mp3 */,
+				E2D733531CA3C49900625A29 /* 15stepcut.mp3 */,
 				E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */,
 			);
 			name = Audience;
@@ -507,6 +550,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				E2D7334C1CA3BB9E00625A29 /* ART.xcodeproj */,
+				E2D7332B1CA3A3FD00625A29 /* RNUploader.xcodeproj */,
 				E272148D1C75379000E9EC3D /* RNNotificationActions.xcodeproj */,
 				E27214861C75371900E9EC3D /* RCTPushNotification.xcodeproj */,
 				E2C34F5E1C61CA320046A2E6 /* RNMixpanel.xcodeproj */,
@@ -740,6 +785,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		E2D7332C1CA3A3FD00625A29 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E2D733451CA3A3FD00625A29 /* libRNUploader.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E2D7334D1CA3BB9E00625A29 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E2D733511CA3BB9E00625A29 /* libART.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E2F303C91C4DFC42003C21E4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -787,6 +848,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				BEDA8B9F7044F45026151237 /* Embed Pods Frameworks */,
 				66DCBBDE9666B795086EF255 /* Copy Pods Resources */,
+				E25119EB1CA39D630024B069 /* Copy test audio file */,
 				E2B9ED6D1C8A51860050C0EE /* Crashlytics */,
 			);
 			buildRules = (
@@ -855,6 +917,10 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = E2D7334D1CA3BB9E00625A29 /* Products */;
+					ProjectRef = E2D7334C1CA3BB9E00625A29 /* ART.xcodeproj */;
+				},
 				{
 					ProductGroup = E21A34FF1C99F77500E1AF30 /* Products */;
 					ProjectRef = 7E247F0990D74955A0E0EE23 /* BVLinearGradient.xcodeproj */;
@@ -938,6 +1004,10 @@
 				{
 					ProductGroup = E2A485941C52174100ADDD30 /* Products */;
 					ProjectRef = E2A485931C52174100ADDD30 /* RNSpinkit.xcodeproj */;
+				},
+				{
+					ProductGroup = E2D7332C1CA3A3FD00625A29 /* Products */;
+					ProjectRef = E2D7332B1CA3A3FD00625A29 /* RNUploader.xcodeproj */;
 				},
 				{
 					ProductGroup = E2654D2A1C7E981400F9BCE8 /* Products */;
@@ -1125,6 +1195,20 @@
 			remoteRef = E2D175F61C4B5C870006949B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		E2D733451CA3A3FD00625A29 /* libRNUploader.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNUploader.a;
+			remoteRef = E2D733441CA3A3FD00625A29 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E2D733511CA3BB9E00625A29 /* libART.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libART.a;
+			remoteRef = E2D733501CA3BB9E00625A29 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		E2F303CE1C4DFC42003C21E4 /* libRCTFBSDKLogin.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1147,6 +1231,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2A485921C51FBC700ADDD30 /* Oswald-Regular.ttf in Resources */,
+				E25119ED1CA39D930024B069 /* 15step.mp3 in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				E2A485901C51FBC700ADDD30 /* Oswald-Bold.ttf in Resources */,
@@ -1154,6 +1239,7 @@
 				E20D90E91C76822400C05994 /* Audience.entitlements in Resources */,
 				5231FA59C8554F52B7A9F354 /* Entypo.ttf in Resources */,
 				0989DB72CDFA4807B56222F3 /* EvilIcons.ttf in Resources */,
+				E2D733541CA3C49900625A29 /* 15stepcut.mp3 in Resources */,
 				A3DFAEA39D97447A9E8D92BF /* FontAwesome.ttf in Resources */,
 				49EFA14F75544B4CAAD7D9F8 /* Foundation.ttf in Resources */,
 				FD6CD67D32EF42BCBF028FC0 /* Ionicons.ttf in Resources */,

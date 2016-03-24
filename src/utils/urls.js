@@ -13,3 +13,7 @@ export const episodeShareLink = (podcastId, episodeId, userId, time) => {
     if (time) url = `${url}?time=${time}`;
     return url;
 };
+
+export const clipShareLink = clipId => {
+    return `${PROD_SERVER}/clip/${clipId}`;
+};

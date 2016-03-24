@@ -52,7 +52,9 @@ class ButtonRow extends Component {
                 <EmojiButton
                     onPressIn={this.props.onEmojiPressIn}
                 />
-                <RecordButton />
+                <RecordButton
+                    episode={this.props.episode}
+                />
             </Animated.View>
         );
     }
@@ -72,6 +74,7 @@ export default Relay.createContainer(ButtonRow, {
         episode: () => Relay.QL`
             fragment on Episode {
                 ${ShareMomentButton.getFragment('episode')}
+                ${RecordButton.getFragment('episode')}
             }
         `
     }
