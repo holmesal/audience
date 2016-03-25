@@ -10,6 +10,7 @@ import MTAudio from '../../lib/MTAudio';
 const SHOW_PLAYER = 'audience/player/SHOW_PLAYER';
 const HIDE_PLAYER = 'audience/player/HIDE_PLAYER';
 const UPDATE_EPISODE = 'audience/player/UPDATE_EPISODE';
+const UPDATE_NEXT_EPISODE = 'audience/player/UPDATE_NEXT_EPISODE';
 const UPDATE_PLAYING = 'audience/player/UPDATE_PLAYING';
 const UPDATE_BUFFERING = 'audience/player/UPDATE_BUFFERING';
 const UPDATE_DURATION = 'audience/player/UPDATE_DURATION';
@@ -23,6 +24,7 @@ const UPDATE_SENDING_COMMENT = 'audience/player/UPDATE_SENDING_COMMENT';
 const initialState = Immutable.fromJS({
     visible: false,
     episodeId: null, //'RXBpc29kZToyOTAz',
+    nextEpisodeId: null,
     playing: false,
     buffering: false,
     duration: null,
@@ -41,6 +43,7 @@ export default createReducer(initialState, {
     [HIDE_PLAYER]: (state, action) => state.set('visible', false),
 
     [UPDATE_EPISODE]: (state, action) => state.set('episodeId', action.episodeId),
+    [UPDATE_NEXT_EPISODE]: (state, action) => state.set('nextEpisodeId', action.nextEpisodeId),
 
     [UPDATE_PLAYING]: (state, action) => state.set('playing', action.playing),
 
@@ -61,6 +64,7 @@ export default createReducer(initialState, {
 // Selectors
 export const duration$ = state => state.getIn(['player', 'duration']);
 export const episodeId$ = state => state.getIn(['player', 'episodeId']);
+export const nextEpisodeId$ = state => state.getIn(['player', 'nextEpisodeId']);
 export const currentTime$ = state => state.getIn(['player', 'currentTime']);
 export const lastTargetTime$ = state => state.getIn(['player', 'lastTargetTime']);
 export const visible$ = state => state.getIn(['player', 'visible']);
@@ -136,6 +140,20 @@ export const playEpisode = (episodeId, startTime=0) => {
         dispatch(updateLastTargetTime(startTime));
     }
 };
+
+export const playNextEpisode = () => {
+    return (dispatch, getState) => {
+        let nextEpisodeId = nextEpisodeId$(getState());
+        if (nextEpisodeId) {
+            // play the next episode
+            dispatch(playEpisode(nextEpisodeId));
+            // clear the next episode
+            dispatch(updateNextEpisode(null));
+        }
+    }
+};
+
+export const updateNextEpisode = (nextEpisodeId) => ({type: UPDATE_NEXT_EPISODE, nextEpisodeId});
 
 //export const seekTo = (time) => {
 //    return (dispatch, getState) => {

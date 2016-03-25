@@ -27,13 +27,15 @@ export default class AudioStreamIOS extends Component {
         onCurrentTimeChange: PropTypes.func,
         onDurationChange: PropTypes.func,
         onStateChange: PropTypes.func,
+        onFinish: PropTypes.func,
         onSkip: PropTypes.func
     };
 
     static defaultProps = {
         onCurrentTimeChange: () => {},
         onDurationChange: () => {},
-        onPlayingChange: () => {}
+        onPlayingChange: () => {},
+        onFinish: () => {}
     };
 
     state = {
@@ -86,6 +88,7 @@ export default class AudioStreamIOS extends Component {
         // Emit player state changes
         if (this.props.onStateChange && audio.playerState != this.state.playerState) {
             this.props.onStateChange(audio.playerState);
+            if (audio.playerState === 'PLAYBACK_COMPLETED') this.props.onFinish()
         }
         this.setState(audio);
     }
