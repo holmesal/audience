@@ -31,7 +31,8 @@ const pixelsPerSecond = 4;
 class CompactScrubber extends Component {
 
     static propTypes = {
-        onWaveformPress: PropTypes.func
+        onWaveformPress: PropTypes.func,
+        playing: PropTypes.bool
     };
 
     static defaultProps = {
@@ -163,9 +164,9 @@ class CompactScrubber extends Component {
 
         // Fade the hint
         Animated.timing(this.state.hintOpacity, {
-            toValue: 1 - (this.state.frac/0.03),
+            toValue: 1 - (this.props.currentTime/25),
             duration: 50
-        }).start()
+        }).start();
 
         // Possibly update mini annotations
         if (prevProps.episode.annotations != this.props.episode.annotations ||

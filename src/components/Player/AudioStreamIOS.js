@@ -35,6 +35,7 @@ export default class AudioStreamIOS extends Component {
         onCurrentTimeChange: () => {},
         onDurationChange: () => {},
         onPlayingChange: () => {},
+        onStateChange: () => {},
         onFinish: () => {}
     };
 
@@ -78,16 +79,17 @@ export default class AudioStreamIOS extends Component {
         // rounding duration to the nearest 10th of a second
         audio.duration = Math.ceil(audio.duration * 10)/10;
         // Emit duration changes
-        if (this.props.onDurationChange && audio.duration != this.state.duration) {
+        if (audio.duration != this.state.duration) {
             this.props.onDurationChange(audio.duration);
         }
         // Emit time changes
-        if (this.props.onCurrentTimeChange && audio.currentTime != this.state.currentTime) {
+        if (audio.currentTime != this.state.currentTime) {
             this.props.onCurrentTimeChange(audio.currentTime);
         }
         // Emit player state changes
-        if (this.props.onStateChange && audio.playerState != this.state.playerState) {
+        if (audio.playerState != this.state.playerState) {
             this.props.onStateChange(audio.playerState);
+            //console.info(audio.playerState);
             if (audio.playerState === 'PLAYBACK_COMPLETED') this.props.onFinish()
         }
         this.setState(audio);

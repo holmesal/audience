@@ -24,7 +24,7 @@ const UPDATE_SENDING_COMMENT = 'audience/player/UPDATE_SENDING_COMMENT';
 const initialState = Immutable.fromJS({
     visible: false,
     episodeId: null, //'RXBpc29kZToyOTAz',
-    nextEpisodeId: null,
+    nextEpisodeId: null, //'RXBpc29kZTo1MTc1',
     playing: false,
     buffering: false,
     duration: null,
@@ -149,6 +149,10 @@ export const playNextEpisode = () => {
             dispatch(playEpisode(nextEpisodeId));
             // clear the next episode
             dispatch(updateNextEpisode(null));
+        } else {
+            // is this the right place to do this?
+            dispatch(hidePlayer());
+            dispatch(playEpisode(null));
         }
     }
 };

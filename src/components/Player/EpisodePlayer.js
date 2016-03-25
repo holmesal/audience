@@ -29,6 +29,8 @@ class EpisodePlayer extends Component {
         duration: 0
     };
 
+    _finishLatch = null;
+
     componentWillReceiveProps(nextProps) {
         // Reset the push notification flag if this is a new episode
         if (nextProps.episode.id != this.props.episode.id) {
@@ -43,6 +45,9 @@ class EpisodePlayer extends Component {
 
         // Check if we should send a push notification
         this.sendRecommendationPushNotification();
+
+        // Check if this episode is over
+        this.checkIfOver();
     }
 
     markHeard() {
@@ -83,6 +88,16 @@ class EpisodePlayer extends Component {
         }
     }
 
+    checkIfOver() {
+        let {currentTime, duration} = this.state;
+        if (duration > 0 &&
+            currentTime > 0 &&
+            currentTime >= duration
+        ) {
+            this.handleFinish();
+        }
+    }
+
     handleCurrentTimeChange(currentTime) {
         this.setState({currentTime});
         //this.props.onCurrentTimeChange(currentTime);
@@ -103,14 +118,21 @@ class EpisodePlayer extends Component {
         if (lastTargetTime < 0) lastTargetTime = Math.random() * 0.0001; //rly small but still causes seek
         else if (lastTargetTime > this.props.duration) {
             lastTargetTime = this.props.duration;
-            this.handleFinish();
+            //this.handleFinish();
         }
         this.props.dispatch(updateLastTargetTime(lastTargetTime));
     }
 
     handleFinish() {
-        console.info('current episode did finish!');
-        this.props.dispatch(playNextEpisode());
+        if (!this._finishLatch) {
+            console.info('current episode did finish!');
+            this.props.dispatch(playNextEpisode());
+            this._finishLatch = true;
+            // Cannot play next again for 5 seconds
+            setTimeout(() => this._finishLatch = null, 5000);
+        } else {
+            console.info('skipping potentially false finish');
+        }
     }
 
     render() {
