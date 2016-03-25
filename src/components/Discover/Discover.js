@@ -61,6 +61,7 @@ class Discover extends Component {
     }
 
     renderNoActivity() {
+        if (this.props.viewer.friendActivity.edges.length > 0) return <View />;
         return (
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                 <PrimaryText style={{textAlign: 'center', marginBottom: 20}}>Your friends haven't done anything...</PrimaryText>
