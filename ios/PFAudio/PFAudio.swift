@@ -252,7 +252,11 @@ class PFAudio: NSObject, RCTInvalidating {
       let duration = self.audioController.activeStream.duration.playbackTimeInSeconds;
       if (duration > 0.0) {
         var targetPosition = timestamp.floatValue / duration;
-        if (targetPosition > 1.0) { targetPosition = 1.0; }
+        // If we're beyond the end, abort the seek
+        if (targetPosition > 1.0) {
+          targetPosition = 1.0;
+//          return;
+        }
         position.position = targetPosition;
 //        print("seeking to", position, "out of", duration);
         self.currentSeekByteOffset.position = targetPosition;
