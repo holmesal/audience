@@ -30,6 +30,7 @@ class PFAudio: NSObject, RCTInvalidating {
   
   // String representation of audio player state
   var playerState: String = "UNKNOWN";
+  var currentSeekByteOffset: FSSeekByteOffset = FSSeekByteOffset(start: 0, end: 0, position: 0.0);
   
   
   override init() {
@@ -169,6 +170,9 @@ class PFAudio: NSObject, RCTInvalidating {
       self.episodeTitle = episodeTitle;
       self.source = source;
       
+      // Reset the current seek byte offset
+      self.currentSeekByteOffset = FSSeekByteOffset(start: 0, end: 0, position: 0.0);
+      
       // Construct the URL and set the data source
       let url = NSURL(string: source);
       // Play
@@ -211,6 +215,7 @@ class PFAudio: NSObject, RCTInvalidating {
   
   @objc func pause() -> Void {
     runOnMain({
+      self.currentSeekByteOffset = self.audioController.activeStream.currentSeekByteOffset;
       if (self.audioController.isPlaying()) {
         self.audioController.pause();
       }
@@ -219,8 +224,18 @@ class PFAudio: NSObject, RCTInvalidating {
   
   @objc func resume() -> Void {
     runOnMain({
+      // play from offset
       if (!self.audioController.isPlaying()) {
-        self.audioController.pause(); // lol pause-to-resume
+        // UGH DOES NOT WORK
+//        print("playing from offset", self.currentSeekByteOffset);
+//        self.audioController.activeStream.playFromOffset(self.currentSeekByteOffset);
+        self.audioController.pause(); // pause to resume lol
+        if (self.audioController.activeStream.currentTimePlayed.position != self.currentSeekByteOffset.position) {
+          var position = FSStreamPosition();
+          position.position = self.currentSeekByteOffset.position;
+          print("resuming to position: ", position);
+          self.audioController.activeStream.seekToPosition(position)
+        }
       }
     });
   }
@@ -230,15 +245,26 @@ class PFAudio: NSObject, RCTInvalidating {
     runOnMain({
       // Need a position struct to update current timestamp
       var position = FSStreamPosition();
-      position.minute = 0;
-      position.second = timestamp.unsignedIntValue; // is this bad?
-      print("seeking to", position);
-      
-      // THIS IS SLOW - BLOCKS THE MAIN THREAD
-      // TODO - can the audioController run on a background thread?
-      self.audioController.activeStream.seekToPosition(position);
-      // Emit the updated state
-      self.emitStateChange();
+//      let minutes = timestamp.floatValue / 60.0 as NSNumber;
+//      let seconds = timestamp.floatValue - (minutes.floatValue * 60) as NSNumber;
+//      position.minute = minutes.unsignedIntValue;
+//      position.second = seconds.unsignedIntValue; // is this bad?
+      let duration = self.audioController.activeStream.duration.playbackTimeInSeconds;
+      if (duration > 0.0) {
+        var targetPosition = timestamp.floatValue / duration;
+        if (targetPosition > 1.0) { targetPosition = 1.0; }
+        position.position = targetPosition;
+//        print("seeking to", position, "out of", duration);
+        self.currentSeekByteOffset.position = targetPosition;
+        
+        // THIS IS SLOW - BLOCKS THE MAIN THREAD
+        // TODO - can the audioController run on a background thread?
+        self.audioController.activeStream.seekToPosition(position);
+        // Emit the updated state
+        self.emitStateChange();
+      } else {
+        print("duration is 0 - not seeking!");
+      }
     });
   }
   
@@ -312,7 +338,16 @@ class PFAudio: NSObject, RCTInvalidating {
     state["playerState"] = self.playerState;
     // Duration
     var duration = self.audioController.activeStream.duration.playbackTimeInSeconds;
+//    print("duration = ", duration);
+//    print("current byte seek offset = ", self.audioController.activeStream.currentSeekByteOffset);
+//    print("current position = ", self.audioController.activeStream.currentTimePlayed);
+    // Duration is sometimes NaN?
     if (duration.isNaN) {duration = 0};
+    // Bail if we're seeking and the duration is 0
+    if (duration == 0.0 && (self.playerState == "BUFFERING" || self.playerState == "SEEKING" || self.playerState == "PLAYING")) {
+      print("duration was 0 for playerState: ", self.playerState, "skipping this state update");
+      return
+    };
     state["duration"] =  duration;
     // currentTime
     var playbackTimeInSeconds = self.audioController.activeStream.currentTimePlayed.playbackTimeInSeconds;
