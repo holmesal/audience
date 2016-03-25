@@ -101,7 +101,10 @@ class EpisodePlayer extends Component {
         console.info('handling skip!');
         let lastTargetTime = this.props.currentTime + amount;
         if (lastTargetTime < 0) lastTargetTime = Math.random() * 0.0001; //rly small but still causes seek
-        else if (lastTargetTime > this.props.duration) lastTargetTime = this.props.duration;
+        else if (lastTargetTime > this.props.duration) {
+            lastTargetTime = this.props.duration;
+            this.handleFinish();
+        }
         this.props.dispatch(updateLastTargetTime(lastTargetTime));
     }
 
