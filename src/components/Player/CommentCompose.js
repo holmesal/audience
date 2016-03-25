@@ -109,6 +109,10 @@ class CommentCompose extends Component {
         this.props.hide();
     }
 
+    handleTextChange(text) {
+        if (text.length < 240) this.setState({text})
+    }
+
     renderTopRow() {
         let sendText = this.state.inFlight ? 'Sending...' : 'Send';
         let disabled = this.state.inFlight || this.state.text.length < 1;
@@ -140,7 +144,7 @@ class CommentCompose extends Component {
                            autoFocus
                            keyboardDismissMode="interactive"
                            keyboardAppearance="dark"
-                           onChangeText={(text) => this.setState({text})}
+                           onChangeText={this.handleTextChange.bind(this)}
                 />
             </Animated.View>
         );
