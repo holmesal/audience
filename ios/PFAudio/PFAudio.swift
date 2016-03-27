@@ -9,11 +9,12 @@ import Foundation
 import MediaPlayer
 import FreeStreamer
 
+
 @objc(PFAudio)
 class PFAudio: NSObject, RCTInvalidating {
   
   // The bridge to magical js-land
-  var bridge: RCTBridge!
+  var bridge: RCTBridge?
   
   // Using FSAudioController instead of FSAudioStream because controller handles changing URLs better
   var audioController: FSAudioController!
@@ -96,31 +97,31 @@ class PFAudio: NSObject, RCTInvalidating {
   
   func didReceivePlayCommand(event:MPRemoteCommand) -> MPRemoteCommandHandlerStatus {
     print("got remote play command!");
-    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterPlayButtonTapped", body: NSNull())
+    self.bridge?.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterPlayButtonTapped", body: NSNull())
     self.resume()
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceivePauseCommand(event:MPRemoteCommand) -> MPRemoteCommandHandlerStatus {
     print("got remote pause command!")
-    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterPauseButtonTapped", body: NSNull())
+    self.bridge?.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterPauseButtonTapped", body: NSNull())
     self.pause()
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceiveSkipForwardCommand(event:MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
-    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterSkipForwardButtonTapped", body: NSNull())
+    self.bridge?.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterSkipForwardButtonTapped", body: NSNull())
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceiveSkipBackwardCommand(event:MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus {
-    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterSkipBackwardButtonTapped", body: NSNull())
+    self.bridge?.eventDispatcher.sendAppEventWithName("PFAudio.commandCenterSkipBackwardButtonTapped", body: NSNull())
     return MPRemoteCommandHandlerStatus.Success
   }
   
   func didReceiveLikeCommand(event:MPFeedbackCommandEvent) -> MPRemoteCommandHandlerStatus {
     // Emit an event over the bridge
-    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.favorite", body: []);
+    self.bridge?.eventDispatcher.sendAppEventWithName("PFAudio.favorite", body: []);
     // Set the command state to 'active'
     // Doesn't work, not sure why.
     let commandCenter = MPRemoteCommandCenter.sharedCommandCenter()
@@ -158,6 +159,7 @@ class PFAudio: NSObject, RCTInvalidating {
   }
   
   // Play a stream
+  var audioStreamRecorder: AudioStreamRecorder?
   @objc func play(source: String, podcastTitle: String, episodeTitle: String, artworkUrl: String?) -> Void {
     runOnMain({
       print(String(format: "PFAudio.play() called with url %@", source))
@@ -168,9 +170,17 @@ class PFAudio: NSObject, RCTInvalidating {
       self.source = source;
       
       // Construct the URL and set the data source
-      let url = NSURL.init(string: source);
+      let url = NSURL(string: source);
       // Play
       self.audioController.playFromURL(url);
+
+      if let audioRecorderFromLastTime = self.audioStreamRecorder
+      {
+        //make sure it has stopped recording from last session
+        audioRecorderFromLastTime.stopRecording()
+      }
+      self.audioStreamRecorder = AudioStreamRecorder()
+      self.audioController.activeStream.delegate = self.audioStreamRecorder!
       
       // If an artwork url was provided, fetch it
       // [Alonso] sometimes this fails - why???
@@ -280,12 +290,14 @@ class PFAudio: NSObject, RCTInvalidating {
     }
   }
   
-  func handleStateChange(state: FSAudioStreamState) -> Void {
-    self.playerState = self.playerStateAsString(state);
-    print("state did change!", state, self.playerState);
-    self.emitStateChange();
+  lazy var handleStateChange:(FSAudioStreamState) -> Void  = {
+    [weak self] state in
+    guard let strongSelf = self else { return }
+    strongSelf.playerState = strongSelf.playerStateAsString(state);
+    print("state did change!", state, strongSelf.playerState);
+    strongSelf.emitStateChange();
     // Start or stop the current time emission timer
-    self.startOrStopReportingCurrentTime();
+    strongSelf.startOrStopReportingCurrentTime();
   }
   
   // Emits the updated state over the bridge to JS
@@ -308,26 +320,21 @@ class PFAudio: NSObject, RCTInvalidating {
     state["currentTime"] =  playbackTimeInSeconds;
     // Source
     state["source"] = self.source;
-    self.bridge.eventDispatcher.sendAppEventWithName("PFAudio.updateState", body: state)
+    self.bridge?.eventDispatcher.sendAppEventWithName("PFAudio.updateState", body: state)
     // Update the now playing info
     self.updateNowPlayingInfo();
   }
   
-  
-  
-  
-  
+
   
   // Start recording
   func startRecording() -> Void {
-    print("PFAudio.startRecording() called!");
+    audioStreamRecorder?.startRecord()
   }
   
   // Stops recording, converts the recorded pcm audio to mp4, and calls the callback with the filepath to that mp4
   func stopRecording(callback: RCTResponseSenderBlock) -> Void {
-    print("PFAudio.stopRecording() called!");
-    
-    // https://github.com/michaeltyson/TPAACAudioConverter for conversion to m4a?
-    callback([NSNull(), "path/to/clip.m4a"]);
+    audioStreamRecorder?.stopRecording(callback)
   }
+  
 }

@@ -1,21 +1,30 @@
 PODS:
-  - FreeStreamer (3.5.4):
-    - Reachability (~> 3.0)
-  - Instabug (5.1.0)
-  - Mixpanel (2.9.3):
-    - Mixpanel/Mixpanel (= 2.9.3)
-  - Mixpanel/Mixpanel (2.9.3)
-  - Reachability (3.2)
+  - Bolts (1.6.0):
+    - Bolts/AppLinks (= 1.6.0)
+    - Bolts/Tasks (= 1.6.0)
+  - Bolts/AppLinks (1.6.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.6.0)
+  - FBSDKCoreKit (4.10.1):
+    - Bolts (~> 1.5)
+  - FBSDKLoginKit (4.10.1):
+    - FBSDKCoreKit
+  - Instabug (5.2)
+  - Mixpanel (2.9.4):
+    - Mixpanel/Mixpanel (= 2.9.4)
+  - Mixpanel/Mixpanel (2.9.4)
 
 DEPENDENCIES:
-  - FreeStreamer
+  - FBSDKCoreKit
+  - FBSDKLoginKit
   - Instabug
   - Mixpanel
 
 SPEC CHECKSUMS:
-  FreeStreamer: 1df5727569d209481d4549bae54a0d361c8c9bdd
-  Instabug: 19604e58b970de072933800c3cd92ad2f3a019f8
-  Mixpanel: b9ff1c5d41fc07037d4b813bf2799c050ee3e49b
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  Bolts: f52a250053bb517ca874523c3913776359ab3def
+  FBSDKCoreKit: d2aaed5e9ab7d8d6301c533376a1fbff1cf3deb5
+  FBSDKLoginKit: 699ff169080e3072de4b9b0faca90bf23dc36deb
+  Instabug: 48c60e29b1dc8adb2bd80e7eb3c58bceba4ffb8e
+  Mixpanel: 80d2ca9bb38ae91c1044d738e80fe448377ac89f
 
 COCOAPODS: 0.39.0

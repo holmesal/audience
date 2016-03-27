@@ -3,4 +3,5 @@ use_frameworks!
 
 pod 'Mixpanel'
 pod 'Instabug'
-pod 'FreeStreamer'
+pod 'FBSDKCoreKit'
+pod 'FBSDKLoginKit'

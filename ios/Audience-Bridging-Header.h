@@ -11,3 +11,4 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <StreamingKit/STKAudioPlayer.h>
 #import <FreeStreamer/FreeStreamer.h>
+#import "TPAACAudioConverter.h"
