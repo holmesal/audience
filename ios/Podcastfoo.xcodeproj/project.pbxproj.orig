@@ -338,7 +338,12 @@
 		E21A36971CA096B000E1AF30 /* PFAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFAudio.m; sourceTree = "<group>"; };
 		E21A36981CA096B000E1AF30 /* PFAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFAudio.swift; sourceTree = "<group>"; };
 		E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = threadHelper.swift; sourceTree = "<group>"; };
+<<<<<<< c812ab06fbe6e771c9876daadf77e3b6155b0eb4
+=======
+		E21A36D01CA0BDC300E1AF30 /* FreeStreamer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FreeStreamer.framework; path = "DerivedData/Audience/Build/Products/Debug-iphoneos/FreeStreamer.framework"; sourceTree = "<group>"; };
+		E21A36D21CA0BE2F00E1AF30 /* FreeStreamer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreeStreamer.xcodeproj; path = FreeStreamer/FreeStreamer/FreeStreamer.xcodeproj; sourceTree = "<group>"; };
 		E25119EC1CA39D930024B069 /* 15step.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 15step.mp3; sourceTree = "<group>"; };
+>>>>>>> clip uploading works!
 		E2654D121C7C35D200F9BCE8 /* MTDebugIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDebugIP.h; path = MTDebugIP/MTDebugIP.h; sourceTree = "<group>"; };
 		E2654D131C7C35D200F9BCE8 /* MTDebugIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDebugIP.m; path = MTDebugIP/MTDebugIP.m; sourceTree = "<group>"; };
 		E26F20711C5AFB7000C99444 /* StreamingKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = StreamingKit.xcodeproj; path = StreamingKit/StreamingKit.xcodeproj; sourceTree = "<group>"; };
@@ -373,10 +378,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< c812ab06fbe6e771c9876daadf77e3b6155b0eb4
 				AAF1889E1CA83BD2004E229E /* AudioToolbox.framework in Frameworks */,
 				AAAA5AC91CA219D400BEDE5F /* FreeStreamer.framework in Frameworks */,
+=======
 				E2D733521CA3BBA400625A29 /* libART.a in Frameworks */,
 				E2D7334B1CA3A40100625A29 /* libRNUploader.a in Frameworks */,
+>>>>>>> clip uploading works!
 				E272148C1C75371F00E9EC3D /* libRCTPushNotification.a in Frameworks */,
 				E2C34F771C61CA490046A2E6 /* libRNMixpanel.a in Frameworks */,
 				E2B9ED891C8A51D10050C0EE /* Crashlytics.framework in Frameworks */,
@@ -1519,7 +1527,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Release;
 		};
@@ -1578,7 +1586,6 @@
 				PROVISIONING_PROFILE = "b4068df7-47db-4a65-8fac-2e7fd897d3c1";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/**";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -1695,7 +1702,6 @@
 				AAF188AC1CA85023004E229E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

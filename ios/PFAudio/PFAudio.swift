@@ -40,6 +40,7 @@ class PFAudio: NSObject, RCTInvalidating {
     self.audioController.onStateChange = self.handleStateChange;
     self.listenForCommandCenterEvents();
     self.updateNowPlayingInfo();
+    print("freestreamer version number: ", FreeStreamerVersionNumber);
   }
   
   // Invalidate is called by react-native before this instance is released

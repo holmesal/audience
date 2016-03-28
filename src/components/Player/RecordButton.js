@@ -51,7 +51,7 @@ class RecordButton extends Component {
     }
 
     startRecording() {
-        PFAudio.startRecording();
+        //PFAudio.startRecording();
         let startTime = _.round(currentTime$(store.getState()), 1);
         this.setState({startTime});
     }
@@ -59,16 +59,18 @@ class RecordButton extends Component {
     endRecording() {
         let endTime = _.round(currentTime$(store.getState()), 1);
         this.setState({endTime, uploading: true});
-        PFAudio.stopRecording((err, filepath) => {
-            console.info('got filepath!', filepath);
-            //alert(`got filepath: ${filepath}`);
-            this.createClip(filepath);
-        });
+        //PFAudio.stopRecording((err, filepath) => {
+        //    console.info('got filepath!', filepath);
+        //    //alert(`got filepath: ${filepath}`);
+        //    this.createClip(filepath);
+        //});
+        this.createClip();
     }
 
     createClip(filepath) {
         console.info('creating clip!', filepath, this.state);
-        filepath = '15stepcut.mp3';
+        //filepath = '15stepcut.mp3';
+        //filepath = '/tmp/podcastClip.m4a';
         let {startTime, endTime} = this.state;
         console.info(startTime, endTime);
         // Create a new clip via a graphql mutation
@@ -84,64 +86,67 @@ class RecordButton extends Component {
             },
             onSuccess: (res) => {
                 console.info('successfully created clip', res);
+                console.info(res);
                 let clipId = res.createClip.clip.id;
-                //// Upload the clip to s3
-                //let opts = {
-                //    url: res.createClip.signedRequest,
-                //    method: 'PUT',
-                //    headers: {
-                //        'x-amz-acl': 'public-read'
-                //    },
-                //    files: [{
-                //        filename: `${res.createClip.clip.id}.mp3`,
-                //        filepath: filepath,
-                //        filetype: 'audio/mpeg'
-                //    }]
+                this.openShareSheet(clipId);
+                //let clipId = res.createClip.clip.id;
+                ////// Upload the clip to s3
+                ////let opts = {
+                ////    url: res.createClip.signedRequest,
+                ////    method: 'PUT',
+                ////    headers: {
+                ////        'x-amz-acl': 'public-read'
+                ////    },
+                ////    files: [{
+                ////        filename: `${res.createClip.clip.id}.mp3`,
+                ////        filepath: filepath,
+                ////        filetype: 'audio/mpeg'
+                ////    }]
+                ////};
+                ////console.info('uploading with opts: ', opts);
+                //////RNUploader.upload(opts, (err, response) => {
+                //////    if (err) console.error(err);
+                //////    console.info('aws s3 response', response)
+                //////});
+                //
+                //// This doesn't bring the file over to JS land
+                //let xhr = new XMLHttpRequest();
+                //xhr.open('PUT', res.createClip.signedRequest);
+                //// Possibly important
+                //xhr.setRequestHeader('x-amx-acl', 'public-read');
+                //
+                //// Open the share sheet on completion
+                //xhr.onload = () => {
+                //    console.info('transfer completed!', xhr);
+                //    this.openShareSheet(clipId)
                 //};
-                //console.info('uploading with opts: ', opts);
-                ////RNUploader.upload(opts, (err, response) => {
-                ////    if (err) console.error(err);
-                ////    console.info('aws s3 response', response)
-                ////});
-
-                // This doesn't bring the file over to JS land
-                let xhr = new XMLHttpRequest();
-                xhr.open('PUT', res.createClip.signedRequest);
-                // Possibly important
-                xhr.setRequestHeader('x-amx-acl', 'public-read');
-
-                // Open the share sheet on completion
-                xhr.onload = () => {
-                    console.info('transfer completed!', xhr);
-                    this.openShareSheet(clipId)
-                };
-                // Reset on fail
-                xhr.onerror = () => {
-                    console.error('oh no', xhr);
-                    alert('error uploading your clip :-(');
-                    this.reset();
-                };
-                xhr.onreadystatechange = function(ev) {
-                    console.info('ready state change', ev);
-                };
-                // Listen for progress events
-                xhr.upload.onprogress = ev => {
-                    console.info(ev)
-                    if (ev.lengthComputable) {
-                        this.setState({
-                            uploadProgress: ev.loaded / ev.total
-                        });
-                    }
-                };
-
-                // Grab the file
-                let file = {
-                    uri: filepath,
-                    type: 'audio/mpeg',
-                    name: `${clipId}.mp3`
-                };
-                // Start the transfer
-                xhr.send(file);
+                //// Reset on fail
+                //xhr.onerror = () => {
+                //    console.error('oh no', xhr);
+                //    alert('error uploading your clip :-(');
+                //    this.reset();
+                //};
+                //xhr.onreadystatechange = function(ev) {
+                //    console.info('ready state change', ev);
+                //};
+                //// Listen for progress events
+                //xhr.upload.onprogress = ev => {
+                //    console.info(ev)
+                //    if (ev.lengthComputable) {
+                //        this.setState({
+                //            uploadProgress: ev.loaded / ev.total
+                //        });
+                //    }
+                //};
+                //
+                //// Grab the file
+                //let file = {
+                //    uri: filepath,
+                //    type: 'audio/mp4',
+                //    name: `${clipId}.m4a`
+                //};
+                //// Start the transfer
+                //xhr.send(file);
             }
         });
     }

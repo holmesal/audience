@@ -40,7 +40,6 @@ export default class CreateClipMutation extends Relay.Mutation {
                 clip {
                     id
                 }
-                signedRequest
             }
             `]
         }];
