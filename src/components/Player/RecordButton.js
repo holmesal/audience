@@ -29,7 +29,7 @@ class RecordButton extends Component {
     state = {
         startTime: null,
         endTime: null,
-        inFlight: true,
+        inFlight: false,
         opacity: new Animated.Value(1)
     };
 
@@ -44,7 +44,7 @@ class RecordButton extends Component {
         Animated.timing(this.state.opacity, {
             toValue: 0.3
         }).start(() => {
-            if (!this.props.sendingComment) {
+            if (!this.state.inFlight) {
                 Animated.spring(this.state.opacity, {
                     toValue: 1
                 }).start()
@@ -60,13 +60,16 @@ class RecordButton extends Component {
 
     startRecording() {
         if (this.state.inFlight) return false;
-        //PFAudio.startRecording();
         let startTime = _.round(currentTime$(store.getState()), 1);
         this.setState({startTime});
     }
 
     endRecording() {
         let endTime = _.round(currentTime$(store.getState()), 1);
+        if (endTime - this.state.startTime < 1) {
+            alert('Hold down this button while playing to record a clip');
+            return false;
+        }
         this.setState({endTime, inFlight: true});
         this.createClip();
     }
@@ -90,6 +93,7 @@ class RecordButton extends Component {
                 console.info(res);
                 let clipId = res.createClip.clip.id;
                 this.openShareSheet(clipId);
+                this.reset();
             }
         });
     }
