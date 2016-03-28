@@ -1,4 +1,5 @@
 import React, {
+    Animated,
     ActionSheetIOS,
     Component,
     DeviceEventEmitter,
@@ -19,16 +20,6 @@ import {currentTime$} from '../../redux/modules/player';
 import store from '../../redux/create';
 import {clipShareLink} from '../../utils/urls';
 
-/**
- * Upload flow works like this:
- * 1) Audio file is generated and stored in /tmp/rando-filename.mp3. This filename is passed in the callback.
- * 2) A `createClip` mutation is fired off.
- * 3) A signed upload request is returned in the query response to this mutation.
- *    The filename will be the id of the created Clip node
- * 4) The file is posted to s3 using the returned signed request.
- * 5) On completion, the share sheet is opened
- */
-
 class RecordButton extends Component {
 
     static propTypes = {};
@@ -38,19 +29,37 @@ class RecordButton extends Component {
     state = {
         startTime: null,
         endTime: null,
-        uploading: false,
-        uploadProgress: 0
+        inFlight: true,
+        opacity: new Animated.Value(1)
     };
 
-    componentDidMount() {
-        //console.info(require('image!15step'));
-        DeviceEventEmitter.addListener('RNUploaderProgress', (data) => {
-            let {progress} = data;
-            console.info('upload progress: ', progress);
+    componentDidUpdate(prevProps, prevState) {
+        //console.info('update!', this.props);
+        if (this.state.inFlight) {
+            this.fadeOutAndIn()
+        }
+    }
+
+    fadeOutAndIn() {
+        Animated.timing(this.state.opacity, {
+            toValue: 0.3
+        }).start(() => {
+            if (!this.props.sendingComment) {
+                Animated.spring(this.state.opacity, {
+                    toValue: 1
+                }).start()
+            } else {
+                Animated.timing(this.state.opacity, {
+                    toValue: 0.5
+                }).start((s) => {
+                    this.fadeOutAndIn();
+                })
+            }
         })
     }
 
     startRecording() {
+        if (this.state.inFlight) return false;
         //PFAudio.startRecording();
         let startTime = _.round(currentTime$(store.getState()), 1);
         this.setState({startTime});
@@ -58,21 +67,13 @@ class RecordButton extends Component {
 
     endRecording() {
         let endTime = _.round(currentTime$(store.getState()), 1);
-        this.setState({endTime, uploading: true});
-        //PFAudio.stopRecording((err, filepath) => {
-        //    console.info('got filepath!', filepath);
-        //    //alert(`got filepath: ${filepath}`);
-        //    this.createClip(filepath);
-        //});
+        this.setState({endTime, inFlight: true});
         this.createClip();
     }
 
     createClip(filepath) {
         console.info('creating clip!', filepath, this.state);
-        //filepath = '15stepcut.mp3';
-        //filepath = '/tmp/podcastClip.m4a';
         let {startTime, endTime} = this.state;
-        console.info(startTime, endTime);
         // Create a new clip via a graphql mutation
         Relay.Store.commitUpdate(new CreateClipMutation({
             episode: this.props.episode,
@@ -89,64 +90,6 @@ class RecordButton extends Component {
                 console.info(res);
                 let clipId = res.createClip.clip.id;
                 this.openShareSheet(clipId);
-                //let clipId = res.createClip.clip.id;
-                ////// Upload the clip to s3
-                ////let opts = {
-                ////    url: res.createClip.signedRequest,
-                ////    method: 'PUT',
-                ////    headers: {
-                ////        'x-amz-acl': 'public-read'
-                ////    },
-                ////    files: [{
-                ////        filename: `${res.createClip.clip.id}.mp3`,
-                ////        filepath: filepath,
-                ////        filetype: 'audio/mpeg'
-                ////    }]
-                ////};
-                ////console.info('uploading with opts: ', opts);
-                //////RNUploader.upload(opts, (err, response) => {
-                //////    if (err) console.error(err);
-                //////    console.info('aws s3 response', response)
-                //////});
-                //
-                //// This doesn't bring the file over to JS land
-                //let xhr = new XMLHttpRequest();
-                //xhr.open('PUT', res.createClip.signedRequest);
-                //// Possibly important
-                //xhr.setRequestHeader('x-amx-acl', 'public-read');
-                //
-                //// Open the share sheet on completion
-                //xhr.onload = () => {
-                //    console.info('transfer completed!', xhr);
-                //    this.openShareSheet(clipId)
-                //};
-                //// Reset on fail
-                //xhr.onerror = () => {
-                //    console.error('oh no', xhr);
-                //    alert('error uploading your clip :-(');
-                //    this.reset();
-                //};
-                //xhr.onreadystatechange = function(ev) {
-                //    console.info('ready state change', ev);
-                //};
-                //// Listen for progress events
-                //xhr.upload.onprogress = ev => {
-                //    console.info(ev)
-                //    if (ev.lengthComputable) {
-                //        this.setState({
-                //            uploadProgress: ev.loaded / ev.total
-                //        });
-                //    }
-                //};
-                //
-                //// Grab the file
-                //let file = {
-                //    uri: filepath,
-                //    type: 'audio/mp4',
-                //    name: `${clipId}.m4a`
-                //};
-                //// Start the transfer
-                //xhr.send(file);
             }
         });
     }
@@ -171,8 +114,7 @@ class RecordButton extends Component {
         this.setState({
             startTime: null,
             endTime: null,
-            uploadProgress: 0,
-            uploading: false
+            inFlight: false
         });
     }
 
@@ -198,9 +140,13 @@ class RecordButton extends Component {
                 onPressIn={this.startRecording.bind(this)}
                 onPressOut={this.endRecording.bind(this)}
             >
-                <Image style={styles.buttonImage} source={require('image!buttonRecord')}>
-                    {this.renderProgress()}
-                </Image>
+                <Animated.Image
+                    style={[styles.buttonImage, {
+                        opacity: this.state.opacity
+                    }]}
+                    source={require('image!buttonRecord')}>
+
+                </Animated.Image>
             </TouchableOpacity>
         );
     }
