@@ -3,17 +3,9 @@ import Relay from 'react-relay';
 import store from '../redux/create';
 import {viewerId$} from '../redux/modules/auth';
 let {MTDebugIP} = NativeModules;
-import {DEV_SERVER, STAGING_SERVER, PROD_SERVER} from '../utils/urls';
+import {USE_STAGING, GRAPHQL_ROOT} from '../utils/urls';
 
-const USE_STAGING = false;
-
-let graphqlURL = __DEV__ ?
-    `${DEV_SERVER}/graphql` :
-    `${PROD_SERVER}/graphql`;
-
-if (USE_STAGING) graphqlURL = `${STAGING_SERVER}/graphql`;
-
-console.info('graphQL url: ', graphqlURL);
+console.info('graphQL url: ', GRAPHQL_ROOT);
 
 // Ricky Bobby
 //const DEBUG_TOKEN = 'CAANMZBBpQDs4BAOfgLdloNJ3h3kTVjseoOrg0oyUgZArqxsgGJfB7FaM3ZADa7OuY7DPCucDAnCHbySP93yRYfJDE4AZAQz3oCed6tUFeZCVPJvyA2DmPUj9nKPZCi3mmchdRsvuBNT6kxdmiZBZAPcGSN2tRwGs79TjZAGWAUzS3RX8LzmK31lvZA';
@@ -25,7 +17,7 @@ const DEBUG_TOKEN = 'CAANMZBBpQDs4BAEJKRKNDKZAHfILmtfZBdZA2GNQI89ibcJKDq35s8HrJd
 //const DEBUG_TOKEN = null;
 
 Relay.injectNetworkLayer(
-    new Relay.DefaultNetworkLayer(graphqlURL)
+    new Relay.DefaultNetworkLayer(GRAPHQL_ROOT)
 );
 
 export const updateRelayAuthHeader = (token) => {
@@ -34,7 +26,7 @@ export const updateRelayAuthHeader = (token) => {
         token = DEBUG_TOKEN;
     }
     Relay.injectNetworkLayer(
-        new Relay.DefaultNetworkLayer(graphqlURL, {
+        new Relay.DefaultNetworkLayer(GRAPHQL_ROOT, {
           headers: {
             Authorization: `Bearer ${token}`
           }

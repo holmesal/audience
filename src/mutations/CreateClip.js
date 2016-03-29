@@ -16,7 +16,6 @@ export default class CreateClipMutation extends Relay.Mutation {
     }
 
     getVariables() {
-        console.info(this.props)
         return {
             episodeId: this.props.episode.id,
             startTime: this.props.startTime,

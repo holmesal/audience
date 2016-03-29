@@ -3,7 +3,7 @@ import {
 } from 'react-native';
 import UrlPattern from 'url-pattern';
 import qs from 'qs';
-import {PROD_SERVER} from '../utils/urls';
+import {PROD_WEB} from '../utils/urls';
 import {playEpisode, updateLastTargetTime} from '../redux/modules/player';
 import store from '../redux/create';
 
@@ -14,12 +14,12 @@ let playEpisodePatten = new UrlPattern(`/:podcastId/:episodeId(/:viewerId)`, {
     segmentValueCharset: 'a-zA-Z0-9-_~ %='
 });
 function handleLink(url) {
-    if (url.indexOf(PROD_SERVER) === -1) {
-        console.error(`got a URL without PROD_SERVER: ${PROD_SERVER} - bailing. url was: ${url}`);
+    if (url.indexOf(PROD_WEB) === -1) {
+        console.error(`got a URL without PROD_WEB: ${PROD_WEB} - bailing. url was: ${url}`);
         return false;
     }
     try {
-        let afterRoot = url.split(PROD_SERVER)[1];
+        let afterRoot = url.split(PROD_WEB)[1];
         // don't care about the root
         let path = afterRoot.split('?')[0];
         // parse query params

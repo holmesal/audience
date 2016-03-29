@@ -29,14 +29,25 @@ class RecordButton extends Component {
     state = {
         startTime: null,
         endTime: null,
+        recording: false,
         inFlight: false,
-        opacity: new Animated.Value(1)
+        opacity: new Animated.Value(1),
+        scale: new Animated.Value(1)
     };
 
     componentDidUpdate(prevProps, prevState) {
         //console.info('update!', this.props);
         if (this.state.inFlight) {
             this.fadeOutAndIn()
+        }
+        if (this.state.recording) {
+            Animated.spring(this.state.scale, {
+                toValue: 1.5
+            }).start();
+        } else {
+            Animated.spring(this.state.scale, {
+                toValue: 1
+            }).start();
         }
     }
 
@@ -61,16 +72,25 @@ class RecordButton extends Component {
     startRecording() {
         if (this.state.inFlight) return false;
         let startTime = _.round(currentTime$(store.getState()), 1);
-        this.setState({startTime});
+        this.setState({
+            startTime,
+            recording: true
+        });
     }
 
     endRecording() {
+        if (this.state.inFlight) return false;
         let endTime = _.round(currentTime$(store.getState()), 1);
         if (endTime - this.state.startTime < 1) {
             alert('Hold down this button while playing to record a clip');
+            this.reset();
             return false;
         }
-        this.setState({endTime, inFlight: true});
+        this.setState({
+            endTime,
+            inFlight: true,
+            recording: false
+        });
         this.createClip();
     }
 
@@ -118,7 +138,8 @@ class RecordButton extends Component {
         this.setState({
             startTime: null,
             endTime: null,
-            inFlight: false
+            inFlight: false,
+            recording: false
         });
     }
 
@@ -143,13 +164,16 @@ class RecordButton extends Component {
             <TouchableOpacity
                 onPressIn={this.startRecording.bind(this)}
                 onPressOut={this.endRecording.bind(this)}
+                activeOpacity={0.9}
             >
                 <Animated.Image
                     style={[styles.buttonImage, {
-                        opacity: this.state.opacity
+                        opacity: this.state.opacity,
+                        transform: [{scale: this.state.scale}],
+                        tintColor: this.state.recording ? "#CF5656" : null
                     }]}
-                    source={require('image!buttonRecord')}>
-
+                    source={require('image!buttonRecord')}
+                >
                 </Animated.Image>
             </TouchableOpacity>
         );
@@ -160,7 +184,7 @@ let styles = StyleSheet.create({
     buttonImage: {
         width: 90,
         height: 90,
-        position: 'relative'
+        position: 'relative',
     }
 });
 
