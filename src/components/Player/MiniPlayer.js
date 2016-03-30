@@ -1,4 +1,5 @@
 import React, {
+    Animated,
     Component,
     Image,
     PropTypes,
@@ -9,23 +10,41 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 import store from '../../redux/create';
-import {hidePlayer} from '../../redux/modules/player';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+import {showPlayer, hidePlayer, visible$} from '../../redux/modules/player';
+import {showPodcastInfo} from '../../redux/modules/podcastInfo';
 import RecommendButton from './RecommendButton';
 import colors from '../../colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 class MiniPlayer extends Component {
 
-    static propTypes = {
-
+    state = {
+        iconState: new Animated.Value(0)
     };
 
-    static defaultProps = {
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.visible != prevProps.visible) {
+            const toValue = this.props.visible ? 0 : 1;
+            Animated.spring(this.state.iconState, {
+                toValue
+            }).start()
+        }
+    }
 
-    };
 
     togglePlayer() {
+        console.info('toggling player', this.props)
+        if (this.props.visible) store.dispatch(hidePlayer());
+        else store.dispatch(showPlayer());
+    }
+
+    showPodcast() {
+        // Hide the player
         store.dispatch(hidePlayer());
+        // Show this show in the podcast info view
+        store.dispatch(showPodcastInfo(this.props.episode.podcast.id));
     }
 
     render() {
@@ -37,13 +56,25 @@ class MiniPlayer extends Component {
                     episode={this.props.episode}
                 />
 
-                <View style={styles.textWrapper}>
-                    <Text style={styles.title} numberOfLines={1}>{this.props.episode.title}</Text>
+                <TouchableOpacity
+                    style={styles.textWrapper}
+                    onPress={this.showPodcast.bind(this)}
+                >
+                    <Text style={styles.title} numberOfLines={1}>{this.props.episode.title} - {this.props.visible ? 'visible' : 'no'}</Text>
                     <Text style={styles.podcast} numberOfLines={1}>{this.props.episode.podcast.name}</Text>
-                </View>
+                </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={this.togglePlayer.bind(this)}>
-                    <Icon name="ios-arrow-down" size={24} color={colors.lighterGrey} />
+                    <Animated.View
+                        style={{transform: [{
+                        rotateZ: this.state.iconState.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: ['0deg', '180deg']
+                        })
+                        }]}}
+                    >
+                        <Icon name="ios-arrow-down" size={24} color={colors.lighterGrey} />
+                    </Animated.View>
                 </TouchableOpacity>
 
             </View>
@@ -90,7 +121,12 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(MiniPlayer, {
+const sel = createSelector(visible$, (visible) => ({
+    visible
+}));
+const con = connect(sel)(MiniPlayer);
+
+export default Relay.createContainer(con, {
     fragments: {
         episode: () => Relay.QL`
             fragment on Episode {
