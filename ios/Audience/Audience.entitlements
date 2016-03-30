@@ -4,8 +4,14 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:podcastfoo.herokuapp.com</string>
-		<string>applinks:www.podcastfoo.herokuapp.com</string>
+		<string>www.activitycontinuation:podcastfoo-web-staging.herokuapp.com</string>
+		<string>activitycontinuation:podcastfoo-web-staging.herokuapp.com</string>
+		<string>www.activitycontinuation:podcastfoo-web.herokuapp.com</string>
+		<string>activitycontinuation:podcastfoo-web.herokuapp.com</string>
+		<string>applinks:podcastfoo-web.herokuapp.com</string>
+		<string>applinks:www.podcastfoo-web.herokuapp.com</string>
+		<string>applinks:podcastfoo-web-staging.herokuapp.com</string>
+		<string>applinks:www.podcastfoo-web-staging.herokuapp.com</string>
 	</array>
 </dict>
 </plist>

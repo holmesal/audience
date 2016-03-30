@@ -60,7 +60,7 @@ class MiniPlayer extends Component {
                     style={styles.textWrapper}
                     onPress={this.showPodcast.bind(this)}
                 >
-                    <Text style={styles.title} numberOfLines={1}>{this.props.episode.title} - {this.props.visible ? 'visible' : 'no'}</Text>
+                    <Text style={styles.title} numberOfLines={1}>{this.props.episode.title}</Text>
                     <Text style={styles.podcast} numberOfLines={1}>{this.props.episode.podcast.name}</Text>
                 </TouchableOpacity>
 

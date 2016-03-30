@@ -3,23 +3,23 @@ import {
 } from 'react-native';
 import UrlPattern from 'url-pattern';
 import qs from 'qs';
-import {PROD_WEB} from '../utils/urls';
+import {WEB_ROOT} from '../utils/urls';
 import {playEpisode, updateLastTargetTime} from '../redux/modules/player';
 import store from '../redux/create';
 
 /**
  * Respond to urls by manipulating application state in redux
  */
-let playEpisodePatten = new UrlPattern(`/:podcastId/:episodeId(/:viewerId)`, {
+let playEpisodePatten = new UrlPattern(`/listen/:episodeId`, {
     segmentValueCharset: 'a-zA-Z0-9-_~ %='
 });
 function handleLink(url) {
-    if (url.indexOf(PROD_WEB) === -1) {
-        console.error(`got a URL without PROD_WEB: ${PROD_WEB} - bailing. url was: ${url}`);
+    if (url.indexOf(WEB_ROOT) === -1) {
+        console.error(`got a URL without WEB_ROOT: ${WEB_ROOT} - bailing. url was: ${url}`);
         return false;
     }
     try {
-        let afterRoot = url.split(PROD_WEB)[1];
+        let afterRoot = url.split(WEB_ROOT)[1];
         // don't care about the root
         let path = afterRoot.split('?')[0];
         // parse query params
@@ -28,10 +28,10 @@ function handleLink(url) {
 
         // try to match the episode path
         if (playEpisodePatten.match(path)) {
-            let {podcastId, episodeId, viewerId} = playEpisodePatten.match(path);
-            let time = parseInt(q.time) || 0;
+            let {episodeId} = playEpisodePatten.match(path);
+            let time = parseInt(q.time);
             //console.info('got time: ')
-            console.info('matched episode path!', podcastId, episodeId, viewerId, time);
+            console.info('matched play episode path!', episodeId, time);
             // Play this episode
             store.dispatch(playEpisode(episodeId, time));
         } else {
