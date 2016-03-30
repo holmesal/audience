@@ -5,7 +5,7 @@ import React, {
     View
 } from 'react-native';
 
-import {PFAudio} from 'NativeModules';
+import {MTAudio} from 'NativeModules';
 
 /**
  * This component should hide the mask the imperative nature of interacting with the ios api
@@ -47,19 +47,22 @@ export default class AudioStreamIOS extends Component {
 
     _lastCurrentTime = 0;
 
+    _startedPlaying = 0;
+
     componentDidMount() {
         this._subscriptions = [];
         // Listen for changes to the audio state
-        this._subscriptions.push(NativeAppEventEmitter.addListener('PFAudio.updateState', this.handleNativeAudioStateChange.bind(this)));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.updateState', this.handleNativeAudioStateChange.bind(this)));
         // Emit changes to play/pause state
-        this._subscriptions.push(NativeAppEventEmitter.addListener('PFAudio.commandCenterPlayButtonTapped', this.handleCommandCenterPlayButtonTap.bind(this)));
-        this._subscriptions.push(NativeAppEventEmitter.addListener('PFAudio.commandCenterPauseButtonTapped', this.handleCommandCenterPauseButtonTap.bind(this)));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterPlayButtonTapped', this.handleCommandCenterPlayButtonTap.bind(this)));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterPauseButtonTapped', this.handleCommandCenterPauseButtonTap.bind(this)));
         // Handle command center skips
-        this._subscriptions.push(NativeAppEventEmitter.addListener('PFAudio.commandCenterSkipForwardButtonTapped', this.handleCommandCenterSkipForwardButtonTap.bind(this)));
-        this._subscriptions.push(NativeAppEventEmitter.addListener('PFAudio.commandCenterSkipBackwardButtonTapped', this.handleCommandCenterSkipBackwardButtonTap.bind(this)));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipForwardButtonTapped', this.handleCommandCenterSkipForwardButtonTap.bind(this)));
+        this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipBackwardButtonTapped', this.handleCommandCenterSkipBackwardButtonTap.bind(this)));
         // Play the episode
         if (this.props.url) {
-            PFAudio.play(this.props.url, this.props.title, this.props.artist, this.props.artworkUrl);
+            this._startedPlaying = Date.now();
+            MTAudio.play(this.props.url, this.props.title, this.props.artist, this.props.artworkUrl);
             this.props.onPlayingChange(true);
             // Seek to this time
             setTimeout(() => this.seekTo(this.props.time), 0);
@@ -84,7 +87,12 @@ export default class AudioStreamIOS extends Component {
         }
         // Emit time changes
         if (audio.currentTime != this.state.currentTime) {
-            this.props.onCurrentTimeChange(audio.currentTime);
+            //console.info('audioplayer sent current time: ', audio.currentTime);
+            if (audio.currentTime === 0 && Date.now() - this._startedPlaying < 1000) {
+                console.info(`ignoring currentTime=0 update, as it's probably fake. Has been ${Date.now() - this._startedPlaying}ms since we began playing.`);
+            } else {
+                this.props.onCurrentTimeChange(audio.currentTime);
+            }
         }
         // Emit player state changes
         if (audio.playerState != this.state.playerState) {
@@ -114,7 +122,7 @@ export default class AudioStreamIOS extends Component {
     seekTo(time) {
         if (Math.abs(this.state.currentTime - time) > 1) {
             console.info(`[AudioStreamIOS] seeking to ${time}`);
-            PFAudio.seekToTime(time);
+            MTAudio.seekToTime(time);
         } else {
             //console.info('skipping!');
         }
@@ -125,15 +133,16 @@ export default class AudioStreamIOS extends Component {
         // When the url changes, stop playback and play the new URL
         if (nextProps.url != this.props.url) {
             //console.info('audio source changed!');
-            PFAudio.play(nextProps.url, nextProps.title, nextProps.artist, this.props.artworkUrl);
+            this._startedPlaying = Date.now();
+            MTAudio.play(nextProps.url, nextProps.title, nextProps.artist, this.props.artworkUrl);
             this.props.onPlayingChange(true);
             setTimeout(() => this.seekTo(this.props.time), 0);
         }
 
         // When the playing state changes, start or stop playback
         if (nextProps.playing != this.props.playing) {
-            //console.info(`[AudioStreamIOS] setting PFAudio playing state to ${nextProps.playing} from ${this.props.playing}`);
-            nextProps.playing ? PFAudio.resume() : PFAudio.pause();
+            //console.info(`[AudioStreamIOS] setting MTAudio playing state to ${nextProps.playing} from ${this.props.playing}`);
+            nextProps.playing ? MTAudio.resume() : MTAudio.pause();
         }
 
         // When the target time changes, seek to that time

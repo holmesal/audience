@@ -4,11 +4,13 @@ import podcastInfo from './podcastInfo';
 import player from './player';
 import auth from './auth';
 import tabs from './tabs';
+import lastHeard from './lastHeard';
 
 export default combineReducers({
     search,
     podcastInfo,
     player,
     auth,
-    tabs
+    tabs,
+    lastHeard
 });

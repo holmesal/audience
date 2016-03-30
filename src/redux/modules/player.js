@@ -6,6 +6,7 @@ import log from '../../utils/log';
 import moment from 'moment';
 import _ from 'lodash';
 import MTAudio from '../../lib/MTAudio';
+import {updateLastHeardTime, getLastHeardTime} from './lastHeard';
 
 const SHOW_PLAYER = 'audience/player/SHOW_PLAYER';
 const HIDE_PLAYER = 'audience/player/HIDE_PLAYER';
@@ -30,7 +31,6 @@ const initialState = Immutable.fromJS({
     duration: null,
     currentTime: null,
     lastTargetTime: 0,
-    duration: null,
 
     choosingEmoji: false,
     sendingEmoji: false,
@@ -120,14 +120,14 @@ export const updateEpisode = (episodeId) => ({
     type: UPDATE_EPISODE,
     episodeId
 });
-export const playEpisode = (episodeId, startTime=0) => {
+export const playEpisode = (episodeId, startTime) => {
     return (dispatch, getState) => {
 
         // Only do this if we haven't been asked to play the episode that's currently playing
         if (episodeId != episodeId$(getState())) {
             // Update to the new episode
             dispatch(updateEpisode(episodeId));
-            // Show th eplayer
+            // Show the player
             dispatch(showPlayer());
             // Stop the player - will be started again by the audio component when it re-renders
             dispatch(updatePlaying(false));
@@ -136,7 +136,15 @@ export const playEpisode = (episodeId, startTime=0) => {
         }
 
         // Either way, if a startTime is passed we should seek to it
+        //let targetTime = startTime;
+        // If we weren't asked to seek anywhere specific
+        if (!startTime && startTime != 0) {
+            // Check if we stored a lastHeard time for this episode
+            // Will return 0 if we haven't stored a lastHeardTime
+            startTime = getLastHeardTime(getState(), episodeId);
+        }
         // Seek to this time
+        console.info('playing with start time: ', startTime);
         dispatch(updateLastTargetTime(startTime));
     }
 };
@@ -193,10 +201,23 @@ export const updateDuration = (duration) => ({
     duration
 });
 
-export const updateCurrentTime = (currentTime) => ({
-    type: UPDATE_CURRENT_TIME,
-    currentTime
-});
+//export const updateCurrentTime = (currentTime) => ({
+//    type: UPDATE_CURRENT_TIME,
+//    currentTime
+//});
+
+const debouncedLastHeardTimeUpdate = _.throttle(
+    (dispatch, getState, currentTime) => dispatch(updateLastHeardTime(episodeId$(getState()), currentTime)), 5000, {leading: true, trailing: false}
+);
+export const updateCurrentTime = (currentTime) => {
+    return (dispatch, getState) => {
+        debouncedLastHeardTimeUpdate(dispatch, getState, currentTime);
+        dispatch({
+            type: UPDATE_CURRENT_TIME,
+            currentTime
+        });
+    }
+};
 
 export const updateLastTargetTime = (lastTargetTime) => ({
     type: UPDATE_LAST_TARGET_TIME,

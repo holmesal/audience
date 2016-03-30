@@ -30,7 +30,6 @@ export const podcastInfo$ = createSelector(visible$, (visible) => ({
     visible
 }));
 
-
 // Actions
 export const showPodcastInfo = (podcastId) => ({
     type: SHOW,
