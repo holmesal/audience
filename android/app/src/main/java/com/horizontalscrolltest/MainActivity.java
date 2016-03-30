@@ -1,6 +1,8 @@
 package com.horizontalscrolltest;
 
 import com.facebook.react.ReactActivity;
+import com.dispatcher.rnbranch.RNBranchPackage;
+import com.dispatcher.rnbranch.RNBranchPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.kevinejohn.RNMixpanel.RNMixpanel;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -39,6 +41,8 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            new RNBranchPackage(),
+            new RNBranchPackage(),
         new VectorIconsPackage(),
         new RNMixpanel(),
         new LinearGradientPackage(),

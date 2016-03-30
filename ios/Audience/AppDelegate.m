@@ -16,9 +16,9 @@
 #import "RCTPushNotificationManager.h"
 #import "RCTLinkingManager.h"
 #import "RNNotificationActions.h"
-
 #import <asl.h>
 #import "RCTLog.h"
+//#import "RNBranch.h"
 
 @implementation AppDelegate
 
@@ -26,6 +26,9 @@
 {
   // Init crashlytics
   [Fabric with:@[[Crashlytics class]]];
+  
+  // Init branch
+//  [RNBranch initSessionWithLaunchOptions:launchOptions isReferrable:YES];
   
   // Custom logging for crashlytics
   RCTSetLogThreshold(RCTLogLevelInfo);
