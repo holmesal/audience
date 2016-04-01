@@ -55,7 +55,9 @@ class AnnotationView extends Component {
         console.info(this.props);
         return (
             <Animated.View style={[styles.wrapper, {transform: [{translateY: this.state.keyboardHeight}]}]}>
-                <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
+                <ScrollView style={styles.scroll}
+                            stickyHeaderIndices={[]}
+                            contentContainerStyle={styles.scrollContent}>
                     <CompactAnnotation annotation={this.props.annotation} />
                     <Replies annotation={this.props.annotation} />
                 </ScrollView>
@@ -84,6 +86,8 @@ export default Relay.createContainer(AnnotationView, {
                 id
                 text
                 ${CompactAnnotation.getFragment('annotation')}
+                ${Replies.getFragment('annotation')}
+                ${Compose.getFragment('annotation')}
                 clip {
                     id
                 }

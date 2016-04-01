@@ -16,11 +16,13 @@ import colors from '../../colors';
 class Compose extends Component {
 
     state = {
-        text: null
+        text: null,
+        inputHeight: 24
     };
 
     handleChange(ev) {
-        console.info(ev.nativeEvent)
+        //console.info(ev.nativeEvent.contentSize.height)
+        this.setState({inputHeight: ev.nativeEvent.contentSize.height})
     }
 
     render() {
@@ -29,7 +31,8 @@ class Compose extends Component {
                 <TextInput onChangeText={text => this.setState({text})}
                            onChange={this.handleChange.bind(this)}
                            placeholder="Say something awesome"
-                           style={styles.input}
+                           style={[styles.input, {height: this.state.inputHeight + 6}]}
+                           multiline
                 />
                 <TouchableOpacity style={styles.sendButton}>
                     <Text style={styles.send}>Send</Text>
@@ -43,7 +46,7 @@ let styles = StyleSheet.create({
     wrapper: {
         alignSelf: 'stretch',
         backgroundColor: colors.lighterGrey,
-        height: 40,
+        //height: 40,
         padding: 4,
         flexDirection: 'row'
     },
@@ -53,7 +56,8 @@ let styles = StyleSheet.create({
         backgroundColor: colors.lightGrey,
         borderRadius: 4,
         paddingLeft: 12,
-        paddingRight: 12
+        paddingRight: 12,
+        fontSize: 16
     },
     sendButton: {
         //backgroundColor: '#4dbbc9',
@@ -61,7 +65,9 @@ let styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'stretch',
         paddingLeft: 12,
-        paddingRight: 12
+        paddingRight: 12,
+        paddingTop: 4,
+        paddingBottom: 4
     },
     send: {
         color: colors.attention,

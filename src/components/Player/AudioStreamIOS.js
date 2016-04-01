@@ -36,7 +36,8 @@ export default class AudioStreamIOS extends Component {
         onDurationChange: () => {},
         onPlayingChange: () => {},
         onStateChange: () => {},
-        onFinish: () => {}
+        onFinish: () => {},
+        onSkip: () => {}
     };
 
     state = {
@@ -60,7 +61,7 @@ export default class AudioStreamIOS extends Component {
         this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipForwardButtonTapped', this.handleCommandCenterSkipForwardButtonTap.bind(this)));
         this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipBackwardButtonTapped', this.handleCommandCenterSkipBackwardButtonTap.bind(this)));
         // Play the episode
-        if (this.props.url) {
+        if (this.props.url && this.props.playing) {
             this._startedPlaying = Date.now();
             MTAudio.play(this.props.url, this.props.title, this.props.artist, this.props.artworkUrl);
             this.props.onPlayingChange(true);
@@ -98,7 +99,11 @@ export default class AudioStreamIOS extends Component {
         if (audio.playerState != this.state.playerState) {
             this.props.onStateChange(audio.playerState);
             //console.info(audio.playerState);
-            if (audio.playerState === 'PLAYBACK_COMPLETED') this.props.onFinish()
+            //if (audio.playerState === 'PLAYBACK_COMPLETED') this.props.onFinish()
+            if (audio.playerState === 'STOPPED' || audio.playerState === 'PLAYBACK_COMPLETED') {
+                this.props.onFinish();
+                this.reset();
+            }
         }
         this.setState(audio);
     }
@@ -128,21 +133,40 @@ export default class AudioStreamIOS extends Component {
         }
     }
 
+    play(props) {
+        console.info('playing!', props)
+        this._startedPlaying = Date.now();
+        MTAudio.play(props.url, props.title, props.artist, props.artworkUrl);
+        props.onPlayingChange(true);
+        setTimeout(() => this.seekTo(props.time), 0);
+    }
+
+    reset() {
+        MTAudio.pause();
+        this._startedPlaying = 0;
+    }
+
     componentWillReceiveProps(nextProps) {
         //console.info('audio stream time: ', this.props.time);
         // When the url changes, stop playback and play the new URL
         if (nextProps.url != this.props.url) {
+            this.reset();
             //console.info('audio source changed!');
-            this._startedPlaying = Date.now();
-            MTAudio.play(nextProps.url, nextProps.title, nextProps.artist, this.props.artworkUrl);
-            this.props.onPlayingChange(true);
-            setTimeout(() => this.seekTo(this.props.time), 0);
+            this.play(nextProps);
         }
 
         // When the playing state changes, start or stop playback
         if (nextProps.playing != this.props.playing) {
             //console.info(`[AudioStreamIOS] setting MTAudio playing state to ${nextProps.playing} from ${this.props.playing}`);
-            nextProps.playing ? MTAudio.resume() : MTAudio.pause();
+            if (nextProps.playing) {
+                if (this._startedPlaying) {
+                    MTAudio.resume()
+                } else {
+                    this.play(nextProps)
+                }
+            } else {
+                MTAudio.pause();
+            }
         }
 
         // When the target time changes, seek to that time
