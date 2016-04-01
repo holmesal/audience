@@ -12,9 +12,13 @@ import PodcastInfoWrapper from './../PodcastInfo/PodcastInfoWrapper';
 import Player from './../Player/PlayerRoot';
 import CompactPlayer from '../CompactPlayer/CompactPlayerRoot';
 
+// Testing
+import AnnotationRoot from '../Annotation/AnnotationRoot';
+
 export default class Authenticated extends Component {
 
     render() {
+        return <AnnotationRoot />;
         return (
             <View style={styles.wrapper}>
                 {/** Flex-positioned views */}

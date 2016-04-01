@@ -26,14 +26,14 @@ import Info from './Info';
 import MiniPlayer from './MiniPlayer';
 
 import Navbar from './Navbar';
-import Annotations from './../Annotations/AnnotationsListview';
-import AnnotationSpawner from '../Annotations/AnnotationSpawner';
+import Annotations from './../PlayerAnnotations/AnnotationsListview';
+import AnnotationSpawner from '../PlayerAnnotations/AnnotationSpawner';
 import EmojiSpawner from '../EmojiSploder/EmojiSpawner';
 import CompactScrubber from './CompactScrubber';
 import Compose from './Compose';
 import ButtonRow from './ButtonRow';
-import ScrollableAnnotationView from '../Annotations/ScrollableAnnotationView';
-import ScrollableAnnotationContainer from '../Annotations/ScrollableAnnotationContainer';
+import ScrollableAnnotationView from '../PlayerAnnotations/ScrollableAnnotationView';
+import ScrollableAnnotationContainer from '../PlayerAnnotations/ScrollableAnnotationContainer';
 
 import EmojiSploder from '../EmojiSploder/EmojiSploder';
 
