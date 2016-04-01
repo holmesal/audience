@@ -18,7 +18,8 @@ export const API_ROOT = __DEV__ ?
     (USE_STAGING ? STAGING_API : DEV_API) :
     PROD_API;
 
-export const GRAPHQL_ROOT = `${API_ROOT}/graphql`;
+export const GRAPHQL_AUTHENTICATED_ROOT = `${API_ROOT}/graphql`;
+export const GRAPHQL_PUBLIC_ROOT = `${API_ROOT}/graphql-public`;
 
 export const episodeShareLink = (podcastId, episodeId, userId, time) => {
     let url = `${WEB_ROOT}/${podcastId}/${episodeId}/${userId}`;

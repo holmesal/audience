@@ -15,7 +15,7 @@ let playEpisodePatten = new UrlPattern(`/listen/:episodeId`, {
 });
 function handleLink(url) {
     if (url.indexOf(WEB_ROOT) === -1) {
-        console.error(`got a URL without WEB_ROOT: ${WEB_ROOT} - bailing. url was: ${url}`);
+        console.info(`got a URL without WEB_ROOT: ${WEB_ROOT} - bailing. url was: ${url}`);
         return false;
     }
     try {
