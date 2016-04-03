@@ -8,10 +8,10 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-import Icon from 'react-native-vector-icons/Ionicons';
 import DebugView from '../common/DebugView';
-import colors from '../../colors';
 import FacebookAvatar from '../common/FacebookAvatar';
+import LikeButton from '../common/LikeButton';
+import colors from '../../colors';
 import LikeAnnotationCommentMutation from '../../mutations/LikeAnnotationComment';
 
 class AnnotationComment extends Component {
@@ -46,11 +46,7 @@ class AnnotationComment extends Component {
         this.setState({inFlight: true});
     }
     
-    renderLikeButton() {
-        return this.props.annotationComment.viewerHasLiked ?
-            <Icon name="ios-heart" color="#DF7474" size={iconSize}/> :
-            <Icon name="ios-heart-outline" color={colors.lighterGrey} size={iconSize}/>;
-    }
+
 
     render() {
         return (
@@ -60,16 +56,14 @@ class AnnotationComment extends Component {
                     <Text style={[styles.text, styles.name]}>{this.props.annotationComment.user.displayName}</Text>
                     <Text style={[styles.text]}>{this.props.annotationComment.text}</Text>
                 </View>
-                <TouchableOpacity style={styles.likeButton} 
-                                  onPress={this.toggleLike.bind(this)}>
-                    {this.renderLikeButton()}
-                </TouchableOpacity>
+                <LikeButton style={styles.likeButton}
+                            onPress={this.toggleLike.bind(this)}
+                            liked={this.props.annotationComment.viewerHasLiked}/>
             </View>
         );
     }
 }
 
-const iconSize = 28;
 let styles = StyleSheet.create({
     wrapper: {
         //flex: 1
@@ -93,8 +87,6 @@ let styles = StyleSheet.create({
     },
     likeButton: {
         //backgroundColor: 'red',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
         paddingRight: 12,
         paddingLeft: 12,
         paddingTop: 4,
