@@ -37,6 +37,7 @@
 		BFC4B8530FD54EE29384E6EB /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EEC39D937E7D4CE29DA926B4 /* libBVLinearGradient.a */; };
 		E20D90E91C76822400C05994 /* Audience.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E20D90E81C767DC400C05994 /* Audience.entitlements */; };
 		E21A36CE1CA0A9BD00E1AF30 /* threadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */; };
+		E23426A41CB0D72E0095499B /* libRCTOneSignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23426911CB0D7160095499B /* libRCTOneSignal.a */; };
 		E25119ED1CA39D930024B069 /* 15step.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E25119EC1CA39D930024B069 /* 15step.mp3 */; };
 		E25119EE1CA39D9C0024B069 /* 15step.mp3 in Copy test audio file */ = {isa = PBXBuildFile; fileRef = E25119EC1CA39D930024B069 /* 15step.mp3 */; };
 		E2654D141C7C35D200F9BCE8 /* MTDebugIP.m in Sources */ = {isa = PBXBuildFile; fileRef = E2654D131C7C35D200F9BCE8 /* MTDebugIP.m */; };
@@ -149,6 +150,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = BVLinearGradient;
+		};
+		E23426901CB0D7160095499B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E23426821CB0D7160095499B /* RCTOneSignal.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3245CDED1BFEE35C00EABF68;
+			remoteInfo = RCTOneSignal;
 		};
 		E23AF1621CAA10B9006D7271 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -333,6 +341,7 @@
 		E21A36971CA096B000E1AF30 /* PFAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFAudio.m; sourceTree = "<group>"; };
 		E21A36981CA096B000E1AF30 /* PFAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFAudio.swift; sourceTree = "<group>"; };
 		E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = threadHelper.swift; sourceTree = "<group>"; };
+		E23426821CB0D7160095499B /* RCTOneSignal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTOneSignal.xcodeproj; path = "../node_modules/react-native-onesignal/ios/RCTOneSignal.xcodeproj"; sourceTree = "<group>"; };
 		E23AF15E1CAA10B9006D7271 /* FreeStreamer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreeStreamer.xcodeproj; path = "../../../../Downloads/FreeStreamer-master/FreeStreamer/FreeStreamer.xcodeproj"; sourceTree = "<group>"; };
 		E25119EC1CA39D930024B069 /* 15step.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 15step.mp3; sourceTree = "<group>"; };
 		E2654D121C7C35D200F9BCE8 /* MTDebugIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDebugIP.h; path = MTDebugIP/MTDebugIP.h; sourceTree = "<group>"; };
@@ -369,6 +378,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E23426A41CB0D72E0095499B /* libRCTOneSignal.a in Frameworks */,
 				AAF1889E1CA83BD2004E229E /* AudioToolbox.framework in Frameworks */,
 				E2D733521CA3BBA400625A29 /* libART.a in Frameworks */,
 				E2D7334B1CA3A40100625A29 /* libRNUploader.a in Frameworks */,
@@ -543,6 +553,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				E23426821CB0D7160095499B /* RCTOneSignal.xcodeproj */,
 				E2D7334C1CA3BB9E00625A29 /* ART.xcodeproj */,
 				E2D7332B1CA3A3FD00625A29 /* RNUploader.xcodeproj */,
 				E272148D1C75379000E9EC3D /* RNNotificationActions.xcodeproj */,
@@ -664,6 +675,14 @@
 				AAF188811CA83716004E229E /* AudioStreamRecorder.swift */,
 			);
 			path = PFAudio;
+			sourceTree = "<group>";
+		};
+		E23426831CB0D7160095499B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E23426911CB0D7160095499B /* libRCTOneSignal.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		E23AF15F1CAA10B9006D7271 /* Products */ = {
@@ -951,6 +970,10 @@
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
 				},
 				{
+					ProductGroup = E23426831CB0D7160095499B /* Products */;
+					ProjectRef = E23426821CB0D7160095499B /* RCTOneSignal.xcodeproj */;
+				},
+				{
 					ProductGroup = E27214871C75371900E9EC3D /* Products */;
 					ProjectRef = E27214861C75371900E9EC3D /* RCTPushNotification.xcodeproj */;
 				},
@@ -1095,6 +1118,13 @@
 			fileType = archive.ar;
 			path = libBVLinearGradient.a;
 			remoteRef = E21A35021C99F77500E1AF30 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E23426911CB0D7160095499B /* libRCTOneSignal.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTOneSignal.a;
+			remoteRef = E23426901CB0D7160095499B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		E23AF1631CAA10B9006D7271 /* FreeStreamer.framework */ = {
@@ -1440,6 +1470,7 @@
 					"$(SRCROOT)/Frameworks/**",
 					"\"$(SRCROOT)/../node_modules/branch-react-native-sdk/RNBranch/RNBranch.xcodeproj\"/**",
 					"$(SRCROOT)/../node_modules/branch-react-native-sdk/**",
+					"$(SRCROOT)/../node_modules/react-native-onesignal/**",
 				);
 				INFOPLIST_FILE = Audience/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1502,6 +1533,7 @@
 					"$(SRCROOT)/Frameworks/**",
 					"\"$(SRCROOT)/../node_modules/branch-react-native-sdk/RNBranch/RNBranch.xcodeproj\"/**",
 					"$(SRCROOT)/../node_modules/branch-react-native-sdk/**",
+					"$(SRCROOT)/../node_modules/react-native-onesignal/**",
 				);
 				INFOPLIST_FILE = Audience/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

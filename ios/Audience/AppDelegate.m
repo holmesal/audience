@@ -18,9 +18,11 @@
 #import "RNNotificationActions.h"
 #import <asl.h>
 #import "RCTLog.h"
+#import "RCTOneSignal.h"
 //#import "RNBranch.h"
 
 @implementation AppDelegate
+@synthesize oneSignal = _oneSignal;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -34,9 +36,9 @@
   RCTSetLogThreshold(RCTLogLevelInfo);
   RCTSetLogFunction(CrashlyticsReactLogFunction);
   
-  NSString* filePath = [[NSBundle mainBundle] pathForResource:@"15step"
-                                                       ofType:@"mp3"];
-  NSLog(@"file path: %@", filePath);
+  // Init onesignal
+  self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
+                                                         appId:@"a7b8289a-a654-4e53-94ab-21aa3502254a"];
   
   NSURL *jsCodeLocation;
   
@@ -167,7 +169,8 @@
 // Required for the notification event.
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification
 {
-  [RCTPushNotificationManager didReceiveRemoteNotification:notification];
+  [RCTOneSignal didReceiveRemoteNotification:notification];
+//  [RCTPushNotificationManager didReceiveRemoteNotification:notification];
 }
 
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification

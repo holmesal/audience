@@ -15,6 +15,7 @@ import React, {
 } from 'react-native';
 
 import './notifications';
+import './lib/remoteNotifications';
 
 import './lib/linking';
 

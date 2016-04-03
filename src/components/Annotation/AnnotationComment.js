@@ -38,7 +38,7 @@ class AnnotationComment extends Component {
                 let error = transaction.getError();
                 console.error(error);
                 console.info(transaction);
-                alert('Error liking this annotation comment :-(');
+                alert('Error unliking this comment :-(');
                 //this.refs.input.focus();
                 this.setState({inFlight: false});
             }

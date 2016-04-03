@@ -6,6 +6,7 @@ import {FBSDKAccessToken} from 'react-native-fbsdkcore';
 import {FBSDKLoginManager} from 'react-native-fbsdklogin';
 import Relay from 'react-relay';
 import {updateRelayAuthHeader} from '../../utils/relay';
+import {updatePlayerId} from '../../lib/remoteNotifications';
 import {requiredReadPermissions} from '../../utils/facebook';
 
 /**
@@ -86,6 +87,8 @@ export const checkLogin = () => {
                     dispatch(updateLoggedIn(true));
                     // Update the auth token relay sends with requests
                     updateRelayAuthHeader(credentials.tokenString);
+                    // Now that we're logged in, send our onesignal playerId to the backend
+                    updatePlayerId();
                 }
             } else {
                 console.info('no credentials found');

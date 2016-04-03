@@ -39,7 +39,7 @@ class CompactAnnotation extends Component {
                 let error = transaction.getError();
                 console.error(error);
                 console.info(transaction);
-                alert('Error liking this annotation :-(');
+                alert('Error unliking this annotation :-(');
                 //this.refs.input.focus();
                 this.setState({inFlight: false});
             }

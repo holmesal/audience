@@ -1,7 +1,9 @@
 workspace 'Audience'
+xcodeproj 'Podcastfoo.xcodeproj'
 use_frameworks!
 
 pod 'Mixpanel'
 pod 'Instabug'
 pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
+pod 'OneSignal'

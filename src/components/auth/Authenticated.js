@@ -18,7 +18,7 @@ import AnnotationRoot from '../Annotation/AnnotationRoot';
 export default class Authenticated extends Component {
 
     render() {
-        return <AnnotationRoot />;
+        //return <AnnotationRoot />;
         return (
             <View style={styles.wrapper}>
                 {/** Flex-positioned views */}
