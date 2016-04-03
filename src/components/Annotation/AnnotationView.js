@@ -12,7 +12,7 @@ import React, {
 import Relay from 'react-relay';
 
 import CompactAnnotation from './CompactAnnotation';
-import Replies from './Replies';
+import CommentList from './CommentList';
 import Compose from './Compose';
 
 class AnnotationView extends Component {
@@ -59,7 +59,7 @@ class AnnotationView extends Component {
                             stickyHeaderIndices={[]}
                             contentContainerStyle={styles.scrollContent}>
                     <CompactAnnotation annotation={this.props.annotation} />
-                    <Replies annotation={this.props.annotation} />
+                    <CommentList annotation={this.props.annotation} />
                 </ScrollView>
                 <Compose annotation={this.props.annotation} />
             </Animated.View>
@@ -86,7 +86,7 @@ export default Relay.createContainer(AnnotationView, {
                 id
                 text
                 ${CompactAnnotation.getFragment('annotation')}
-                ${Replies.getFragment('annotation')}
+                ${CommentList.getFragment('annotation')}
                 ${Compose.getFragment('annotation')}
                 clip {
                     id
