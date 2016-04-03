@@ -10,12 +10,12 @@ import Relay from 'react-relay';
 
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
-import Comment from './Comment';
+import AnnotationComment from './AnnotationComment';
 
 class CommentList extends Component {
 
     renderComments() {
-        return _.map(this.props.annotation.comments.edges.reverse(), edge => <Comment key={edge.node.id} comment={edge.node} />)
+        return _.map(this.props.annotation.comments.edges.reverse(), edge => <AnnotationComment key={edge.node.id} annotationComment={edge.node} />)
     }
 
     render() {
@@ -43,7 +43,7 @@ export default Relay.createContainer(CommentList, {
                         node {
                             ... on AnnotationComment {
                                 id
-                                ${Comment.getFragment('comment')}
+                                ${AnnotationComment.getFragment('annotationComment')}
                             }
                         }
                     }
