@@ -14,11 +14,12 @@ import CompactPlayer from '../CompactPlayer/CompactPlayerRoot';
 
 // Testing
 import AnnotationRoot from '../Annotation/AnnotationRoot';
+import RootStack from '../Nav/RootStack';
 
 export default class Authenticated extends Component {
 
     render() {
-        //return <AnnotationRoot />;
+        return <RootStack />;
         return (
             <View style={styles.wrapper}>
                 {/** Flex-positioned views */}
