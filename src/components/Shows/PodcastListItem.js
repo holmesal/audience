@@ -2,12 +2,14 @@ import React, {
     ActionSheetIOS,
     Component,
     Image,
+    NavigationExperimental,
     PropTypes,
     StyleSheet,
     Text,
     TouchableOpacity,
     View
 } from 'react-native';
+const {Container: NavigationContainer} = NavigationExperimental;
 import Relay from 'react-relay';
 import TouchableFade from '../common/TouchableFade';
 import colors from '../../colors';
@@ -16,6 +18,7 @@ import PodcastActionSheet from '../common/PodcastActionSheet';
 
 import store from '../../redux/create';
 import {showPodcastInfo} from '../../redux/modules/podcastInfo';
+import {showShowInfo} from '../Nav/tabs/Shows';
 
 class PodcastListItem extends Component {
 
@@ -24,7 +27,8 @@ class PodcastListItem extends Component {
     };
 
     showPodcastInfo() {
-        store.dispatch(showPodcastInfo(this.props.podcast.id))
+        store.dispatch(showPodcastInfo(this.props.podcast.id));
+        this.props.onNavigate(showShowInfo(this.props.podcast.id));
     }
 
     renderDots() {
@@ -115,7 +119,9 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(PodcastListItem, {
+const contained = NavigationContainer.create(PodcastListItem);
+
+export default Relay.createContainer(contained, {
 
     initialVariables: {
         size: 'medium'

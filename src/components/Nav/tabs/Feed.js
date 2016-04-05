@@ -9,6 +9,7 @@ import React, {
 } from 'react-native';
 
 import DebugView from '../../common/DebugView';
+import DiscoverRoot from '../../Discover/DiscoverRoot';
 
 const {
     Reducer
@@ -22,19 +23,21 @@ export const FeedTabReducer = Reducer.StackReducer({
     },
     initialState: {
         key: FeedTabKey,
+        tabLabel: 'Feed',
+        tabIcon: 'ios-paper-outline',
         index: 0,
         children: [
             {key: 'base'}
         ]
     }
-})
+});
 
 export default class Feed extends Component {
 
     render() {
         console.info('[FeedTab] rendering!', this.props);
         return (
-            <DebugView text="FeedTab" />
+            <DiscoverRoot />
         );
     }
 }

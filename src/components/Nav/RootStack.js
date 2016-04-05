@@ -9,6 +9,7 @@ import React, {
 } from 'react-native';
 
 import DebugView from '../common/DebugView';
+import colors from '../../colors';
 
 import Tabs, {TabsReducer, TabsReducerKey} from './Tabs';
 
@@ -55,7 +56,7 @@ export const reducer = Reducer.StackReducer({
     getReducerForState: (initialState) => {
         console.info('get reducer for initialState', initialState)
         switch (initialState.key) {
-            case 'Tabs':
+            case TabsReducerKey:
                 console.info('using TabsReducer');
                 return TabsReducer;
             case 'Player':
@@ -79,13 +80,13 @@ export const reducer = Reducer.StackReducer({
 export default class RootStack extends Component {
 
     componentDidMount() {
-        setTimeout(() => {
-            this.refs.rootContainer.handleNavigation(showPlayer('fake-episode-id'));
-            //this.refs.rootContainer.handleNavigation(showTabs());
-        }, 3000);
-        setTimeout(() => {
-            this.refs.rootContainer.handleNavigation(showAnnotation('fake-annotation-id'));
-        }, 6000);
+        //setTimeout(() => {
+        //    this.refs.rootContainer.handleNavigation(showPlayer('fake-episode-id'));
+        //    //this.refs.rootContainer.handleNavigation(showTabs());
+        //}, 3000);
+        //setTimeout(() => {
+        //    this.refs.rootContainer.handleNavigation(showAnnotation('fake-annotation-id'));
+        //}, 6000);
     }
 
     renderScene(props) {
@@ -121,6 +122,7 @@ export default class RootStack extends Component {
         console.info('[RootStack] rendering navigation state: ', navigationState);
         return <AnimatedView navigationState={navigationState}
                              renderScene={this.renderScene.bind(this)}
+                             style={styles.wrapper}
         />
     }
 
@@ -130,15 +132,14 @@ export default class RootStack extends Component {
                            reducer={reducer}
                            ref="rootContainer"
                            renderNavigation={this.renderNavigation.bind(this)}
-            >
-                <Text>I am the RootStack component!</Text>
-            </RootContainer>
+            />
         );
     }
 }
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1
+        flex: 1,
+        backgroundColor: colors.darkGrey
     }
 });

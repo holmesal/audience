@@ -1,18 +1,22 @@
 import React, {
     Component,
     Image,
+    NavigationExperimental,
     PropTypes,
     StyleSheet,
     Text,
     View
 } from 'react-native';
 import Relay from 'react-relay';
-
+const {
+    Container: NavigationContainer
+} = NavigationExperimental;
 import PodcastActionSheet from '../common/PodcastActionSheet';
 
 import store from '../../redux/create';
 import {showPodcastInfo} from '../../redux/modules/podcastInfo';
 import {blur} from '../../redux/modules/search';
+import {showShowInfo} from '../Nav/tabs/Search';
 
 import ResultItem from './ResultItem';
 
@@ -24,7 +28,9 @@ class PodcastResult extends Component {
 
     handlePress() {
         store.dispatch(blur());
-        store.dispatch(showPodcastInfo(this.props.podcast.id));
+        //store.dispatch(showPodcastInfo(this.props.podcast.id));
+        console.info(this.props.podcast.id);
+        this.props.onNavigate(showShowInfo(this.props.podcast.id));
     }
 
     render() {
@@ -49,7 +55,8 @@ class PodcastResult extends Component {
     }
 }
 
-export default Relay.createContainer(PodcastResult, {
+const contained = NavigationContainer.create(PodcastResult);
+export default Relay.createContainer(contained, {
     fragments: {
         podcast: () => Relay.QL`
             fragment on Podcast {

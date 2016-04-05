@@ -2,11 +2,13 @@ import React, {
     Component,
     Image,
     ListView,
+    NavigationExperimental,
     PropTypes,
     StyleSheet,
     Text,
     View
 } from 'react-native';
+const {RootContainer, Container: NavigationContainer} = NavigationExperimental;
 import Relay from 'react-relay';
 import PhotoHeader from './PhotoHeader';
 import TopBar from './TopBar';
@@ -138,6 +140,13 @@ class PodcastInfo extends Component {
                           canLoadMore={this.props.podcast.episodes.pageInfo.hasNextPage}
                           onLoadMoreAsync={this.loadMore.bind(this)}
                 />
+                <TopBar
+                    onBackPress={() => {
+                        console.info('going back!');
+                        //this.props.onNavigate(RootContainer.getBackAction())
+                        this.props.onNavigate({type: 'NestedBack'})
+                    }}
+                />
             </View>
         )
     }
@@ -149,7 +158,8 @@ let styles = StyleSheet.create({
     }
 });
 
-let connectedPodcastInfo = connect()(PodcastInfo);
+let contained = NavigationContainer.create(PodcastInfo);
+let connectedPodcastInfo = connect()(contained);
 export default Relay.createContainer(connectedPodcastInfo, {
     initialVariables: {
         first: EPISODE_RESULTS_PER_PAGE,

@@ -13,7 +13,7 @@ import RelayError from '../common/RelayError';
 
 import {podcastId$} from '../../redux/modules/podcastInfo';
 
-class PodcastInfoRoot extends Component {
+export default class PodcastInfoRoot extends Component {
 
     render() {
         const {podcastId} = this.props;
@@ -45,8 +45,8 @@ class PodcastInfoRoot extends Component {
     }
 }
 
-export const sel$ = createSelector(podcastId$, (podcastId) => ({
-    podcastId
-}));
-
-export default connect(sel$)(PodcastInfoRoot);
+//export const sel$ = createSelector(podcastId$, (podcastId) => ({
+//    podcastId
+//}));
+//
+//export default connect(sel$)(PodcastInfoRoot);

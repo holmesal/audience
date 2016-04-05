@@ -20,22 +20,23 @@ export default class Authenticated extends Component {
 
     render() {
         return <RootStack />;
-        return (
-            <View style={styles.wrapper}>
-                {/** Flex-positioned views */}
-                <Tabs />
-                <CompactPlayer />
-
-                {/** Overlay views */}
-                <PodcastInfoWrapper />
-                <Player />
-            </View>
-        );
+        //return (
+        //    <View style={styles.wrapper}>
+        //        {/** Flex-positioned views */}
+        //        <Tabs />
+        //        <CompactPlayer />
+        //
+        //        {/** Overlay views */}
+        //        <PodcastInfoWrapper />
+        //        <Player />
+        //    </View>
+        //);
     }
 }
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1
+        flex: 1,
+        backgroundColor: 'red'
     }
 });
