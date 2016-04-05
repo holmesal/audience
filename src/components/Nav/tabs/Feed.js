@@ -19,7 +19,7 @@ export const FeedTabKey = 'FeedTab';
 
 export const FeedTabReducer = Reducer.StackReducer({
     getPushedReducerForAction: (action, lastState) => {
-        console.info('[FeedTab] handling action: ', action, lastState);
+        //console.info('[FeedTab] handling action: ', action, lastState);
     },
     initialState: {
         key: FeedTabKey,
@@ -35,7 +35,7 @@ export const FeedTabReducer = Reducer.StackReducer({
 export default class Feed extends Component {
 
     render() {
-        console.info('[FeedTab] rendering!', this.props);
+        //console.info('[FeedTab] rendering!', this.props);
         return (
             <DiscoverRoot />
         );

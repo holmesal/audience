@@ -37,7 +37,7 @@ class Discover extends Component {
 
     componentWillReceiveProps(nextProps) {
         //console.info('got props!')
-        console.info(nextProps.viewer.friendActivity)
+        //console.info(nextProps.viewer.friendActivity)
         //this.parseActivity(nextProps.viewer.friendActivity)
     }
 

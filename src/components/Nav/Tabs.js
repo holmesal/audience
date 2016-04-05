@@ -18,6 +18,7 @@ import TabBar from './TabBar';
 import FeedTab, {FeedTabReducer, FeedTabKey} from './tabs/Feed';
 import ShowsTab, {ShowsTabReducer, ShowsTabKey} from './tabs/Shows';
 import SearchTab, {SearchTabReducer, SearchTabKey} from './tabs/Search';
+import ViewerTab, {ViewerTabReducer, ViewerTabKey} from './tabs/Viewer';
 
 
 //export const TabsReducer = (state, action) => {
@@ -32,6 +33,7 @@ export const TabsReducer = Reducer.TabsReducer({
     tabReducers: [
         FeedTabReducer,
         ShowsTabReducer,
+        ViewerTabReducer,
         SearchTabReducer
     ]
 });
@@ -39,14 +41,16 @@ export const TabsReducer = Reducer.TabsReducer({
 export default class Tabs extends Component {
 
     renderScene(navigationState) {
-        console.info('[Tabs] rendering scene with navigationState: ', navigationState);
+        //console.info('[Tabs] rendering scene with navigationState: ', navigationState);
         switch (navigationState.key) {
             case FeedTabKey:
                 return <FeedTab key={FeedTabKey} navigationState={navigationState}/>;
             case ShowsTabKey:
                 return <ShowsTab key={ShowsTabKey} navigationState={navigationState}/>;
             case SearchTabKey:
-                return <SearchTab hi="there" key={SearchTabKey} navigationState={navigationState}/>;
+                return <SearchTab key={SearchTabKey} navigationState={navigationState}/>;
+            case ViewerTabKey:
+                return <ViewerTab key={ViewerTabKey} navigationState={navigationState}/>;
             default:
                 console.warn('[Tabs] could not render scene for key: ', navigationState.key);
                 return <View />
@@ -54,7 +58,7 @@ export default class Tabs extends Component {
     }
 
     render() {
-        console.info('[Tabs] rendering!', this.props);
+        //console.info('[Tabs] rendering!', this.props);
         return (
             <View style={styles.wrapper}>
                 <NavigationView navigationState={this.props.navigationState}

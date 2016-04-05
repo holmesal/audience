@@ -32,7 +32,7 @@ export const showShowInfo = showId => ({
 export const ShowsTabReducer = StackReducer({
     customBackActions: ['NestedBack'],
     getPushedReducerForAction: (action, lastState) => {
-        console.info('[ShowsTab] handling action: ', action, lastState);
+        //console.info('[ShowsTab] handling action: ', action, lastState);
         switch (action.type) {
             case SHOW_SHOW_INFO:
                 return lastState => lastState || {key: `ShowInfo-${action.showId}`, type: 'ShowInfo', showId: action.showId };
@@ -40,7 +40,7 @@ export const ShowsTabReducer = StackReducer({
         return null;
     },
     getReducerForState: (initialState) => {
-        console.info('[ShowsTab] getting reducer for state: ', initialState);
+        //console.info('[ShowsTab] getting reducer for state: ', initialState);
         return (state) => state || initialState;
     },
     initialState: {
@@ -58,7 +58,7 @@ export default class Shows extends Component {
 
     renderScene(props) {
         const {key, type} = props.scene.navigationState;
-        console.info('[ShowsTab] rendering scene with props: ', props);
+        //console.info('[ShowsTab] rendering scene with props: ', props);
         switch (type) {
             case 'Shows':
                 return <ShowsRoot key={key} />;
@@ -68,7 +68,7 @@ export default class Shows extends Component {
     }
 
     render() {
-        console.info('[ShowsTab] rendering!', this.props);
+        //console.info('[ShowsTab] rendering!', this.props);
         return (
             <CardStack navigationState={this.props.navigationState}
                           renderScene={this.renderScene.bind(this)}

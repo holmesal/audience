@@ -29,7 +29,9 @@ export default class TabBarItem extends Component {
         const activeTextStyles = this.props.active ? styles.activeLabel : null;
         const iconColor = this.props.active ? colors.attention : colors.grey;
         return (
-            <TouchableOpacity style={styles.wrapper} onPress={this.props.onPress}>
+            <TouchableOpacity style={styles.wrapper}
+                              onPress={this.props.onPress}
+                              activeOpacity={0.8}>
                 <Icon name={this.props.icon}
                       color={iconColor}
                       size={28} />

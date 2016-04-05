@@ -29,7 +29,7 @@ export const showShowInfo = showId => ({
 export const SearchTabReducer = StackReducer({
     customBackActions: ['NestedBack'],
     getPushedReducerForAction: (action, lastState) => {
-        console.info('[SearchTab] handling action: ', action, lastState);
+        //console.info('[SearchTab] handling action: ', action, lastState);
         switch (action.type) {
             case SHOW_SHOW_INFO:
                 return lastState => lastState || {key: `ShowInfo-${action.showId}`, type: 'ShowInfo', showId: action.showId };
@@ -37,7 +37,7 @@ export const SearchTabReducer = StackReducer({
         return null;
     },
     getReducerForState: (initialState) => {
-        console.info('[SearchTab] getting reducer for state: ', initialState);
+        //console.info('[SearchTab] getting reducer for state: ', initialState);
         return (state) => state || initialState;
     },
     initialState: {
@@ -55,19 +55,20 @@ export default class Search extends Component {
 
     renderScene(props) {
         const {key, type} = props.scene.navigationState;
-        console.info('[SearchTab] rendering scene with props: ', props);
+        //console.info('[SearchTab] rendering scene with props: ', props);
         switch (type) {
             case 'Search':
-                return <SearchRoot key={key} />;
+                return <SearchRoot autoFocus key={key} />;
             case 'ShowInfo':
                 return <PodcastInfoRoot key={key} podcastId={props.scene.navigationState.showId} />;
             default:
+                console.warn('Search tab could not render scene for type: ', type);
                 return <View />
         }
     }
 
     render() {
-        console.info('[SearchTab] rendering!', this.props);
+        //console.info('[SearchTab] rendering!', this.props);
         return (
             <CardStack navigationState={this.props.navigationState}
                        renderScene={this.renderScene.bind(this)}

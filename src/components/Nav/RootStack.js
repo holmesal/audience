@@ -39,7 +39,7 @@ export const showAnnotation = annotationId => ({
 
 export const reducer = Reducer.StackReducer({
     getPushedReducerForAction: (action, lastState) => {
-        console.info('[RootStack] getting pushed reducer for action: ', action);
+        //console.info('[RootStack] getting pushed reducer for action: ', action);
         switch (action.type) {
             //case SHOW_TABS:
             //    return TabsReducer;
@@ -54,10 +54,9 @@ export const reducer = Reducer.StackReducer({
         return null;
     },
     getReducerForState: (initialState) => {
-        console.info('get reducer for initialState', initialState)
+        //console.info('get reducer for initialState', initialState)
         switch (initialState.key) {
             case TabsReducerKey:
-                console.info('using TabsReducer');
                 return TabsReducer;
             case 'Player':
                 return state => state || initialState;
@@ -90,7 +89,7 @@ export default class RootStack extends Component {
     }
 
     renderScene(props) {
-        console.info('[RootStack] rendering scene with props: ', props);
+        //console.info('[RootStack] rendering scene with props: ', props);
         switch (props.scene.navigationState.key) {
             case 'base':
                 return <View key="base" />;
@@ -119,7 +118,7 @@ export default class RootStack extends Component {
 
 
     renderNavigation(navigationState, onNavigate) {
-        console.info('[RootStack] rendering navigation state: ', navigationState);
+        //console.info('[RootStack] rendering navigation state: ', navigationState);
         return <AnimatedView navigationState={navigationState}
                              renderScene={this.renderScene.bind(this)}
                              style={styles.wrapper}

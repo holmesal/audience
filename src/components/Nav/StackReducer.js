@@ -9,10 +9,9 @@ const {
 const defaultGetReducerForState = (initialState) => (state) => state || initialState;
 
 function NavigationStackReducer({initialState, getReducerForState, getPushedReducerForAction, customBackActions}) {
-    console.info('custom stack reducer created wtih ', customBackActions, arguments)
     const getReducerForStateWithDefault = getReducerForState || defaultGetReducerForState;
     return function (lastState, action) {
-        console.info('navigation stack reducer is running', lastState, action, customBackActions)
+        //console.info('navigation stack reducer is running', lastState, action, customBackActions)
 
         // If there is no state, use the initial state
         if (!lastState) {
@@ -20,13 +19,12 @@ function NavigationStackReducer({initialState, getReducerForState, getPushedRedu
         }
         // Get the parent of the
         const lastParentState = NavigationStateUtils.getParent(lastState);
-        console.info('last parent state: ', lastParentState)
+        //console.info('last parent state: ', lastParentState)
         if (!lastParentState) {
             return lastState;
         }
-        console.info('got this far!');
         if (customBackActions.indexOf(action.type) != -1) {
-            console.info(`[StackReducer] - `, action.type + ' was found in custom back actions - treating as back');
+            //console.info(`[StackReducer] - `, action.type + ' was found in custom back actions - treating as back');
             if (lastParentState.index === 0 || lastParentState.children.length === 1) {
                 return lastParentState;
             }
