@@ -38,3 +38,7 @@ export const episodeShareLink = (podcastId, episodeId, userId, time) => {
 export const clipShareLink = clipId => {
     return `${WEB_ROOT}/clip/${clipId}`;
 };
+
+export const annotationShareLink = annotationId => {
+    return `${WEB_ROOT}/annotation/${annotationId}`;
+};

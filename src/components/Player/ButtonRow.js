@@ -20,16 +20,23 @@ class ButtonRow extends Component {
     };
 
     defaultProps = {
-        visible: false
+        visible: true
     };
 
     state = {
         opacity: new Animated.Value(0)
     };
 
+    componentDidMount() {
+        this.updateVisibility();
+    }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.visible) this.show();
+    componentDidUpdate(prevProps, prevState) {
+        this.updateVisibility();
+    }
+
+    updateVisibility(props) {
+        if (this.props.visible) this.show();
         else this.hide();
     }
 

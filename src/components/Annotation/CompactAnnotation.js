@@ -14,6 +14,7 @@ import colors from '../../colors';
 import FacebookAvatar from '../common/FacebookAvatar';
 import LikeAnnotationMutation from '../../mutations/LikeAnnotation';
 import LikeButton from '../common/LikeButton';
+import PrettyArtwork from '../common/PrettyArtwork';
 
 class CompactAnnotation extends Component {
 
@@ -50,6 +51,8 @@ class CompactAnnotation extends Component {
     render() {
         return (
             <View style={styles.wrapper}>
+
+                <PrettyArtwork podcast={this.props.annotation.episode.podcast} />
 
                 <FacebookAvatar user={this.props.annotation.user} />
 
@@ -107,6 +110,11 @@ export default Relay.createContainer(CompactAnnotation, {
                 }
                 clip {
                     ${PlayClipButton.getFragment('clip')}
+                }
+                episode {
+                    podcast {
+                        ${PrettyArtwork.getFragment('podcast')}
+                    }
                 }
             }
         `

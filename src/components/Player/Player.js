@@ -65,14 +65,6 @@ class Player extends Component {
         DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
     }
 
-    //componentDidMount() {
-    //    this.updateVisibility();
-    //}
-    //
-    //componentDidUpdate(prevProps, prevState) {
-    //    this.updateVisibility();
-    //}
-
     keyboardWillShow(ev) {
         if (this.props.visible) {
             //console.info('keyboard will show!', ev);
@@ -97,205 +89,73 @@ class Player extends Component {
         }
     }
 
-    //updateVisibility() {
-    //    if (this.props.visible) {
-    //        Animated.spring(this.state.offset, {
-    //            toValue: 0,
-    //            tension: 32,
-    //            friction: 8
-    //        }).start();
-    //    } else {
-    //        Animated.spring(this.state.offset, {
-    //            toValue: OFFSCREEN,
-    //            tension: 31,
-    //            friction: 9
-    //        }).start();
-    //    }
-    //}
-
     handleWaveformPress() {
         //console.info('waveform was pressed, and playing is: ', this.props.playing);
         if (this.props.playing) this.props.dispatch(pause());
         else this.props.dispatch(resume())
     }
 
-    //renderAnnotationsCompose() {
-    //    return <View style={{flex: 1}} />
-    //    //return (
-    //    //    <Animated.View style={{flex: 1, transform: [{translateY: this.state.keyboardHeight}]}}>
-    //    //
-    //    //        <Annotations
-    //    //            episode={this.props.episode}
-    //    //            style={styles.annotations}
-    //    //        />
-    //    //
-    //    //        <Compose
-    //    //            episode={this.props.episode}
-    //    //        />
-    //    //
-    //    //    </Animated.View>
-    //    //)
-    //}
-    //
-    //measureEmojiButtonRelativeToContainer(buttonRef) {
-    //    let handle = React.findNodeHandle(buttonRef);
-    //    let ancestorHandle = React.findNodeHandle(this.refs.wrapper);
-    //    console.info(UIManager)
-    //    UIManager.measureLayoutRelativeToParent(handle, ancestorHandle, (x, y, w, h, px, py) => {
-    //        console.log('offset', x, y, w, h, px, py);
-    //        //let scrollTarget = y - this.state.containerHeight + h;
-    //        ////console.info('scrolLTarget', scrollTarget);
-    //        //this.scrollTo({y: scrollTarget});
-    //        //Animated.spring(this.state.opacity, {toValue: 1}).start();
-    //        this.setState({globalEmojiButtonPosition: {
-    //            x: px,
-    //            y: py,
-    //            w: w,
-    //            h: h
-    //        }});
-    //    });
-    //}
-
-    //oldRender() {
-    //    if (!this.props.episode) {
-    //        console.warn('player got null episode :-(');
-    //        return <View />;
-    //    }
-    //    //console.info('player render!', this.state.emojiSploderVisible);
-    //    let pointerEvents = this.props.visible ? 'auto' : 'none';
-    //    return (
-    //        <Animated.View
-    //            ref="wrapper"
-    //            style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]}
-    //            pointerEvents={pointerEvents}
-    //        >
-    //
-    //            <View style={styles.content}>
-    //                <AnnotationSpawner
-    //                    episode={this.props.episode}
-    //                />
-    //                <EmojiSpawner
-    //                    episode={this.props.episode}
-    //                />
-    //            </View>
-    //
-    //
-    //            <Navbar
-    //                style={styles.navbar}
-    //                episode={this.props.episode}
-    //                podcast={this.props.episode.podcast}
-    //            />
-    //
-    //            <ButtonRow
-    //                style={styles.buttonRow}
-    //                onCommentPress={() => this.setState({composeVisible: true})}
-    //            />
-    //
-    //            <CompactScrubber
-    //                duration={this.state.duration}
-    //                currentTime={this.state.currentTime}
-    //                playing={this.props.playing}
-    //                onSeek={lastTargetTime => this.setState({lastTargetTime})}
-    //                hidePlayer={() => this.props.dispatch(hidePlayer())}
-    //                onScrubStart={() => this.setState({scrubbing: true})}
-    //                onScrubEnd={() => this.setState({scrubbing: false})}
-    //                onWaveformPress={this.handleWaveformPress.bind(this)}
-    //                episode={this.props.episode}
-    //                style={{top: this.state.keyboardHeight}}
-    //            />
-    //
-    //            <EpisodePlayer
-    //                ref="audio"
-    //                episode={this.props.episode}
-    //                podcast={this.props.episode.podcast}
-    //                lastTargetTime={this.state.lastTargetTime}
-    //                onDurationChange={duration => this.setState({duration})}
-    //                onCurrentTimeChange={currentTime => this.setState({currentTime})}
-    //                onSkip={this.handleSkip.bind(this)}
-    //            />
-    //
-    //            <EmojiSploder
-    //                targetLayout={{
-    //                    left: windowWidth/2 - 30,
-    //                    bottom: buttonRowBottom,
-    //                    width: 60,
-    //                    height: 60
-    //                }}
-    //            />
-    //
-    //        </Animated.View>
-    //    );
-    //}
-
     render() {
         if (!this.props.episode) {
             console.warn('player got null episode :-(');
             return <View />;
         }
-        let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
-            //<Animated.View
-            //    ref="wrapper"
-            //    style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]}
-            //    pointerEvents={pointerEvents}
-            //>
 
-                <View style={styles.content}>
+            <View style={styles.content}>
 
-                    <ScrollableAnnotationContainer
-                        episode={this.props.episode}
-                    />
+                <ScrollableAnnotationContainer
+                    episode={this.props.episode}
+                />
 
-                    <CompactScrubber
-                        episode={this.props.episode}
-                        hidePlayer={() => this.props.dispatch(hidePlayer())}
-                        onWaveformPress={this.handleWaveformPress.bind(this)}
-                    />
+                <CompactScrubber
+                    episode={this.props.episode}
+                    hidePlayer={() => this.props.dispatch(hidePlayer())}
+                    onWaveformPress={this.handleWaveformPress.bind(this)}
+                />
 
-                    <ButtonRow
-                        episode={this.props.episode}
-                        style={styles.buttonRow}
-                        onCommentPress={() => this.setState({composeVisible: true})}
-                        visible={this.props.visible}
-                    />
+                <ButtonRow
+                    episode={this.props.episode}
+                    style={styles.buttonRow}
+                    onCommentPress={() => this.setState({composeVisible: true})}
+                    visible={true}
+                />
 
-                    { false && <MiniPlayer
-                        episode={this.props.episode}
-                    />}
+                { false && <MiniPlayer
+                    episode={this.props.episode}
+                />}
 
-                    {/** views that come above everyhing*/}
-                    <CommentCompose
-                        episode={this.props.episode}
-                        visible={this.state.composeVisible}
-                        scrubberHeight={84}
-                        hide={() => this.setState({composeVisible: false})}
-                    />
+                {/** views that come above everyhing*/}
+                <CommentCompose
+                    episode={this.props.episode}
+                    visible={this.state.composeVisible}
+                    scrubberHeight={84}
+                    hide={() => this.setState({composeVisible: false})}
+                />
 
-                    {/** non-views*/}
-                    <EpisodePlayer
-                        ref="audio"
-                        episode={this.props.episode}
-                        podcast={this.props.episode.podcast}
-                    />
+                {/** non-views*/}
+                <EpisodePlayer
+                    ref="audio"
+                    episode={this.props.episode}
+                    podcast={this.props.episode.podcast}
+                />
 
-                    <EmojiSploder
-                        episode={this.props.episode}
-                        targetLayout={{
-                            left: windowWidth/2 - 40,
-                            bottom: buttonRowBottom,
-                            width: 80,
-                            height: 80
-                        }}
-                    />
+                <EmojiSploder
+                    episode={this.props.episode}
+                    targetLayout={{
+                        left: windowWidth/2 - 40,
+                        bottom: buttonRowBottom,
+                        width: 80,
+                        height: 80
+                    }}
+                />
 
-                </View>
-
-            //</Animated.View>
+            </View>
         );
     }
 }
 
-const buttonRowBottom = 35 + 60;
+const buttonRowBottom = 40;
 
 let styles = StyleSheet.create({
     wrapper: {
