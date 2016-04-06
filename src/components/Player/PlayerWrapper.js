@@ -3,6 +3,7 @@ import React, {
     Component,
     Dimensions,
     Image,
+    NavigationExperimental,
     PropTypes,
     StyleSheet,
     Text,
@@ -12,9 +13,26 @@ import {connect} from 'react-redux';
 import {visible$} from '../../redux/modules/player.js';
 import {createSelector} from 'reselect';
 import PlayerRoot from './PlayerRoot';
+import PlayerRootStack from '../Nav/PlayerRootStack';
 import colors from '../../colors';
-
 const OFFSCREEN = Dimensions.get('window').height;
+
+const {
+    Reducer,
+    RootContainer,
+    AnimatedView,
+    Card
+    } = NavigationExperimental;
+
+const reducer = Reducer.StackReducer({
+    initialState: {
+        key: 'playerRoot',
+        index: 0,
+        children: [
+            {key: 'Player'}
+        ]
+    }
+});
 
 class PlayerWrapper extends Component {
 
@@ -30,11 +48,6 @@ class PlayerWrapper extends Component {
             offset
         };
     }
-
-    //state = {
-    //    //opacity: new Animated.Value(1),
-    //    //offset: new Animated.Value(0)
-    //};
 
     componentDidMount() {
         this.updateVisibility();
@@ -69,7 +82,7 @@ class PlayerWrapper extends Component {
                 style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]}
                 pointerEvents={pointerEvents}
             >
-                <PlayerRoot />
+                <PlayerRootStack />
             </Animated.View>
         );
     }

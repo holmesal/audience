@@ -58,9 +58,9 @@ class CompactAnnotation extends Component {
                     <Text style={[styles.text, styles.body]}>{this.props.annotation.text}</Text>
                 </View>
 
-                <PlayClipButton
+                {this.props.annotation.clip && <PlayClipButton
                     clip={this.props.annotation.clip}
-                />
+                />}
 
                 <LikeButton style={styles.likeButton}
                             onPress={this.toggleLike.bind(this)}

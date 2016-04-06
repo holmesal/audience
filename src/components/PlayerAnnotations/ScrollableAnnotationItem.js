@@ -4,6 +4,7 @@ import React, {
     Component,
     Dimensions,
     Image,
+    NavigationExperimental,
     PropTypes,
     PushNotificationIOS,
     StyleSheet,
@@ -15,15 +16,19 @@ import Relay from 'react-relay';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from '../../colors';
 import emoji from 'node-emoji';
+import LikeButton from '../common/LikeButton';
 import {getTintForUser, tintOpacity} from '../../utils/tints';
 import {getViewerId} from '../../utils/relay';
+import {showAnnotation} from '../Nav/PlayerRootStack';
+import LikeAnnotationMutation from '../../mutations/LikeAnnotation';
 
 export default class ScrollableAnnotationItem extends Component {
 
     state = {
         height: new Animated.Value(0),
         opacity: new Animated.Value(0),
-        cardHeight: null
+        cardHeight: null,
+        likeInFlight: false
     };
 
     _fadeOutBeginTimeout = null;
@@ -100,6 +105,36 @@ export default class ScrollableAnnotationItem extends Component {
         }).start()
     }
 
+    toggleLike() {
+        // Bail if in-progress
+        if (this.state.inFlight) return;
+        // Create mutation
+        const mutation = new LikeAnnotationMutation({
+            annotation: this.props.annotation
+        });
+        // Commit the update
+        Relay.Store.commitUpdate(mutation, {
+            onSuccess: (data) => {
+                console.info('successfully liked annotation!', data);
+                // Clear the text
+                this.setState({likeInFlight: false});
+            },
+            onFailure: (transaction) => {
+                let error = transaction.getError();
+                console.error(error);
+                console.info(transaction);
+                alert('Error unliking this annotation :-(');
+                //this.refs.input.focus();
+                this.setState({likeInFlight: false});
+            }
+        });
+        this.setState({likeInFlight: true});
+    }
+
+    handlePress() {
+        this.props.onNavigate(showAnnotation(this.props.annotation.id))
+    }
+
     render() {
         let flex = this.props.annotation.text.length > 25 ? 1 : 0;
         const photoUrl = `http://graph.facebook.com/v2.5/${this.props.annotation.user.facebookId}/picture?type=square&height=${this.state.cardHeight * 2}`;
@@ -109,10 +144,12 @@ export default class ScrollableAnnotationItem extends Component {
                 opacity: this.state.opacity
             }]}>
                 <View style={[styles.row, {height: this.state.cardHeight}]}>
-                    <TouchableOpacity style={styles.likeTouchable}>
-                        <Icon style={styles.icon} name="ios-heart-outline" size={24} color={colors.lighterGrey} />
-                    </TouchableOpacity>
-                    <View style={[styles.card, {flex}]} onLayout={this.handleLayout.bind(this)}>
+                    <LikeButton style={styles.likeTouchable}
+                                onPress={this.toggleLike.bind(this)}
+                                liked={this.props.annotation.viewerHasLiked}/>
+                    <TouchableOpacity style={[styles.card, {flex}]}
+                                      onLayout={this.handleLayout.bind(this)}
+                                      onPress={this.handlePress.bind(this)}>
                         <Image
                             source={{uri: photoUrl}}
                             style={[styles.image, {height: this.state.cardHeight || 0}]}
@@ -124,7 +161,7 @@ export default class ScrollableAnnotationItem extends Component {
                             />
                         </Image>
                         <Text style={styles.text} onLayout={this.handleTextLayout.bind(this)}>{emoji.emojify(this.props.annotation.text)}</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </Animated.View>
         );
@@ -150,7 +187,7 @@ let styles = StyleSheet.create({
         overflow: 'hidden',
         transform: [
             {rotateZ: '180deg'}
-        ],
+        ]
         //borderColor: 'green',
         //borderWidth: 1
     },
@@ -161,9 +198,10 @@ let styles = StyleSheet.create({
         //height: 80
     },
     likeTouchable: {
-        width: 0,//likeTouchableWidth,
+        //width: likeTouchableWidth,
         overflow: 'hidden',
-        marginRight: 20,
+        paddingLeft: 12,
+        paddingRight: 12,
         alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center',
@@ -208,11 +246,16 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(ScrollableAnnotationItem, {
+const contained = NavigationExperimental.Container.create(ScrollableAnnotationItem);
+
+export default Relay.createContainer(contained, {
     fragments: {
         annotation: () => Relay.QL`
             fragment on Annotation {
+                id
                 text
+                viewerHasLiked
+                ${LikeAnnotationMutation.getFragment('annotation')}
                 user {
                     id
                     facebookId

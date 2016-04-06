@@ -25,17 +25,6 @@ const {
     Card
 } = NavigationExperimental;
 
-const SHOW_TABS = 'rootStack.showTabs';
-export const showTabs = () => ({
-    type: SHOW_TABS
-});
-
-//const SHOW_PLAYER = 'rootStack.showPlayer';
-//export const showPlayer = episodeId => ({
-//    type: SHOW_PLAYER,
-//    episodeId
-//});
-
 const SHOW_ANNOTATION = 'rootStack.showAnnotation';
 export const showAnnotation = annotationId => ({
     type: SHOW_ANNOTATION,
@@ -46,25 +35,14 @@ export const reducer = Reducer.StackReducer({
     getPushedReducerForAction: (action, lastState) => {
         //console.info('[RootStack] getting pushed reducer for action: ', action);
         switch (action.type) {
-            //case SHOW_TABS:
-            //    return TabsReducer;
-            //case SHOW_PLAYER:
-            //    return state => state || {key: 'Player'}; // TODO - PlayerReducer
             case SHOW_ANNOTATION:
                 return state => state || {key: 'Annotation', annotationId: action.annotationId};
-            //default:
-            //    console.warn('[RootStack] Could not find pushed reducer for action: ', action);
-            //    return state => state;
         }
         return null;
     },
     getReducerForState: (initialState) => {
         //console.info('get reducer for initialState', initialState)
         switch (initialState.key) {
-            case TabsReducerKey:
-                return TabsReducer;
-            //case 'Player':
-            //    return state => state || initialState;
             case 'Annotation':
                 return state => state || initialState;
             default:
@@ -73,10 +51,10 @@ export const reducer = Reducer.StackReducer({
         }
     },
     initialState: {
-        key: 'root',
+        key: 'playerRootStack',
         index: 0,
         children: [
-            TabsReducer()
+            {key: 'Player'}
         ]
     }
 });
@@ -85,46 +63,15 @@ export default class RootStack extends Component {
 
     componentDidMount() {
         //setTimeout(() => {
-        //    this.refs.rootContainer.handleNavigation(showPlayer('fake-episode-id'));
-        //}, 3000);
-        //setTimeout(() => {
         //    this.refs.rootContainer.handleNavigation(showAnnotation('QW5ub3RhdGlvbjoxMzM='));
         //}, 6000);
-    }
-
-    handleLink(uri) {
-        if (!uri) return;
-        const link = handleLink(uri);
-        console.info('got linking action: ', uri, 'which parsed to', link);
-
-        switch (link.type) {
-            case 'episode':
-                store.dispatch(playEpisode(link.episodeId, link.time));
-                break;
-            case 'show':
-                console.info('TODO - SHOW SHOW INFO FROM DEEPLINK');
-            case 'annotation':
-                return showAnnotation(link.annotationId);
-            case 'clip':
-                console.info('TODO - HANDLE CLIPS');
-                break;
-                //return showClip(link.clipId)
-        }
     }
 
     renderScene(props) {
         //console.info('[RootStack] rendering scene with props: ', props);
         switch (props.scene.navigationState.key) {
-            case TabsReducerKey:
-                return <Tabs key="tabs" navigationState={props.scene.navigationState}/>
             case 'Player':
-                return (
-                    <Card
-                        {...props}
-                        key="player"
-                        renderScene={() => <PlayerRoot />}
-                     />
-                );
+                return <PlayerRoot key="player" />;
             case 'Annotation':
                 return (
                     <Card
@@ -134,7 +81,7 @@ export default class RootStack extends Component {
                     />
                 );
             default:
-                console.warn('[RootStack] could not render scene for key: ', props.scene.navigationState.key);
+                console.warn('[PlayerRootStack] could not render scene for key: ', props.scene.navigationState.key);
         }
     }
 
@@ -151,7 +98,6 @@ export default class RootStack extends Component {
         return (
             <RootContainer style={styles.wrapper}
                            reducer={reducer}
-                           LinkingActionMap={this.handleLink.bind(this)}
                            ref="rootContainer"
                            renderNavigation={this.renderNavigation.bind(this)}
             />
