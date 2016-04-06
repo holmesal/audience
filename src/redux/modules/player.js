@@ -130,7 +130,7 @@ export const playEpisode = (episodeId, startTime) => {
             // Show the player
             dispatch(showPlayer());
             // Stop the player - will be started again by the audio component when it re-renders
-            dispatch(updatePlaying(false));
+            dispatch(updatePlaying(true));
             // Update the duration to null
             dispatch(updateDuration(null));
         }

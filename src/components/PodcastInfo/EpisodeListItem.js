@@ -1,6 +1,7 @@
 import React, {
     Component,
     Image,
+    NavigationExperimental,
     PropTypes,
     StyleSheet,
     Text,
@@ -12,6 +13,10 @@ import striptags from 'striptags';
 import store from '../../redux/create';
 import {playEpisode} from '../../redux/modules/player';
 import moment from 'moment';
+//import {showPlayer} from '../Nav/RootStack';
+
+// Navigation
+const {Container: NavigationContainer} = NavigationExperimental;
 
 import {PrimaryText, SupportingText, MetaText} from '../../type';
 import colors from '../../colors';
@@ -29,6 +34,10 @@ class EpisodeListItem extends Component {
 
     play() {
         store.dispatch(playEpisode(this.props.episode.id));
+        //this.props.onNavigate(showPlayer(this.props.episode.id));
+        this.props.onNavigate({
+            type: 'rootStack.showPlayer'
+        });
     }
 
     getDuration() {
@@ -167,7 +176,9 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(EpisodeListItem, {
+const contained = NavigationContainer.create(EpisodeListItem);
+
+export default Relay.createContainer(contained, {
     fragments: {
         episode: () => Relay.QL`
             fragment on Episode {

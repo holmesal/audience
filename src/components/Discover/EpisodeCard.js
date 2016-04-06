@@ -1,12 +1,14 @@
 import React, {
     Component,
     Image,
+    NavigationExperimental,
     PropTypes,
     StyleSheet,
     Text,
     View
 } from 'react-native';
 import Relay from 'react-relay';
+const {Container: NavigationContainer} = NavigationExperimental;
 import colors from '../../colors';
 import TouchableFade from '../common/TouchableFade';
 import {playEpisode} from '../../redux/modules/player.js';
@@ -15,7 +17,10 @@ import store from '../../redux/create.js';
 class EpisodeCard extends Component {
 
     playEpisode() {
-        store.dispatch(playEpisode(this.props.episode.id))
+        store.dispatch(playEpisode(this.props.episode.id));
+        this.props.onNavigate({
+            type: 'rootStack.showPlayer'
+        });
     }
 
     render() {
@@ -78,7 +83,9 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(EpisodeCard, {
+const contained = NavigationContainer.create(EpisodeCard);
+
+export default Relay.createContainer(contained, {
 
     initialVariables: {
         size: 'large'

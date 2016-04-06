@@ -64,7 +64,7 @@ class MiniPlayer extends Component {
                     <Text style={styles.podcast} numberOfLines={1}>{this.props.episode.podcast.name}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={this.togglePlayer.bind(this)}>
+                <TouchableOpacity style={styles.button} onPress={this.togglePlayer.bind(this)} activeOpacity={0.85}>
                     <Animated.View
                         style={{transform: [{
                         rotateZ: this.state.iconState.interpolate({

@@ -11,6 +11,7 @@ import Tabs from './../Tabs/Tabs';
 import PodcastInfoWrapper from './../PodcastInfo/PodcastInfoWrapper';
 import Player from './../Player/PlayerRoot';
 import CompactPlayer from '../CompactPlayer/CompactPlayerRoot';
+//import MiniPlayer from '../Player/MiniPlayer';
 
 // Testing
 import AnnotationRoot from '../Annotation/AnnotationRoot';
@@ -19,7 +20,12 @@ import RootStack from '../Nav/RootStack';
 export default class Authenticated extends Component {
 
     render() {
-        return <RootStack />;
+        return (
+            <View style={styles.wrapper}>
+                <RootStack />
+                <CompactPlayer />
+            </View>
+        )
         //return (
         //    <View style={styles.wrapper}>
         //        {/** Flex-positioned views */}

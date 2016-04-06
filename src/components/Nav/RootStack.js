@@ -9,6 +9,8 @@ import React, {
 } from 'react-native';
 
 import DebugView from '../common/DebugView';
+import AnnotationRoot from '../Annotation/AnnotationRoot';
+import PlayerRoot from '../Player/PlayerRoot';
 import colors from '../../colors';
 
 import Tabs, {TabsReducer, TabsReducerKey} from './Tabs';
@@ -46,7 +48,7 @@ export const reducer = Reducer.StackReducer({
             case SHOW_PLAYER:
                 return state => state || {key: 'Player'}; // TODO - PlayerReducer
             case SHOW_ANNOTATION:
-                return state => state || {key: 'Annotation'}; // TODO - AnntoationReducer
+                return state => state || {key: 'Annotation', annotationId: action.annotationId}; // TODO - AnntoationReducer
             //default:
             //    console.warn('[RootStack] Could not find pushed reducer for action: ', action);
             //    return state => state;
@@ -81,18 +83,15 @@ export default class RootStack extends Component {
     componentDidMount() {
         //setTimeout(() => {
         //    this.refs.rootContainer.handleNavigation(showPlayer('fake-episode-id'));
-        //    //this.refs.rootContainer.handleNavigation(showTabs());
         //}, 3000);
         //setTimeout(() => {
-        //    this.refs.rootContainer.handleNavigation(showAnnotation('fake-annotation-id'));
+        //    this.refs.rootContainer.handleNavigation(showAnnotation('QW5ub3RhdGlvbjoxMzM='));
         //}, 6000);
     }
 
     renderScene(props) {
         //console.info('[RootStack] rendering scene with props: ', props);
         switch (props.scene.navigationState.key) {
-            case 'base':
-                return <View key="base" />;
             case TabsReducerKey:
                 return <Tabs key="tabs" navigationState={props.scene.navigationState}/>
             case 'Player':
@@ -100,7 +99,7 @@ export default class RootStack extends Component {
                     <Card
                         {...props}
                         key="player"
-                        renderScene={() => <DebugView key="player" text="(player)" />}
+                        renderScene={() => <PlayerRoot />}
                      />
                 );
             case 'Annotation':
@@ -108,7 +107,7 @@ export default class RootStack extends Component {
                     <Card
                         {...props}
                         key="annotation"
-                        renderScene={() => <DebugView key="annotation" text="(annotation)" />}
+                        renderScene={() => <AnnotationRoot annotationId={props.scene.navigationState.annotationId} />}
                     />
                 );
             default:

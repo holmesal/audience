@@ -61,6 +61,7 @@ export default class AudioStreamIOS extends Component {
         this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipForwardButtonTapped', this.handleCommandCenterSkipForwardButtonTap.bind(this)));
         this._subscriptions.push(NativeAppEventEmitter.addListener('MTAudio.commandCenterSkipBackwardButtonTapped', this.handleCommandCenterSkipBackwardButtonTap.bind(this)));
         // Play the episode
+        console.info('audiostreamios props', this.props)
         if (this.props.url && this.props.playing) {
             this._startedPlaying = Date.now();
             MTAudio.play(this.props.url, this.props.title, this.props.artist, this.props.artworkUrl);

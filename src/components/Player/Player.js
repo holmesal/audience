@@ -47,8 +47,10 @@ class Player extends Component {
     static defaultProps = {};
 
     state = {
-        opacity: new Animated.Value(0),
-        offset: new Animated.Value(OFFSCREEN),
+        //opacity: new Animated.Value(0),
+        //offset: new Animated.Value(OFFSCREEN),
+        opacity: new Animated.Value(1),
+        offset: new Animated.Value(0),
         composeVisible: false,
         keyboardHeight: new Animated.Value(0),
     };
@@ -257,9 +259,9 @@ class Player extends Component {
                         visible={this.props.visible}
                     />
 
-                    <MiniPlayer
+                    { false && <MiniPlayer
                         episode={this.props.episode}
-                    />
+                    />}
 
                     {/** views that come above everyhing*/}
                     <CommentCompose
