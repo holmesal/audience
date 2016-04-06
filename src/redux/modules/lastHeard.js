@@ -11,7 +11,7 @@ const initialState = Immutable.fromJS({
 export default createReducer(initialState, {
 
     [UPDATE_TIME]: (state, action) => {
-        console.info('updating last heard time!', action.time, action.episodeId);
+        //console.info('updating last heard time!', action.time, action.episodeId);
         return state.setIn([action.episodeId], action.time);
     }
 

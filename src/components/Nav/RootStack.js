@@ -12,6 +12,9 @@ import DebugView from '../common/DebugView';
 import AnnotationRoot from '../Annotation/AnnotationRoot';
 import PlayerRoot from '../Player/PlayerRoot';
 import colors from '../../colors';
+import {handleLink} from '../../lib/linking';
+import store from '../../redux/create';
+import {playEpisode} from '../../redux/modules/player';
 
 import Tabs, {TabsReducer, TabsReducerKey} from './Tabs';
 
@@ -89,6 +92,26 @@ export default class RootStack extends Component {
         //}, 6000);
     }
 
+    handleLink(uri) {
+        if (!uri) return;
+        const link = handleLink(uri);
+        console.info('got linking action: ', uri, 'which parsed to', link);
+
+        switch (link.type) {
+            case 'episode':
+                store.dispatch(playEpisode(link.episodeId, link.time));
+                break;
+            case 'show':
+                console.info('TODO - SHOW SHOW INFO FROM DEEPLINK');
+            case 'annotation':
+                return showAnnotation(link.annotationId);
+            case 'clip':
+                console.info('TODO - HANDLE CLIPS');
+                break;
+                //return showClip(link.clipId)
+        }
+    }
+
     renderScene(props) {
         //console.info('[RootStack] rendering scene with props: ', props);
         switch (props.scene.navigationState.key) {
@@ -128,6 +151,7 @@ export default class RootStack extends Component {
         return (
             <RootContainer style={styles.wrapper}
                            reducer={reducer}
+                           LinkingActionMap={this.handleLink.bind(this)}
                            ref="rootContainer"
                            renderNavigation={this.renderNavigation.bind(this)}
             />
