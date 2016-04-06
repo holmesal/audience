@@ -88,7 +88,7 @@ export default class RootStack extends Component {
         //    this.refs.rootContainer.handleNavigation(showPlayer('fake-episode-id'));
         //}, 3000);
         setTimeout(() => {
-            this.refs.rootContainer.handleNavigation(showAnnotation('QW5ub3RhdGlvbjoxMDI='));
+            this.refs.rootContainer.handleNavigation(showAnnotation('QW5ub3RhdGlvbjoxMzQ='));
         }, 2000);
     }
 
