@@ -14,7 +14,8 @@ import PlayerRoot from '../Player/PlayerRoot';
 import colors from '../../colors';
 import {handleLink} from '../../lib/linking';
 import store from '../../redux/create';
-import {playEpisode} from '../../redux/modules/player';
+import {playEpisode, hidePlayer} from '../../redux/modules/player';
+import RemoteNotifications from '../../lib/remoteNotifications';
 
 import Tabs, {TabsReducer, TabsReducerKey} from './Tabs';
 
@@ -51,7 +52,7 @@ export const reducer = Reducer.StackReducer({
             //case SHOW_PLAYER:
             //    return state => state || {key: 'Player'}; // TODO - PlayerReducer
             case SHOW_ANNOTATION:
-                return state => state || {key: 'Annotation', annotationId: action.annotationId};
+                return state => state || {key: `Annotation-${action.annotationId}`, type: 'Annotation', annotationId: action.annotationId};
             //default:
             //    console.warn('[RootStack] Could not find pushed reducer for action: ', action);
             //    return state => state;
@@ -60,8 +61,9 @@ export const reducer = Reducer.StackReducer({
     },
     getReducerForState: (initialState) => {
         //console.info('get reducer for initialState', initialState)
-        switch (initialState.key) {
-            case TabsReducerKey:
+        if (initialState.key === TabsReducerKey) initialState.type = 'Tabs';
+        switch (initialState.type) {
+            case 'Tabs':
                 return TabsReducer;
             //case 'Player':
             //    return state => state || initialState;
@@ -76,7 +78,7 @@ export const reducer = Reducer.StackReducer({
         key: 'root',
         index: 0,
         children: [
-            TabsReducer()
+            _.assign(TabsReducer(), {type: 'Tabs'})
         ]
     }
 });
@@ -84,47 +86,72 @@ export const reducer = Reducer.StackReducer({
 export default class RootStack extends Component {
 
     componentDidMount() {
+        // Start listening for push notification opens
+        this._notificationSubscription = RemoteNotifications.addListener('notificationOpened', this.handleNotificationOpen.bind(this));
         //setTimeout(() => {
         //    this.refs.rootContainer.handleNavigation(showPlayer('fake-episode-id'));
         //}, 3000);
         //setTimeout(() => {
         //    this.refs.rootContainer.handleNavigation(showAnnotation('QW5ub3RhdGlvbjoxMzg='));
-        //}, 2000);
+        //}, 100);
+    }
+
+    componentWillUnmount() {
+        this._notificationSubscription.remove();
+    }
+
+    /**
+     * Given a navigation intent {type, ...}, dispatch the appropriate action to the navigation
+     */
+    mapIntentToAction(intent) {
+        console.info('handling navigation intent', intent);
+        switch (intent.type) {
+            case 'episode':
+                store.dispatch(playEpisode(intent.episodeId, intent.time));
+                break;
+            case 'show':
+                store.dispatch(hidePlayer());
+                console.info('TODO - SHOW SHOW INFO FROM DEEPLINK');
+            case 'annotation':
+                store.dispatch(hidePlayer());
+                return showAnnotation(intent.annotationId);
+            case 'clip':
+                store.dispatch(hidePlayer());
+                console.info('TODO - HANDLE CLIPS');
+                break;
+            default:
+                console.warn('could not handle intent: ', intent)
+        }
     }
 
     handleLink(uri) {
         if (!uri) return;
-        const link = handleLink(uri);
-        console.info('got linking action: ', uri, 'which parsed to', link);
+        const intent = handleLink(uri);
+        console.info('got linking action: ', uri, 'which parsed to', intent);
+        return this.mapIntentToAction(intent)
+    }
 
-        switch (link.type) {
-            case 'episode':
-                store.dispatch(playEpisode(link.episodeId, link.time));
-                break;
-            case 'show':
-                console.info('TODO - SHOW SHOW INFO FROM DEEPLINK');
-            case 'annotation':
-                return showAnnotation(link.annotationId);
-            case 'clip':
-                console.info('TODO - HANDLE CLIPS');
-                break;
-                //return showClip(link.clipId)
-        }
+    handleNotificationOpen(notificationData) {
+        const action = this.mapIntentToAction(notificationData);
+        if (action) this.refs.rootContainer.handleNavigation(action);
     }
 
     renderScene(props) {
-        //console.info('[RootStack] rendering scene with props: ', props);
-        switch (props.scene.navigationState.key) {
-            case TabsReducerKey:
+        console.info('[RootStack] rendering scene with props: ', props);
+        const state = props.scene.navigationState;
+        // Shim type for tabs that don't support it
+        if (state.key === TabsReducerKey) state.type = 'Tabs';
+        switch (state.type) {
+            case 'Tabs':
                 return <Tabs key="tabs" navigationState={props.scene.navigationState}/>
-            case 'Player':
-                return (
-                    <Card
-                        {...props}
-                        key="player"
-                        renderScene={() => <PlayerRoot />}
-                     />
-                );
+            //case 'Player':
+            //    return (
+            //        <Card
+            //            {...props}
+            //            key="player"
+            //            renderScene={() => <PlayerRoot />}
+            //         />
+            //    );
             case 'Annotation':
                 return (
                     <Card
