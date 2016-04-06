@@ -75,7 +75,6 @@ export const sendingEmoji$ = state => state.getIn(['player', 'sendingEmoji']);
 export const sendingComment$ = state => state.getIn(['player', 'sendingComment']);
 
 export const player$ = createSelector(visible$, playing$, (visible, playing) => ({
-    visible,
     playing
 }));
 

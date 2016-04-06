@@ -47,10 +47,10 @@ class Player extends Component {
     static defaultProps = {};
 
     state = {
-        //opacity: new Animated.Value(0),
+        //opacity: new Animated.Value(1),
         //offset: new Animated.Value(OFFSCREEN),
-        opacity: new Animated.Value(1),
-        offset: new Animated.Value(0),
+        //opacity: new Animated.Value(1),
+        //offset: new Animated.Value(0),
         composeVisible: false,
         keyboardHeight: new Animated.Value(0),
     };
@@ -65,13 +65,13 @@ class Player extends Component {
         DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
     }
 
-    componentDidMount() {
-        this.updateVisibility();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        this.updateVisibility();
-    }
+    //componentDidMount() {
+    //    this.updateVisibility();
+    //}
+    //
+    //componentDidUpdate(prevProps, prevState) {
+    //    this.updateVisibility();
+    //}
 
     keyboardWillShow(ev) {
         if (this.props.visible) {
@@ -97,21 +97,21 @@ class Player extends Component {
         }
     }
 
-    updateVisibility() {
-        if (this.props.visible) {
-            Animated.spring(this.state.offset, {
-                toValue: 0,
-                tension: 32,
-                friction: 8
-            }).start();
-        } else {
-            Animated.spring(this.state.offset, {
-                toValue: OFFSCREEN,
-                tension: 31,
-                friction: 9
-            }).start();
-        }
-    }
+    //updateVisibility() {
+    //    if (this.props.visible) {
+    //        Animated.spring(this.state.offset, {
+    //            toValue: 0,
+    //            tension: 32,
+    //            friction: 8
+    //        }).start();
+    //    } else {
+    //        Animated.spring(this.state.offset, {
+    //            toValue: OFFSCREEN,
+    //            tension: 31,
+    //            friction: 9
+    //        }).start();
+    //    }
+    //}
 
     handleWaveformPress() {
         //console.info('waveform was pressed, and playing is: ', this.props.playing);
@@ -119,23 +119,23 @@ class Player extends Component {
         else this.props.dispatch(resume())
     }
 
-    renderAnnotationsCompose() {
-        return <View style={{flex: 1}} />
-        //return (
-        //    <Animated.View style={{flex: 1, transform: [{translateY: this.state.keyboardHeight}]}}>
-        //
-        //        <Annotations
-        //            episode={this.props.episode}
-        //            style={styles.annotations}
-        //        />
-        //
-        //        <Compose
-        //            episode={this.props.episode}
-        //        />
-        //
-        //    </Animated.View>
-        //)
-    }
+    //renderAnnotationsCompose() {
+    //    return <View style={{flex: 1}} />
+    //    //return (
+    //    //    <Animated.View style={{flex: 1, transform: [{translateY: this.state.keyboardHeight}]}}>
+    //    //
+    //    //        <Annotations
+    //    //            episode={this.props.episode}
+    //    //            style={styles.annotations}
+    //    //        />
+    //    //
+    //    //        <Compose
+    //    //            episode={this.props.episode}
+    //    //        />
+    //    //
+    //    //    </Animated.View>
+    //    //)
+    //}
     //
     //measureEmojiButtonRelativeToContainer(buttonRef) {
     //    let handle = React.findNodeHandle(buttonRef);
@@ -234,11 +234,11 @@ class Player extends Component {
         }
         let pointerEvents = this.props.visible ? 'auto' : 'none';
         return (
-            <Animated.View
-                ref="wrapper"
-                style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]}
-                pointerEvents={pointerEvents}
-            >
+            //<Animated.View
+            //    ref="wrapper"
+            //    style={[styles.wrapper, {transform: [{translateY: this.state.offset}]}]}
+            //    pointerEvents={pointerEvents}
+            //>
 
                 <View style={styles.content}>
 
@@ -290,7 +290,7 @@ class Player extends Component {
 
                 </View>
 
-            </Animated.View>
+            //</Animated.View>
         );
     }
 }

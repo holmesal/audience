@@ -21,7 +21,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 class MiniPlayer extends Component {
 
     state = {
-        iconState: new Animated.Value(0)
+        iconState: new Animated.Value(0),
+        height: new Animated.Value(0)
     };
 
     componentDidUpdate(prevProps, prevState) {
@@ -31,6 +32,12 @@ class MiniPlayer extends Component {
                 toValue
             }).start()
         }
+    }
+
+    componentDidMount() {
+        Animated.spring(this.state.height, {
+            toValue: height
+        }).start()
     }
 
 
@@ -47,7 +54,35 @@ class MiniPlayer extends Component {
         store.dispatch(showPodcastInfo(this.props.episode.podcast.id));
     }
 
+    renderLoading() {
+        return (
+            <Animated.View style={[styles.wrapper, {height: this.state.height}]}>
+
+                <TouchableOpacity
+                    style={styles.textWrapper}
+                    onPress={this.togglePlayer.bind(this)}
+                >
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} onPress={this.togglePlayer.bind(this)} activeOpacity={0.85}>
+                    <Animated.View
+                        style={{transform: [{
+                        rotateZ: this.state.iconState.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: ['0deg', '180deg']
+                        })
+                        }]}}
+                    >
+                        <Icon name="ios-arrow-down" size={24} color={colors.lighterGrey} />
+                    </Animated.View>
+                </TouchableOpacity>
+
+            </Animated.View>
+        )
+    }
+
     render() {
+        if (this.props.loading) return this.renderLoading();
         return (
             <View style={styles.wrapper}>
 
@@ -58,7 +93,7 @@ class MiniPlayer extends Component {
 
                 <TouchableOpacity
                     style={styles.textWrapper}
-                    onPress={this.showPodcast.bind(this)}
+                    onPress={this.togglePlayer.bind(this)}
                 >
                     <Text style={styles.title} numberOfLines={1}>{this.props.episode.title}</Text>
                     <Text style={styles.podcast} numberOfLines={1}>{this.props.episode.podcast.name}</Text>
@@ -82,10 +117,12 @@ class MiniPlayer extends Component {
     }
 }
 
+const height = 48;
+
 let styles = StyleSheet.create({
     wrapper: {
         alignSelf: 'stretch',
-        height: 48,
+        height: height,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#2D2D2D'

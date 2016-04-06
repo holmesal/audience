@@ -18,9 +18,9 @@ class EpisodeCard extends Component {
 
     playEpisode() {
         store.dispatch(playEpisode(this.props.episode.id));
-        this.props.onNavigate({
-            type: 'rootStack.showPlayer'
-        });
+        //this.props.onNavigate({
+        //    type: 'rootStack.showPlayer'
+        //});
     }
 
     render() {

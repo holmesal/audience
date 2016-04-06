@@ -10,6 +10,7 @@ import React, {
 import Tabs from './../Tabs/Tabs';
 import PodcastInfoWrapper from './../PodcastInfo/PodcastInfoWrapper';
 import Player from './../Player/PlayerRoot';
+import PlayerWrapper from './../Player/PlayerWrapper';
 import CompactPlayer from '../CompactPlayer/CompactPlayerRoot';
 //import MiniPlayer from '../Player/MiniPlayer';
 
@@ -23,6 +24,7 @@ export default class Authenticated extends Component {
         return (
             <View style={styles.wrapper}>
                 <RootStack />
+                <PlayerWrapper />
                 <CompactPlayer />
             </View>
         )

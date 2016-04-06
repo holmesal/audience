@@ -40,7 +40,7 @@ class PlayerRoot extends Component {
                 Component={MiniPlayer}
                 route={route}
                 renderFailure={this.renderFailure}
-                renderLoading={() => <View />}
+                renderLoading={() => <MiniPlayer loading episode={null} />}
             />
         )
     }
