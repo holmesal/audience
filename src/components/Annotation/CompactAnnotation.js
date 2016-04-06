@@ -50,26 +50,28 @@ class CompactAnnotation extends Component {
 
     render() {
         return (
-            <View style={styles.wrapper}>
-
+            <View>
                 <PrettyArtwork podcast={this.props.annotation.episode.podcast} />
+                <View style={styles.wrapper}>
 
-                <FacebookAvatar user={this.props.annotation.user} />
 
-                <View style={styles.textWrapper}>
-                    <Text style={[styles.text, styles.name]}>{this.props.annotation.user.displayName}</Text>
-                    <Text style={[styles.text, styles.body]}>{this.props.annotation.text}</Text>
+                    <FacebookAvatar user={this.props.annotation.user} />
+
+                    <View style={styles.textWrapper}>
+                        <Text style={[styles.text, styles.name]}>{this.props.annotation.user.displayName}</Text>
+                        <Text style={[styles.text, styles.body]}>{this.props.annotation.text}</Text>
+                    </View>
+
+                    {this.props.annotation.clip && <PlayClipButton
+                        clip={this.props.annotation.clip}
+                    />}
+
+                    <LikeButton style={styles.likeButton}
+                                onPress={this.toggleLike.bind(this)}
+                                liked={this.props.annotation.viewerHasLiked} />
+
+
                 </View>
-
-                {this.props.annotation.clip && <PlayClipButton
-                    clip={this.props.annotation.clip}
-                />}
-
-                <LikeButton style={styles.likeButton}
-                            onPress={this.toggleLike.bind(this)}
-                            liked={this.props.annotation.viewerHasLiked} />
-
-
             </View>
         );
     }

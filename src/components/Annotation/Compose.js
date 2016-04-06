@@ -16,6 +16,14 @@ import colors from '../../colors';
 
 class Compose extends Component {
 
+    static propTypes = {
+        onComment: PropTypes.func
+    };
+
+    static defaultProps = {
+        onComment: () => {}
+    };
+
     state = {
         text: '',
         inputHeight: 24,
@@ -44,6 +52,8 @@ class Compose extends Component {
                 });
                 // Unfocus the keyboard
                 this.refs.input.blur();
+                // Notify parents
+                this.props.onComment();
             },
             onFailure: (transaction) => {
                 let error = transaction.getError();

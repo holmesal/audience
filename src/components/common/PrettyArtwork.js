@@ -1,6 +1,7 @@
 import React, {
     Animated,
     Component,
+    Dimensions,
     Image,
     PropTypes,
     StyleSheet,
@@ -15,6 +16,8 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
+
+const windowWidth = Dimensions.get('window').width;
 
 class PrettyArtwork extends Component {
 
@@ -50,7 +53,7 @@ class PrettyArtwork extends Component {
         return (
             <Animated.View style={{opacity: this.state.visibility}}>
                 <Image style={styles.image} source={{uri: this.props.podcast.artwork}} onLoad={this.handleLoad.bind(this)} />
-                <Surface width={200} height={200}>
+                <Surface width={windowWidth} height={windowWidth}>
                     <Blur factor={2} passes={8}>
                         {this.props.podcast.artwork}
                     </Blur>

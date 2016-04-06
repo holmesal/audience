@@ -22,7 +22,8 @@ class AnnotationView extends Component {
     static defaultProps = {};
 
     state = {
-        keyboardHeight: new Animated.Value(0)
+        keyboardHeight: new Animated.Value(0),
+        contentSize: 0
     };
 
     componentWillMount() {
@@ -51,31 +52,40 @@ class AnnotationView extends Component {
         }).start();
     }
 
+    scrollToBottom() {
+        this.refs.scrollView.scrollTo({y: this.state.contentSize});
+    }
+
     render() {
         console.info(this.props);
         return (
             <Animated.View style={[styles.wrapper, {transform: [{translateY: this.state.keyboardHeight}]}]}>
                 <ScrollView style={styles.scroll}
+                            ref="scrollView"
                             stickyHeaderIndices={[]}
+                            onContentSizeChange={contentSize => this.setState({contentSize})}
                             contentContainerStyle={styles.scrollContent}>
                     <CompactAnnotation annotation={this.props.annotation} />
                     <CommentList annotation={this.props.annotation} />
                 </ScrollView>
-                <Compose annotation={this.props.annotation} />
+                <Compose annotation={this.props.annotation}
+                         onComment={this.scrollToBottom.bind(this)} />
             </Animated.View>
         );
     }
 }
 
+//const paddingTop = 100;
 let styles = StyleSheet.create({
     wrapper: {
         flex: 1
     },
     scroll: {
-        flex: 1
+        flex: 1,
+        //marginTop: 100
     },
     scrollContent: {
-        paddingTop: 100
+        //paddingTop
     }
 });
 
