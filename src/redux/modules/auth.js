@@ -88,7 +88,6 @@ export const checkLogin = () => {
                     // Update the auth token relay sends with requests
                     updateRelayAuthHeader(credentials.tokenString);
                     // Now that we're logged in, send our onesignal playerId to the backend
-                    console.dir(RemoteNotifications)
                     RemoteNotifications.updatePlayerId();
                 }
             } else {
