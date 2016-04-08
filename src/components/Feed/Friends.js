@@ -15,7 +15,7 @@ import DebugView from '../common/DebugView';
 import FeedItem from './FeedItem';
 import FeedListView from './FeedListView';
 
-const ACTIVITY_ITEMS_PER_PAGE = 2;
+const ACTIVITY_ITEMS_PER_PAGE = 20;
 
 class FriendsFeed extends Component {
 

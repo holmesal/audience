@@ -42,10 +42,6 @@ export default class FeedListView extends Component {
         }
     }
 
-    refresh() {
-
-    }
-
     componentWillReceiveProps(nextProps) {
         if (this.props.activity != nextProps.activity) {
             console.info('list of activity items changed!', this.props.activity);
@@ -107,6 +103,9 @@ export default class FeedListView extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         flex: 1
+    },
+    scrollContent: {
+        paddingTop: 20
     }
 });
 

@@ -18,14 +18,16 @@ class Feed extends Component {
 
     render() {
         return (
-            <ScrollableTabView
-                tabBarUnderlineColor={colors.attention}
-                tabBarActiveTextColor={colors.white}
-                tabBarInactiveTextColor={colors.grey}
-            >
-                <Friends viewer={this.props.viewer} tabLabel="Friends Only" />
-                <Global viewer={this.props.viewer} tabLabel="Everyone" />
-            </ScrollableTabView>
+            <View style={styles.wrapper}>
+                <ScrollableTabView
+                    tabBarUnderlineColor={colors.lightGrey}
+                    tabBarActiveTextColor={colors.white}
+                    tabBarInactiveTextColor={colors.grey}
+                >
+                    <Friends viewer={this.props.viewer} tabLabel="Friends Only" />
+                    <Global viewer={this.props.viewer} tabLabel="Everyone" />
+                </ScrollableTabView>
+            </View>
         );
     }
 }
@@ -33,7 +35,7 @@ class Feed extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         flex: 1,
-        paddingTop: 40
+        paddingTop: 20
     }
 });
 

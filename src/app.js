@@ -31,7 +31,7 @@ import colors from './colors';
 import Auth from './components/auth/Auth';
 
 // Ignore some warnings
-console.ignoredYellowBox = ['Possible Unhandled Promise Rejection', 'Sticky header index 0'];
+console.ignoredYellowBox = ['Possible Unhandled Promise Rejection', 'Sticky header index 0', 'Warning: ScrollView doesn\'t take rejection well'];
 
 // Initialize mixpanel
 if (__DEV__) {
