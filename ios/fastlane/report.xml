@@ -3,32 +3,32 @@
   <testsuite name="fastlane.lanes">
     
       
-      <testcase classname="fastlane.lanes" name="0: Verifying required fastlane version" time="0.000573">
+      <testcase classname="fastlane.lanes" name="0: Verifying required fastlane version" time="0.000592">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.000261">
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.000254">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: ./build.sh" time="49.151504">
+      <testcase classname="fastlane.lanes" name="2: ./build.sh" time="497.796479">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: gym" time="239.659908">
+      <testcase classname="fastlane.lanes" name="3: gym" time="6882.071321">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: pilot" time="66.916025">
+      <testcase classname="fastlane.lanes" name="4: pilot" time="243.01928">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: slack" time="0.810778">
+      <testcase classname="fastlane.lanes" name="5: slack" time="2.287529">
         
       </testcase>
     
