@@ -30,15 +30,17 @@ class PrettyArtwork extends Component {
         console.info('loaded image', ev.nativeEvent, image)
         ColorCube.getColors(this.props.podcast.artwork, (err, colors) => {
             console.info('got colors: ', colors);
-            let dom = colors[0];
-            let rgb = dom.split(',').map(x => parseFloat(x) * 255);
-            console.info(rgb);
-            this.setState({
-                dominantColor: rgb
-            });
-            Animated.spring(this.state.visibility, {
-                toValue: 1
-            }).start();
+            if (colors.length > 0) {
+                let dom = colors[0];
+                let rgb = dom.split(',').map(x => parseFloat(x) * 255);
+                console.info(rgb);
+                this.setState({
+                    dominantColor: rgb
+                });
+                Animated.spring(this.state.visibility, {
+                    toValue: 1
+                }).start();
+            }
         })
     }
 

@@ -133,11 +133,14 @@ let styles = StyleSheet.create({
 });
 
 export default Relay.createContainer(Discover, {
+    initialVariables: {
+        first: 100
+    },
     fragments: {
         viewer: () => Relay.QL`
         fragment on User {
             id
-            friendActivity {
+            friendActivity(first:$first) {
                 edges {
                     node {
                         __typename

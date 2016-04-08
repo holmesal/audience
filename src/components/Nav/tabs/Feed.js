@@ -9,7 +9,7 @@ import React, {
 } from 'react-native';
 
 import DebugView from '../../common/DebugView';
-import DiscoverRoot from '../../Discover/DiscoverRoot';
+import FeedRoot from '../../Feed/FeedRoot';
 
 const {
     Reducer
@@ -37,7 +37,7 @@ export default class Feed extends Component {
     render() {
         //console.info('[FeedTab] rendering!', this.props);
         return (
-            <DiscoverRoot />
+            <FeedRoot />
         );
     }
 }
