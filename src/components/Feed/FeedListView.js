@@ -105,7 +105,9 @@ let styles = StyleSheet.create({
         flex: 1
     },
     scrollContent: {
-        paddingTop: 20
+        paddingTop: 20,
+        paddingLeft: 8,
+        paddingRight: 8
     }
 });
 

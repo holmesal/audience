@@ -83,3 +83,22 @@ export class MetaText extends Component {
         );
     }
 }
+
+export class BoldCaps extends Component {
+
+    render() {
+        return (
+            <Text {...this.props} style={[
+                {
+                    color: colors.white,
+                    backgroundColor: 'transparent',
+                    fontFamily: 'System',
+                    fontWeight: '700',
+                    fontSize: 10,
+                    letterSpacing: 1.85
+                },
+                this.props.style
+            ]}>{this.props.children}</Text>
+        );
+    }
+}

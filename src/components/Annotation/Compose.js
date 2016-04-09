@@ -13,6 +13,7 @@ import Relay from 'react-relay';
 import CommentOnAnnotationMutation from '../../mutations/CommentOnAnnotation';
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
+import emojione from 'emojione';
 
 class Compose extends Component {
 
@@ -37,9 +38,11 @@ class Compose extends Component {
 
     addComment() {
         if (this.state.text.length < 1) return false;
+        const emojified = emojione.toShort(this.state.text);
+        console.info(`${this.state.text} ---> (emojify) ---> ${emojified}`);
         let mutation = new CommentOnAnnotationMutation({
             annotation: this.props.annotation,
-            text: this.state.text
+            text: emojified
         });
         // Commit the update
         Relay.Store.commitUpdate(mutation, {

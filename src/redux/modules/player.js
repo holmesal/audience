@@ -132,6 +132,15 @@ export const playEpisode = (episodeId, startTime) => {
             dispatch(updatePlaying(true));
             // Update the duration to null
             dispatch(updateDuration(null));
+        } else {
+            if (episodeId) {
+                // We were asked to play an episode that is already playing, so show the player
+                dispatch(showPlayer());
+            }
+            //if (startTime) {
+            //    // If startTime was provided, then seek to it
+            //    dispatch()
+            //}
         }
 
         // Either way, if a startTime is passed we should seek to it

@@ -10,6 +10,7 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 import AnnotateEpisodeMutation from '../../mutations/AnnotateEpisode';
+import emojione from 'emojione';
 import store from '../../redux/create';
 import {currentTime$} from '../../redux/modules/player';
 import colors from '../../colors';
@@ -29,11 +30,14 @@ class Compose extends Component {
         let currentTime = currentTime$(store.getState());
         console.info(this.state.text, currentTime);
 
+        const emojified = emojione.toShort(this.state.text);
+        console.info(`${this.state.text} ---> (emojify) ---> ${emojified}`);
+
         // Create the mutation
         let mutation = new AnnotateEpisodeMutation({
             episode: this.props.episode,
             time: currentTime,
-            text: this.state.text
+            text: emojified
         });
 
         // Commit the update

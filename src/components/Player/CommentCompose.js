@@ -12,6 +12,7 @@ import React, {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import colors from '../../colors';
+import emojione from 'emojione';
 import Relay from 'react-relay';
 import AnnotateEpisodeMutation from '../../mutations/AnnotateEpisode';
 import Mixpanel from 'react-native-mixpanel';
@@ -70,11 +71,14 @@ class CommentCompose extends Component {
         let currentTime = this.state.currentTime;
         console.info(this.state.text, currentTime);
 
+        const emojified = emojione.toShort(this.state.text);
+        console.info(`${this.state.text} ---> (emojify) ---> ${emojified}`);
+
         // Create the mutation
         let mutation = new AnnotateEpisodeMutation({
             episode: this.props.episode,
             time: currentTime,
-            text: this.state.text
+            text: emojified
         });
 
         // Commit the update

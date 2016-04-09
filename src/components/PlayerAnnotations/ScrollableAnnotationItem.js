@@ -15,7 +15,7 @@ import React, {
 import Relay from 'react-relay';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from '../../colors';
-import emoji from 'node-emoji';
+import emojione from 'emojione';
 import LikeButton from '../common/LikeButton';
 import {getTintForUser, tintOpacity} from '../../utils/tints';
 import {getViewerId} from '../../utils/relay';
@@ -45,7 +45,7 @@ export default class ScrollableAnnotationItem extends Component {
         PushNotificationIOS.cancelAllLocalNotifications();
 
         //console.info('showing notificaton!');
-        let alertBody = `${this.props.annotation.user.displayName.split(' ')[0]}: ${emoji.emojify(this.props.annotation.text)}`;
+        let alertBody = `${this.props.annotation.user.displayName.split(' ')[0]}: ${emojione.shortnameToUnicode(this.props.annotation.text)}`;
         PushNotificationIOS.presentLocalNotification({
             alertBody,
             userInfo: {
@@ -160,7 +160,7 @@ export default class ScrollableAnnotationItem extends Component {
                                 }]}
                             />
                         </Image>
-                        <Text style={styles.text} onLayout={this.handleTextLayout.bind(this)}>{emoji.emojify(this.props.annotation.text)}</Text>
+                        <Text style={styles.text} onLayout={this.handleTextLayout.bind(this)}>{emojione.shortnameToUnicode(this.props.annotation.text)}</Text>
                     </TouchableOpacity>
                 </View>
             </Animated.View>

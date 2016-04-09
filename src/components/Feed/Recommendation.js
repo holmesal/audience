@@ -28,7 +28,9 @@ class Recommendation extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1
+        flex: 1,
+        marginTop: 20,
+        marginBottom: 20
     }
 });
 

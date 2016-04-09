@@ -7,71 +7,43 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-
+import emojione from 'emojione';
 import PlayClipButton from './PlayClipButton';
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
 import FacebookAvatar from '../common/FacebookAvatar';
-import LikeAnnotationMutation from '../../mutations/LikeAnnotation';
 import LikeButton from '../common/LikeButton';
 import PrettyArtwork from '../common/PrettyArtwork';
+import ActionRow from './ActionRow';
+import InfoRow from './InfoRow';
 
 class CompactAnnotation extends Component {
 
-    state = {
-        inFlight: false
-    };
-
-    toggleLike() {
-        // Bail if in-progress
-        if (this.state.inFlight) return;
-        // Create mutation
-        const mutation = new LikeAnnotationMutation({
-            annotation: this.props.annotation
-        });
-        // Commit the update
-        Relay.Store.commitUpdate(mutation, {
-            onSuccess: (data) => {
-                console.info('successfully liked annotation!', data);
-                // Clear the text
-                this.setState({inFlight: false});
-            },
-            onFailure: (transaction) => {
-                let error = transaction.getError();
-                console.error(error);
-                console.info(transaction);
-                alert('Error unliking this annotation :-(');
-                //this.refs.input.focus();
-                this.setState({inFlight: false});
-            }
-        });
-        this.setState({inFlight: true});
-    }
-
     render() {
+        const onlyEmojiStyles = this.props.annotation.text.replace(/ *\:[^)]*\: */g, "").length === 0 ? {fontSize: 40, letterSpacing: 4} : {};
         return (
-            <View>
-                <PrettyArtwork podcast={this.props.annotation.episode.podcast} />
-                <View style={styles.wrapper}>
+            <View style={styles.wrapper}>
+                <PrettyArtwork style={styles.background} podcast={this.props.annotation.episode.podcast} />
 
-
-                    <FacebookAvatar user={this.props.annotation.user} />
-
-                    <View style={styles.textWrapper}>
-                        <Text style={[styles.text, styles.name]}>{this.props.annotation.user.displayName}</Text>
-                        <Text style={[styles.text, styles.body]}>{this.props.annotation.text}</Text>
-                    </View>
-
-                    {this.props.annotation.clip && <PlayClipButton
-                        clip={this.props.annotation.clip}
-                    />}
-
-                    <LikeButton style={styles.likeButton}
-                                onPress={this.toggleLike.bind(this)}
-                                liked={this.props.annotation.viewerHasLiked} />
-
-
+                <View style={styles.avatarWrapper}>
+                    <FacebookAvatar
+                        size={60}
+                        style={styles.avatar}
+                        user={this.props.annotation.user}
+                    />
                 </View>
+
+                <Text style={[styles.text, styles.name]}>{this.props.annotation.user.displayName}</Text>
+                <Text style={[styles.text, styles.body, onlyEmojiStyles]}>{emojione.shortnameToUnicode(this.props.annotation.text)}</Text>
+
+                {this.props.annotation.clip && <PlayClipButton
+                    clip={this.props.annotation.clip}
+                />}
+
+                <ActionRow annotation={this.props.annotation}/>
+
+                <InfoRow annotation={this.props.annotation} />
+
             </View>
         );
     }
@@ -79,10 +51,17 @@ class CompactAnnotation extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        flexDirection: 'row',
-        backgroundColor: colors.darkGreyLightContrast,
-        paddingLeft: 12,
-        alignItems: 'center'
+        //flexDirection: 'row',
+        //backgroundColor: colors.darkGreyLightContrast,
+        //paddingLeft: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'stretch',
+        //flex: 1,
+        //position: 'relative',
+        //height: 200,
+        marginTop: 60,
+        paddingTop: 50
     },
 
     textWrapper: {
@@ -91,10 +70,39 @@ let styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'System',
-        color: colors.lightGrey
+        color: colors.lightGrey,
+        backgroundColor: 'transparent',
+        fontSize: 14,
+        fontWeight: '400'
     },
     name: {
         fontWeight: '500'
+    },
+    body: {
+        fontSize: 22,
+        color: colors.lighterGrey,
+        marginTop: 12,
+        paddingLeft: 4,
+        paddingRight: 4
+    },
+    background: {
+        //position: 'absolute',
+        //top: 0,
+        //left: 0,
+        //bottom: 0,
+        //right: 0
+    },
+
+    avatarWrapper: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: -18,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    avatar: {
+
     }
 });
 
@@ -104,8 +112,8 @@ export default Relay.createContainer(CompactAnnotation, {
             fragment on Annotation {
                 id
                 text
-                viewerHasLiked
-                ${LikeAnnotationMutation.getFragment('annotation')}
+                ${ActionRow.getFragment('annotation')}
+                ${InfoRow.getFragment('annotation')}
                 user {
                     displayName
                     ${FacebookAvatar.getFragment('user')}

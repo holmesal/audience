@@ -15,7 +15,7 @@ import PodcastInfoRoot from '../../PodcastInfo/PodcastInfoRoot';
 const {
     AnimatedView,
     CardStack,
-    Reducer,
+    //Reducer,
     StateUtils
 } = NavigationExperimental;
 

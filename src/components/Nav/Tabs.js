@@ -41,18 +41,19 @@ export const TabsReducer = Reducer.TabsReducer({
 export default class Tabs extends Component {
 
     renderScene(navigationState) {
+        const navState = navigationState.scene.navigationState;
         //console.info('[Tabs] rendering scene with navigationState: ', navigationState);
-        switch (navigationState.key) {
+        switch (navState.key) {
             case FeedTabKey:
-                return <FeedTab key={FeedTabKey} navigationState={navigationState}/>;
+                return <FeedTab key={FeedTabKey} navigationState={navState}/>;
             case ShowsTabKey:
-                return <ShowsTab key={ShowsTabKey} navigationState={navigationState}/>;
+                return <ShowsTab key={ShowsTabKey} navigationState={navState}/>;
             case SearchTabKey:
-                return <SearchTab key={SearchTabKey} navigationState={navigationState}/>;
+                return <SearchTab key={SearchTabKey} navigationState={navState}/>;
             case ViewerTabKey:
-                return <ViewerTab key={ViewerTabKey} navigationState={navigationState}/>;
+                return <ViewerTab key={ViewerTabKey} navigationState={navState}/>;
             default:
-                console.warn('[Tabs] could not render scene for key: ', navigationState.key);
+                console.warn('[Tabs] could not render scene for key: ', navState.key, navState, navigationState);
                 return <View />
         }
     }
