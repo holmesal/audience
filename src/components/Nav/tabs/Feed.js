@@ -11,6 +11,7 @@ import React, {
 import DebugView from '../../common/DebugView';
 import FeedRoot from '../../Feed/FeedRoot';
 import PodcastInfoRoot from '../../PodcastInfo/PodcastInfoRoot';
+import AnnotationRoot from '../../Annotation/AnnotationRoot';
 
 const {
     //Reducer,
@@ -21,11 +22,17 @@ import StackReducer from '../StackReducer'
 
 export const FeedTabKey = 'FeedTab';
 
-const SHOW_SHOW_INFO = 'feedTab/showShowInfo';
+const SHOW_SHOW_INFO = 'feedTab.showShowInfo';
 export const showShowInfo = showId => ({
     type: SHOW_SHOW_INFO,
     showId
 });
+
+//const SHOW_ANNOTATION = 'feedTab.showAnnotation';
+//export const showAnnotation = annotationId => ({
+//    type: SHOW_ANNOTATION,
+//    annotationId
+//});
 
 export const FeedTabReducer = StackReducer({
     customBackActions: ['NestedBack'],
@@ -34,6 +41,8 @@ export const FeedTabReducer = StackReducer({
         switch (action.type) {
             case SHOW_SHOW_INFO:
                 return lastState => lastState || {key: `ShowInfo-${action.showId}`, type: 'ShowInfo', showId: action.showId };
+            //case SHOW_ANNOTATION:
+            //    return lastState => lastState || {key: `Annotation-${action.annotationId}`, type: 'Annotation', annotationId: action.annotationId };
         }
         return null;
     },
@@ -62,6 +71,8 @@ export default class Feed extends Component {
                 return <FeedRoot key={key} />;
             case 'ShowInfo':
                 return <PodcastInfoRoot key={key} podcastId={props.scene.navigationState.showId} />;
+            //case 'Annotation':
+            //    return <AnnotationRoot key={key} annotationId={props.scene.navigationState.annotationId} />;
             default:
                 console.warn('[FeedTab] could not render scene for key: ', key);
                 return <View />;

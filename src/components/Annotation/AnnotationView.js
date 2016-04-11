@@ -3,17 +3,24 @@ import React, {
     Component,
     DeviceEventEmitter,
     Image,
+    NavigationExperimental,
     PropTypes,
     ScrollView,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import Relay from 'react-relay';
-
+import Icon from 'react-native-vector-icons/Ionicons';
+import colors from '../../colors';
 import CompactAnnotation from './CompactAnnotation';
 import CommentList from './CommentList';
 import Compose from './Compose';
+
+const {
+    Container: NavigationContainer
+} = NavigationExperimental;
 
 class AnnotationView extends Component {
 
@@ -56,21 +63,35 @@ class AnnotationView extends Component {
         this.refs.scrollView.scrollTo({y: this.state.contentSize});
     }
 
+    goBack() {
+        this.props.onNavigate({
+            type: 'BackAction'
+        });
+    }
+
     render() {
-        console.info(this.props);
         return (
-            <Animated.View style={[styles.wrapper, {transform: [{translateY: this.state.keyboardHeight}]}]}>
-                <ScrollView style={styles.scroll}
-                            ref="scrollView"
-                            stickyHeaderIndices={[]}
-                            onContentSizeChange={contentSize => this.setState({contentSize})}
-                            contentContainerStyle={styles.scrollContent}>
-                    <CompactAnnotation annotation={this.props.annotation} />
-                    <CommentList annotation={this.props.annotation} />
-                </ScrollView>
-                <Compose annotation={this.props.annotation}
-                         onComment={this.scrollToBottom.bind(this)} />
-            </Animated.View>
+            <View style={styles.wrapper}>
+                <Animated.View style={[styles.wrapper, {transform: [{translateY: this.state.keyboardHeight}]}]}>
+                    <ScrollView style={styles.scroll}
+                                ref="scrollView"
+                                stickyHeaderIndices={[]}
+                                onContentSizeChange={contentSize => this.setState({contentSize})}
+                                contentContainerStyle={styles.scrollContent}>
+                        <CompactAnnotation annotation={this.props.annotation} />
+                        <CommentList annotation={this.props.annotation} />
+                    </ScrollView>
+                    <Compose annotation={this.props.annotation}
+                             onComment={this.scrollToBottom.bind(this)}
+                             autoFocus={this.props.focusInput}
+                    />
+                </Animated.View>
+                <TouchableOpacity style={styles.backButton}
+                                  onPress={this.goBack.bind(this)}
+                                  activeOpacity={0.8}>
+                    <Icon name="ios-arrow-left" color={colors.lightGrey} size={32} />
+                </TouchableOpacity>
+            </View>
         );
     }
 }
@@ -86,10 +107,22 @@ let styles = StyleSheet.create({
     },
     scrollContent: {
         //paddingTop
+    },
+    backButton: {
+        height: 60,
+        width: 60,
+        backgroundColor: 'transparent',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });
 
-export default Relay.createContainer(AnnotationView, {
+const contained = NavigationContainer.create(AnnotationView);
+
+export default Relay.createContainer(contained, {
     fragments: {
         annotation: () => Relay.QL`
             fragment on Annotation {

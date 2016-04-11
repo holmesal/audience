@@ -92,6 +92,7 @@ class Compose extends Component {
                            multiline
                            ref="input"
                            value={this.state.text}
+                           autoFocus={this.props.autoFocus}
                 />
                 {this.renderSendButton()}
                 {this.state.inFlight && <View style={styles.cover} />}

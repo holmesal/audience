@@ -46,10 +46,6 @@ class ActionRow extends Component {
         this.setState({inFlight: true});
     }
 
-    addComment() {
-
-    }
-
     shareAnnotation() {
         const url = annotationShareLink(this.props.annotation.id);
         ActionSheetIOS.showShareActionSheetWithOptions({
@@ -70,7 +66,7 @@ class ActionRow extends Component {
         return (
             <View style={styles.wrapper}>
                 <ActionRowButton onPress={this.toggleLike.bind(this)} icon={likeIcon} iconColor={likeColor} label="LIKE" />
-                <ActionRowButton onPress={this.addComment.bind(this)} icon="chatbox-working" label="COMMENT" />
+                <ActionRowButton onPress={this.props.onCommentPress} icon="chatbox-working" label="COMMENT" />
                 <ActionRowButton onPress={this.shareAnnotation.bind(this)} icon="reply" label="SHARE" />
             </View>
         );

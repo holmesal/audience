@@ -18,7 +18,7 @@ export default class AnnotationRoot extends Component {
 
     render() {
         //const annotationId = 'QW5ub3RhdGlvbjoxMzM=';
-        const {annotationId} = this.props;
+        const {annotationId, focusInput} = this.props;
         //const {annotationId} = this.props;
         console.info('annotation root component sees annotation id: ', annotationId);
 
@@ -39,6 +39,7 @@ export default class AnnotationRoot extends Component {
                         <RelayError error={error} retry={retry} />
                     );
                 }}
+                renderFetched={data => <AnnotationView {...data} focusInput={focusInput} />}
                 renderLoading={() => <View />}
             />
         )

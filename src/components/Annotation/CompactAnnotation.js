@@ -40,7 +40,7 @@ class CompactAnnotation extends Component {
                     clip={this.props.annotation.clip}
                 />}
 
-                <ActionRow annotation={this.props.annotation}/>
+                <ActionRow annotation={this.props.annotation} onCommentPress={this.props.onCommentPress}/>
 
                 <InfoRow annotation={this.props.annotation} />
 

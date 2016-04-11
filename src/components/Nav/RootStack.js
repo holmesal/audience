@@ -38,9 +38,10 @@ export const showTabs = () => ({
 //});
 
 const SHOW_ANNOTATION = 'rootStack.showAnnotation';
-export const showAnnotation = annotationId => ({
+export const showAnnotation = (annotationId, focusInput=false) => ({
     type: SHOW_ANNOTATION,
-    annotationId
+    annotationId,
+    focusInput
 });
 
 export const reducer = Reducer.StackReducer({
@@ -52,7 +53,7 @@ export const reducer = Reducer.StackReducer({
             //case SHOW_PLAYER:
             //    return state => state || {key: 'Player'}; // TODO - PlayerReducer
             case SHOW_ANNOTATION:
-                return state => state || {key: `Annotation-${action.annotationId}`, type: 'Annotation', annotationId: action.annotationId};
+                return state => state || {key: `Annotation-${action.annotationId}`, type: 'Annotation', annotationId: action.annotationId, focusInput: action.focusInput};
             //default:
             //    console.warn('[RootStack] Could not find pushed reducer for action: ', action);
             //    return state => state;
@@ -153,11 +154,12 @@ export default class RootStack extends Component {
             //         />
             //    );
             case 'Annotation':
+                const {annotationId, focusInput} = props.scene.navigationState;
                 return (
                     <Card
                         {...props}
                         key="annotation"
-                        renderScene={() => <AnnotationRoot annotationId={props.scene.navigationState.annotationId} />}
+                        renderScene={() => <AnnotationRoot annotationId={annotationId} focusInput={focusInput} />}
                     />
                 );
             default:
