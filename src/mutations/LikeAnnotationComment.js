@@ -8,6 +8,7 @@ export default class LikeAnnotationCommentMutation extends Relay.Mutation {
             fragment on AnnotationComment {
                 id
                 viewerHasLiked
+                likeCount
             }
         `
     };
@@ -30,12 +31,14 @@ export default class LikeAnnotationCommentMutation extends Relay.Mutation {
         fragment on UnlikeAnnotationCommentPayload {
             annotationComment {
                 viewerHasLiked
+                likeCount
             }
         }` :
         Relay.QL`
         fragment on LikeAnnotationCommentPayload {
             annotationComment {
                 viewerHasLiked
+                likeCount
             }
         }`;
     }
@@ -50,10 +53,12 @@ export default class LikeAnnotationCommentMutation extends Relay.Mutation {
     }
 
     getOptimisticResponse() {
+        const {viewerHasLiked} = this.props.annotationComment;
         return {
             annotationComment: {
                 id: this.props.annotationComment.id,
-                viewerHasLiked: !this.props.annotationComment.viewerHasLiked
+                viewerHasLiked: !viewerHasLiked,
+                likeCount: viewerHasLiked ? this.props.annotationComment.likeCount - 1 : this.props.annotationComment.likeCount + 1
             }
         }
     }

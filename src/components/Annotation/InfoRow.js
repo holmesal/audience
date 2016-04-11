@@ -35,7 +35,7 @@ class InfoRow extends Component {
                                bottom={this.props.annotation.episode.title}
                                onPress={this.playEpisode.bind(this)}
                 />
-                <InfoRowButton top="From the podcast"
+                <InfoRowButton top="From the show"
                                bottom={this.props.annotation.episode.podcast.name}
                                onPress={this.showPodcast.bind(this)}
                 />

@@ -45,19 +45,29 @@ class AnnotationComment extends Component {
         this.setState({inFlight: true});
     }
     
-
+    renderLikeCount() {
+        const { likeCount } = this.props.annotationComment;
+        if (likeCount > 0) {
+            return <Text style={styles.likeCount}>{likeCount} like{likeCount > 1 ? 's' : ''}</Text>
+        }
+    }
 
     render() {
         return (
             <View style={styles.wrapper}>
-                <FacebookAvatar user={this.props.annotationComment.user} size={24} />
+                <FacebookAvatar user={this.props.annotationComment.user} size={54} />
+                <View style={styles.triangle} />
                 <View style={styles.content}>
                     <Text style={[styles.text, styles.name]}>{this.props.annotationComment.user.displayName}</Text>
                     <Text style={[styles.text]}>{this.props.annotationComment.text}</Text>
+                    <View style={styles.likeRow}>
+                        <LikeButton style={styles.likeButton}
+                                    caption
+                                    onPress={this.toggleLike.bind(this)}
+                                    liked={this.props.annotationComment.viewerHasLiked}/>
+                        {this.renderLikeCount()}
+                    </View>
                 </View>
-                <LikeButton style={styles.likeButton}
-                            onPress={this.toggleLike.bind(this)}
-                            liked={this.props.annotationComment.viewerHasLiked}/>
             </View>
         );
     }
@@ -68,28 +78,61 @@ let styles = StyleSheet.create({
         //flex: 1
         //height: 120,
         flexDirection: 'row',
-        paddingLeft: 20,
-        paddingTop: 22,
-        alignItems: 'flex-start'
+        //paddingLeft: 20,
+        marginTop: 4,
+        alignItems: 'flex-start',
+        marginBottom: 4
+    },
+    triangle: {
+        width: 0,
+        height: 0,
+        marginLeft: 2,
+        //backgroundColor: colors.darkGreyLightContrast,
+        backgroundColor: 'transparent',
+        borderRightWidth: 6,
+        borderTopWidth: 0,
+        borderBottomWidth: 8,
+        borderLeftWidth: 0,
+        borderRightColor: colors.darkGreyLightContrast,
+        borderTopColor: 'transparent',
+        borderBottomColor: 'transparent',
+        borderLeftColor: 'transparent'
     },
     content: {
-        flex: 1
+        flex: 1,
+        backgroundColor: colors.darkGreyLightContrast,
+        padding: 12,
+        borderRadius: 2
     },
     text: {
         flexDirection: 'column',
-        marginLeft: 20,
-        fontSize: 16,
+        //marginLeft: 20,
+        fontSize: 14,
+        lineHeight: 16,
+        marginBottom: 8,
         color: colors.lightGrey
     },
     name: {
         fontWeight: '600'
     },
+    likeRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        //justifyContent: 'center',
+        //backgroundColor: 'red'
+    },
     likeButton: {
-        //backgroundColor: 'red',
-        paddingRight: 12,
-        paddingLeft: 12,
-        paddingTop: 4,
-        height: 60
+        padding: 0,
+        paddingTop: 8,
+        flex: 1
+        //paddingRight: 12,
+        //paddingLeft: 12,
+        //paddingTop: 4,
+        //height: 60
+    },
+    likeCount: {
+        color: colors.lightGrey,
+        marginBottom: -6
     }
 });
 
@@ -99,6 +142,7 @@ export default Relay.createContainer(AnnotationComment, {
             fragment on AnnotationComment {
                 id
                 text
+                likeCount
                 viewerHasLiked
                 ${LikeAnnotationCommentMutation.getFragment('annotationComment')}
                 user {

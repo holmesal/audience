@@ -35,7 +35,7 @@ class Annotation extends Component {
     renderMoreCommentsButton() {
         const {commentCount} = this.props.annotationActivity.annotation;
         if (commentCount > 1) {
-            return <ShowMoreCommentsButton moreCount={commentCount-1} onPress={ev => this.showAnnotation(false)} />
+            return <ShowMoreCommentsButton style={styles.moreComments} moreCount={commentCount-1} onPress={ev => this.showAnnotation(false)} />
         }
     }
 
@@ -62,6 +62,9 @@ class Annotation extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         flex: 1
+    },
+    moreComments: {
+        marginLeft: 62
     }
 });
 

@@ -9,6 +9,7 @@ import React, {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from '../../colors';
+import { BoldCaps } from '../../type';
 
 export default class LikeButton extends Component {
 
@@ -23,9 +24,16 @@ export default class LikeButton extends Component {
     };
 
     renderIcon() {
+        const iconSize = this.props.caption ? 20 : 28;
         return this.props.liked ?
             <Icon name="ios-heart" color={colors.red} size={iconSize}/> :
             <Icon name="ios-heart-outline" color={colors.lighterGrey} size={iconSize}/>;
+    }
+
+    renderCaption() {
+        if (this.props.caption) {
+            return <BoldCaps style={styles.text}>LIKE{this.props.liked ? 'D' : ''}</BoldCaps>
+        }
     }
 
     render() {
@@ -33,20 +41,27 @@ export default class LikeButton extends Component {
         return (
             <TouchableOpacity {...this.props} style={[styles.button, this.props.style, debugStyles]}>
                 {this.renderIcon()}
+                {this.renderCaption()}
             </TouchableOpacity>
         );
     }
 }
 
-const iconSize = 28;
 let styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'flex-start',
-        padding: 20
+        flexDirection: 'row',
+        padding: 20,
+        //backgroundColor: 'green'
     },
     debug: {
         borderWidth: 1,
         borderColor: 'red'
+    },
+    text: {
+        color: colors.lightGrey,
+        marginLeft: 8,
+        marginTop: -2
     }
 });

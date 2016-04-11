@@ -180,7 +180,7 @@ export default class RootStack extends Component {
         return (
             <RootContainer style={styles.wrapper}
                            reducer={reducer}
-                           LinkingActionMap={this.handleLink.bind(this)}
+                           linkingActionMap={this.handleLink.bind(this)}
                            ref="rootContainer"
                            renderNavigation={this.renderNavigation.bind(this)}
             />

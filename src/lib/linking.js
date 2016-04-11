@@ -83,10 +83,10 @@ export function handleLink(url) {
 }
 
 //// Listen for deeplinks while app is running
-//Linking.addEventListener('url', (ev) => {
-//    console.info('got url event', ev);
-//    handleLink(ev.url);
-//});
+Linking.addEventListener('url', (ev) => {
+    console.info('linking library got url event', ev);
+    //handleLink(ev.url);
+});
 //
 //// If the app was launched from a deeplink, handle it
 //Linking.getInitialURL().then(url => {
