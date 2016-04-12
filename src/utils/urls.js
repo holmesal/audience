@@ -1,7 +1,7 @@
 import {NativeModules} from 'react-native';
 let {MTDebugIP} = NativeModules;
 
-export const USE_STAGING = true;
+export const USE_STAGING = false;
 
 export const DEV_WEB = `http://${MTDebugIP.debugIP}:8082`;
 export const STAGING_WEB = `https://podcastfoo-web-staging.herokuapp.com`;
