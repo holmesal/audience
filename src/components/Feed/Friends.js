@@ -13,7 +13,7 @@ import Relay from 'react-relay';
 
 import DebugView from '../common/DebugView';
 import FeedItem from './FeedItem';
-import FeedListView from './FeedListView';
+import RefreshableListView from '../common/RefreshableListView';
 
 const ACTIVITY_ITEMS_PER_PAGE = 20;
 
@@ -36,9 +36,14 @@ class FriendsFeed extends Component {
         });
     }
 
+    renderItem(edge) {
+        return <FeedItem key={edge.node.id} activity={edge.node} />
+    }
+
     render() {
-        return <FeedListView
-            activity={this.props.viewer.friendActivity}
+        return <RefreshableListView
+            items={this.props.viewer.friendActivity}
+            renderItem={this.renderItem.bind(this)}
             onLoadMore={this.onLoadMore.bind(this)}
             onRefresh={this.onRefresh.bind(this)}
             refreshing={this.state.refreshing}

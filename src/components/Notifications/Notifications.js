@@ -2,22 +2,19 @@ import React, {
     Component,
     Image,
     PropTypes,
-    RefreshControl,
-    ScrollView,
     StyleSheet,
     Text,
     View
 } from 'react-native';
-import _ from 'lodash';
 import Relay from 'react-relay';
-
-import DebugView from '../common/DebugView';
-import FeedItem from './FeedItem';
 import RefreshableListView from '../common/RefreshableListView';
+import DebugView from '../common/DebugView';
+import colors from '../../colors';
+import NotificationItem from './NotificationItem';
 
-const ACTIVITY_ITEMS_PER_PAGE = 20;
+const NOTIFICATIONS_PER_PAGE = 20;
 
-class GlobalFeed extends Component {
+class Feed extends Component {
 
     state = {
         refreshing: false
@@ -25,7 +22,7 @@ class GlobalFeed extends Component {
 
     onLoadMore() {
         this.props.relay.setVariables({
-            first: this.props.relay.variables.first + ACTIVITY_ITEMS_PER_PAGE
+            first: this.props.relay.variables.first + NOTIFICATIONS_PER_PAGE
         });
     }
 
@@ -36,13 +33,13 @@ class GlobalFeed extends Component {
         });
     }
 
-    renderItem(edge) {
-        return <FeedItem key={edge.node.id} activity={edge.node} />
+    renderItem(edge, sectionId, rowId) {
+        return <NotificationItem key={rowId} notification={edge.node} />
     }
 
     render() {
         return <RefreshableListView
-            items={this.props.viewer.globalActivity}
+            items={this.props.viewer.notifications}
             renderItem={this.renderItem.bind(this)}
             onLoadMore={this.onLoadMore.bind(this)}
             onRefresh={this.onRefresh.bind(this)}
@@ -52,25 +49,32 @@ class GlobalFeed extends Component {
     }
 }
 
-export default Relay.createContainer(GlobalFeed, {
+let styles = StyleSheet.create({
+    wrapper: {
+        flex: 1,
+        paddingTop: 20
+    }
+});
+
+export default Relay.createContainer(Feed, {
     initialVariables: {
-        first: ACTIVITY_ITEMS_PER_PAGE
+        first: NOTIFICATIONS_PER_PAGE
     },
     fragments: {
         viewer: () => Relay.QL`
-        fragment on User {
-            id
-            globalActivity(first: $first) {
-                edges {
-                    node {
-                        ${FeedItem.getFragment('activity')}
+            fragment on User {
+                notifications(first:$first) {
+                    edges {
+                        node {
+                            __typename
+                            ${NotificationItem.getFragment('notification')}
+                        }
+                    }
+                    pageInfo {
+                        hasNextPage
                     }
                 }
-                pageInfo {
-                    hasNextPage
-                }
             }
-        }
         `
     }
-});
+})
