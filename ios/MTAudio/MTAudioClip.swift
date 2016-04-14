@@ -139,8 +139,8 @@ class MTAudioClip: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
     // Start or stop the current time emission timer
     self.startOrStopReportingCurrentTime(state);
   }
-  func audioPlayer(audioPlayer: STKAudioPlayer!, didFinishPlayingQueueItemId queueItemId: NSObject!, withReason stopReason: STKAudioPlayerStopReason, andProgress progress: Double, andDuration duration: Double) {
-    print("did finish playing!");
+  func audioPlayer(audioPlayer: STKAudioPlayer, didFinishPlayingQueueItemId queueItemId: NSObject, withReason stopReason: STKAudioPlayerStopReason, andProgress progress: Double, andDuration duration: Double) {
+    print("did finish playing: ", queueItemId, stopReason, progress, duration);
     self.bridge.eventDispatcher.sendAppEventWithName("MTAudioClip.finishedPlaying", body: nil)
   }
   func audioPlayer(audioPlayer: STKAudioPlayer!, unexpectedError errorCode: STKAudioPlayerErrorCode) {

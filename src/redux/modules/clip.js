@@ -1,5 +1,6 @@
 import {createReducer} from 'redux-immutablejs';
 import {createSelector} from 'reselect';
+import {pauseForClip, resumeAfterClip} from './player';
 import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
@@ -45,21 +46,33 @@ export const player$ = createSelector(clipId$, playing$, (clipId, playing) => ({
 /**
  Actions
 */
-export const playClip = (clipId) => ({
-    type: PLAY_CLIP,
-    clipId
-});
+export const playClip = (clipId) => (dispatch, getState) => {
+    dispatch(pauseForClip());
+    dispatch({
+        type: PLAY_CLIP,
+        clipId
+    });
+};
 
-export const resume = () => ({
-    type: UPDATE_PLAYING,
-    playing: true
-});
+export const resume = () => (dispatch, getState) => {
+    dispatch(pauseForClip());
+    dispatch({
+        type: UPDATE_PLAYING,
+        playing: true
+    });
+};
 
-export const pause = () => ({
-    type: UPDATE_PLAYING,
-    playing: false
-});
+export const pause = () => (dispatch, getState) => {
+    dispatch(resumeAfterClip());
+    dispatch({
+        type: UPDATE_PLAYING,
+        playing: false
+    });
+};
 
-export const finishedPlaying = () => ({
-    type: FINISHED_PLAYING
-});
+export const finishedPlaying = () => (dispatch, getState) => {
+    dispatch(resumeAfterClip());
+    dispatch({
+        type: FINISHED_PLAYING
+    });
+};

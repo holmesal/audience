@@ -21,12 +21,15 @@ const SKIP = 'audience/player/SKIP';
 const UPDATE_CHOOSING_EMOJI = 'audience/player/UPDATE_CHOOSING_EMOJI';
 const UPDATE_SENDING_EMOJI = 'audience/player/UPDATE_SENDING_EMOJI';
 const UPDATE_SENDING_COMMENT = 'audience/player/UPDATE_SENDING_COMMENT';
+const PAUSE_FOR_CLIP = 'audience/player/PAUSE_FOR_CLIP';
+const RESUME_AFTER_CLIP = 'audience/player/RESUME_AFTER_CLIP';
 
 const initialState = Immutable.fromJS({
     visible: false,
     episodeId: null, //'RXBpc29kZToyOTAz',
     nextEpisodeId: null, //'RXBpc29kZTo1MTc1',
     playing: false,
+    pausedForClip: false,
     buffering: false,
     duration: null,
     currentTime: null,
@@ -46,6 +49,14 @@ export default createReducer(initialState, {
     [UPDATE_NEXT_EPISODE]: (state, action) => state.set('nextEpisodeId', action.nextEpisodeId),
 
     [UPDATE_PLAYING]: (state, action) => state.set('playing', action.playing),
+    [PAUSE_FOR_CLIP]: (state, action) => state.merge({
+        playing: false,
+        pausedForClip: true
+    }),
+    [RESUME_AFTER_CLIP]: (state, action) => state.merge({
+        playing: true,
+        pausedForClip: false
+    }),
 
     //[UPDATE_BUFFERING]: (state, action) => state.set('buffering', action.buffering),
 
@@ -69,6 +80,7 @@ export const currentTime$ = state => state.getIn(['player', 'currentTime']);
 export const lastTargetTime$ = state => state.getIn(['player', 'lastTargetTime']);
 export const visible$ = state => state.getIn(['player', 'visible']);
 export const playing$ = state => state.getIn(['player', 'playing']);
+export const pausedForClip$ = state => state.getIn(['player', 'pausedForClip']);
 export const buffering$ = state => state.getIn(['player', 'buffering']);
 export const choosingEmoji$ = state => state.getIn(['player', 'choosingEmoji']);
 export const sendingEmoji$ = state => state.getIn(['player', 'sendingEmoji']);
@@ -169,6 +181,28 @@ export const playNextEpisode = () => {
             // is this the right place to do this?
             dispatch(hidePlayer());
             dispatch(playEpisode(null));
+        }
+    }
+};
+
+export const pauseForClip = () => {
+    return (dispatch, getState) => {
+        if (playing$(getState())) {
+            console.info('an episode is currently playing, pausing while a clip plays...');
+            dispatch({
+                type: PAUSE_FOR_CLIP
+            });
+        }
+    }
+};
+
+export const resumeAfterClip = () => {
+    return (dispatch, getState) => {
+        if (pausedForClip$(getState())) {
+            console.info('we were paused for a clip but it has finished playing, so resuming the episode');
+            dispatch({
+                type: RESUME_AFTER_CLIP
+            });
         }
     }
 };

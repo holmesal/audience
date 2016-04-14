@@ -30,7 +30,7 @@ class PlayClipButton extends Component {
 
     componentWillReceiveProps(nextProps) {
         const playing = nextProps.clipId === this.props.clip.id && nextProps.playing;
-        console.info('[ClipId] nextprops: ', nextProps, playing);
+        //console.info('[ClipId] nextprops: ', nextProps, playing);
         this.setState({
             playing
         });
@@ -45,7 +45,10 @@ class PlayClipButton extends Component {
     }
 
     render() {
-        console.info(this.props.clip, this.state.playing);
+        if (this.props.clipId === this.props.clip.id) {
+            console.info(`[${this.props.clip.id}] is rendering: `, this.props);
+        }
+        //console.info(this.props.clip, this.state.playing);
         const {clip} = this.props;
         const clipUrl = `http://s3-us-west-1.amazonaws.com/${BUCKET}/${clip.id}.mp3`;
         // Get duration
