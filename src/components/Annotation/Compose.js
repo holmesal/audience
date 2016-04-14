@@ -15,6 +15,8 @@ import DebugView from '../common/DebugView';
 import colors from '../../colors';
 import emojione from 'emojione';
 
+const defaultInputHeight = 24;
+
 class Compose extends Component {
 
     static propTypes = {
@@ -27,7 +29,7 @@ class Compose extends Component {
 
     state = {
         text: '',
-        inputHeight: 24,
+        inputHeight: defaultInputHeight,
         inFlight: false
     };
 
@@ -51,7 +53,8 @@ class Compose extends Component {
                 // Clear the text
                 this.setState({
                     text: '',
-                    inFlight: false
+                    inFlight: false,
+                    inputHeight: defaultInputHeight
                 });
                 // Unfocus the keyboard
                 this.refs.input.blur();
