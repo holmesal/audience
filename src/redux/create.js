@@ -46,8 +46,8 @@ let finalCreateStore;
 if (__DEV__) {
     finalCreateStore = compose(
         //autoRehydrate(),
-        createStoreWithMiddleware
-        //devTools()
+        createStoreWithMiddleware,
+        devTools()
         //devTools({
         //    hostname: 'http://172.20.10.4',
         //    port: 8000,

@@ -17,7 +17,7 @@ import colors from '../../colors';
 import { BoldCaps } from '../../type';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {MTAudio} from 'NativeModules';
-import AudioStreamIOS from '../Player/AudioStreamIOS';
+import AudioStreamIOS from '../Audio/AudioStreamIOS';
 import moment from 'moment';
 
 class PlayClipButton extends Component {

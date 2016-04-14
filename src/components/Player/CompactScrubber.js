@@ -268,15 +268,15 @@ class CompactScrubber extends Component {
     //    return width / this.state.waveformWidth * this.props.duration;
     //}
 
-    scrollToCurrentTime() {
+    scrollToTime(targetTime) {
         //console.info('scrolling to current time!', this.props.currentTime, this.props.duration, this.state.waveformWidth);
         // This animated scroll will generate some scroll events, so we need to set a flag to ignore them
         this._autoScrolling = true;
 
         // Actually perform the scroll
-        let {currentTime, duration} = this.props;
-        if (currentTime && duration) {
-            let targetX = currentTime / duration * this.state.waveformWidth;
+        let {duration} = this.props;
+        if (targetTime && duration) {
+            let targetX = targetTime / duration * this.state.waveformWidth;
             //console.info('scrolling to: ', targetX, this.props.currentTime, this.props.duration);
             this.refs.scroller.scrollTo({x: targetX});
         }
@@ -288,7 +288,11 @@ class CompactScrubber extends Component {
         // IMPORTANT - if it actually takes longer than this to scroll properly (like when debugging on deive
         // with chrome runtime on laptop over usb or slow wifi) then this isn't enough, causing seek events
         // whcih causes skippy audio
-        }, __DEV__ ? 1000 : 500)
+        }, __DEV__ ? 2000 : 500)
+    }
+
+    scrollToCurrentTime() {
+        this.scrollToTime(this.props.currentTime);
     }
 
     waveformWasTouched() {
@@ -340,6 +344,7 @@ class CompactScrubber extends Component {
             return (<MiniAnnotation user={edge.node.user}
                                     style={[styles.miniAnnotation, {left: edge.left, opacity: edge.opacity}]}
                                     key={edge.node.id}
+                                    //onPress={() => this.scrollToTime(edge.node.time)}
             />);
         });
         this.setState({miniAnnotations})
@@ -466,7 +471,8 @@ let styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         alignSelf: 'stretch',
-        position: 'relative'
+        position: 'relative',
+        //backgroundColor: 'red'
     },
 
     waveformMask: {

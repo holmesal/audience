@@ -309,6 +309,7 @@ class MTAudio: NSObject, STKAudioPlayerDelegate, RCTInvalidating {
   }
   func audioPlayer(audioPlayer: STKAudioPlayer!, didFinishPlayingQueueItemId queueItemId: NSObject!, withReason stopReason: STKAudioPlayerStopReason, andProgress progress: Double, andDuration duration: Double) {
     print("did finish playing!");
+    self.bridge.eventDispatcher.sendAppEventWithName("MTAudio.finishedPlaying", body: nil)
   }
   func audioPlayer(audioPlayer: STKAudioPlayer!, unexpectedError errorCode: STKAudioPlayerErrorCode) {
     print("unexpected error!");

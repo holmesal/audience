@@ -4,6 +4,7 @@ import React, {
     PropTypes,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import Relay from 'react-relay';
@@ -22,7 +23,7 @@ class MiniAnnotation extends Component {
     render() {
         const photoUrl = `http://graph.facebook.com/v2.5/${this.props.user.facebookId}/picture?type=square&height=${height * 2}`;
         return (
-            <View style={[styles.wrapper, this.props.style]}>
+            <TouchableOpacity style={[styles.wrapper, this.props.style]} activeOpacity={0.8} onPressIn={this.props.onPress}>
                 <Image style={styles.image} source={{uri: photoUrl}}>
                     <View
                         style={[styles.tint, {
@@ -34,7 +35,7 @@ class MiniAnnotation extends Component {
                     <View style={styles.line} />
                     <View style={[styles.line, {width: 7, marginTop: 3}]} />
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     }
 }

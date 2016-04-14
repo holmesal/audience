@@ -8,7 +8,7 @@ import React, {
 } from 'react-native';
 import Relay from 'react-relay';
 import {connect} from 'react-redux';
-import {episodePlayer$, resume, updatePlaying, updateCurrentTime, updateDuration, updateLastTargetTime, playNextEpisode} from '../../redux/modules/player.js';
+import {episodePlayer$, resume, updatePlaying, updateCurrentTime, updateDuration, updateLastTargetTime, finish} from '../../redux/modules/player.js';
 import ListenToEpisodeMutation from '../../mutations/ListenToEpisode';
 import {showRecommendNotification} from '../../notifications';
 
@@ -126,7 +126,8 @@ class EpisodePlayer extends Component {
     handleFinish() {
         if (!this._finishLatch) {
             console.info('current episode did finish!');
-            this.props.dispatch(playNextEpisode());
+            //this.props.dispatch(playNextEpisode());
+            this.props.dispatch(finish());
             this._finishLatch = true;
             // Cannot play next again for 5 seconds
             setTimeout(() => this._finishLatch = null, 5000);
@@ -136,6 +137,7 @@ class EpisodePlayer extends Component {
     }
 
     render() {
+        console.info('episodeplayer props: ', this.props);
         return (
             <AudioStreamIOS
                 url={this.props.episode.audioSource}

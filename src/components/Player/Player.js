@@ -21,7 +21,7 @@ import Controls from './Controls';
 //import SocialButtons from './SocialButtons';
 import ShareButton from './ShareButton';
 import CommentCompose from './CommentCompose';
-import EpisodePlayer from './EpisodePlayer';
+import EpisodePlayer from './../Audio/EpisodePlayer';
 import Info from './Info';
 import MiniPlayer from './MiniPlayer';
 

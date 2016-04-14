@@ -23,12 +23,14 @@ const UPDATE_SENDING_EMOJI = 'audience/player/UPDATE_SENDING_EMOJI';
 const UPDATE_SENDING_COMMENT = 'audience/player/UPDATE_SENDING_COMMENT';
 const PAUSE_FOR_CLIP = 'audience/player/PAUSE_FOR_CLIP';
 const RESUME_AFTER_CLIP = 'audience/player/RESUME_AFTER_CLIP';
+const FINISH = 'audience/player/FINISH';
 
 const initialState = Immutable.fromJS({
     visible: false,
     episodeId: null, //'RXBpc29kZToyOTAz',
     nextEpisodeId: null, //'RXBpc29kZTo1MTc1',
     playing: false,
+    finished: false,
     pausedForClip: false,
     buffering: false,
     duration: null,
@@ -56,6 +58,12 @@ export default createReducer(initialState, {
     [RESUME_AFTER_CLIP]: (state, action) => state.merge({
         playing: true,
         pausedForClip: false
+    }),
+
+    [FINISH]: (state, action) => state.merge({
+        playing: false,
+        pausedForClip: false,
+        finished: true
     }),
 
     //[UPDATE_BUFFERING]: (state, action) => state.set('buffering', action.buffering),
@@ -127,10 +135,17 @@ export const commentButton$ = createSelector(sendingComment$, (sendingComment) =
 //}));
 
 // Actions
-export const updateEpisode = (episodeId) => ({
-    type: UPDATE_EPISODE,
-    episodeId
-});
+export const updateEpisode = (episodeId) => {
+    return (dispatch, getState) => {
+        //console.info('updating episode: ', episodeId)
+        //if (!episodeId) dispatch(hidePlayer());
+        dispatch({
+            type: UPDATE_EPISODE,
+            episodeId
+        })
+    };
+};
+
 export const playEpisode = (episodeId, startTime) => {
     return (dispatch, getState) => {
 
@@ -260,6 +275,10 @@ export const updateCurrentTime = (currentTime) => {
         });
     }
 };
+
+export const finish = () => ({
+    type: FINISH
+});
 
 export const updateLastTargetTime = (lastTargetTime) => ({
     type: UPDATE_LAST_TARGET_TIME,
