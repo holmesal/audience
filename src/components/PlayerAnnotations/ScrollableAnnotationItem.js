@@ -187,7 +187,7 @@ let styles = StyleSheet.create({
         overflow: 'hidden',
         transform: [
             {rotateZ: '180deg'}
-        ]
+        ],
         //borderColor: 'green',
         //borderWidth: 1
     },
@@ -195,14 +195,14 @@ let styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 22,
         marginRight: marginRight
-        //height: 80
     },
     likeTouchable: {
         //width: likeTouchableWidth,
         overflow: 'hidden',
+        padding: 0,
         paddingLeft: 12,
         paddingRight: 12,
-        alignSelf: 'stretch',
+        //alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center',
         //backgroundColor: 'orange'
@@ -211,8 +211,6 @@ let styles = StyleSheet.create({
         backgroundColor: 'transparent'
     },
     card: {
-        // uncomment to fix heart positioning
-        //height: 80,
         flex: 1,
         alignItems: 'flex-start',
         flexWrap: 'wrap',
@@ -241,7 +239,7 @@ let styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 22,
         color: colors.darkGrey,
-        flex: 1,
+        flex: 1
 
     }
 });
