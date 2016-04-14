@@ -5,6 +5,7 @@ import player from './player';
 import auth from './auth';
 import tabs from './tabs';
 import lastHeard from './lastHeard';
+import clip from './clip';
 
 export default combineReducers({
     search,
@@ -12,5 +13,6 @@ export default combineReducers({
     player,
     auth,
     tabs,
-    lastHeard
+    lastHeard,
+    clip
 });

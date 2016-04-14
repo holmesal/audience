@@ -38,6 +38,8 @@
 		E20D90E91C76822400C05994 /* Audience.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E20D90E81C767DC400C05994 /* Audience.entitlements */; };
 		E21A36CE1CA0A9BD00E1AF30 /* threadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */; };
 		E222FEBF1CB4E15D00C04AC9 /* libRNGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E222FEBE1CB4E14C00C04AC9 /* libRNGL.a */; };
+		E229CF831CBF23B400A93FF5 /* MTAudioClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = E229CF821CBF23B400A93FF5 /* MTAudioClip.swift */; };
+		E229CFA51CBF248B00A93FF5 /* MTAudioClipBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = E229CFA41CBF248B00A93FF5 /* MTAudioClipBridge.m */; };
 		E23426A41CB0D72E0095499B /* libRCTOneSignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E23426911CB0D7160095499B /* libRCTOneSignal.a */; };
 		E25119ED1CA39D930024B069 /* 15step.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E25119EC1CA39D930024B069 /* 15step.mp3 */; };
 		E25119EE1CA39D9C0024B069 /* 15step.mp3 in Copy test audio file */ = {isa = PBXBuildFile; fileRef = E25119EC1CA39D930024B069 /* 15step.mp3 */; };
@@ -367,6 +369,8 @@
 		E21A36981CA096B000E1AF30 /* PFAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFAudio.swift; sourceTree = "<group>"; };
 		E21A36CD1CA0A9BD00E1AF30 /* threadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = threadHelper.swift; sourceTree = "<group>"; };
 		E222FEB91CB4E14C00C04AC9 /* RNGL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGL.xcodeproj; path = "../node_modules/gl-react-native/ios/RNGL.xcodeproj"; sourceTree = "<group>"; };
+		E229CF821CBF23B400A93FF5 /* MTAudioClip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MTAudioClip.swift; sourceTree = "<group>"; };
+		E229CFA41CBF248B00A93FF5 /* MTAudioClipBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAudioClipBridge.m; sourceTree = "<group>"; };
 		E23426821CB0D7160095499B /* RCTOneSignal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTOneSignal.xcodeproj; path = "../node_modules/react-native-onesignal/ios/RCTOneSignal.xcodeproj"; sourceTree = "<group>"; };
 		E23AF15E1CAA10B9006D7271 /* FreeStreamer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FreeStreamer.xcodeproj; path = "../../../../Downloads/FreeStreamer-master/FreeStreamer/FreeStreamer.xcodeproj"; sourceTree = "<group>"; };
 		E25119EC1CA39D930024B069 /* 15step.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 15step.mp3; sourceTree = "<group>"; };
@@ -825,6 +829,8 @@
 			children = (
 				E2A519771C5AE8A9001546D5 /* MTAudio.swift */,
 				E2A519781C5AE8A9001546D5 /* MTAudioBridge.m */,
+				E229CF821CBF23B400A93FF5 /* MTAudioClip.swift */,
+				E229CFA41CBF248B00A93FF5 /* MTAudioClipBridge.m */,
 			);
 			name = "deprecated-MTAudio";
 			path = MTAudio;
@@ -1497,6 +1503,7 @@
 			files = (
 				E29101C31CB4D5FF00F7C4C9 /* CCLocalMaximum.m in Sources */,
 				E29101C21CB4D5FF00F7C4C9 /* CCColorCube.m in Sources */,
+				E229CFA51CBF248B00A93FF5 /* MTAudioClipBridge.m in Sources */,
 				E2BD75061CB4D3E600C9F335 /* RCTColorCube.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				E2A519791C5AE8A9001546D5 /* MTAudio.swift in Sources */,
@@ -1504,6 +1511,7 @@
 				AAF188B61CA86728004E229E /* TPAACAudioConverter.m in Sources */,
 				E2654D141C7C35D200F9BCE8 /* MTDebugIP.m in Sources */,
 				E21A36CE1CA0A9BD00E1AF30 /* threadHelper.swift in Sources */,
+				E229CF831CBF23B400A93FF5 /* MTAudioClip.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

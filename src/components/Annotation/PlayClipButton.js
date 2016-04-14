@@ -8,6 +8,9 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
+import { createSelector } from 'reselect';
+import { clipId$, playing$, playClip, pause } from '../../redux/modules/clip';
+import { connect } from 'react-redux';
 import {BUCKET} from '../../utils/urls';
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
@@ -25,16 +28,20 @@ class PlayClipButton extends Component {
         targetTime: 0
     };
 
-    togglePlay() {
+    componentWillReceiveProps(nextProps) {
+        const playing = nextProps.clipId === this.props.clip.id && nextProps.playing;
+        console.info('[ClipId] nextprops: ', nextProps, playing);
         this.setState({
-            playing: !this.state.playing
+            playing
         });
     }
 
-    handleFinish() {
-        this.setState({
-            playing: false
-        });
+    togglePlay() {
+        if (!this.state.playing) {
+            this.props.dispatch(playClip(this.props.clip.id));
+        } else {
+            this.props.dispatch(pause());
+        }
     }
 
     render() {
@@ -45,7 +52,7 @@ class PlayClipButton extends Component {
         const duration = moment.duration(this.props.clip.endTime - this.props.clip.startTime, 'seconds');
         const minutes = duration.minutes();
         const seconds = duration.seconds();
-        console.info('duration: ', minutes, seconds, duration);
+        //console.info('duration: ', minutes, seconds, duration);
         // Build length string
         let length = '';
         if (minutes > 0) length += `${minutes} MINUTE`;
@@ -62,15 +69,6 @@ class PlayClipButton extends Component {
                       style={styles.icon}
                       size={60}/>
                 <BoldCaps style={styles.length}>{length}</BoldCaps>
-                <AudioStreamIOS url={clipUrl}
-                                title={clip.episode.title}
-                                artist={clip.episode.podcast.name}
-                                artworkUrl={clip.episode.podcast.artwork}
-                                playing={this.state.playing}
-                                time={this.state.targetTime}
-                                onPlayingChange={playing => this.setState({playing})}
-                                onFinish={this.handleFinish.bind(this)}
-                />
 
             </TouchableOpacity>
         );
@@ -94,7 +92,10 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(PlayClipButton, {
+const sel$ = createSelector(clipId$, playing$, (clipId, playing) => ({clipId, playing}));
+const connected = connect(sel$)(PlayClipButton);
+
+export default Relay.createContainer(connected, {
     initialVariables: {
         size: 'large'
     },

@@ -12,6 +12,7 @@ import PodcastInfoWrapper from './../PodcastInfo/PodcastInfoWrapper';
 import Player from './../Player/PlayerRoot';
 import PlayerWrapper from './../Player/PlayerWrapper';
 import CompactPlayer from '../CompactPlayer/CompactPlayerRoot';
+import ClipPlayer from '../Audio/ClipPlayer';
 //import MiniPlayer from '../Player/MiniPlayer';
 
 // Testing
@@ -26,6 +27,8 @@ export default class Authenticated extends Component {
                 <RootStack />
                 <PlayerWrapper />
                 <CompactPlayer />
+
+                <ClipPlayer />
             </View>
         )
         //return (
