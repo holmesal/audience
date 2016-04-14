@@ -94,7 +94,7 @@ export default class AudioStreamIOS extends Component {
         audio.duration = Math.ceil(audio.duration * 10)/10;
 
         // If the audio player send currentTime and duration as 0, interpret this as the episode ending
-        if (audio.duration === 0 && audio.currentTime == 0 && Date.now() - this._startedPlaying > 0) {
+        if (audio.duration === 0 && audio.currentTime == 0 && Date.now() - this._startedPlaying > 10000) {
             console.info(`[AudioPlayer] ignoring currentTime=0 and duration=0 because I think we finished`);
             this.handleFinishedPlaying();
             return false;
