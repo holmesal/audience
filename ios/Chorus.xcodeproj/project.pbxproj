@@ -331,7 +331,7 @@
 		00E356F21AD99517003FC87E /* HorizontalScrollTestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HorizontalScrollTestTests.m; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Podcastfoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Podcastfoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Chorus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chorus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Audience/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Audience/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -353,7 +353,7 @@
 		8F6FB6DAE78044AFAC46A2A1 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		AAF188811CA83716004E229E /* AudioStreamRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioStreamRecorder.swift; sourceTree = "<group>"; };
 		AAF1889D1CA83BD2004E229E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		AAF188A31CA85023004E229E /* PodcastfooTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PodcastfooTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAF188A31CA85023004E229E /* Chorus.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Chorus.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAF188A71CA85023004E229E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAF188AE1CA853A6004E229E /* PFAudioRecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFAudioRecordTests.swift; sourceTree = "<group>"; };
 		AAF188B11CA858EE004E229E /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
@@ -650,8 +650,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Podcastfoo.app */,
-				AAF188A31CA85023004E229E /* PodcastfooTests.xctest */,
+				13B07F961A680F5B00A75B9A /* Chorus.app */,
+				AAF188A31CA85023004E229E /* Chorus.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -929,9 +929,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* Podcastfoo */ = {
+		13B07F861A680F5B00A75B9A /* Chorus */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Podcastfoo" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Chorus" */;
 			buildPhases = (
 				1FEAB5250A1777E61BD27A40 /* Check Pods Manifest.lock */,
 				E2654D101C7C32C800F9BCE8 /* Auto-ip */,
@@ -949,14 +949,14 @@
 			);
 			dependencies = (
 			);
-			name = Podcastfoo;
+			name = Chorus;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* Podcastfoo.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Chorus.app */;
 			productType = "com.apple.product-type.application";
 		};
-		AAF188A21CA85023004E229E /* PodcastfooTests */ = {
+		AAF188A21CA85023004E229E /* ChorusTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AAF188AA1CA85023004E229E /* Build configuration list for PBXNativeTarget "PodcastfooTests" */;
+			buildConfigurationList = AAF188AA1CA85023004E229E /* Build configuration list for PBXNativeTarget "ChorusTests" */;
 			buildPhases = (
 				AAF1889F1CA85023004E229E /* Sources */,
 				AAF188A01CA85023004E229E /* Frameworks */,
@@ -967,9 +967,9 @@
 			dependencies = (
 				AAF188A91CA85023004E229E /* PBXTargetDependency */,
 			);
-			name = PodcastfooTests;
+			name = ChorusTests;
 			productName = PodcastfooTests;
-			productReference = AAF188A31CA85023004E229E /* PodcastfooTests.xctest */;
+			productReference = AAF188A31CA85023004E229E /* Chorus.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -999,7 +999,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Podcastfoo" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Chorus" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1126,8 +1126,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* Podcastfoo */,
-				AAF188A21CA85023004E229E /* PodcastfooTests */,
+				13B07F861A680F5B00A75B9A /* Chorus */,
+				AAF188A21CA85023004E229E /* ChorusTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1530,7 +1530,7 @@
 /* Begin PBXTargetDependency section */
 		AAF188A91CA85023004E229E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* Podcastfoo */;
+			target = 13B07F861A680F5B00A75B9A /* Chorus */;
 			targetProxy = AAF188A81CA85023004E229E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1603,7 +1603,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alonsoholmes.audience;
-				PRODUCT_NAME = Podcastfoo;
+				PRODUCT_NAME = Chorus;
 				PROVISIONING_PROFILE = "a061376d-6b57-453f-bd34-f572a01a59cb";
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
@@ -1666,7 +1666,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alonsoholmes.audience;
-				PRODUCT_NAME = Podcastfoo;
+				PRODUCT_NAME = Chorus;
 				PROVISIONING_PROFILE = "a061376d-6b57-453f-bd34-f572a01a59cb";
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Audience-Bridging-Header.h";
@@ -1800,9 +1800,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mtnlab.PodcastfooTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Chorus;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Podcastfoo.app/Podcastfoo";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chorus.app/Chorus";
 			};
 			name = Debug;
 		};
@@ -1817,15 +1817,15 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mtnlab.PodcastfooTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Podcastfoo.app/Podcastfoo";
+				PRODUCT_NAME = Chorus;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chorus.app/Chorus";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Podcastfoo" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Chorus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -1834,7 +1834,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Podcastfoo" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Chorus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
@@ -1843,7 +1843,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AAF188AA1CA85023004E229E /* Build configuration list for PBXNativeTarget "PodcastfooTests" */ = {
+		AAF188AA1CA85023004E229E /* Build configuration list for PBXNativeTarget "ChorusTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AAF188AB1CA85023004E229E /* Debug */,
