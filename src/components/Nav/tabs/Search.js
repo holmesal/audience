@@ -13,7 +13,7 @@ const {
     Reducer,
     StateUtils
 } = NavigationExperimental;
-
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import StackReducer from '../StackReducer'
 import SearchRoot from '../../Search/Search';
 import PodcastInfoRoot from '../../PodcastInfo/PodcastInfoRoot';
@@ -52,6 +52,11 @@ export const SearchTabReducer = StackReducer({
 });
 
 export default class Search extends Component {
+
+    constructor(props) {
+        super(props);
+        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    }
 
     renderScene(props) {
         const {key, type} = props.scene.navigationState;

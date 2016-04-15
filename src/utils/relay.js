@@ -30,7 +30,9 @@ export const updateRelayAuthHeader = (token) => {
         new Relay.DefaultNetworkLayer(GRAPHQL_AUTHENTICATED_ROOT, {
           headers: {
             Authorization: `Bearer ${token}`
-          }
+          },
+            fetchTimeout: 30000,
+            retryDelays: [5000, 10000, 15000]
         })
     );
 };

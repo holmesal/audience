@@ -7,7 +7,7 @@ import React, {
     Text,
     View
 } from 'react-native';
-
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import DebugView from '../../common/DebugView';
 import NotificationsRoot from '../../Notifications/NotificationsRoot';
 import PodcastInfoRoot from '../../PodcastInfo/PodcastInfoRoot';
@@ -67,6 +67,11 @@ export const NotificationsTabReducer = StackReducer({
 });
 
 export default class Notifications extends Component {
+
+    constructor(props) {
+        super(props);
+        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    }
 
     renderScene(props) {
         const {key, type} = props.scene.navigationState;

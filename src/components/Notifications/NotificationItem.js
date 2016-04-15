@@ -114,7 +114,8 @@ let styles = StyleSheet.create({
         fontWeight: '700'
     },
     timestamp: {
-        fontSize: 11
+        fontSize: 11,
+        marginTop: 4
     }
 });
 

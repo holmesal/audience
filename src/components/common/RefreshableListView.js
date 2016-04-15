@@ -84,7 +84,7 @@ export default class RefreshableListView extends Component {
     }
 
     render() {
-        console.info('items: ', this.props.items);
+        //console.info('items: ', this.props.items);
         return (
             <ListView
                 contentContainerStyle={[styles.scrollContent, this.props.contentContainerStyle]}
