@@ -67,6 +67,9 @@ class AnnotationView extends Component {
         this.props.onNavigate({
             type: 'BackAction'
         });
+        //this.props.onNavigate({
+        //    type: 'NestedBack'
+        //});
     }
 
     render() {

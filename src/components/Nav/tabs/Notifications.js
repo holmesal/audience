@@ -28,6 +28,13 @@ export const showShowInfo = showId => ({
     showId
 });
 
+//const SHOW_ANNOTATION = 'notificationsTab.showAnnotation';
+//export const showAnnotation = (annotationId, focusInput=false) => ({
+//    type: SHOW_ANNOTATION,
+//    annotationId,
+//    focusInput
+//});
+
 export const NotificationsTabReducer = StackReducer({
     customBackActions: ['NestedBack'],
     getPushedReducerForAction: (action, lastState) => {
@@ -36,14 +43,18 @@ export const NotificationsTabReducer = StackReducer({
             case SHOW_SHOW_INFO:
                 return lastState => lastState || {key: `ShowInfo-${action.showId}`, type: 'ShowInfo', showId: action.showId };
             //case SHOW_ANNOTATION:
-            //    return lastState => lastState || {key: `Annotation-${action.annotationId}`, type: 'Annotation', annotationId: action.annotationId };
+            //    return state => state || {
+            //        key: `Annotation-${action.annotationId}`,
+            //        type: 'Annotation',
+            //        annotationId: action.annotationId,
+            //        focusInput: action.focusInput};
         }
         return null;
     },
-    getReducerForState: (initialState) => {
-        //console.info('[NotificationsTab] getting reducer for state: ', initialState);
-        return (state) => state || initialState;
-    },
+    //getReducerForState: (initialState) => {
+    //    //console.info('[NotificationsTab] getting reducer for state: ', initialState);
+    //    return (state) => state || initialState;
+    //},
     initialState: {
         key: NotificationsTabKey,
         tabLabel: 'Notifs',
@@ -85,6 +96,7 @@ export default class Notifications extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        flex: 1
+        flex: 1,
+        alignSelf: 'stretch'
     }
 });

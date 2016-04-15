@@ -42,6 +42,7 @@ class FriendsFeed extends Component {
 
     render() {
         return <RefreshableListView
+            contentContainerStyle={styles.scrollContent}
             items={this.props.viewer.friendActivity}
             renderItem={this.renderItem.bind(this)}
             onLoadMore={this.onLoadMore.bind(this)}
@@ -51,6 +52,14 @@ class FriendsFeed extends Component {
         />;
     }
 }
+
+let styles = StyleSheet.create({
+    scrollContent: {
+        marginLeft: 8,
+        marginRight: 8,
+        marginTop: 20
+    }
+});
 
 export default Relay.createContainer(FriendsFeed, {
     initialVariables: {

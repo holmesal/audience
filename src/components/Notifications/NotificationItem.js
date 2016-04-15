@@ -1,18 +1,25 @@
 import React, {
     Component,
     Image,
+    NavigationExperimental,
     PropTypes,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
 import Relay from 'react-relay';
 
 import DebugView from '../common/DebugView';
+import TouchableFade from '../common/TouchableFade';
 import FacebookAvatar from '../common/FacebookAvatar';
 import colors from '../../colors';
 import moment from 'moment-twitter';
 import emojione from 'emojione';
+
+const {
+    Container: NavigationContainer
+} = NavigationExperimental;
 
 const firstThree = text => {
     const split = text.split(' ');
@@ -39,10 +46,38 @@ class NotificationItem extends Component {
         }
     }
 
+    handlePress() {
+        const showAnnotation = annotationId => ({
+            type: 'rootStack.showAnnotation',
+            annotationId
+        });
+        const {notification, onNavigate} = this.props;
+        console.info('pressed notification: ', notification);
+        switch (notification.__typename) {
+            case 'NotificationLikedAnnotation':
+                onNavigate(showAnnotation(notification.annotation.id));
+                break;
+            case 'NotificationCommentedOnAnnotation':
+                onNavigate(showAnnotation(notification.annotationComment.annotation.id));
+                break;
+            case 'NotificationLikedAnnotationComment':
+                onNavigate(showAnnotation(notification.annotationComment.annotation.id));
+                break;
+            case 'NotificationAlsoCommentedOnAnnotation':
+                onNavigate(showAnnotation(notification.annotationComment.annotation.id));
+                break;
+            default:
+                console.error(`could not navigate for unknown notification type: ${this.props.notification.__typename}`)
+        }
+    }
+
     render() {
         const { notification } = this.props;
         return (
-            <View style={styles.wrapper}>
+            <TouchableFade style={styles.wrapper}
+                           onPress={this.handlePress.bind(this)}
+                           underlayColor={colors.darkGreyLightContrast}
+            >
                 <FacebookAvatar style={styles.avatar} user={this.props.notification.source} size={54} />
                 <View style={styles.content}>
                     <Text style={[styles.text, styles.body]}>
@@ -51,16 +86,8 @@ class NotificationItem extends Component {
                     </Text>
                     <Text style={[styles.text, styles.timestamp]}>{moment(new Date(this.props.notification.created)).twitterLong()}</Text>
                 </View>
-            </View>
+            </TouchableFade>
         );
-        //switch (this.props.notification.__typename) {
-        //    case 'RecommendationActivity':
-        //        return <FeedRecommendation recommendationActivity={notification} />;
-        //    case 'AnnotationActivity':
-        //        return <FeedAnnotation annotationActivity={notification} />;
-        //    default:
-        //        return <View />;
-        //}
     }
 }
 
@@ -91,7 +118,9 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(NotificationItem, {
+const contained = NavigationContainer.create(NotificationItem);
+
+export default Relay.createContainer(contained, {
     fragments: {
         notification: () => Relay.QL`
             fragment on Notification {
@@ -103,6 +132,7 @@ export default Relay.createContainer(NotificationItem, {
                         ${FacebookAvatar.getFragment('user')}
                     }
                     annotation {
+                        id
                         text
                     }
                 }
@@ -115,6 +145,7 @@ export default Relay.createContainer(NotificationItem, {
                     }
                     annotationComment {
                         annotation {
+                            id
                             text
                         }
                     }
@@ -128,6 +159,9 @@ export default Relay.createContainer(NotificationItem, {
                     }
                     annotationComment {
                         text
+                        annotation {
+                            id
+                        }
                     }
                 }
 
@@ -139,6 +173,7 @@ export default Relay.createContainer(NotificationItem, {
                     }
                     annotationComment {
                         annotation {
+                            id
                             text
                         }
                     }

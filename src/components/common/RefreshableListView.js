@@ -87,7 +87,7 @@ export default class RefreshableListView extends Component {
         console.info('items: ', this.props.items);
         return (
             <ListView
-                contentContainerStyle={styles.scrollContent}
+                contentContainerStyle={[styles.scrollContent, this.props.contentContainerStyle]}
                 ref={com => this._scrollView = com}
                 renderScrollComponent={props => <InfiniteScrollView {...props} />}
                 dataSource={this.state.dataSource}
@@ -106,9 +106,7 @@ let styles = StyleSheet.create({
         flex: 1
     },
     scrollContent: {
-        paddingTop: 20,
-        paddingLeft: 8,
-        paddingRight: 8
+        paddingTop: 20
     }
 });
 
