@@ -11,6 +11,7 @@ import DebugView from '../common/DebugView';
 import FacebookAvatar from '../common/FacebookAvatar';
 import LikeButton from '../common/LikeButton';
 import colors from '../../colors';
+import emojione from 'emojione';
 import LikeAnnotationCommentMutation from '../../mutations/LikeAnnotationComment';
 
 class AnnotationComment extends Component {
@@ -59,7 +60,7 @@ class AnnotationComment extends Component {
                 <View style={styles.triangle} />
                 <View style={styles.content}>
                     <Text style={[styles.text, styles.name]}>{this.props.annotationComment.user.displayName}</Text>
-                    <Text style={[styles.text]}>{this.props.annotationComment.text}</Text>
+                    <Text style={[styles.text]}>{emojione.shortnameToUnicode(this.props.annotationComment.text)}</Text>
                     <View style={styles.likeRow}>
                         <LikeButton style={styles.likeButton}
                                     caption
