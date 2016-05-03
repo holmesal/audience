@@ -15,6 +15,7 @@ import DebugView from '../common/DebugView';
 import colors from '../../colors';
 import GrabHandle from './GrabHandle';
 import SelectedSegment from './SelectedSegment';
+import Waveform from './Waveform';
 
 const {width} = Dimensions.get('window');
 
@@ -28,6 +29,9 @@ const sensitivity = 1;
 // What is the minimum chunk of time a user can highlight?
 const minimumDuration = 5000;
 
+// How wide is the "highlighted" area on-screen?
+const highlightWidth = width = (2 * sidePadding);
+
 /**
  * TODO
  * enforce a minimum highlight duration
@@ -36,14 +40,14 @@ const minimumDuration = 5000;
 export default class Highlight extends Component {
 
     static propTypes = {
-        // Duration, in seconds
+        // Duration, in MILLISECONDS
         duration: PropTypes.number
     };
 
     state = {
         loopMode: 'full',
-        startTime: new Animated.Value(15000),
-        endTime: new Animated.Value(30000)
+        startTime: new Animated.Value(10000),
+        endTime: new Animated.Value(20000)
     };
 
     componentDidMount() {
@@ -85,8 +89,8 @@ export default class Highlight extends Component {
                 projectedValue = currentStartTime + minimumDuration;
             }
             // Can't be after the end
-            if (projectedValue > this.props.duration * 1000){
-                projectedValue = this.props.duration * 1000;
+            if (projectedValue > this.props.duration){
+                projectedValue = this.props.duration;
             }
         }
 
@@ -111,6 +115,13 @@ export default class Highlight extends Component {
         return (
             <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
                 <View style={styles.wrapper}>
+                    <Waveform startTime={this.state.startTime}
+                              endTime={this.state.endTime}
+                              episodeDuration={this.props.duration}
+                              style={styles.waveform}
+                              minimumDuration={minimumDuration}
+                              highlightWidth={highlightWidth}
+                    />
                     <SelectedSegment style={styles.highlighted}
                                      loopMode={this.state.loopMode}
                                      duration={5000}
@@ -160,5 +171,12 @@ let styles = StyleSheet.create({
     },
     speedo: {
         color: colors.white
+    },
+    waveform: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: sidePadding
+        //flex: 1,
     }
 });

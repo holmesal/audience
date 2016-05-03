@@ -52,7 +52,7 @@ export default class App extends Component {
     }
 
     render() {
-        return <Highlight />;
+        return <Highlight duration={100000} />;
         return <Auth />;
     }
 }

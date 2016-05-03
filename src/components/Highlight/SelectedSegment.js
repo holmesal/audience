@@ -112,7 +112,8 @@ export default class SelectedSegment extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         backgroundColor: colors.yellow,
-        position: 'relative'
+        position: 'relative',
+        opacity: 0.5
     },
     playHead: {
         position: 'absolute',
