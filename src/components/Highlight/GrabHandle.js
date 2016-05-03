@@ -9,7 +9,7 @@ import React, {
     View
 } from 'react-native';
 import Relay from 'react-relay';
-
+import _ from 'lodash';
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
 
@@ -33,6 +33,11 @@ export default class GrabHandle extends Component {
             outputRange: [-100, 0, 100]
         });
         drag.addListener(this.observeDragUpdate.bind(this));
+
+        this.reportVelocityChange = _.throttle(velocity => {
+            this.props.onVelocityChange(velocity);
+        }, 100, {leading: true, trailing: true});
+
         this.state = {
             drag,
             translateX
@@ -89,7 +94,7 @@ export default class GrabHandle extends Component {
     observeDragUpdate(val) {
         if (!this.state.resetting) {
             //console.info('translation update', val)
-            this.props.onVelocityChange(val.value / this.props.maxDisplacement);
+            this.reportVelocityChange(val.value / this.props.maxDisplacement)
         }
     }
 

@@ -29,6 +29,7 @@ import Mixpanel from 'react-native-mixpanel';
 
 import colors from './colors';
 import Auth from './components/auth/Auth';
+import Highlight from './components/Highlight/Highlight';
 
 // Ignore some warnings
 console.ignoredYellowBox = ['Possible Unhandled Promise Rejection', 'Sticky header index 0', 'Warning: ScrollView doesn\'t take rejection well'];
@@ -51,6 +52,7 @@ export default class App extends Component {
     }
 
     render() {
+        return <Highlight />;
         return <Auth />;
     }
 }
