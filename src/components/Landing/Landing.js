@@ -19,11 +19,9 @@ export default class Landing extends Component {
             <ScrollView contentContainerStyle={styles.wrapper}>
                 <Text style={styles.emoji}>🎧🙌</Text>
                 <Text style={[styles.body, {fontWeight: '600', fontSize: 16, paddingLeft: 0}]}>Great to have you! Some things to know:</Text>
-                <Text style={[styles.body, {marginBottom: 40}]}>Updates and new features every Sunday.</Text>
-                <Text style={styles.body}>Feel free to share with any friends you like, but avoid posting publicly or sending to journalists.</Text>
-                <Text style={styles.body}>Your Podcastfoo friends come from your facebook friend list (for now).</Text>
+                <Text style={styles.body}>Feel free to share with any friends, but avoid posting publicly or sending to journalists.</Text>
+                <Text style={styles.body}>Your Chorus friends come from your facebook friend list (for now).</Text>
                 <Text style={styles.body}>Shake your device if you see something broken or have a cool idea.</Text>
-                <Text style={[styles.body, {marginBottom: 40}]}>Podcastfoo is a code name.</Text>
                 <Login onLogin={this.props.onLogin}/>
             </ScrollView>
         );

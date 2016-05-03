@@ -18,8 +18,8 @@ export default class InviteFriend extends Component {
 
     invite() {
         ActionSheetIOS.showShareActionSheetWithOptions({
-            url: 'http://eepurl.com/bQ7mC5',
-            message: '🚀🙌🎧Join the Podcastfoo beta!',
+            url: 'http://pfoo.herokuapp.com',
+            message: '🚀🙌🎧 Join the Chorus beta!',
 
         },
         error => console.error,

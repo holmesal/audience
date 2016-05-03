@@ -32,7 +32,7 @@ export const TabsReducerKey = 'TabState';
 
 export const TabsReducer = Reducer.TabsReducer({
     key: TabsReducerKey,
-    initialIndex: 1,
+    initialIndex: 0,
     tabReducers: [
         FeedTabReducer,
         NotificationsTabReducer,
