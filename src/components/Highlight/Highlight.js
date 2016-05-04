@@ -30,7 +30,7 @@ const sensitivity = 10;
 const minimumDuration = 5000;
 
 // How wide is the "highlighted" area on-screen?
-const highlightWidth = width = (2 * sidePadding);
+const highlightWidth = width - (2 * sidePadding);
 
 /**
  * TODO
@@ -45,18 +45,18 @@ export default class Highlight extends Component {
     };
 
     state = {
-        loopMode: 'full',
-        startTime: new Animated.Value(0),
-        endTime: new Animated.Value(100000)
+        startTime: new Animated.Value(5000),
+        endTime: new Animated.Value(15000),
+        activeHandle: null
     };
 
     componentDidMount() {
         this.state.startTime.addListener(this.logTimeRange.bind(this));
         this.state.endTime.addListener(this.logTimeRange.bind(this));
 
-        setInterval(() => {
-            this.setState({});
-        }, 1000)
+        //setInterval(() => {
+        //    this.setState({});
+        //}, 1000)
     }
 
     logTimeRange() {
@@ -118,6 +118,17 @@ export default class Highlight extends Component {
         }
     }
 
+    getCurrentLoopMode() {
+        switch(this.state.activeHandle) {
+            case 'left':
+                return 'start';
+            case 'right':
+                return 'end';
+            default:
+                return 'full';
+        }
+    }
+
     render() {
         return (
             <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
@@ -128,23 +139,24 @@ export default class Highlight extends Component {
                               style={styles.waveform}
                               minimumDuration={minimumDuration}
                               highlightWidth={highlightWidth}
+                              scaleAround={this.state.activeHandle}
                     />
                     <SelectedSegment style={styles.highlighted}
-                                     loopMode={this.state.loopMode}
+                                     loopMode={this.getCurrentLoopMode()}
                                      duration={5000}
                                      edgeLoopAmount={1000}
                     />
                     <GrabHandle style={[styles.handle, {left: sidePadding - handleWidth/2}]}
                                 maxDisplacement={sidePadding}
                                 onVelocityChange={v => this.updateRateOfTimeChange('start', v)}
-                                onGrab={() => this.setState({loopMode: 'start'})}
-                                onRelease={() => this.setState({loopMode: 'full'})}
+                                onGrab={() => this.setState({activeHandle: 'start'})}
+                                onRelease={() => this.setState({activeHandle: null})}
                     />
                     <GrabHandle style={[styles.handle, {right: sidePadding - handleWidth/2}]}
                                 maxDisplacement={sidePadding}
                                 onVelocityChange={v => this.updateRateOfTimeChange('end', v)}
-                                onGrab={() => this.setState({loopMode: 'end'})}
-                                onRelease={() => this.setState({loopMode: 'full'})}
+                                onGrab={() => this.setState({activeHandle: 'end'})}
+                                onRelease={() => this.setState({activeHandle: null})}
                     />
                 </View>
                 <Text style={styles.speedo}>startTime: {_.round(this.state.startTime._value, 2)}</Text>
