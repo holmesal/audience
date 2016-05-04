@@ -24,7 +24,7 @@ const handleWidth = 100;
 
 // How sensitive are the handles?
 // default = 1
-const sensitivity = 1;
+const sensitivity = 10;
 
 // What is the minimum chunk of time a user can highlight?
 const minimumDuration = 5000;
@@ -46,13 +46,17 @@ export default class Highlight extends Component {
 
     state = {
         loopMode: 'full',
-        startTime: new Animated.Value(10000),
-        endTime: new Animated.Value(20000)
+        startTime: new Animated.Value(0),
+        endTime: new Animated.Value(100000)
     };
 
     componentDidMount() {
         this.state.startTime.addListener(this.logTimeRange.bind(this));
         this.state.endTime.addListener(this.logTimeRange.bind(this));
+
+        setInterval(() => {
+            this.setState({});
+        }, 1000)
     }
 
     logTimeRange() {
@@ -66,7 +70,7 @@ export default class Highlight extends Component {
      */
     updateRateOfTimeChange(which, velocity) {
         //console.info(`updating velocity for ${which.toUpperCase()} to ${velocity}`);
-        const projectionLength = 1000;
+        let projectionLength = 1000;
         // Get the animated value for the time we're referring to
         const animatedTime = (which === 'start') ? this.state.startTime : this.state.endTime;
         //console.info(animatedTime);
@@ -93,6 +97,9 @@ export default class Highlight extends Component {
                 projectedValue = this.props.duration;
             }
         }
+
+        //  Recalc the projected time in case it changed
+        projectionLength = (projectedValue - animatedTime._value) / (velocity * sensitivity);
 
         // If the velocity is 0, just stop the animation
         if (velocity === 0) {

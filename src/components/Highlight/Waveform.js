@@ -34,13 +34,30 @@ export default class Waveform extends Component {
          *      duration, and we'd scale the waveform so that it was the same width as the highlight area.
          * This is the scale factor that we'd scale to in that case:
          */
-        const scaleFactor = this.props.highlightWidth / waveformWidth;
-        //const scaleX = Animated.this.props.highlightDuration.interpolate({
-        //    inputRange: [this.props.minimumDuration, this.props.episodeDuration],
-        //    outputRange: [1, scaleFactor]
-        //});
+        const scaleFactor = this.props.highlightWidth / waveformWidth * 2;
+        const negativeStartTime = this.props.startTime.interpolate({
+            inputRange: [0, this.props.episodeDuration],
+            outputRange: [0, -this.props.episodeDuration]
+        });
+        const animatedDuration = Animated.add(this.props.endTime, negativeStartTime);
+        console.info(animatedDuration)
+        //setInterval(() => {
+        //    console.info(animatedDuration)
+        //}, 1000);
+        //animatedDuration.addListener(console.info);
+        const scaleX = animatedDuration.interpolate({
+            inputRange: [this.props.minimumDuration, this.props.episodeDuration],
+            outputRange: [1, scaleFactor]
+        });
+
+        const shiftLeft = scaleX.interpolate({
+            inputRange: [0, 1],
+            outputRange: [-waveformWidth/2, 0]
+        });
+
+        const totalX = Animated.add(Animated.multiply(scaleX, translateX), shiftLeft);
         return (
-            <Animated.View style={[styles.wrapper, this.props.style, {transform: [{translateX}]}]}>
+            <Animated.View style={[styles.wrapper, this.props.style, {transform: [{translateX: totalX}, {scaleX}, {scaleY:scaleX}]}]}>
                 <Image style={styles.waveform} source={require('image!waveform')} />
             </Animated.View>
         );
