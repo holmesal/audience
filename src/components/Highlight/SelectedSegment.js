@@ -102,7 +102,6 @@ export default class SelectedSegment extends Component {
     render() {
         return (
             <View style={[styles.wrapper, this.props.style]} onLayout={this.handleLayout.bind(this)}>
-                <DebugView text={`I am the SelectedSegment component!`}/>
                 <Animated.View style={[styles.playHead, {transform: [{translateX: this.state.playheadPosition}]}]} />
             </View>
         );

@@ -1,6 +1,7 @@
 import React, {
     Animated,
     Component,
+    Easing,
     Image,
     PropTypes,
     StyleSheet,
@@ -98,13 +99,14 @@ export default class Waveform extends Component {
 
         // Pixels per millisecond
         const rho = this.props.highlightWidth / this.props.minimumDuration; // px/ms
+        //const rho = waveformWidth / this.props.episodeDuration; // px/ms
 
         // The number of pixels in the maximum duration
-        const wMaxDuration = rho * this.props.episodeDuration;
-
-        // The scale factor between the minimum duration and the maximum duration
-        const SFMaxDuration = this.props.highlightWidth / wMaxDuration;
-        console.info('SFMaxDuration: ', SFMaxDuration);
+        //const wMaxDuration = rho * this.props.episodeDuration;
+        //
+        //// The scale factor between the minimum duration and the maximum duration
+        //const SFMaxDuration = this.props.highlightWidth / wMaxDuration;
+        //console.info('SFMaxDuration: ', SFMaxDuration);
 
         // The fraction of the episode duration that the start time starts at
         const fracStart = this.props.startTime.interpolate({
@@ -120,18 +122,34 @@ export default class Waveform extends Component {
         const newPixels = Animated.multiply(duration, rho);
 
         // What scale factor will fit this number of pixels into the highlight?
+        const scaleFactor = duration.interpolate({
+            inputRange: [this.props.minimumDuration, this.props.episodeDuration],
+            outputRange: [1, this.props.highlightWidth / waveformWidth],
+            easing: Easing.exp
+            //easing: (t) => {
+            //    console.info(`t: ${t}  SF:  COR_SF: ${255 / newPixels.__getValue()}`);
+            //    return 0.5 * (1 - Math.cos(t * 2 * Math.PI));
+            //}
+        });
+
         //const scaleFactor = duration.interpolate({
         //    inputRange: [this.props.minimumDuration, this.props.episodeDuration],
-        //    outputRange: [1, SFMaxDuration]
+        //    outputRange: [1, 1],
+        //    easing: val => {
+        //        console.info('interp: ', val)
+        //        return 1/newPixels.__getValue();
+        //    }
         //});
 
-        // The minimum width the waveform will ever be
-        const minWaveformWidth = SFMaxDuration * waveformWidth;
-
-        const scaleFactor = newPixels.interpolate({
-            inputRange: [this.props.highlightWidth, waveformWidth],
-            outputRange: [1, this.props.highlightWidth/waveformWidth]
-        });
+        //// The minimum width the waveform will ever be
+        const minWaveformWidth = this.props.minimumDuration * rho;
+        // The maximum width the waveform will ever be
+        const maxWaveformWidth = this.props.episodeDuration * rho;
+        //
+        //const scaleFactor = newPixels.interpolate({
+        //    inputRange: [minWaveformWidth, maxWaveformWidth],
+        //    outputRange: [1, waveformWidth/maxWaveformWidth]
+        //});
 
         const newWaveformWidth = Animated.multiply(scaleFactor, waveformWidth);
 
@@ -142,7 +160,8 @@ export default class Waveform extends Component {
             newPixels: newPixels.__getValue(),
             scaleFactor: scaleFactor.__getValue(),
             pixelsPerMs: rho,
-            minWaveformWidth
+            minWaveformWidth,
+            maxWaveformWidth
         });
         //console.info('scale factor is: ', scaleFactor.__getValue());
 
@@ -151,17 +170,21 @@ export default class Waveform extends Component {
          */
 
         const outerTransforms = [
-
+            {translateX: -waveformWidth/2},
+            // Scale by the scale factor
+            {scaleX: scaleFactor},
+            {scaleY: scaleFactor},
+            {translateX: waveformWidth/2},
+            {translateX: Animated.multiply(fracStart, Animated.multiply(waveformWidth, -1))},
         ];
+
 
         const innerTransforms = [
             // Move the center of the waveform to the left handle
             //{translateX: -waveformWidth/2},
             //{translateX: Animated.multiply(newWaveformWidth, 0.5)},
-            {translateX: Animated.multiply(fracStart, Animated.multiply(newWaveformWidth, -1))},
-            // Scale by the scale factor
-            {scaleX: scaleFactor},
-            {scaleY: scaleFactor},
+            //{translateX: Animated.multiply(fracStart, Animated.multiply(newWaveformWidth, -1))},
+
             // Stick the left edge back at 0
             // Offset by the current time
         ];
@@ -170,13 +193,13 @@ export default class Waveform extends Component {
 
 
         return (
-            <Animated.View style={{transform: [{translateX: -waveformWidth/2}]}}>
-                <Animated.View style={{transform: [{translateX: Animated.multiply(newWaveformWidth, 0.5)}]}}>
-                    <Animated.View style={[styles.wrapper, this.props.style, {transform: innerTransforms}]}>
+            <View style={[styles.wrapper, this.props.style]}>
+                <Animated.View style={[{transform: outerTransforms}]}>
+                    <Animated.View style={{transform: innerTransforms}}>
                         <Image style={styles.waveform} source={require('image!waveform')} />
                     </Animated.View>
                 </Animated.View>
-            </Animated.View>
+            </View>
         );
     }
 }
@@ -186,7 +209,7 @@ let styles = StyleSheet.create({
         //flex: 1,
         //width: 1173
         flexDirection: 'row',
-        //alignItems: 'center'
+        alignItems: 'center'
     },
     waveform: {
         width: waveformWidth,

@@ -110,7 +110,7 @@ export default class GrabHandle extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        backgroundColor: colors.blue,
+        //backgroundColor: colors.blue,
         alignItems: 'center',
         justifyContent: 'center'
     },

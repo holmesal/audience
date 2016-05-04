@@ -45,22 +45,18 @@ export default class Highlight extends Component {
     };
 
     state = {
-        startTime: new Animated.Value(5000),
-        endTime: new Animated.Value(15000),
+        startTime: new Animated.Value(0),
+        endTime: new Animated.Value(23000),
         activeHandle: null
     };
 
     componentDidMount() {
         this.state.startTime.addListener(this.logTimeRange.bind(this));
         this.state.endTime.addListener(this.logTimeRange.bind(this));
-
-        //setInterval(() => {
-        //    this.setState({});
-        //}, 1000)
     }
 
     logTimeRange() {
-        console.info(`${_.round(this.state.startTime._value/1000, 2)} --- ${_.round(this.state.endTime._value/1000, 2)}`);
+        //console.info(`${_.round(this.state.startTime._value/1000, 2)} --- ${_.round(this.state.endTime._value/1000, 2)}`);
     }
 
     /**
