@@ -19,6 +19,7 @@ import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux';
 import {currentTime$, updateSendingComment} from '../../redux/modules/player.js';
 import store from '../../redux/create';
+import Highlight from '../Highlight/Highlight';
 
 class CommentCompose extends Component {
 
@@ -42,7 +43,7 @@ class CommentCompose extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._keyboardShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
         this._keyboardHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
     }
@@ -53,6 +54,7 @@ class CommentCompose extends Component {
     }
 
     keyboardWillShow(ev) {
+        console.info('keyboardWillShow: ', ev);
         this.setState({keyboardHeight: ev.endCoordinates.height});
     }
 
@@ -61,9 +63,9 @@ class CommentCompose extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        //console.info('did update!', this.state.keyboardHeight, this.props.scrubberHeight)
+        console.info('did update!', this.state.keyboardHeight, this.props.scrubberHeight)
         Animated.spring(this.state.paddingBottom, {
-            toValue: this.state.keyboardHeight + this.props.scrubberHeight
+            toValue: this.state.keyboardHeight
         }).start();
     }
 
@@ -141,15 +143,16 @@ class CommentCompose extends Component {
             <Animated.View style={[styles.inputWrapper, {paddingBottom: this.state.paddingBottom}]}>
                 {this.renderTopRow()}
                 <TextInput style={styles.input}
-                           placeholder="Say something awesome..."
+                           placeholder="Say something great..."
                            placeholderTextColor="grey"
                            multiline
                            value={this.state.text}
-                           autoFocus
+                           //autoFocus
                            keyboardDismissMode="interactive"
                            keyboardAppearance="dark"
                            onChangeText={this.handleTextChange.bind(this)}
                 />
+                <Highlight episodeDuration={1000 * 60 * 60 * 3} initialEndTime={30000} />
             </Animated.View>
         );
     }
@@ -162,7 +165,7 @@ let styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(62,62,62,0.95)'
+        backgroundColor: colors.white
     },
     topRow: {
         flexDirection: 'row'
@@ -187,7 +190,7 @@ let styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        //backgroundColor: 'red',
+        backgroundColor: 'red',
         //marginTop: 40,
         color: colors.lightGrey,
         alignSelf: 'stretch',

@@ -26,8 +26,8 @@ const RESUME_AFTER_CLIP = 'audience/player/RESUME_AFTER_CLIP';
 const FINISH = 'audience/player/FINISH';
 
 const initialState = Immutable.fromJS({
-    visible: false,
-    episodeId: null, //'RXBpc29kZToyOTAz',
+    visible: true,
+    episodeId: 'RXBpc29kZTo1NjU4', //'RXBpc29kZToyOTAz',
     nextEpisodeId: null, //'RXBpc29kZTo1MTc1',
     playing: false,
     finished: false,
