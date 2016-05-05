@@ -52,7 +52,7 @@ export default class App extends Component {
     }
 
     render() {
-        return <Highlight duration={23000} />;
+        return <Highlight episodeDuration={1000 * 60 * 60 * 3} initialEndTime={30000} />;
         return <Auth />;
     }
 }

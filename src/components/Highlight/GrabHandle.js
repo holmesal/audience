@@ -12,6 +12,8 @@ import Relay from 'react-relay';
 import _ from 'lodash';
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
+import Triangle from 'react-native-triangle';
+import {prettyFormatTime} from '../../utils';
 
 export default class GrabHandle extends Component {
 
@@ -19,6 +21,7 @@ export default class GrabHandle extends Component {
 
     static defaultProps = {
         maxDisplacement: 60,
+        paddingBottom: 44,
 
         onVelocityChange: () => {},
         onGrab: () => {},
@@ -100,9 +103,17 @@ export default class GrabHandle extends Component {
 
 
     render() {
+        const interpTranslateX = this.state.translateX.interpolate({
+            inputRange: [-100, 100],
+            outputRange: [-50, 50]
+        });
         return (
-            <Animated.View style={[styles.wrapper, this.props.style, {transform: [{translateX: this.state.translateX}]}]} {...this._panResponder.panHandlers}>
-                <View style={styles.indicator} />
+            <Animated.View style={[styles.wrapper, this.props.style, {transform: [{translateX: interpTranslateX}]}]} {...this._panResponder.panHandlers}>
+                <View style={[styles.indicatorWrapper, {paddingBottom: this.props.paddingBottom}]}>
+                    <Text style={styles.time}>{prettyFormatTime(this.props.time)}</Text>
+                    <Triangle style={styles.triangle} direction="down" width={9} height={6} color={colors.darkGrey} />
+                    <View style={styles.indicator} />
+                </View>
             </Animated.View>
         );
     }
@@ -111,12 +122,43 @@ export default class GrabHandle extends Component {
 let styles = StyleSheet.create({
     wrapper: {
         //backgroundColor: colors.blue,
+        //opacity: 0.5,
+        //flex: 1
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    indicatorWrapper: {
+        //backgroundColor: 'red',
+        //height: 200,
+        //position: 'absolute',
+        //top: 0,
+        //bottom: 0,
+        //left: 0,
+        //right: 0,
+        flex: 1,
+        alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center'
     },
     indicator: {
         flex: 1,
-        width: 4,
+        width: 3,
+        //height: 20,
         backgroundColor: colors.darkGrey
+    },
+    triangle: {
+        marginBottom: -5
+    },
+    time: {
+        fontFamily: 'System',
+        fontSize: 14,
+        color: colors.darkGrey,
+        letterSpacing: 0.26,
+        fontWeight: '500',
+        marginTop: 6,
+        marginBottom: 8,
+        //backgroundColor: 'red',
+        textAlign: 'center',
+        alignSelf: 'stretch'
     }
 });

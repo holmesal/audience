@@ -12,6 +12,7 @@ import Relay from 'react-relay';
 
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
+import {prettyFormatTime} from '../../utils';
 
 export default class SelectedSegment extends Component {
 
@@ -63,6 +64,11 @@ export default class SelectedSegment extends Component {
 
         //console.info({startValue, toValue, duration});
 
+        if (duration === 0) {
+            console.warn('Not animating scrubber with 0 duration - that would create a call stack overflow, silly. Check yo shit.');
+            return false;
+        }
+
         this.state.playheadPosition.setValue(startValue);
         Animated.timing(this.state.playheadPosition, {
             toValue,
@@ -74,7 +80,7 @@ export default class SelectedSegment extends Component {
                 //console.info('animation finished!');
                 this.animate(this.props.loopMode);
             }
-        })
+        });
     }
 
     handleLayout(ev) {
@@ -86,7 +92,8 @@ export default class SelectedSegment extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if (
-            nextProps.loopMode != this.props.loopMode
+            nextProps.loopMode != this.props.loopMode ||
+            nextProps.duration != this.props.duration
         ) {
             return true;
         }
@@ -102,7 +109,10 @@ export default class SelectedSegment extends Component {
     render() {
         return (
             <View style={[styles.wrapper, this.props.style]} onLayout={this.handleLayout.bind(this)}>
-                <Animated.View style={[styles.playHead, {transform: [{translateX: this.state.playheadPosition}]}]} />
+                <Animated.View style={[styles.shrinkable, this.props.shrinkTransform]}>
+                    <Animated.View style={[styles.playHead, {transform: [{translateX: this.state.playheadPosition}]}]} />
+                </Animated.View>
+                <Text style={styles.time}>{prettyFormatTime(this.props.duration / 1000)}</Text>
             </View>
         );
     }
@@ -110,15 +120,31 @@ export default class SelectedSegment extends Component {
 
 let styles = StyleSheet.create({
     wrapper: {
-        backgroundColor: colors.yellow,
         position: 'relative',
-        opacity: 0.5
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    shrinkable: {
+        backgroundColor: 'rgba(255, 234, 88, 0.76)',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
     },
     playHead: {
         position: 'absolute',
         width: 2,
         top: 0,
         bottom: 0,
-        backgroundColor: colors.red
+        backgroundColor: colors.blue
+    },
+    time: {
+        fontFamily: 'System',
+        fontSize: 20,
+        color: colors.darkGrey,
+        letterSpacing: 0.38,
+        fontWeight: '600',
+        backgroundColor: 'transparent'
     }
 });

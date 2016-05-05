@@ -122,10 +122,10 @@ export default class Waveform extends Component {
         const newPixels = Animated.multiply(duration, rho);
 
         // What scale factor will fit this number of pixels into the highlight?
+        // TODO - this isn't returning the proper values
         const scaleFactor = duration.interpolate({
             inputRange: [this.props.minimumDuration, this.props.episodeDuration],
             outputRange: [1, this.props.highlightWidth / waveformWidth],
-            easing: Easing.exp
             //easing: (t) => {
             //    console.info(`t: ${t}  SF:  COR_SF: ${255 / newPixels.__getValue()}`);
             //    return 0.5 * (1 - Math.cos(t * 2 * Math.PI));
