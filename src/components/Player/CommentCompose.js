@@ -43,7 +43,7 @@ class CommentCompose extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this._keyboardShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
         this._keyboardHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
     }
@@ -147,7 +147,7 @@ class CommentCompose extends Component {
                            placeholderTextColor="grey"
                            multiline
                            value={this.state.text}
-                           //autoFocus
+                           autoFocus
                            keyboardDismissMode="interactive"
                            keyboardAppearance="dark"
                            onChangeText={this.handleTextChange.bind(this)}
