@@ -117,7 +117,7 @@ class MiniPlayer extends Component {
     }
 }
 
-const height = 48;
+export const height = 48;
 
 let styles = StyleSheet.create({
     wrapper: {

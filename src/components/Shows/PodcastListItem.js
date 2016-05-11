@@ -56,6 +56,7 @@ class PodcastListItem extends Component {
                            underlayColor={colors.darkerGrey}
                            onPress={this.showPodcastInfo.bind(this)}
                            onLongPress={() => this.setState({actionSheetVisible: true})}
+                           delayLongPress={2000}
             >
                 <Image
                     style={styles.artwork}

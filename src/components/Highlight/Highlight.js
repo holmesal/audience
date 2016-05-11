@@ -54,7 +54,16 @@ export default class Highlight extends Component {
         // Duration of the episode, in MILLISECONDS
         episodeDuration: PropTypes.number.isRequired,
         // Initial end time for the clip, IN MILLISECONDS
-        initialEndTime: PropTypes.number.isRequired
+        initialEndTime: PropTypes.number.isRequired,
+        // Called when the start or end times chance, with SECONDS
+        onChangeBounds: PropTypes.func.isRequired,
+        // Will be called when we need to play from a specific position, with SECONDS
+        playFromTime: PropTypes.func.isRequired
+    };
+
+    static defaultProps = {
+        onChangeBounds: () => {},
+        playFromTime: () => {}
     };
 
     state = {
@@ -76,8 +85,15 @@ export default class Highlight extends Component {
     }
 
     setToDefaultPositionAndDuration(initialEndTime) {
+        // Make sure we clip at least the minimum duration
+        if (initialEndTime < minimumDuration) {
+            initialEndTime = minimumDuration;
+        }
+        // The duration should be somewhere between minDuration and defaultDuration
+        const duration = (initialEndTime >= defaultDuration) ? defaultDuration : initialEndTime;
+        // Update the times
         this.state.endTime.setValue(initialEndTime);
-        this.state.startTime.setValue(initialEndTime - defaultDuration);
+        this.state.startTime.setValue(initialEndTime - duration);
     }
 
     handleUpdatedTime() {
@@ -93,6 +109,7 @@ export default class Highlight extends Component {
                 startSeconds: s,
                 endSeconds: e
             });
+            this.props.onChangeBounds({start: s, end: e});
         }
     }
 
@@ -103,7 +120,7 @@ export default class Highlight extends Component {
      */
     updateRateOfTimeChange(which, velocity) {
         // How many seconds out to project
-        const howManySeconds = 60;
+        const howManySeconds = 1;
         //console.info(`updating velocity for ${which.toUpperCase()} to ${velocity}`);
         let projectionLength = 1000 * howManySeconds;
         // Get the animated value for the time we're referring to
@@ -117,26 +134,34 @@ export default class Highlight extends Component {
         const currentEndTime = this.state.endTime._value;
         if (which === 'start') {
             // Can't be before the beginning
-            if (projectedValue < 0) projectedValue = 0;
+            if (projectedValue < 0) {
+                console.info('preventing projected start before episode start');
+                projectedValue = 0;
+            }
             // Can't be later than {minimumDuration} seconds before the end time
             if (projectedValue > currentEndTime - minimumDuration) {
+                console.info('preventing projected start less than minDuration from end');
                 projectedValue = currentEndTime - minimumDuration;
             }
             // Can't make the clip longer than the max duration
             if (currentEndTime - projectedValue > maximumDuration) {
+                console.info('preventing projected start that would cause clip to be longer than max length');
                 projectedValue = currentEndTime - maximumDuration
             }
         } else {
             // Can't be before {minimumDuration} seconds after the start time
             if (projectedValue < currentStartTime + minimumDuration) {
+                console.info('preventing projected end less than minDuration from start');
                 projectedValue = currentStartTime + minimumDuration;
             }
             // Can't be after the end
             if (projectedValue > this.props.episodeDuration){
+                console.info('preventing projected end after episode end: ', projectedValue, this.props.episodeDuration);
                 projectedValue = this.props.episodeDuration;
             }
             // Can't make the clip longer than the max duration
             if (projectedValue - currentStartTime > maximumDuration) {
+                console.info('preventing projected end that would cause clip to be longer than max length');
                 projectedValue = currentStartTime + maximumDuration;
             }
         }
@@ -173,19 +198,33 @@ export default class Highlight extends Component {
         }
     }
 
+    playFromRelativeSegmentTime(relativeSegmentTime) {
+        // Add to the current start time to get the absolute start time
+        const absoluteStartTime = relativeSegmentTime + this.state.startTime._value;
+        console.info(`playing from relative: ${relativeSegmentTime/1000}   absolute: ${absoluteStartTime/1000}`);
+        this.props.playFromTime(absoluteStartTime / 1000);
+    }
+
     renderWaveform() {
         /**
          * This is disabled until we can divide Animated values
          */
-        //return <Waveform startTime={this.state.startTime}
+        //return (<Waveform startTime={this.state.startTime}
         //                 endTime={this.state.endTime}
         //                 episodeDuration={this.props.episodeDuration}
         //                 style={styles.waveform}
         //                 minimumDuration={minimumDuration}
         //                 highlightWidth={highlightWidth}
         //                 scaleAround={this.state.activeHandle}
-        //        />
+        //        />);
     }
+
+    // Wrapper, useful for debugging:
+    //<View style={{alignItems: 'center', justifyContent: 'center', flex: 1, alignSelf: 'stretch'}}>
+//<Text style={styles.speedo}>startTime: {_.round(this.state.startTime._value, 2)}</Text>
+//<Text style={styles.speedo}>endTime: {_.round(this.state.endTime._value)}</Text>
+//</View>
+
 
     render() {
 
@@ -200,7 +239,6 @@ export default class Highlight extends Component {
         const shrinkable = {transform: [{scaleY}]};
 
         return (
-            <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, alignSelf: 'stretch'}}>
                 <View style={styles.wrapper}>
 
                     {this.renderWaveform()}
@@ -209,8 +247,10 @@ export default class Highlight extends Component {
                     <SelectedSegment style={[styles.highlighted]}
                                      loopMode={this.getCurrentLoopMode()}
                                      duration={(this.state.endSeconds - this.state.startSeconds) * 1000}
-                                     edgeLoopAmount={1000}
+                                     edgeLoopAmount={5000}
                                      shrinkTransform={shrinkable}
+                                     playFromRelativeSegmentTime={this.playFromRelativeSegmentTime.bind(this)}
+                                     startTime={this.state.startTime}
                     />
                     <Animated.View style={[styles.spacer, shrinkable]} />
 
@@ -232,9 +272,6 @@ export default class Highlight extends Component {
                                 onRelease={() => this.setState({activeHandle: null})}
                     />
                 </View>
-                <Text style={styles.speedo}>startTime: {_.round(this.state.startTime._value, 2)}</Text>
-                <Text style={styles.speedo}>endTime: {_.round(this.state.endTime._value)}</Text>
-            </View>
         );
     }
 }

@@ -3,6 +3,7 @@ import React, {
     Easing,
     Component,
     Image,
+    NativeAppEventEmitter,
     PropTypes,
     StyleSheet,
     Text,
@@ -25,19 +26,46 @@ export default class SelectedSegment extends Component {
         duration: PropTypes.number,
 
         // How much time (in milliseconds) to offset the loop from the end/start
-        edgeLoopAmount: PropTypes.number
+        edgeLoopAmount: PropTypes.number,
+
+        // Method to play the audio from a specific relative segment time
+        playFromRelativeSegmentTime: PropTypes.func.isRequired
+
     };
 
     static defaultProps = {
         loopMode: 'full',
         duration: 5000,
-        edgeLoopAmount: 1000
+        edgeLoopAmount: 5000,
+        playFromRelativeSegmentTime: (relSegTime) => {}
     };
+
+    // The properties for the "next" animation
+    _nextAnimProps = null;
 
     state = {
         playheadPosition: new Animated.Value(0),
         width: 0
     };
+
+    componentDidMount() {
+        this._nativeAudioStateSub = NativeAppEventEmitter.addListener('MTAudio.updateState', state => {
+            console.info('[SelectedSegment] got new native audio state: ', state.playerState);
+            if (this._nextAnimProps) {
+                const distance = Math.abs(state.currentTime * 1000 - this._nextAnimProps.absoluteStartTime);
+                console.info(Math.round(state.currentTime*1000), this._nextAnimProps.absoluteStartTime, distance);
+                if (state.playerState === 'PLAYING' && distance < 2000) {
+                    // Look for our specific start time:
+                    console.info('running!')
+                    this.startAnimation();
+                }
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this._nativeAudioStateSub.remove();
+    }
 
     animate(loopMode) {
         //console.info('handling loopMode change: ', loopMode);
@@ -69,18 +97,43 @@ export default class SelectedSegment extends Component {
             return false;
         }
 
+        // Seek to this offset in the audio
+        const frac = startValue / this.state.width;
+        const relativeStartTime = frac * this.props.duration;
+        const absoluteStartTime = relativeStartTime + this.props.startTime._value;
+        this.props.playFromRelativeSegmentTime(relativeStartTime);
+
+        // Store these animation props for use in the next animation
+        // This animation will be automatically kicked off when the next "playing" event comes through from the native audio component
+        setTimeout(() => {
+            this._nextAnimProps = {
+                startValue, toValue, duration,
+                absoluteStartTime
+            };
+        }, 0);
+
+        // Set the playhead to where we'll start from
         this.state.playheadPosition.setValue(startValue);
-        Animated.timing(this.state.playheadPosition, {
-            toValue,
-            easing: Easing.linear,
-            duration
-        }).start(({finished}) => {
-            // Only loop again if this animation wasn't cancelled
-            if (finished) {
-                //console.info('animation finished!');
-                this.animate(this.props.loopMode);
-            }
-        });
+    }
+
+    startAnimation() {
+        if (this._nextAnimProps) {
+            // Grab and clear the animation properties
+            const {startValue, toValue, duration} = this._nextAnimProps;
+            this._nextAnimProps = null;
+            // Do the animation
+            Animated.timing(this.state.playheadPosition, {
+                toValue,
+                easing: Easing.linear,
+                duration
+            }).start(({finished}) => {
+                // Only loop again if this animation wasn't cancelled
+                if (finished) {
+                    //console.info('animation finished!');
+                    this.animate(this.props.loopMode);
+                }
+            });
+        }
     }
 
     handleLayout(ev) {
@@ -103,7 +156,7 @@ export default class SelectedSegment extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.loopMode != prevProps.loopMode) this.animate(this.props.loopMode);
+        if (this.props.loopMode != prevProps.loopMode && this.props.loopMode != 'full') this.animate(this.props.loopMode);
     }
 
     render() {

@@ -17,9 +17,10 @@ import Relay from 'react-relay';
 import AnnotateEpisodeMutation from '../../mutations/AnnotateEpisode';
 import Mixpanel from 'react-native-mixpanel';
 import {connect} from 'react-redux';
-import {currentTime$, updateSendingComment} from '../../redux/modules/player.js';
+import {currentTime$, compose$, updateSendingComment, updateLastTargetTime} from '../../redux/modules/player.js';
 import store from '../../redux/create';
 import Highlight from '../Highlight/Highlight';
+import {height} from './MiniPlayer';
 
 class CommentCompose extends Component {
 
@@ -31,11 +32,13 @@ class CommentCompose extends Component {
 
     state = {
         text: '',
-        paddingBottom: new Animated.Value(0),
-        keyboardHeight: 0,
+        paddingBottom: new Animated.Value(225),
+        keyboardHeight: 225,
         inFlight: false,
         currentTime: null
     };
+
+    _bounds = {};
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.visible && !this.props.visible) {
@@ -48,7 +51,7 @@ class CommentCompose extends Component {
         this._keyboardHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
     }
 
-    componentWillUpdate(nextProps, nextState) {
+    componentWillUnmount(nextProps, nextState) {
         this._keyboardShowSub.remove();
         this._keyboardHideSub.remove();
     }
@@ -58,14 +61,15 @@ class CommentCompose extends Component {
         this.setState({keyboardHeight: ev.endCoordinates.height});
     }
 
-    keyboardWillHide() {
-        this.setState({keyboardHeight: 0});
+    keyboardWillHide(ev) {
+        //console.info('keyboard will hide!', ev);
+        this.setState({keyboardHeight: 225});
     }
 
     componentDidUpdate(prevProps, prevState) {
         console.info('did update!', this.state.keyboardHeight, this.props.scrubberHeight)
         Animated.spring(this.state.paddingBottom, {
-            toValue: this.state.keyboardHeight
+            toValue: this.state.keyboardHeight - height //subtract bottom bar height
         }).start();
     }
 
@@ -119,6 +123,14 @@ class CommentCompose extends Component {
         if (text.length < 240) this.setState({text})
     }
 
+    playFromTime(targetTime) {
+        // We add a tiny offset to the target time so we can repeatedly play from the same location
+        // This smells bad
+        const uniqueTime = targetTime + Math.random() * 0.00000001;
+        console.info('seeking to time: ', uniqueTime)
+        this.props.dispatch(updateLastTargetTime(uniqueTime))
+    }
+
     renderTopRow() {
         let sendText = this.state.inFlight ? 'Sending...' : 'Send';
         let disabled = this.state.inFlight || this.state.text.length < 1;
@@ -152,7 +164,11 @@ class CommentCompose extends Component {
                            keyboardAppearance="dark"
                            onChangeText={this.handleTextChange.bind(this)}
                 />
-                <Highlight episodeDuration={1000 * 60 * 60 * 3} initialEndTime={30000} />
+                <Highlight episodeDuration={1000 * this.props.duration}
+                           initialEndTime={30000}
+                           onChangeBounds={bounds => this._bounds = bounds}
+                           playFromTime={this.playFromTime.bind(this)}
+                />
             </Animated.View>
         );
     }
@@ -190,7 +206,7 @@ let styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        backgroundColor: 'red',
+        //backgroundColor: 'red',
         //marginTop: 40,
         color: colors.lightGrey,
         alignSelf: 'stretch',
@@ -217,7 +233,9 @@ let styles = StyleSheet.create({
     }
 });
 
-export default Relay.createContainer(CommentCompose, {
+const con$ = connect(compose$)(CommentCompose);
+
+export default Relay.createContainer(con$, {
     fragments: {
         episode: () => Relay.QL`
             fragment on Episode {

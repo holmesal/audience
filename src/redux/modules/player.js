@@ -29,7 +29,7 @@ const initialState = Immutable.fromJS({
     visible: true,
     episodeId: 'RXBpc29kZTo1NjU4', //'RXBpc29kZToyOTAz',
     nextEpisodeId: null, //'RXBpc29kZTo1MTc1',
-    playing: false,
+    playing: true,
     finished: false,
     pausedForClip: false,
     buffering: false,
@@ -127,6 +127,10 @@ export const emojiButton$ = createSelector(choosingEmoji$, sendingEmoji$, (choos
 
 export const commentButton$ = createSelector(sendingComment$, (sendingComment) => ({
     sendingComment
+}));
+
+export const compose$ = createSelector(duration$, (duration) => ({
+    duration
 }));
 
 //export const share$ = createSelector(podcastId$, episodeId$, (podcastId, episodeId) => ({
