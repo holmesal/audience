@@ -13,7 +13,7 @@ import Relay from 'react-relay';
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
 
-const waveformWidth = 3060;
+//const waveformWidth = 3060;
 
 export default class Waveform extends Component {
 
@@ -120,14 +120,18 @@ export default class Waveform extends Component {
 
         // How many pixels represent this new duration?
         const newPixels = Animated.multiply(duration, rho);
+
+        // The minimum number of pixels here is set by the minimum duration
         const minNewPixels = rho * this.props.minimumDuration;
-        const maxNewPixels = rho * this.props.episodeDuration;
+
+        // The maximum number of new pixels is the same as the waveform's width, which is set by the episode's duration
+        const waveformWidth = rho * this.props.episodeDuration;
 
         // What scale factor will fit this number of pixels into the highlight?
-        // TODO - this isn't returning the proper values
+        // BLACK MAGIC VODOO EASING FUNCTION
         const oneOverNewPixels = newPixels.interpolate({
-            inputRange: [0, maxNewPixels],
-            outputRange: [0, 1/maxNewPixels],
+            inputRange: [0, waveformWidth],
+            outputRange: [0, 1/waveformWidth],
             easing: t => 1 / t
         });
 
@@ -172,35 +176,20 @@ export default class Waveform extends Component {
          * Runs these transforms in order
          */
 
-        const outerTransforms = [
+        const transforms = [
             {translateX: -waveformWidth/2},
             // Scale by the scale factor
             {scaleX: scaleFactor},
             {scaleY: scaleFactor},
             {translateX: waveformWidth/2},
             {translateX: Animated.multiply(fracStart, Animated.multiply(waveformWidth, -1))},
+            {translateY: Animated.multiply(scaleFactor, 0)}
         ];
-
-
-        const innerTransforms = [
-            // Move the center of the waveform to the left handle
-            //{translateX: -waveformWidth/2},
-            //{translateX: Animated.multiply(newWaveformWidth, 0.5)},
-            //{translateX: Animated.multiply(fracStart, Animated.multiply(newWaveformWidth, -1))},
-
-            // Stick the left edge back at 0
-            // Offset by the current time
-        ];
-
-
-
 
         return (
             <View style={[styles.wrapper, this.props.style]}>
-                <Animated.View style={[{transform: outerTransforms}]}>
-                    <Animated.View style={{transform: innerTransforms}}>
-                        <Image style={styles.waveform} source={require('image!waveform')} />
-                    </Animated.View>
+                <Animated.View style={[{transform: transforms}]}>
+                    <Image style={[styles.waveform, {width: waveformWidth}]} source={require('image!waveform')} />
                 </Animated.View>
             </View>
         );
@@ -212,10 +201,12 @@ let styles = StyleSheet.create({
         //flex: 1,
         //width: 1173
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        //backgroundColor: 'red',
+        alignSelf: 'stretch'
     },
     waveform: {
-        width: waveformWidth,
+        //width: waveformWidth,
         tintColor: colors.darkGrey
     }
 });

@@ -54,7 +54,7 @@ export default class App extends Component {
 
     render() {
         //return <EasingTest />;
-        return <Highlight episodeDuration={60000} initialEndTime={30000} />;
+        //return <Highlight episodeDuration={60000} initialEndTime={5000} />;
         return <Auth />;
     }
 }

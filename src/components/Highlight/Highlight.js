@@ -241,8 +241,8 @@ export default class Highlight extends Component {
         return (
                 <View style={styles.wrapper}>
 
-                    {this.renderWaveform()}
 
+                    {this.renderWaveform()}
                     <Animated.View style={[styles.spacer, shrinkable]} />
                     <SelectedSegment style={[styles.highlighted]}
                                      loopMode={this.getCurrentLoopMode()}
@@ -290,7 +290,8 @@ let styles = StyleSheet.create({
     spacer: {
         width: sidePadding,
         backgroundColor: '#F6F6F6',
-        height: scrubberHeight
+        height: scrubberHeight,
+        opacity: 0.7
     },
     highlighted: {
         flex: 1,
@@ -312,10 +313,11 @@ let styles = StyleSheet.create({
     },
     waveform: {
         position: 'absolute',
-        top: 0,
-        bottom: 0,
+        top: paddingTop,
+        bottom: paddingBottom,
         left: sidePadding,
-        right: sidePadding
+        right: sidePadding,
+        paddingTop: scrubberHeight/2
         //flex: 1,
     }
 });
