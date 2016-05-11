@@ -13,7 +13,7 @@ import Relay from 'react-relay';
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
 
-const waveformWidth = 1173;
+const waveformWidth = 3060;
 
 export default class Waveform extends Component {
 
@@ -120,17 +120,18 @@ export default class Waveform extends Component {
 
         // How many pixels represent this new duration?
         const newPixels = Animated.multiply(duration, rho);
+        const minNewPixels = rho * this.props.minimumDuration;
+        const maxNewPixels = rho * this.props.episodeDuration;
 
         // What scale factor will fit this number of pixels into the highlight?
         // TODO - this isn't returning the proper values
-        const scaleFactor = duration.interpolate({
-            inputRange: [this.props.minimumDuration, this.props.episodeDuration],
-            outputRange: [1, this.props.highlightWidth / waveformWidth],
-            //easing: (t) => {
-            //    console.info(`t: ${t}  SF:  COR_SF: ${255 / newPixels.__getValue()}`);
-            //    return 0.5 * (1 - Math.cos(t * 2 * Math.PI));
-            //}
+        const oneOverNewPixels = newPixels.interpolate({
+            inputRange: [0, maxNewPixels],
+            outputRange: [0, 1/maxNewPixels],
+            easing: t => 1 / t
         });
+
+        const scaleFactor = Animated.multiply(this.props.highlightWidth, oneOverNewPixels);
 
         //const scaleFactor = duration.interpolate({
         //    inputRange: [this.props.minimumDuration, this.props.episodeDuration],
@@ -151,7 +152,7 @@ export default class Waveform extends Component {
         //    outputRange: [1, waveformWidth/maxWaveformWidth]
         //});
 
-        const newWaveformWidth = Animated.multiply(scaleFactor, waveformWidth);
+        //const newWaveformWidth = Animated.multiply(scaleFactor, waveformWidth);
 
         console.info({
             startTime: this.props.startTime.__getValue(),
@@ -161,7 +162,9 @@ export default class Waveform extends Component {
             scaleFactor: scaleFactor.__getValue(),
             pixelsPerMs: rho,
             minWaveformWidth,
-            maxWaveformWidth
+            maxWaveformWidth,
+            scaleFactor: scaleFactor.__getValue(),
+            oneOverNewPixels: oneOverNewPixels.__getValue()
         });
         //console.info('scale factor is: ', scaleFactor.__getValue());
 

@@ -209,14 +209,14 @@ export default class Highlight extends Component {
         /**
          * This is disabled until we can divide Animated values
          */
-        //return (<Waveform startTime={this.state.startTime}
-        //                 endTime={this.state.endTime}
-        //                 episodeDuration={this.props.episodeDuration}
-        //                 style={styles.waveform}
-        //                 minimumDuration={minimumDuration}
-        //                 highlightWidth={highlightWidth}
-        //                 scaleAround={this.state.activeHandle}
-        //        />);
+        return (<Waveform startTime={this.state.startTime}
+                         endTime={this.state.endTime}
+                         episodeDuration={this.props.episodeDuration}
+                         style={styles.waveform}
+                         minimumDuration={minimumDuration}
+                         highlightWidth={highlightWidth}
+                         scaleAround={this.state.activeHandle}
+                />);
     }
 
     // Wrapper, useful for debugging:
@@ -294,6 +294,7 @@ let styles = StyleSheet.create({
     },
     highlighted: {
         flex: 1,
+        opacity: 0.5,
         height: scrubberHeight
         //marginLeft: sidePadding,
         //marginRight: sidePadding
@@ -313,7 +314,8 @@ let styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         bottom: 0,
-        left: sidePadding
+        left: sidePadding,
+        right: sidePadding
         //flex: 1,
     }
 });
