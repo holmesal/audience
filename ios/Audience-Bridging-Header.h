@@ -9,6 +9,7 @@
 #import "RCTEventDispatcher.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <StreamingKit/STKAudioPlayer.h>
+//#import <StreamingKit/STKAudioPlayer.h>
+#import "STKAudioPlayer.h"
 #import <FreeStreamer/FreeStreamer.h>
 #import "TPAACAudioConverter.h"

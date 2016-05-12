@@ -55,7 +55,7 @@ export default class App extends Component {
     render() {
         //return <ProcGenWaveform width={400} height={44} />;
         //return <EasingTest />;
-        return <Highlight episodeDuration={60000} initialEndTime={30000} />;
+        //return <Highlight episodeDuration={60000} initialEndTime={30000} />;
         return <Auth />;
     }
 }
