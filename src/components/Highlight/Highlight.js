@@ -213,7 +213,7 @@ export default class Highlight extends Component {
                          endTime={this.state.endTime}
                          episodeDuration={this.props.episodeDuration}
                          style={styles.waveform}
-                         minimumDuration={defaultDuration}
+                         defaultDuration={defaultDuration}
                          highlightWidth={highlightWidth}
                          scaleAround={this.state.activeHandle}
                          height={scrubberHeight}
@@ -246,7 +246,6 @@ export default class Highlight extends Component {
 
 
                     {this.renderWaveform()}
-                    <Animated.View style={[styles.spacer, shrinkable]} />
                     <SelectedSegment style={[styles.highlighted]}
                                      loopMode={this.getCurrentLoopMode()}
                                      duration={(this.state.endSeconds - this.state.startSeconds) * 1000}
@@ -255,7 +254,8 @@ export default class Highlight extends Component {
                                      playFromRelativeSegmentTime={this.playFromRelativeSegmentTime.bind(this)}
                                      startTime={this.state.startTime}
                     />
-                    <Animated.View style={[styles.spacer, shrinkable]} />
+                    <Animated.View style={[styles.spacer, {left: 0}]} />
+                    <Animated.View style={[styles.spacer, {right: 0}]} />
 
 
                     <GrabHandle style={[styles.handle, {left: sidePadding - handleWidth/2}]}
@@ -294,14 +294,17 @@ let styles = StyleSheet.create({
         width: sidePadding,
         backgroundColor: '#F6F6F6',
         height: scrubberHeight,
-        opacity: 0.7
+        opacity: 0.92,
+        position: 'absolute',
+        top: paddingTop,
+        bottom: paddingBottom
     },
     highlighted: {
         flex: 1,
         opacity: 0.5,
-        height: scrubberHeight
-        //marginLeft: sidePadding,
-        //marginRight: sidePadding
+        height: scrubberHeight,
+        marginLeft: sidePadding,
+        marginRight: sidePadding
     },
     handle: {
         position: 'absolute',
@@ -320,7 +323,7 @@ let styles = StyleSheet.create({
         bottom: paddingBottom,
         left: 0,
         paddingLeft: sidePadding,
-        right: sidePadding,
+        right: 0,
         paddingTop: scrubberHeight/2
         //flex: 1,
     }

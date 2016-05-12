@@ -21,7 +21,7 @@ export default class Waveform extends Component {
     static propTypes = {
         episodeDuration: PropTypes.number.isRequired,
         highlightWidth: PropTypes.number.isRequired,
-        minimumDuration: PropTypes.number.isRequired,
+        defaultDuration: PropTypes.number.isRequired,
         startTime: PropTypes.object.isRequired,
         endTime: PropTypes.object.isRequired,
         height: PropTypes.number.isRequired
@@ -32,7 +32,7 @@ export default class Waveform extends Component {
             nextProps.episodeDuration != this.props.episodeDuration ||
             nextProps.highlightWidth != this.props.highlightWidth ||
             nextProps.highlightWidth != this.props.highlightWidth ||
-            nextProps.minimumDuration != this.props.minimumDuration ||
+            nextProps.defaultDuration != this.props.defaultDuration ||
             nextProps.startTime != this.props.startTime ||
             nextProps.endTime != this.props.endTime ||
             nextProps.height != this.props.height
@@ -44,7 +44,7 @@ export default class Waveform extends Component {
         console.info('Highlight.Waveform is rendering!')
 
         // Pixels per millisecond
-        const rho = this.props.highlightWidth / this.props.minimumDuration; // px/ms
+        const rho = this.props.highlightWidth / this.props.defaultDuration; // px/ms
 
         // The fraction of the episode duration that the start time starts at
         const fracStart = this.props.startTime.interpolate({
@@ -58,9 +58,6 @@ export default class Waveform extends Component {
 
         // How many pixels represent this new duration?
         const newPixels = Animated.multiply(duration, rho);
-
-        // The minimum number of pixels here is set by the minimum duration
-        const minNewPixels = rho * this.props.minimumDuration;
 
         // The maximum number of new pixels is the same as the waveform's width, which is set by the episode's duration
         const waveformWidth = rho * this.props.episodeDuration;
@@ -83,8 +80,6 @@ export default class Waveform extends Component {
             //easing: Easing.ease
         });
 
-        //// The minimum width the waveform will ever be
-        const minWaveformWidth = this.props.minimumDuration * rho;
         // The maximum width the waveform will ever be
         const maxWaveformWidth = this.props.episodeDuration * rho;
 
@@ -95,7 +90,6 @@ export default class Waveform extends Component {
             newPixels: newPixels.__getValue(),
             scaleFactor: scaleFactor.__getValue(),
             pixelsPerMs: rho,
-            minWaveformWidth,
             maxWaveformWidth,
             scaleFactor: scaleFactor.__getValue(),
             oneOverNewPixels: oneOverNewPixels.__getValue()
