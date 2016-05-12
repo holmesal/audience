@@ -12,6 +12,7 @@ import Relay from 'react-relay';
 
 import DebugView from '../common/DebugView';
 import colors from '../../colors';
+import ProcGenWaveform from './ProcGenWaveform';
 
 //const waveformWidth = 3060;
 
@@ -22,91 +23,28 @@ export default class Waveform extends Component {
         highlightWidth: PropTypes.number.isRequired,
         minimumDuration: PropTypes.number.isRequired,
         startTime: PropTypes.object.isRequired,
-        endTime: PropTypes.object.isRequired
+        endTime: PropTypes.object.isRequired,
+        height: PropTypes.number.isRequired
     };
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if (
+            nextProps.episodeDuration != this.props.episodeDuration ||
+            nextProps.highlightWidth != this.props.highlightWidth ||
+            nextProps.highlightWidth != this.props.highlightWidth ||
+            nextProps.minimumDuration != this.props.minimumDuration ||
+            nextProps.startTime != this.props.startTime ||
+            nextProps.endTime != this.props.endTime ||
+            nextProps.height != this.props.height
+        ) return true;
+        return false;
+    }
+
     render() {
-
-        /**
-         * Now figure out the scale
-         * For a highlight that enclosed everything, the highlightDuration would be the same as the episode
-         *      duration, and we'd scale the waveform so that it was the same width as the highlight area.
-         * This is the scale factor that we'd scale to in that case:
-         */
-        //const scaleFactor = this.props.highlightWidth / waveformWidth;
-        //const negativeStartTime = this.props.startTime.interpolate({
-        //    inputRange: [0, this.props.episodeDuration],
-        //    outputRange: [0, -this.props.episodeDuration]
-        //});
-        //const animatedDuration = Animated.add(this.props.endTime, negativeStartTime);
-        //console.info(animatedDuration)
-        //
-        ////const animatedDuration = new Animated.Value(this.props.episodeDuration);
-        //
-        //const scaleX = animatedDuration.interpolate({
-        //    inputRange: [this.props.minimumDuration, this.props.episodeDuration],
-        //    outputRange: [1, scaleFactor]
-        //});
-        //
-        ////const rightHandleOffset = scaleX.interpolate({
-        ////    inputRange: [0, 0.21, 1],
-        ////    outputRange: [0, 0, -255]
-        ////});
-        //
-        //
-        //
-        //// It's currently scaling around it's own center, so we need to shift it left
-        //// So that it scales around the center of our window
-        ////const shiftLeft = scaleX.interpolate({
-        ////    inputRange: [scaleFactor - 0.00000001, scaleFactor, 1],
-        ////    outputRange: [0, -waveformWidth/2, 0]
-        ////});
-        //const centered = new Animated.Value(-waveformWidth/2 + this.props.highlightWidth/2);
-        ////const scaledShift = Animated.multiply(scaleX, shiftLeft);
-        //
-        //const leftHandle = Animated.add(centered, scaleX.interpolate({
-        //    inputRange: [scaleFactor, 1],
-        //    outputRange: [0, waveformWidth/2 - this.props.highlightWidth/2]
-        //}));
-        //
-        //const rightHandle = Animated.add(leftHandle, scaleX.interpolate({
-        //    inputRange: [scaleFactor, 1],
-        //    outputRange: [0, -waveformWidth + this.props.highlightWidth]
-        //}));
-        //
-        //const totalX = this.props.scaleAround === 'start' ? rightHandle : leftHandle;
-        //
-        //
-        //
-        ///**
-        // * Figure out how far left to translate the waveform, based on how much of the episode we've played
-        // */
-        //const translateX = this.props.startTime.interpolate({
-        //    inputRange: [0, this.props.episodeDuration],
-        //    outputRange: [0, -waveformWidth]
-        //});
-
-        // Scale the startTime translation
-        //const scaledTranslate = Animated.multiply(scaleX, translateX);
-
-        //const leftOrigin = Animated.add(shiftLeft, Animated.multiply(-this.props.highlightWidth/2, scaleX))
-
-
-        //let totalX = Animated.add(scaledTranslate, shiftLeft);
-        //let totalX = Animated.add(scaledTranslate, leftOrigin);
-        //totalX = Animated.add(totalX, Animated.multiply(rightHandleOffset, scaleX));
-        //totalX = Animated.add(totalX, Animated.multiply(scaleX, rightHandleOffset));
+        console.info('Highlight.Waveform is rendering!')
 
         // Pixels per millisecond
         const rho = this.props.highlightWidth / this.props.minimumDuration; // px/ms
-        //const rho = waveformWidth / this.props.episodeDuration; // px/ms
-
-        // The number of pixels in the maximum duration
-        //const wMaxDuration = rho * this.props.episodeDuration;
-        //
-        //// The scale factor between the minimum duration and the maximum duration
-        //const SFMaxDuration = this.props.highlightWidth / wMaxDuration;
-        //console.info('SFMaxDuration: ', SFMaxDuration);
 
         // The fraction of the episode duration that the start time starts at
         const fracStart = this.props.startTime.interpolate({
@@ -137,26 +75,18 @@ export default class Waveform extends Component {
 
         const scaleFactor = Animated.multiply(this.props.highlightWidth, oneOverNewPixels);
 
-        //const scaleFactor = duration.interpolate({
-        //    inputRange: [this.props.minimumDuration, this.props.episodeDuration],
-        //    outputRange: [1, 1],
-        //    easing: val => {
-        //        console.info('interp: ', val)
-        //        return 1/newPixels.__getValue();
-        //    }
-        //});
+        const scaleY = scaleFactor.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1],
+            extrapolate: 'clamp'
+            // TODO - ease the "bump" when we transition from SF > 1 to SF < 1
+            //easing: Easing.ease
+        });
 
         //// The minimum width the waveform will ever be
         const minWaveformWidth = this.props.minimumDuration * rho;
         // The maximum width the waveform will ever be
         const maxWaveformWidth = this.props.episodeDuration * rho;
-        //
-        //const scaleFactor = newPixels.interpolate({
-        //    inputRange: [minWaveformWidth, maxWaveformWidth],
-        //    outputRange: [1, waveformWidth/maxWaveformWidth]
-        //});
-
-        //const newWaveformWidth = Animated.multiply(scaleFactor, waveformWidth);
 
         console.info({
             startTime: this.props.startTime.__getValue(),
@@ -170,7 +100,6 @@ export default class Waveform extends Component {
             scaleFactor: scaleFactor.__getValue(),
             oneOverNewPixels: oneOverNewPixels.__getValue()
         });
-        //console.info('scale factor is: ', scaleFactor.__getValue());
 
         /**
          * Runs these transforms in order
@@ -180,16 +109,21 @@ export default class Waveform extends Component {
             {translateX: -waveformWidth/2},
             // Scale by the scale factor
             {scaleX: scaleFactor},
-            {scaleY: scaleFactor},
+            {scaleY: scaleY},
             {translateX: waveformWidth/2},
             {translateX: Animated.multiply(fracStart, Animated.multiply(waveformWidth, -1))},
-            {translateY: Animated.multiply(scaleFactor, 0)}
+            //{translateY: Animated.multiply(scaleFactor, 0)}
         ];
 
         return (
             <View style={[styles.wrapper, this.props.style]}>
                 <Animated.View style={[{transform: transforms}]}>
-                    <Image style={[styles.waveform, {width: waveformWidth}]} source={require('image!waveform')} />
+                    <ProcGenWaveform
+                        style={[styles.waveform]}
+                        width={waveformWidth}
+                        height={this.props.height}
+                        strokeColor={colors.darkGrey}
+                    />
                 </Animated.View>
             </View>
         );
@@ -203,10 +137,11 @@ let styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         //backgroundColor: 'red',
-        alignSelf: 'stretch'
+        alignSelf: 'stretch',
+        overflow: 'hidden'
     },
     waveform: {
         //width: waveformWidth,
-        tintColor: colors.darkGrey
+        //tintColor: colors.darkGrey
     }
 });

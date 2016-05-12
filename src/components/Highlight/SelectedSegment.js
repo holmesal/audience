@@ -198,6 +198,7 @@ let styles = StyleSheet.create({
         color: colors.darkGrey,
         letterSpacing: 0.38,
         fontWeight: '600',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        marginBottom: -88
     }
 });

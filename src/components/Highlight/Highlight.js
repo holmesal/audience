@@ -38,7 +38,7 @@ const minimumDuration = 5000;
 // And the default?
 const defaultDuration = 20000;
 // And the maximum?
-const maximumDuration = 60 * 5 * 1000; // 5 minutes
+const maximumDuration = 1000 * 60; // 1 minute
 
 // How wide is the "highlighted" area on-screen?
 const highlightWidth = width - (2 * sidePadding);
@@ -213,9 +213,10 @@ export default class Highlight extends Component {
                          endTime={this.state.endTime}
                          episodeDuration={this.props.episodeDuration}
                          style={styles.waveform}
-                         minimumDuration={minimumDuration}
+                         minimumDuration={defaultDuration}
                          highlightWidth={highlightWidth}
                          scaleAround={this.state.activeHandle}
+                         height={scrubberHeight}
                 />);
     }
 
@@ -236,7 +237,9 @@ export default class Highlight extends Component {
             outputRange: [1, 0.5],
             extrapolate: 'clamp'
         });
-        const shrinkable = {transform: [{scaleY}]};
+        // Originally, this "stretched" out the yellow part of the highlight to show the time increasing
+        // it's unnecessary with the waveform in there
+        const shrinkable = {};// {transform: [{scaleY}]};
 
         return (
                 <View style={styles.wrapper}>
@@ -315,7 +318,8 @@ let styles = StyleSheet.create({
         position: 'absolute',
         top: paddingTop,
         bottom: paddingBottom,
-        left: sidePadding,
+        left: 0,
+        paddingLeft: sidePadding,
         right: sidePadding,
         paddingTop: scrubberHeight/2
         //flex: 1,

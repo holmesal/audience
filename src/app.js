@@ -30,7 +30,7 @@ import Mixpanel from 'react-native-mixpanel';
 import colors from './colors';
 import Auth from './components/auth/Auth';
 import Highlight from './components/Highlight/Highlight';
-import EasingTest from './components/Highlight/EasingTest';
+import ProcGenWaveform from './components/Highlight/ProcGenWaveform';
 
 // Ignore some warnings
 console.ignoredYellowBox = ['Possible Unhandled Promise Rejection', 'Sticky header index 0', 'Warning: ScrollView doesn\'t take rejection well'];
@@ -53,8 +53,9 @@ export default class App extends Component {
     }
 
     render() {
+        //return <ProcGenWaveform width={400} height={44} />;
         //return <EasingTest />;
-        //return <Highlight episodeDuration={60000} initialEndTime={5000} />;
+        return <Highlight episodeDuration={60000} initialEndTime={30000} />;
         return <Auth />;
     }
 }
