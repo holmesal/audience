@@ -7,6 +7,7 @@ export default {
     darkGreyLightContrast: '#404040',
     darkGrey: '#353535',//'#404040',
     darkerGrey: '#242424',
+    bob: '#242424',
     lightBorder: '#ECECEC',
     darkBorder: '#404040',
     attention: '#FFA726'
